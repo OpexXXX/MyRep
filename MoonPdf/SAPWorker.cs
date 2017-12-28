@@ -90,33 +90,38 @@ namespace MoonPdf
             btn.Press(); //Жмем закупить
 
             GuiStatusbar sbarS = (GuiStatusbar)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/sbar");
-            SapSession.StartTransaction("/SAPCE/IUSEALS");
-            //Выдача
-            //Поиск закупленных пломб
-            GuiTextField typePlombSearch = (GuiTextField)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/usr/ctxtSCAT-LOW");
-            GuiTextField numberPlombSearch = (GuiTextField)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/usr/txtSCODE-LOW");
-            typePlombSearch.Text = plomb.Type;
-            numberPlombSearch.Text = plomb.Number;
-            GuiCheckBox PURCH = (GuiCheckBox)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/usr/chkPURCH");
-            GuiCheckBox ISSUE = (GuiCheckBox)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/usr/chkISSUE");
-            GuiCheckBox INSTA = (GuiCheckBox)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/usr/chkINSTA");
-            PURCH.Selected = true;
-            ISSUE.Selected = false;
-            INSTA.Selected = false;
-            GuiButton btnSearch = (GuiButton)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/tbar[1]/btn[8]");
-            btn.Press(); //жмем поиск
-
-            //Окно с результатами поиска
-            GuiGridView plombArea = (GuiGridView)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/usr/cntlALV_SEALS/shellcont/shell");
-            if (plombArea.RowCount > 0)
+            if (!sbarS.Text.Contains("в базе данных уже существует"))
             {
-                ((GuiButton)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/tbar[1]/btn[25]")).Press(); //Редактировать
-                plombArea.SelectAll();
-                ((GuiButton)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/tbar[1]/btn[31]")).Press(); //Выдать
-                ((GuiTextField)SapSession.FindById("/app/con[0]/ses[0]/wnd[1]/usr/ctxt/SAPCE/IURU_SEALS_CHANGED-REPER")).Text = "6"; //Ответственное лицо "Красноярскэнерго"
-                ((GuiTextField)SapSession.FindById("/app/con[0]/ses[0]/wnd[1]/usr/ctxt/SAPCE/IURU_SEALS_CHANGED-DISSUE")).Text = dateOfPlacement; //Дата выдачи пломбы
-                ((GuiButton)SapSession.FindById("/app/con[0]/ses[0]/wnd[1]/tbar[0]/btn[5]")).Press(); //Скопировать во все
-                ((GuiButton)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/tbar[0]/btn[11]")).Press(); //Сохранить
+
+
+                SapSession.StartTransaction("/SAPCE/IUSEALS");
+                //Выдача
+                //Поиск закупленных пломб
+                GuiTextField typePlombSearch = (GuiTextField)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/usr/ctxtSCAT-LOW");
+                GuiTextField numberPlombSearch = (GuiTextField)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/usr/txtSCODE-LOW");
+                typePlombSearch.Text = plomb.Type;
+                numberPlombSearch.Text = plomb.Number;
+                GuiCheckBox PURCH = (GuiCheckBox)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/usr/chkPURCH");
+                GuiCheckBox ISSUE = (GuiCheckBox)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/usr/chkISSUE");
+                GuiCheckBox INSTA = (GuiCheckBox)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/usr/chkINSTA");
+                PURCH.Selected = true;
+                ISSUE.Selected = false;
+                INSTA.Selected = false;
+                GuiButton btnSearch = (GuiButton)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/tbar[1]/btn[8]");
+                btnSearch.Press(); //жмем поиск
+
+                //Окно с результатами поиска
+                GuiGridView plombArea = (GuiGridView)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/usr/cntlALV_SEALS/shellcont/shell");
+                if (plombArea.RowCount > 0)
+                {
+                    ((GuiButton)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/tbar[1]/btn[25]")).Press(); //Редактировать
+                    plombArea.SelectAll();
+                    ((GuiButton)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/tbar[1]/btn[31]")).Press(); //Выдать
+                    ((GuiTextField)SapSession.FindById("/app/con[0]/ses[0]/wnd[1]/usr/ctxt/SAPCE/IURU_SEALS_CHANGED-REPER")).Text = "6"; //Ответственное лицо "Красноярскэнерго"
+                    ((GuiTextField)SapSession.FindById("/app/con[0]/ses[0]/wnd[1]/usr/ctxt/SAPCE/IURU_SEALS_CHANGED-DISSUE")).Text = dateOfPlacement; //Дата выдачи пломбы
+                    ((GuiButton)SapSession.FindById("/app/con[0]/ses[0]/wnd[1]/tbar[0]/btn[5]")).Press(); //Скопировать во все
+                    ((GuiButton)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/tbar[0]/btn[11]")).Press(); //Сохранить
+                }
             }
 
         }
@@ -127,7 +132,11 @@ namespace MoonPdf
             {
                 shopPlomb(item, akt.DateWork.ToString("d"));
             }
-            SapSession.StartTransaction("/CV01N");
+            //Демонтируем счетчик
+
+            //Монтируем счетчик
+
+            SapSession.StartTransaction("CV01N");
             ((GuiTextField)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/usr/ctxtDRAW-DOKNR")).Text = "*";
             ((GuiTextField)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/usr/ctxtDRAW-DOKAR")).Text = "ATP";
             SapSession.SendCommand(""); //Enter
@@ -136,7 +145,7 @@ namespace MoonPdf
             GuiCTextField UstanovkaText = (GuiCTextField)SapSession.ActiveWindow.FindByName("GS_DATA_MAIN-ANLAGE", "GuiCTextField");
             GuiComboBox TypeAktCombo = (GuiComboBox)SapSession.ActiveWindow.FindByName("GS_DATA_MAIN-VID", "GuiComboBox");
             GuiComboBox TypeProverkaCombo = (GuiComboBox)SapSession.ActiveWindow.FindByName("GS_DATA_MAIN-ISTABLART", "GuiComboBox");
-            GuiTextField NumberProvText = (GuiTextField)SapSession.ActiveWindow.FindByName("GS_DATA_MAIN-ANLAGE", "GuiTextField");
+            GuiTextField NumberProvText = (GuiTextField)SapSession.ActiveWindow.FindByName("GS_DATA_MAIN-NUM", "GuiTextField");
             GuiCTextField DateAktText = (GuiCTextField)SapSession.ActiveWindow.FindByName("GS_DATA_MAIN-DATE_ACT", "GuiCTextField");
             GuiCTextField AgentText = (GuiCTextField)SapSession.ActiveWindow.FindByName("GS_DATA_MAIN-PERNR", "GuiCTextField");
             GuiComboBox ResultProverkaCombo = (GuiComboBox)SapSession.ActiveWindow.FindByName("GS_DATA_MAIN-RES", "GuiComboBox");
@@ -154,13 +163,22 @@ namespace MoonPdf
             TypeProverkaCombo.Key = "13";//13 плановая
             NumberProvText.Text = akt.Number.ToString();
             DateAktText.Text = akt.DateWork.ToString("d");
+            SapSession.SendCommand(""); //Enter
+
+            if (statusBar.Text.Contains("закрыт"))
+            {
+                SapSession.SendCommand("");
+                DateAktText.Text = "02." + (akt.DateWork.Month + 1).ToString() + "." + akt.DateWork.Year.ToString();
+            }
+
             AgentText.Text = akt.Agent_1.SapNumber;
             ResultProverkaCombo.Key = "1";// 1-Соответсвует. 3 -Не соответствует
             typePredpisan.Text = ""; //10 - Истек МПИ
             SrokUstraneniyaText.Text = "";//Дата устранения
-            PrimechanieText.Text = akt.Agent_2.Surname + ""; //Примечание
+            PrimechanieText.Text = ((akt.Agent_2 != null) ? (akt.Agent_2.Surname) : "") + ""; //Примечание
             Pokazanie.Text = akt.PuOldPokazanie; //Показание ПУ
             //Ведение Пломб*******************************/
+
             ustanovkaPlomb(akt);
             /*Добавление файлов*/
             addFIleToAkt(akt, pdfDirectory);
@@ -171,7 +189,7 @@ namespace MoonPdf
             try
             {
                 GuiModalWindow ErrorWindow = ((GuiModalWindow)SapSession.FindById("/app/con[0]/ses[0]/wnd[1]"));
-                if(ErrorWindow.Text.Contains("СтрокиДокум: Просмотр сообщений")) //Если окно 0 из 1 показаний загружено
+                if (ErrorWindow.Text.Contains("СтрокиДокум: Просмотр сообщений")) //Если окно 0 из 1 показаний загружено
                 {
                     GuiButton OKBtn = (GuiButton)SapSession.ActiveWindow.FindByName("btn[0]", "GuiButton"); //
                     OKBtn.Press();
@@ -179,7 +197,7 @@ namespace MoonPdf
             }
             catch (Exception)
             {
-               
+
             }
             try
             {
@@ -198,8 +216,9 @@ namespace MoonPdf
             if (statusBar.Text.Contains("создан"))
             {
                 string numberSAPakt = "", sbarText = "";
-                statusBar.Text = sbarText;
+                sbarText = statusBar.Text;
                 numberSAPakt = sbarText.Split(' ')[2];
+                akt.SapNumberAkt = numberSAPakt;
             }
             else
             {
@@ -218,12 +237,12 @@ namespace MoonPdf
             dobavitFileBtn.Press();
             /*Окно добавление файла*/
             GuiCTextField typeFile = (GuiCTextField)SapSession.ActiveWindow.FindByName("DRAW-DAPPL", "GuiCTextField");  //DRAW-DAPPL "ПДФ"
-            GuiCTextField primechanieFile = (GuiCTextField)SapSession.ActiveWindow.FindByName("MCDOK-FILE_DESCRIPTION", "GuiCTextField"); //MCDOK-FILE_DESCRIPTION Описание файла
+            GuiTextField primechanieFile = (GuiTextField)SapSession.ActiveWindow.FindByName("MCDOK-FILE_DESCRIPTION", "GuiTextField"); //MCDOK-FILE_DESCRIPTION Описание файла
             GuiCTextField pathFile = (GuiCTextField)SapSession.ActiveWindow.FindByName("DRAW-FILEP1", "GuiCTextField"); //DRAW-FILEP1 Путь к файлу
             GuiButton okFileBtn = (GuiButton)SapSession.ActiveWindow.FindByName("btn[0]", "GuiButton"); //btn[0] КнопкаОК
             typeFile.Text = "PDF";
             primechanieFile.Text = "";
-            pathFile.Text = pdfDirectory+akt.PathOfPdfFile;
+            pathFile.Text = pdfDirectory + akt.PathOfPdfFile;
             okFileBtn.Press();
             try
             {
@@ -247,12 +266,12 @@ namespace MoonPdf
             GuiGridView GridPlomb = ((GuiGridView)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/usr/cntlALV_SEALS/shellcont/shell"));
             GuiButton addPlombBtn = (GuiButton)SapSession.ActiveWindow.FindByName("btn[30]", "GuiButton"); //GuiButton//btn[30] Добавить выданные
             GuiButton ustanovitPlombBtn = (GuiButton)SapSession.ActiveWindow.FindByName("btn[32]", "GuiButton"); // Установть выделенные
+            GuiStatusbar statusBar = (GuiStatusbar)SapSession.ActiveWindow.FindByName("sbar", "GuiStatusbar");//sbar
 
             foreach (plomba Plomba in akt.plomb)
             {
                 addPlombBtn.Press();
                 /*Окно Добавить выданные*/
-                GuiStatusbar statusBar = (GuiStatusbar)SapSession.ActiveWindow.FindByName("sbar", "GuiStatusbar");//sbar
                 GuiCTextField typePlombAdd = (GuiCTextField)SapSession.ActiveWindow.FindByName("P_SCAT-LOW", "GuiCTextField"); //P_SCAT-LOW Тип пломбы
                 GuiTextField kodPlombAdd = (GuiTextField)SapSession.ActiveWindow.FindByName("P_SCODE-LOW", "GuiTextField");//P_SCODE-LOW
                 GuiButton addPlombOk = (GuiButton)SapSession.ActiveWindow.FindByName("btn[8]", "GuiButton");//btn[8] Выполнить
@@ -261,10 +280,10 @@ namespace MoonPdf
                 addPlombOk.Press();
                 if (statusBar.Text.Contains("недавно добавлено"))
                 {
-                    GridPlomb.CurrentCellColumn = "SCODE";
+                    GridPlomb.SelectColumn("SCODE");
                     GridPlomb.PressToolbarButton("&MB_FILTER");
                     /**Окно фильтра***************************/
-                    GuiCTextField NumberPlombFilter = (GuiCTextField)SapSession.ActiveWindow.FindByName("/%%DYN001-LOW", "GuiCTextField");
+                    GuiCTextField NumberPlombFilter = (GuiCTextField)SapSession.ActiveWindow.FindByName("%%DYN001-LOW", "GuiCTextField");
                     GuiButton Okbtn = ((GuiButton)SapSession.FindById("wnd[1]/tbar[0]/btn[0]")); //Ок
                     NumberPlombFilter.Text = Plomba.Number;//Код пломбы для фильтра
                     Okbtn.Press();
@@ -277,13 +296,24 @@ namespace MoonPdf
                         GuiButton findMaterial = (GuiButton)SapSession.ActiveWindow.FindByName("ISU_FINDER_DIALOG", "GuiButton"); //ISU_FINDER_DIALOG
                         GuiButton copyToAll = (GuiButton)SapSession.ActiveWindow.FindByName("btn[5]", "GuiButton"); //Скопировать во все
                         findMaterial.Press();
+
                         /*Окно поиска материала*/
                         GuiTab TabTwo = (GuiTab)SapSession.ActiveWindow.FindByName("TAB2", "GuiTab"); //TAB2
                         TabTwo.Select();
                         GuiCTextField ustanovkaTextFind = (GuiCTextField)SapSession.ActiveWindow.FindByName("EFINDD-I_ANLAGE", "GuiCTextField");//EFINDD-I_ANLAGE
                         ustanovkaTextFind.Text = akt.Ustanovka;
-                        GuiButton FindOk = (GuiButton)SapSession.ActiveWindow.FindByName("btn[8]", "GuiButton");//btn[8] Выполнить//btn[0]
+                        GuiButton FindOk = (GuiButton)SapSession.ActiveWindow.FindByName("btn[0]", "GuiButton");//btn[8] Выполнить//btn[0]
                         FindOk.Press();
+                        try
+                        {
+                            //Описать окно выбора счетчика при установке пломбы
+                        }
+                        catch (Exception)
+                        {
+
+                            throw;
+                        }
+
                         /************************/
                         GuiTextField placePlomb = (GuiTextField)SapSession.ActiveWindow.FindByName("/SAPCE/IURU_SEALS_CHANGED-PLACE", "GuiTextField");////Место установки пломбы /SAPCE/IURU_SEALS_CHANGED-PLACE
                         GuiCTextField datePlacePlomb = (GuiCTextField)SapSession.ActiveWindow.FindByName("/SAPCE/IURU_SEALS_CHANGED-DINST", "GuiCTextField");//Дата установки пломбы /SAPCE/IURU_SEALS_CHANGED-DINST
@@ -298,9 +328,73 @@ namespace MoonPdf
             }
 
             GuiButton backBtn = (GuiButton)SapSession.ActiveWindow.FindByName("btn[3]", "GuiButton"); //назад
-            GuiButton SaveAktOKBtn = (GuiButton)SapSession.ActiveWindow.FindByName("btn[0]", "GuiButton"); //Сохранить
+            GuiButton SaveAktOKBtn = (GuiButton)SapSession.ActiveWindow.FindByName("btn[11]", "GuiButton"); //Сохранить
             SaveAktOKBtn.Press();
             backBtn.Press();
+        }
+
+        private bool demontirovatPU(aktATP akt)
+        {
+            //Узнаем серийныи номер пу
+            string serNumberOldPU;
+            SapSession.StartTransaction("IE03");
+            GuiCTextField edinitcaOb = (GuiCTextField)SapSession.ActiveWindow.FindByName("RM63E-EQUNR", "GuiCTextField");
+            edinitcaOb.Text = akt.EdOborudovania;
+            SapSession.SendCommand("");
+            GuiTab tabISU = (GuiTab)SapSession.ActiveWindow.FindByName("T\04", "GuiTab");
+            tabISU.Select();
+            GuiTextField serNumber = (GuiTextField)SapSession.ActiveWindow.FindByName("EDEVICED-GERAET", "GuiTextField");
+            serNumberOldPU = serNumber.Text;
+
+            SapSession.StartTransaction("EG32");
+            GuiCTextField dateDemontag = (GuiCTextField)SapSession.ActiveWindow.FindByName("REG30-EADAT", "GuiCTextField");
+            GuiCTextField serNumberDemontag = (GuiCTextField)SapSession.ActiveWindow.FindByName("REG30-GERAETALT", "GuiCTextField");
+            dateDemontag.Text = akt.DateWork.ToString("d");
+            serNumberDemontag.Text = serNumberOldPU;
+            SapSession.SendCommand("");//
+
+            GuiStatusbar statusBar = (GuiStatusbar)SapSession.ActiveWindow.FindByName("sbar", "GuiStatusbar");//sbar
+            if (statusBar.Text.Contains("в будущем уже есть документы"))
+            {
+                //Удаляем показания
+                SapSession.StartTransaction("EL37");
+                GuiCTextField serNumberPUdel = (GuiCTextField)SapSession.ActiveWindow.FindByName("GERAET", "GuiCTextField");
+                GuiCTextField lowDateDel = (GuiCTextField)SapSession.ActiveWindow.FindByName("ADATSOLL-LOW", "GuiCTextField");
+                GuiCTextField highDateDel = (GuiCTextField)SapSession.ActiveWindow.FindByName("ADATSOLL-HIGH", "GuiCTextField");
+                GuiButton GoBtn = (GuiButton)SapSession.ActiveWindow.FindByName("btn[8]", "GuiButton"); //Сохранить акт
+                string startDateDel, endDateDel;
+                var startDate = new DateTime(akt.DateWork.Year, akt.DateWork.Month, 1);
+                startDateDel = startDate.ToString("d");
+                endDateDel = (akt.DateWork.AddMonths(1).AddDays(-1)).ToString("d");
+                serNumberPUdel.Text = serNumberOldPU;
+                lowDateDel.Text = startDateDel;
+                highDateDel.Text = endDateDel;
+                GoBtn.Press();
+                GuiGridView gridArea = (GuiGridView)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/usr/cntlCONTAINER_EABLD_EL37_EL35/shellcont/shell");
+                gridArea.SelectedRows = "0";
+                gridArea.ClickCurrentCell();
+                gridArea.PressToolbarButton("CANC");
+            }
+
+            SapSession.StartTransaction("EG32");
+            dateDemontag = (GuiCTextField)SapSession.ActiveWindow.FindByName("REG30-EADAT", "GuiCTextField");
+            serNumberDemontag = (GuiCTextField)SapSession.ActiveWindow.FindByName("REG30-GERAETALT", "GuiCTextField");
+            dateDemontag.Text = akt.DateWork.ToString("d");
+            serNumberDemontag.Text = serNumberOldPU;
+            SapSession.SendCommand("");//
+            statusBar = (GuiStatusbar)SapSession.ActiveWindow.FindByName("sbar", "GuiStatusbar");//sbar
+            if (statusBar.Text.Contains("в будущем уже есть документы")) return false;
+
+            GuiTextField Pokazanie = ((GuiTextField)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/usr/tblSAPLE30DCONTROL_RE_REM/txtREG30-ZWSTANDCA[5,0]"));
+            Pokazanie.Text = akt.PuOldPokazanie;
+            GuiButton SaveAktBtn = (GuiButton)SapSession.ActiveWindow.FindByName("btn[11]", "GuiButton"); //Сохранить акт
+            SaveAktBtn.Press();
+            return true;
+
+        }
+        private void montirovatPU()
+        {
+
         }
     }
 }

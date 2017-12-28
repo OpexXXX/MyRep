@@ -28,6 +28,31 @@ namespace MoonPdf
                 MessageBox.Show(ex.Message);
             }
         }
+        public void PUListInit(SpisokPUObserv spisokPU)
+        {
+            SQLiteCommand CommandSQL = new SQLiteCommand(connector);
+            CommandSQL.CommandText = "SELECT * "
+            + " FROM `PriboriUcheta`;";
+            SQLiteDataReader r = CommandSQL.ExecuteReader();
+            while (r.Read())
+            {
+                spisokPU.Add(new PriborUcheta(r["SapNumberPU"].ToString(), r["NamePU"].ToString(), Int32.Parse( r["Poverka"].ToString()), r["Znachnost"].ToString()));
+            }
+            r.Close();
+        }
+        public void AgentListInit(AgentList agentList)
+        {
+            SQLiteCommand CommandSQL = new SQLiteCommand(connector);
+            CommandSQL.CommandText = "SELECT * "
+            + " FROM `AgentList`;";
+            SQLiteDataReader r = CommandSQL.ExecuteReader();
+            while (r.Read())
+            {
+                agentList.Add(new Agent(r["SapNumber"].ToString(), r["Post"].ToString(), r["Surname"].ToString(), r["SearchString"].ToString()));
+            }
+            r.Close();
+
+        }
         public List<Dictionary<String, String>> GetAbonentFromLS(string numberLS)
 
         {

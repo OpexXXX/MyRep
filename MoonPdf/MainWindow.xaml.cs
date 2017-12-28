@@ -60,7 +60,11 @@ namespace MoonPdf
         {
             EnableAtpTab(false);
             ATPWork = new ATPWorker(moonPdfPanel);
+            ATPWork.DbWork.AgentListInit(ATPWork.agents);
+            ATPWork.DbWork.PUListInit(ATPWork.SpisokPU);
+
             ATPWork.DbWork.LoadCompleteATP(ATPWork);
+
             comboBox.ItemsSource = ATPWork.agents;
             comboBox1.ItemsSource = ATPWork.agents;
             DataContext = ATPWork.AktATPInWork;
@@ -531,57 +535,64 @@ namespace MoonPdf
         }
         private void MenuItem_Click_2(object sender, RoutedEventArgs e)
         {
-            try
-            {
+            /*
                 if (sAP == null)
                 {
                     sAP = new SAPActive("ER2");
                     sAP.login();
                 }
+                */
                 progressBar.Minimum = 0;
                 progressBar.Maximum = ATPWork.CompleteAtpWorkList.Count;
+                
                 int i = 0;
+
                 foreach (var item in ATPWork.CompleteAtpWorkList)
                 {
-                    if (item.SapNumberAkt == "")
+                    if ((item.SapNumberAkt == "")&&(File.Exists(ATPWork.AktDirektory+item.PathOfPdfFile)))
                     {
-                        sAP.enterAktTehProverki(item,ATPWork.AktDirektory);
 
-                    }
+                    sAP.enterAktTehProverki(item,ATPWork.AktDirektory);
+                   // item.PathOfPdfFile = item.Number.ToString() + ".pdf";
+                    //MessageBox.Show(item.PathOfPdfFile);
+                    ATPWork.DbWork.DromCompliteTable();
+                    ATPWork.DbWork.InsertCompleteAktAPT(ATPWork.CompleteAtpWorkList);
+
+                }
                     progressBar.Value = i;
                     i++;
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+           
+                //MessageBox.Show(ex.Message);
+            
         }
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            foreach (aktATP item in ATPWork.CompleteAtpWorkList)
+            /*foreach (aktATP item in ATPWork.CompleteAtpWorkList)
             {
                 List<Dictionary<string, string>> tempList;
                 tempList = ATPWork.DbWork.GetAbonentFromLS(item.NumberLS);
                 item.setDataByDb(tempList[0]);
-            }
+            }*/
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            foreach (aktATP item in ATPWork.CompleteAtpWorkList)
+            
+
+           /* foreach (aktATP item in ATPWork.CompleteAtpWorkList)
             {
-                /* int i = 0;
+                 int i = 0;
                  string fileName = "";
                  i=(item.PathOfPdfFile.Split('\\')).Length;
                  fileName = item.PathOfPdfFile.Split('\\')[i - 1];
-                 item.PathOfPdfFile = fileName;*/
+                 item.PathOfPdfFile = fileName;
                 string p = ATPWork.AktDirektory + item.PathOfPdfFile;
                 if (!File.Exists(p))
                 {
                     MessageBox.Show(item.Title + " " + item.PathOfPdfFile);
                 }
-            }
+            }*/
 
 
         }

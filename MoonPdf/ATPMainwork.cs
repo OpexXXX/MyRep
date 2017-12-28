@@ -44,15 +44,15 @@ namespace MoonPdf
             get { return this.poverka; }
             set { this.poverka = value; this.OnPropertyChanged("Poverka"); }
         }
-        private int znachnost;
-        public int Znachnost
+        private string znachnost;
+        public string Znachnost
         {
             get { return this.znachnost; }
             set { this.znachnost = value; this.OnPropertyChanged("Znachnost"); }
         }
 
 
-        public PriborUcheta(string SapNumberPU, string Nazvanie, int Poverka, int Znachnost)
+        public PriborUcheta(string SapNumberPU, string Nazvanie, int Poverka, string Znachnost)
         {
             this.SapNumberPU = SapNumberPU;
             this.Nazvanie = Nazvanie;
@@ -550,9 +550,7 @@ namespace MoonPdf
             PathOfMailFolder = Environment.CurrentDirectory+"\\";
             AllAtpInWorkList = new AllATPObserv();
             agents = new AgentList(); //
-            agentsListInit();
             SpisokPU = new SpisokPUObserv();
-            PUListInit();
             CompleteAtpWorkList = new AllATPObserv();
             //DbWork.LoadCompleteATP(this);
         }
@@ -576,23 +574,21 @@ namespace MoonPdf
         }
         private void agentsListInit()
         {
-
             agents.Add(new Agent("40004461", "электромонтер УТЭЭ ", "Глушков Александр Сергеевич", "лушков"));
             agents.Add(new Agent("40222271", "электромонтер УТЭЭ ", "Дубинин Сергей Геннадьевич", "убинин"));
             agents.Add(new Agent("40000562", "электромонтер УТЭЭ ", "Кропочева Анна Сергеевна", "ропочева"));
             agents.Add(new Agent("40004895", "началиник УТЭЭ ", "Лавренова Светлана Николаевна", "авренова"));
             agents.Add(new Agent("40221533", "электромонтер УТЭЭ ", "Назаров Дмитрий Анатольевич", "азаров"));
             agents.Add(new Agent("40002703", "Инспектор УТЭЭ ", "Сяткина Елена Эдуардовна", "яткина"));
-
         }
         private void PUListInit()
         {
-            SpisokPU.Add(new PriborUcheta("15", "Нева 101", 16, 5));
-            SpisokPU.Add(new PriborUcheta("16", "Меркурий 201", 16, 5));
-            SpisokPU.Add(new PriborUcheta("17", "СЕ 101", 16, 5));
-            SpisokPU.Add(new PriborUcheta("18", "ЦЭ 6803", 16, 6));
-            SpisokPU.Add(new PriborUcheta("19", "СКАТ101", 16, 5));
-            SpisokPU.Add(new PriborUcheta("20", "NP73-1.10.1", 10, 7));
+            SpisokPU.Add(new PriborUcheta("15", "Нева 101", 16, "5"));
+            SpisokPU.Add(new PriborUcheta("16", "Меркурий 201", 16, "5"));
+            SpisokPU.Add(new PriborUcheta("17", "СЕ 101", 16, "5"));
+            SpisokPU.Add(new PriborUcheta("18", "ЦЭ 6803", 16, "6"));
+            SpisokPU.Add(new PriborUcheta("19", "СКАТ101", 16, "5"));
+            SpisokPU.Add(new PriborUcheta("20", "NP73-1.10.1", 10, "7"));
         }
 
         public void createMailPath(string path)
