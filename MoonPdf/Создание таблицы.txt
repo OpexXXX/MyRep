@@ -1,0 +1,22 @@
+CREATE TABLE `ATPList` (
+	`ID`	TEXT,
+	`Adress`	TEXT,
+	`Agent_1`	TEXT,
+	`Agent_2`	TEXT,
+	`DateWork`	TEXT,
+	`FIO`	TEXT,
+	`HideNewPu`	INTEGER,
+	`Number`	TEXT,
+	`NumberLS`	TEXT,
+	`PuNewNumber`	TEXT,
+	`PuNewPokazanie`	TEXT,
+	`PuNewPoverkaEar`	TEXT,
+	`PuNewPoverKvartal`	TEXT,
+	`PuNewType`	TEXT,
+	`PuOldMPI`	TEXT,
+	`PuOldNumber`	TEXT,
+	`PuOldPokazanie`	TEXT,
+	`PuOldType`	TEXT,
+	`Field19`	TEXT,
+	`TypeOfWork`	TEXT
+);
