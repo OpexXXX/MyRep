@@ -21,7 +21,7 @@ namespace MoonPdf
             string connectString = null;
             if (env.ToUpper().Equals("DEFAULT"))
             {
-                connectString = "1.0 Test ERP (DEFAULT)";
+                connectString = "11.0 Test ERP (DEFAULT)";
             }
             else
             {
