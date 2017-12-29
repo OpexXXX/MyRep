@@ -58,7 +58,21 @@ namespace MoonPdf
         }
         void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            EnableAtpTab(false);
+
+            // Will not overwrite if the destination file already exists.
+
+            try
+            {
+                string path = String.Format("BASE\\{0}_{1}_{2}_{3}_{4}_{5}_{6}", DateTime.Now.Day, DateTime.Now.Month, DateTime.Now.Year, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second, "filename.db");
+                File.Copy("filename.db", path);
+            }
+            catch (Exception)
+            {
+                
+                MessageBox.Show("");
+            }
+      
+                EnableAtpTab(false);
             ATPWork = new ATPWorker(moonPdfPanel);
             ATPWork.DbWork.AgentListInit(ATPWork.agents);
             ATPWork.DbWork.PUListInit(ATPWork.SpisokPU);
@@ -535,13 +549,13 @@ namespace MoonPdf
         }
         private void MenuItem_Click_2(object sender, RoutedEventArgs e)
         {
-            /*
+            
                 if (sAP == null)
                 {
                     sAP = new SAPActive("ER2");
                     sAP.login();
                 }
-                */
+                
                 progressBar.Minimum = 0;
                 progressBar.Maximum = ATPWork.CompleteAtpWorkList.Count;
                 
