@@ -97,7 +97,7 @@ namespace MoonPdf
             List<Dictionary<String, String>> result = new List<Dictionary<string, string>>();
 
             SQLiteCommand CommandSQL = new SQLiteCommand(connector);
-            CommandSQL.CommandText = "SELECT FIO, PuType, LsNumber,City,Street,House,Korpus,PuNumber, Kv "
+            CommandSQL.CommandText = "SELECT FIO, PuType, LsNumber,City,Street,House,Korpus,PuNumber, Kv, Ustanovka,PuKod "
   + " FROM SAPFL WHERE PuNumber LIKE '%" + numberPU + "%' ";
             try
             {

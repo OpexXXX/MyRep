@@ -112,6 +112,9 @@ namespace MoonPdf
             comboBox3.DataContext = ATPWork;
             comboBox2.ItemsSource = ATPWork.SpisokPU;
             comboBox3.ItemsSource = ATPWork.AllAtpInWorkList;
+            comboBox4.ItemsSource = ATPWork.SpisokPU;
+  
+                
             /**
             ICollectionView cvTasks = CollectionViewSource.GetDefaultView(dataGridComplete.ItemsSource);
             if (cvTasks != null && cvTasks.CanGroup == true)
@@ -532,15 +535,7 @@ namespace MoonPdf
         }
         private void dataGridComplete_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            /*try
-            {
-                aktATP akt = (aktATP)dataGridComplete.SelectedItem;
-                moonPdfPanel.OpenFile(akt.PathOfPdfFile);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }*/
+           
         }
         public SAPActive sAP;
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -610,6 +605,32 @@ namespace MoonPdf
 
 
         }
+
+        private void DataGridMailedAkt_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                aktATP akt = (aktATP)DataGridMailedAkt.SelectedItem;
+                moonPdfPanel.OpenFile(akt.PathOfPdfFile);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void button_Click_3(object sender, RoutedEventArgs e)
+        {
+            string temp_pu;
+            temp_pu = comboBox4.SelectedItem.ToString();
+            foreach (PriborUcheta item in ATPWork.SpisokPU)
+            {
+                if (item.Nazvanie == temp_pu) ((aktATP)DataGridMailedAkt.SelectedItem).PuNewType = new PriborUcheta(item.SapNumberPU, item.Nazvanie, item.Poverka, item.Znachnost);
+            }
+
+         
+        }
+
     }
 }
 

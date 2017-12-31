@@ -255,13 +255,14 @@
             </TabItem >
             <TabItem Header="Отправленные акты" FontSize="14">
                 <Grid Background="#FFE5E5E5" Margin="0,0,0,0">
-                    <DataGrid x:Name="DataGridMailedAkt" Margin="0,0,0,0" IsReadOnly="False" CanUserAddRows="False">
+                    <DataGrid x:Name="DataGridMailedAkt" Margin="0,25,0,0" IsReadOnly="False" CanUserAddRows="False" SelectionChanged="DataGridMailedAkt_SelectionChanged">
                         <DataGrid.Columns>
                             <DataGridTextColumn Binding="{Binding Title}" Header="Номер"/>
                             <DataGridTextColumn Binding="{Binding TypeOfWork}" Header="Тип"/>
                             <DataGridTextColumn Binding="{Binding NumberLS}" Header="Л/С"/>
                             <DataGridTextColumn Binding="{Binding FIO}" Header="Ф.И.О."/>
                             <DataGridTextColumn Binding="{Binding Adress}" Header="Адрес"/>
+                            <DataGridComboBoxColumn x:Name="dataGridComboTypePU" IsReadOnly="False" SelectedItemBinding="{Binding SapNumberPU}" Header="Новый ПУ"/>
                         </DataGrid.Columns>
                         <DataGrid.GroupStyle>
                             <GroupStyle ContainerStyle="{StaticResource GroupHeaderStyle}">
@@ -286,6 +287,8 @@
                         
                         </DataGrid.GroupStyle>
                     </DataGrid>
+                    <ComboBox x:Name="comboBox4" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"/>
+                    <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="120,0,0,0" VerticalAlignment="Top" Width="75" Click="button_Click_3"/>
                 </Grid>
             </TabItem >
             <TabItem Header="Акты в работе" FontSize="14">
