@@ -71,12 +71,11 @@ namespace MoonPdf
                 
                 MessageBox.Show("");
             }
-      
-                EnableAtpTab(false);
+    
+            EnableAtpTab(false);
             ATPWork = new ATPWorker(moonPdfPanel);
             ATPWork.DbWork.AgentListInit(ATPWork.agents);
             ATPWork.DbWork.PUListInit(ATPWork.SpisokPU);
-
             ATPWork.DbWork.LoadCompleteATP(ATPWork);
 
             comboBox.ItemsSource = ATPWork.agents;
@@ -84,19 +83,14 @@ namespace MoonPdf
             DataContext = ATPWork.AktATPInWork;
             dataGrid1.ItemsSource = ATPWork.AllAtpInWorkList;
 
-
-
             ListCollectionView collection1 = new ListCollectionView(ATPWork.AllAtpInWorkList);
             collection1.GroupDescriptions.Add(new PropertyGroupDescription("Complete"));
             dataGrid1.ItemsSource = collection1;
-
             var yourCostumFilter1 = new Predicate<object>(item => ((aktATP)item).NumberMail == 0);
             ListCollectionView collection2 = new ListCollectionView(ATPWork.CompleteAtpWorkList);
             collection2.GroupDescriptions.Add(new PropertyGroupDescription("TypeOfWork"));
             collection2.Filter = yourCostumFilter1;
             dataGridComplete.ItemsSource = collection2;
-
-
             // your Filter
             var yourCostumFilter = new Predicate<object>(item => ((aktATP)item).NumberMail != 0);
             ListCollectionView collection = new ListCollectionView(ATPWork.CompleteAtpWorkList);
@@ -104,7 +98,6 @@ namespace MoonPdf
             collection.GroupDescriptions.Add(new PropertyGroupDescription("TypeOfWork"));
             collection.Filter = yourCostumFilter;
             DataGridMailedAkt.ItemsSource = collection;
-
             List<string> ll = new List<string>();
             ll.Add("2400_4");
             ll.Add("2400_5");
@@ -112,7 +105,7 @@ namespace MoonPdf
             comboBox3.DataContext = ATPWork;
             comboBox2.ItemsSource = ATPWork.SpisokPU;
             comboBox3.ItemsSource = ATPWork.AllAtpInWorkList;
-            comboBox4.ItemsSource = ATPWork.SpisokPU;
+           
   
                 
             /**
@@ -247,6 +240,7 @@ namespace MoonPdf
                 }
             }
         }
+
         private void textBox6_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -260,9 +254,9 @@ namespace MoonPdf
                     statusStripText.Text = "Введите более 4х символов для поиска по номеру ПУ";
                 }
             }
-
-
         }
+
+
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -277,8 +271,8 @@ namespace MoonPdf
                     statusStripText.Text = "Введите более 9ти символов для поиска по лицевому счету";
                 }
             }
-
         }
+
         private void dataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             ATPWork.AktATPInWork.plomb.Add(new plomba("", "", "", false));
@@ -621,14 +615,14 @@ namespace MoonPdf
 
         private void button_Click_3(object sender, RoutedEventArgs e)
         {
-            string temp_pu;
+           /* string temp_pu;
             temp_pu = comboBox4.SelectedItem.ToString();
             foreach (PriborUcheta item in ATPWork.SpisokPU)
             {
                 if (item.Nazvanie == temp_pu) ((aktATP)DataGridMailedAkt.SelectedItem).PuNewType = new PriborUcheta(item.SapNumberPU, item.Nazvanie, item.Poverka, item.Znachnost);
             }
 
-         
+         */
         }
 
     }

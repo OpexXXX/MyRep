@@ -16,12 +16,22 @@ namespace MoonPdf
     {
         SQLiteConnection connector;
         SQLiteConnection connectorOnSaveLoad;
+        SQLiteConnection connectorOplombirovki;
         public DataBaseWorker()
         {
             connector = new SQLiteConnection("Data Source=filename.db; Version=3;");
             try
             {
                 connector.Open();
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            connectorOplombirovki = new SQLiteConnection("Data Source=oplombirovki.db; Version=3;");
+            try
+            {
+                connectorOplombirovki.Open();
             }
             catch (SQLiteException ex)
             {
@@ -132,7 +142,6 @@ namespace MoonPdf
             }
 
         }
-
         public bool SaveATP(ATPWorker ATP, string Path)
         {
             //Открываем соединение

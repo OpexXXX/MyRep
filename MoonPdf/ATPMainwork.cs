@@ -131,7 +131,6 @@ namespace MoonPdf
             return this.surname.ToString();
         }
     }
-
     public class ATPWorker : INotifyPropertyChanged
     {
         public DataBaseWorker DbWork;
