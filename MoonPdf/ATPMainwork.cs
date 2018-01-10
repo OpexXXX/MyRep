@@ -158,6 +158,7 @@ namespace MoonPdf
                 this.completeAtpWorkList = value;
             }
         }
+
         private AllATPObserv allAtpInWorkList;
         public AllATPObserv AllAtpInWorkList
         {

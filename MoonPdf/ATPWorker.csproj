@@ -169,10 +169,14 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ExcelWorker.cs" />
+    <Compile Include="Oplobbirovki.cs" />
     <Compile Include="ResultSearchWindow.xaml.cs">
       <DependentUpon>ResultSearchWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SAPWorker.cs" />
+    <Compile Include="SearchWindowOplombirovki.xaml.cs">
+      <DependentUpon>SearchWindowOplombirovki.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -192,6 +196,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="ResultSearchWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SearchWindowOplombirovki.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

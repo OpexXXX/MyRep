@@ -127,32 +127,42 @@ namespace MoonPdf
         }
         public void enterAktTehProverki(aktATP akt, string pdfDirectory)
         {
-            string pokazanieProverki,primechanieKAkty;
+            string dataProvodkiAkta = akt.DateWork.ToString("d");
+
+            string pokazanieProverki, primechanieKAkty;
             //Закупаем пломбы 
             foreach (plomba item in akt.plomb)
             {
                 shopPlomb(item, akt.DateWork.ToString("d"));
             }
-            
+
             if (akt.DopuskFlag) //Если тип акта допуск
             {
                 pokazanieProverki = akt.PuNewPokazanie; //Показания для акта проверки
-                primechanieKAkty = "Допуск" + ((akt.Agent_2 != null) ? (akt.Agent_2.Surname) : "") + ""; //Примечание для акта
-                if (!demontirovatPU(akt)) return;//Демонтируем счетчик
-                if (montirovatPU(akt)=="") return;//Монтируем счетчик
+                primechanieKAkty = "Допуск " + ((akt.Agent_2 != null) ? (akt.Agent_2.Surname) : "") + " "; //Примечание для акта
+                string result = demontirovatPU(akt,akt.DateWork);
+
+                if (result =="") return;//Демонтируем счетчик
+                if (result != "ok") dataProvodkiAkta = result;
+                string dateMontagPU = akt.DateWork.ToString("d"); 
+                 
+                if (result != "ok") dateMontagPU = result;
+
+                if (montirovatPU(akt, dateMontagPU) == "") return;//Монтируем счетчик
             }
 
             else//Если тип акта проверка
             {
                 pokazanieProverki = akt.PuOldPokazanie;
-                primechanieKAkty = ((akt.Agent_2 != null) ? (akt.Agent_2.Surname) : "") + ""; //Примечание
+                primechanieKAkty = ((akt.Agent_2 != null) ? (akt.Agent_2.Surname) : "") + " "; //Примечание
             }
 
             SapSession.StartTransaction("CV01N");
             ((GuiTextField)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/usr/ctxtDRAW-DOKNR")).Text = "*";
             ((GuiTextField)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/usr/ctxtDRAW-DOKAR")).Text = "ATP";
             SapSession.SendCommand(""); //Enter
-                                        /*******************Вкладка оснвная****************************************/
+
+            /*******************Вкладка оснвная****************************************/
             GuiCTextField BEText = (GuiCTextField)SapSession.ActiveWindow.FindByName("GS_DATA_MAIN-BUKRS", "GuiCTextField");
             GuiCTextField UstanovkaText = (GuiCTextField)SapSession.ActiveWindow.FindByName("GS_DATA_MAIN-ANLAGE", "GuiCTextField");
             GuiComboBox TypeAktCombo = (GuiComboBox)SapSession.ActiveWindow.FindByName("GS_DATA_MAIN-VID", "GuiComboBox");
@@ -174,30 +184,34 @@ namespace MoonPdf
             TypeAktCombo.Key = "1"; //Контрольная проверка
             TypeProverkaCombo.Key = "13";//13 плановая
             NumberProvText.Text = akt.Number.ToString(); //Номер проверки
-            DateAktText.Text = akt.DateWork.ToString("d");// Дата проверки
-            
+            DateAktText.Text = dataProvodkiAkta;// Дата проверки
 
             AgentText.Text = akt.Agent_1.SapNumber;// 1ый Агент к акту
-            ResultProverkaCombo.Key = akt.PuOldMPI ? "3":"1";// 1-Соответсвует. 3 -Не соответствует
+            ResultProverkaCombo.Key = akt.PuOldMPI ? "3" : "1";// 1-Соответсвует. 3 -Не соответствует
             typePredpisan.Text = akt.PuOldMPI ? "10" : ""; //10 - Истек МПИ
-            SrokUstraneniyaText.Text = akt.PuOldMPI ? akt.DateWork.AddMonths(1).ToString("d") : "";//Дата устранения
-            PrimechanieText.Text= primechanieKAkty; //Примечание
+            SrokUstraneniyaText.Text = akt.PuOldMPI ? dataProvodkiAkta : "";//Дата устранения
+
             Pokazanie.Text = pokazanieProverki; //Показание ПУ
             SapSession.SendCommand(""); //Enter
 
             if (statusBar.Text.Contains("закрыт")) //Если период закрыт разносим вторым числом текущего месяца
             {
-                SapSession.SendCommand("");
-                string date = "02." + (akt.DateWork.Month + 1).ToString() + "." + akt.DateWork.Year.ToString();
+                var datet = akt.DateWork.AddMonths(1);
+                string date = "02." + datet.Month.ToString() + "." + datet.Year.ToString();
+                DateAktText = (GuiCTextField)SapSession.ActiveWindow.FindByName("GS_DATA_MAIN-DATE_ACT", "GuiCTextField");
                 DateAktText.Text = date;
+                SapSession.SendCommand("");
+                primechanieKAkty += " " + akt.DateWork.ToString("d");
             }
+            PrimechanieText = (GuiTextField)SapSession.ActiveWindow.FindByName("GS_DATA_MAIN-PRIM", "GuiTextField");
+            PrimechanieText.Text = primechanieKAkty; //Примечание
+
 
             //Ведение Пломб*******************************/
             ustanovkaPlomb(akt);
             /*Добавление файлов*/
             addFIleToAkt(akt, pdfDirectory);
             //Сохранение
-
             SaveAktBtn.Press();
             GuiButton SaveAktOKBtn = (GuiButton)SapSession.ActiveWindow.FindByName("btn[0]", "GuiButton"); //Сохранить акт
             SaveAktOKBtn.Press();
@@ -222,7 +236,6 @@ namespace MoonPdf
                     GuiButton OKBtn = (GuiButton)SapSession.ActiveWindow.FindByName("btn[0]", "GuiButton"); //
                     OKBtn.Press();
                 }
-
             }
             catch (Exception)
             {
@@ -331,7 +344,7 @@ namespace MoonPdf
                         catch (Exception)
                         {
 
-                            throw;
+
                         }
 
                         /************************/
@@ -353,8 +366,10 @@ namespace MoonPdf
             backBtn.Press();
         }
 
-        private bool demontirovatPU(aktATP akt)
+        private string demontirovatPU(aktATP akt, DateTime dataP)
         {
+            DateTime dataProvodki = new DateTime(dataP.Year, dataP.Month, dataP.Day);
+
             /***********Узнаем серийныи номер пу*******************/
             string serNumberOldPU;
             SapSession.StartTransaction("IE03");
@@ -370,7 +385,7 @@ namespace MoonPdf
             SapSession.StartTransaction("EG32");
             GuiCTextField dateDemontag = (GuiCTextField)SapSession.ActiveWindow.FindByName("REG30-EADAT", "GuiCTextField");
             GuiCTextField serNumberDemontag = (GuiCTextField)SapSession.ActiveWindow.FindByName("REG30-GERAETALT", "GuiCTextField");
-            dateDemontag.Text = akt.DateWork.ToString("d");
+            dateDemontag.Text = dataProvodki.ToString("d");
             serNumberDemontag.Text = serNumberOldPU;
             SapSession.SendCommand("");//
 
@@ -399,23 +414,41 @@ namespace MoonPdf
                 SapSession.StartTransaction("EG32");
                 dateDemontag = (GuiCTextField)SapSession.ActiveWindow.FindByName("REG30-EADAT", "GuiCTextField");
                 serNumberDemontag = (GuiCTextField)SapSession.ActiveWindow.FindByName("REG30-GERAETALT", "GuiCTextField");
-                dateDemontag.Text = akt.DateWork.ToString("d");
+                dateDemontag.Text = dataProvodki.ToString("d");
                 serNumberDemontag.Text = serNumberOldPU;
                 SapSession.SendCommand("");
             }
 
-           
+
             statusBar = (GuiStatusbar)SapSession.ActiveWindow.FindByName("sbar", "GuiStatusbar");//sbar
-            if (statusBar.Text.Contains("не соответствует введенным данным")) return true;
-            if (statusBar.Text.Contains("рассчитана после")) return false;
+            if (statusBar.Text.Contains("не соответствует введенным данным")) return "ok";
+
+            if (statusBar.Text.Contains("рассчитана после"))
+            {
+                dataProvodki= dataProvodki.AddMonths(1);
+               // dataProvodki.AddDays(1);
+                DateTime datet = new DateTime(dataProvodki.Year, dataProvodki.Month, 2);
+                string res = demontirovatPU(akt, datet);
+                if (res == "ok")
+                {
+                    return datet.ToString("d");
+                }
+                else
+                {
+                    return "";
+                }
+
+
+            }
+
             GuiTextField Pokazanie = ((GuiTextField)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/usr/tblSAPLE30DCONTROL_RE_REM/txtREG30-ZWSTANDCA[5,0]"));
             Pokazanie.Text = akt.PuOldPokazanie;
             GuiButton SaveAktBtn = (GuiButton)SapSession.ActiveWindow.FindByName("btn[11]", "GuiButton"); //Сохранить акт
             SaveAktBtn.Press();
-            return true;
+            return "ok";
 
         }
-        private string montirovatPU(aktATP akt)
+        private string montirovatPU(aktATP akt, string date)
         {
             SapSession.StartTransaction("/MRSKS/ISU_CARD");
             GuiCTextField ustanovka = (GuiCTextField)SapSession.ActiveWindow.FindByName("P_ANLAGE", "GuiCTextField");
@@ -436,11 +469,11 @@ namespace MoonPdf
             GuiComboBox poverkaKvartal = (GuiComboBox)SapSession.ActiveWindow.FindByName("GS_LOGIKNR-CUST_FIELD-CHECK_QUART", "GuiComboBox");//GS_LOGIKNR-CUST_FIELD-CHECK_QUART Квартал поверки GuiComboBox 
             GuiTextField PuNumber = (GuiTextField)SapSession.ActiveWindow.FindByName("GS_LOGIKNR-CUST_FIELD-COUNTERNUMBER", "GuiTextField");//GS_LOGIKNR-CUST_FIELD-COUNTERNUMBER Номер ПУ GuiTextField 
             yearProdaction.Text = akt.PuNewPoverkaEar;
-            dateMontag.Text = akt.DateWork.ToString("d");
+            dateMontag.Text = date;
             typePU.Text = akt.PuNewType.SapNumberPU;
             poverkaYar.Text = akt.PuNewPoverkaEar;
-            periodPoverki.Text = akt.PuNewType.Poverka.ToString() ;
-            poverkaKvartal.Key= akt.PuNewPoverKvartal;
+            periodPoverki.Text = akt.PuNewType.Poverka.ToString();
+            poverkaKvartal.Key = akt.PuNewPoverKvartal;
             PuNumber.Text = akt.PuNewNumber;
 
             SapSession.SendCommand("");
@@ -448,7 +481,7 @@ namespace MoonPdf
             GuiTextField Pokazanie = (GuiTextField)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/usr/subCUST_SCREEN:/MRSKS/ISU_ARM_LOGIKNR:1003/tbl/MRSKS/ISU_ARM_LOGIKNRGT_LOGIKZW_SCR/txtGS_LOGIKZW-ARESULT_TXT[5,0]");//Показание  GuiTextField 
             znachnostPU.Text = akt.PuNewType.Znachnost;
             Pokazanie.Text = akt.PuNewPokazanie;
-            GuiButton SavePUBtn = (GuiButton)SapSession.ActiveWindow.FindByName("btn[11]", "GuiButton"); 
+            GuiButton SavePUBtn = (GuiButton)SapSession.ActiveWindow.FindByName("btn[11]", "GuiButton");
 
             GuiStatusbar statusBar = (GuiStatusbar)SapSession.ActiveWindow.FindByName("sbar", "GuiStatusbar");
             SavePUBtn.Press();
@@ -465,7 +498,7 @@ namespace MoonPdf
             OkBtn.Press();
             OkBtn = (GuiButton)SapSession.ActiveWindow.FindByName("btn[0]", "GuiButton");
             OkBtn.Press();
-            GuiTextField SeriiniiNomer = (GuiTextField)SapSession.ActiveWindow.FindByName("GS_LOGIKNR-SERNR", "GuiTextField"); 
+            GuiTextField SeriiniiNomer = (GuiTextField)SapSession.ActiveWindow.FindByName("GS_LOGIKNR-SERNR", "GuiTextField");
             //GS_LOGIKNR-SERNR GuiTextField Серийный номер
 
             return SeriiniiNomer.Text;

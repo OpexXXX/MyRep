@@ -68,10 +68,10 @@ namespace MoonPdf
             }
             catch (Exception)
             {
-                
+
                 MessageBox.Show("");
             }
-    
+
             EnableAtpTab(false);
             ATPWork = new ATPWorker(moonPdfPanel);
             ATPWork.DbWork.AgentListInit(ATPWork.agents);
@@ -105,9 +105,9 @@ namespace MoonPdf
             comboBox3.DataContext = ATPWork;
             comboBox2.ItemsSource = ATPWork.SpisokPU;
             comboBox3.ItemsSource = ATPWork.AllAtpInWorkList;
-           
-  
-                
+
+
+
             /**
             ICollectionView cvTasks = CollectionViewSource.GetDefaultView(dataGridComplete.ItemsSource);
             if (cvTasks != null && cvTasks.CanGroup == true)
@@ -396,7 +396,7 @@ namespace MoonPdf
             }
             string nameMail;
             string pathOfMail;
-            nameMail = "исх.№91-" + numberMailTextBlock.Text + " от " + dateMail.Text + "г. Акты ПР ФЛ";
+            nameMail = @"исх.№91-" + numberMailTextBlock.Text + @" от " + dateMail.Text + @"г. Акты ПР ФЛ";
             if (ATPWork.PathOfMailFolder == null)
             {
                 if (!ATPWork.selectMailFolder()) return;
@@ -415,7 +415,7 @@ namespace MoonPdf
                     item.DateMail = dateMail.Text;
                 }
             }
-            excel.DataTableToExcel(listATPForMail, pathOfMail + "\\" + "Реестр.xlsx");
+            excel.DataTableToExcel(listATPForMail, pathOfMail + "\\" + @"Реестр.xlsx");
             ATPWork.blindPdf(listATPForMail, pathOfMail);
         }
         private void dateTimePicker1_KeyDown(object sender, KeyEventArgs e)
@@ -529,7 +529,7 @@ namespace MoonPdf
         }
         private void dataGridComplete_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-           
+
         }
         public SAPActive sAP;
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -538,36 +538,46 @@ namespace MoonPdf
         }
         private void MenuItem_Click_2(object sender, RoutedEventArgs e)
         {
-            
-                if (sAP == null)
-                {
-                    sAP = new SAPActive("ER2");
-                    sAP.login();
-                }
-                
-                progressBar.Minimum = 0;
-                progressBar.Maximum = ATPWork.CompleteAtpWorkList.Count;
-                
-                int i = 0;
 
-                foreach (var item in ATPWork.CompleteAtpWorkList)
+            if (sAP == null)
+            {
+                sAP = new SAPActive("ER2");
+                sAP.login();
+            }
+
+            progressBar.Minimum = 0;
+            progressBar.Maximum = ATPWork.CompleteAtpWorkList.Count;
+
+            int i = 0;
+
+            foreach (var item in ATPWork.CompleteAtpWorkList)
+            {
+
+                if ((item.SapNumberAkt == "") && (File.Exists(ATPWork.AktDirektory + item.PathOfPdfFile)))
                 {
-                    if ((item.SapNumberAkt == "")&&(File.Exists(ATPWork.AktDirektory+item.PathOfPdfFile)))
+                   /* try
+                    {*/
+                        sAP.enterAktTehProverki(item, ATPWork.AktDirektory);
+                        // item.PathOfPdfFile = item.Number.ToString() + ".pdf";
+                        //MessageBox.Show(item.PathOfPdfFile);
+                        ATPWork.DbWork.DromCompliteTable();
+                        ATPWork.DbWork.InsertCompleteAktAPT(ATPWork.CompleteAtpWorkList);
+
+                   /* }
+                    catch (Exception ex)
                     {
 
-                    sAP.enterAktTehProverki(item,ATPWork.AktDirektory);
-                   // item.PathOfPdfFile = item.Number.ToString() + ".pdf";
-                    //MessageBox.Show(item.PathOfPdfFile);
-                    ATPWork.DbWork.DromCompliteTable();
-                    ATPWork.DbWork.InsertCompleteAktAPT(ATPWork.CompleteAtpWorkList);
+                        MessageBox.Show(ex.Message);
+                    }*/
+                   
 
                 }
-                    progressBar.Value = i;
-                    i++;
-                }
-           
-                //MessageBox.Show(ex.Message);
-            
+                progressBar.Value = i;
+                i++;
+            }
+
+            //MessageBox.Show(ex.Message);
+
         }
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
@@ -581,21 +591,21 @@ namespace MoonPdf
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            
 
-           /* foreach (aktATP item in ATPWork.CompleteAtpWorkList)
-            {
-                 int i = 0;
-                 string fileName = "";
-                 i=(item.PathOfPdfFile.Split('\\')).Length;
-                 fileName = item.PathOfPdfFile.Split('\\')[i - 1];
-                 item.PathOfPdfFile = fileName;
-                string p = ATPWork.AktDirektory + item.PathOfPdfFile;
-                if (!File.Exists(p))
-                {
-                    MessageBox.Show(item.Title + " " + item.PathOfPdfFile);
-                }
-            }*/
+
+            /* foreach (aktATP item in ATPWork.CompleteAtpWorkList)
+             {
+                  int i = 0;
+                  string fileName = "";
+                  i=(item.PathOfPdfFile.Split('\\')).Length;
+                  fileName = item.PathOfPdfFile.Split('\\')[i - 1];
+                  item.PathOfPdfFile = fileName;
+                 string p = ATPWork.AktDirektory + item.PathOfPdfFile;
+                 if (!File.Exists(p))
+                 {
+                     MessageBox.Show(item.Title + " " + item.PathOfPdfFile);
+                 }
+             }*/
 
 
         }
@@ -615,14 +625,14 @@ namespace MoonPdf
 
         private void button_Click_3(object sender, RoutedEventArgs e)
         {
-           /* string temp_pu;
-            temp_pu = comboBox4.SelectedItem.ToString();
-            foreach (PriborUcheta item in ATPWork.SpisokPU)
-            {
-                if (item.Nazvanie == temp_pu) ((aktATP)DataGridMailedAkt.SelectedItem).PuNewType = new PriborUcheta(item.SapNumberPU, item.Nazvanie, item.Poverka, item.Znachnost);
-            }
+            /* string temp_pu;
+             temp_pu = comboBox4.SelectedItem.ToString();
+             foreach (PriborUcheta item in ATPWork.SpisokPU)
+             {
+                 if (item.Nazvanie == temp_pu) ((aktATP)DataGridMailedAkt.SelectedItem).PuNewType = new PriborUcheta(item.SapNumberPU, item.Nazvanie, item.Poverka, item.Znachnost);
+             }
 
-         */
+          */
         }
 
     }

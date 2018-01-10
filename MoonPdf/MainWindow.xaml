@@ -83,15 +83,13 @@
                 </ProgressBar.RenderTransform>
             </ProgressBar>
         </StatusBar>
-        <TabControl x:Name="tabControlMain" Margin="0,31" >
+        <TabControl x:Name="tabControlMain" Margin="0,26,0,31" >
             <TabItem Header="Тех. проверки" FontSize="14">
                 <Grid Margin="0,0,0,0">
-
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="371"/>
                     </Grid.ColumnDefinitions>
-
                     <GridSplitter x:Name="gridSplitter" Grid.Column="1" HorizontalAlignment="Left" Height="718" VerticalAlignment="Top" Width="5" Grid.RowSpan="3" Margin="0,0,0,-101"/>
                     <TabControl x:Name="tabControl" Grid.Column="1" Margin="5,0,0,1" RenderTransformOrigin="0.5,0.5" Grid.Row="1">
                         <TabControl.RenderTransform>
@@ -385,15 +383,30 @@
                         </TabItem>
                     </TabControl>
                     <mpp:MoonPdfPanel Background="LightGray" ViewType="SinglePage" PageRowDisplay="ContinuousPageRows" PageMargin="0,2,4,2" x:Name="moonPdfPanel" x:FieldModifier="private" RenderTransformOrigin="0.243,0.495" Margin="0,1,0,0" Grid.Row="1" PageRowDisplayChanged="moonPdfPanel_PageRowDisplayChanged" AllowDrop="False" PdfLoaded="moonPdfPanel_PdfLoaded"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Внеплан" FontSize="14">
+                <Grid Margin="0,0,0,0">
+                    <DataGrid x:Name="dataGridOplombirovki" Margin="0,0,0,10"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Акты БУ" FontSize="14">
+                <Grid Margin="0,0,0,0">
+                    <TabControl x:Name="tabControlBU" Margin="0,0,0,0" >
+                        <TabItem Header="Занесение" FontSize="14">
+                            <Grid Margin="0,0,0,0">
 
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="Реестр" FontSize="14">
+                            <Grid Margin="0,0,0,0">
 
-
-
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
                 </Grid>
             </TabItem>
 
         </TabControl>
-
     </Grid>
-
 </Window>
