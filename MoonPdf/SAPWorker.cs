@@ -116,7 +116,7 @@ namespace MoonPdf
                 {
                     ((GuiButton)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/tbar[1]/btn[25]")).Press(); //Редактировать
                     plombArea.SelectAll();
-                    ((GuiButton)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/tbar[1]/btn[31]")).Press(); //Выдать
+                    ((GuiButton)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/tbar[1]/btn[31]")).Press(); //Выдать  
                     ((GuiTextField)SapSession.FindById("/app/con[0]/ses[0]/wnd[1]/usr/ctxt/SAPCE/IURU_SEALS_CHANGED-REPER")).Text = "6"; //Ответственное лицо "Красноярскэнерго"
                     ((GuiTextField)SapSession.FindById("/app/con[0]/ses[0]/wnd[1]/usr/ctxt/SAPCE/IURU_SEALS_CHANGED-DISSUE")).Text = dateOfPlacement; //Дата выдачи пломбы
                     ((GuiButton)SapSession.FindById("/app/con[0]/ses[0]/wnd[1]/tbar[0]/btn[5]")).Press(); //Скопировать во все
