@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace MoonPdf
+namespace MyApp.Model
 {
     public class PlobmListOserv : ObservableCollection<plomba>
     {

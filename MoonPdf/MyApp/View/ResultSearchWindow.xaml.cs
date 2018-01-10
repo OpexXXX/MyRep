@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace MoonPdf
+namespace MyApp
 {
     
     public class ListBoxView :INotifyPropertyChanged, IEquatable<ListBoxView>

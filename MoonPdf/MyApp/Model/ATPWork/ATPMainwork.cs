@@ -17,7 +17,7 @@ using winForms = System.Windows.Forms;
 using System.Windows.Media.Animation;
 
 
-namespace MoonPdf
+namespace MyApp.Model
 {
     public class SpisokPUObserv : ObservableCollection<PriborUcheta>
     {

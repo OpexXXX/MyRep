@@ -23,7 +23,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 
-namespace MoonPdf
+namespace MyApp
 {
 
 	public partial class App : Application

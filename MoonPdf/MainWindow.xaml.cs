@@ -24,7 +24,7 @@ using System.ComponentModel;
 using SAPFEWSELib;
 using System.Threading;
 
-namespace MoonPdf
+namespace MyApp
 {
 
     public partial class MainWindow : Window

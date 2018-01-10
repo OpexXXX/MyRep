@@ -12,14 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace MoonPdf
+namespace MyApp
 {
     /// <summary>
-    /// Логика взаимодействия для SearchWindowOplombirovki.xaml
+    /// Логика взаимодействия для SettingsWindow.xaml
     /// </summary>
-    public partial class SearchWindowOplombirovki : Window
+    public partial class SettingsWindow : Window
     {
-        public SearchWindowOplombirovki()
+        public SettingsWindow()
         {
             InitializeComponent();
         }

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MoonPdf
+namespace MyApp.Model
 {
     public class spisokZayvokOplomb : ObservableCollection<ZayvkaOplomb>
     {

@@ -7,7 +7,7 @@
     <ProjectGuid>{0A2C7E6D-E41B-444E-A74F-C396F7912D9D}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MoonPdf</RootNamespace>
+    <RootNamespace>ATPWork</RootNamespace>
     <AssemblyName>ATPWork</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -97,7 +97,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>martz90-circle-windows-8.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\martz90-circle-windows-8.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -168,42 +168,42 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ExcelWorker.cs" />
-    <Compile Include="Oplobbirovki.cs" />
-    <Compile Include="ResultSearchWindow.xaml.cs">
+    <Compile Include="MyApp\Model\ExcelWork\ExcelWorker.cs" />
+    <Compile Include="MyApp\Model\Zayvki na oplombirovku\Oplobbirovki.cs" />
+    <Compile Include="MyApp\View\ResultSearchWindow.xaml.cs">
       <DependentUpon>ResultSearchWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SAPWorker.cs" />
-    <Compile Include="SearchWindowOplombirovki.xaml.cs">
+    <Compile Include="MyApp\Model\SAPWork\SAPWorker.cs" />
+    <Compile Include="MyApp\View\SearchWindowOplombirovki.xaml.cs">
       <DependentUpon>SearchWindowOplombirovki.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SettingsWindow.xaml.cs">
+    <Compile Include="MyApp\View\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="aktATP.cs" />
+    <Compile Include="MyApp\Model\ATPWork\aktATP.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ATPMainwork.cs" />
-    <Compile Include="DataBaseWorker.cs" />
+    <Compile Include="MyApp\Model\ATPWork\ATPMainwork.cs" />
+    <Compile Include="MyApp\Model\DbWork\DataBaseWorker.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="ResultSearchWindow.xaml">
+    <Page Include="MyApp\View\ResultSearchWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SearchWindowOplombirovki.xaml">
+    <Page Include="MyApp\View\SearchWindowOplombirovki.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SettingsWindow.xaml">
+    <Page Include="MyApp\View\SettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -241,7 +241,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="martz90-circle-windows-8.ico" />
+    <Resource Include="Resources\martz90-circle-windows-8.ico" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="Microsoft.Office.Core">
@@ -285,14 +285,16 @@
     <Resource Include="Resources\ok.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Interop.SAPFEWSELib.dll" />
-    <Content Include="Interop.SAPLogonCtrl.dll" />
-    <Content Include="libmupdf.dll" />
-    <Content Include="MoonPdfLib.dll" />
-    <Content Include="MouseKeyboardActivityMonitor.dll" />
-    <Content Include="sapfewse.ocx" />
+    <Content Include="Resources\Interop.SAPFEWSELib.dll" />
+    <Content Include="Resources\Interop.SAPLogonCtrl.dll" />
+    <Content Include="Resources\libmupdf.dll" />
+    <Content Include="Resources\MoonPdfLib.dll" />
+    <Content Include="Resources\MouseKeyboardActivityMonitor.dll" />
+    <Content Include="Resources\sapfewse.ocx" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="MyApp\ViewModel\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
