@@ -193,13 +193,13 @@ namespace MyApp.Model
                + "TypeOfWork TEXT"
               + ");";
             result_command += sql_command;
-            foreach (aktATP item in ATP.AllAtpInWorkList)
+            foreach (AktTehProverki item in ATP.AllAtpInWorkList)
             {
                 //добавляем строку с актом
                 sql_command = "INSERT INTO ATPList(  'ID',`PathOfPdfFile`, 'Adress', Agent_1, Agent_2, DateWork, FIO, DopuskFlag, Number,NumberLS,PuNewNumber,PuNewPokazanie,PuNewPoverkaEar,PuNewPoverKvartal,PuNewType,PuOldMPI,PuOldNumber,PuOldPokazanie,PuOldType,TypeOfWork, Page1, Page2)"
               + "VALUES ('"
                + item.ID.ToString() + "', '"
-                 + item.PathOfPdfFile + "', '"
+                 + item.NamePdfFile + "', '"
                 + item.Adress + "', '"
                 + (item.Agent_1 != null ? item.Agent_1.SapNumber : "") + "', '"
                 + (item.Agent_2 != null ? item.Agent_2.SapNumber : "") + "', '"
@@ -222,7 +222,7 @@ namespace MyApp.Model
                 + item.NumberOfPagesInSoursePdf[1] + "');";
                 result_command += sql_command;
                 // Создаем Таблицу для пломб к текущему акту
-                if (item.plomb.Count > 0)
+                if (item.plombs.Count > 0)
                 {
                     string plombTableName = item.ID.ToString() + item.Number + item.NumberLS + "Plobm";
                     //Имя таблицы пломб
@@ -234,7 +234,7 @@ namespace MyApp.Model
                       + "'Remove' INTEGER,     "
                       + "'Place' TEXT );";
                     result_command += sql_command;
-                    foreach (plomba Plomba in item.plomb)
+                    foreach (Plomba Plomba in item.plombs)
                     {
                         //добавляем строку с пломбой
                         sql_command = "INSERT INTO `" + plombTableName + "` (Type, Number, Remove, Place) "
@@ -277,7 +277,7 @@ namespace MyApp.Model
                 return false;
             }
             // Загрузка листа проверок
-            List<aktATP> result = new List<aktATP>();
+            List<AktTehProverki> result = new List<AktTehProverki>();
             SQLiteCommand CommandSQL = new SQLiteCommand(connectorOnSaveLoad);
             CommandSQL.CommandText = "SELECT * "
             + " FROM `ATPList`;";
@@ -291,7 +291,7 @@ namespace MyApp.Model
                     List<int> Page = new List<int>();
                     Page.Add(Int32.Parse(r["Page1"].ToString()));
                     Page.Add(Int32.Parse(r["Page2"].ToString()));
-                    result.Add(new aktATP(Int32.Parse(r["ID"].ToString()), Page, r["PathOfPdfFile"].ToString()));
+                    result.Add(new AktTehProverki(Int32.Parse(r["ID"].ToString()), Page, r["PathOfPdfFile"].ToString()));
                     //Ищем агентов по номеру
                     string temp_agent = r["Agent_1"].ToString();
                     if (temp_agent != "")
@@ -353,7 +353,7 @@ namespace MyApp.Model
                                 plomb_Number = plomb_reader["Number"].ToString();
                                 plomb_Remove = Int32.Parse(plomb_reader["Remove"].ToString()) == 0 ? false : true; ;
                                 plomb_Place = plomb_reader["Place"].ToString();
-                                result[i].plomb.Add(new plomba(plomb_Type, plomb_Number, plomb_Place, plomb_Remove));
+                                result[i].plombs.Add(new Plomba(plomb_Type, plomb_Number, plomb_Place, plomb_Remove));
                             }
                         }
                     }
@@ -370,7 +370,7 @@ namespace MyApp.Model
                 MessageBox.Show(ex.Message);
             }
             ATP.AllAtpInWorkList.Clear();
-            foreach (aktATP item in result)
+            foreach (AktTehProverki item in result)
             {
                 ATP.AllAtpInWorkList.Add(item);
             }
@@ -395,7 +395,7 @@ namespace MyApp.Model
         {
             //Открываем соединение
             // Загрузка листа проверок
-            List<aktATP> result = new List<aktATP>();
+            List<AktTehProverki> result = new List<AktTehProverki>();
             SQLiteCommand CommandSQL = new SQLiteCommand(connector);
             CommandSQL.CommandText = "SELECT * "
             + " FROM `CompleteATPList`;";
@@ -407,7 +407,7 @@ namespace MyApp.Model
                 List<int> Page = new List<int>();
                 Page.Add(Int32.Parse(r["Page1"].ToString()));
                 Page.Add(Int32.Parse(r["Page2"].ToString()));
-                result.Add(new aktATP(Int32.Parse(r["ID"].ToString()), Page, r["PathOfPdfFile"].ToString()));
+                result.Add(new AktTehProverki(Int32.Parse(r["ID"].ToString()), Page, r["PathOfPdfFile"].ToString()));
                 //Ищем агентов по номеру
                 string temp_agent = r["Agent_1"].ToString();
                 if (temp_agent != "")
@@ -476,7 +476,7 @@ namespace MyApp.Model
                             plomb_Number = plomb_reader["Number"].ToString();
                             plomb_Remove = Int32.Parse(plomb_reader["Remove"].ToString()) == 0 ? false : true; ;
                             plomb_Place = plomb_reader["Place"].ToString();
-                            result[i].plomb.Add(new plomba(plomb_Type, plomb_Number, plomb_Place, plomb_Remove));
+                            result[i].plombs.Add(new Plomba(plomb_Type, plomb_Number, plomb_Place, plomb_Remove));
                         }
                     }
                 }
@@ -496,13 +496,13 @@ namespace MyApp.Model
 
 
             ATP.CompleteAtpWorkList.Clear();
-            foreach (aktATP item in result)
+            foreach (AktTehProverki item in result)
             {
                 ATP.CompleteAtpWorkList.Add(item);
             }
 
         }
-        public bool chekForContainsCompleteAktATP(aktATP akt)
+        public bool chekForContainsCompleteAktATP(AktTehProverki akt)
         {
             SQLiteCommand CommandSQL = new SQLiteCommand(connector);
             CommandSQL.CommandText = "SELECT DateWork, Number, NumberLS "
@@ -515,14 +515,14 @@ namespace MyApp.Model
         public void InsertCompleteAktAPT(AllATPObserv akti)
         {
             string resultCommand = "BEGIN; ";
-            foreach (aktATP akt in akti)
+            foreach (AktTehProverki akt in akti)
             {
                 if (!chekForContainsCompleteAktATP(akt))
                 {
                     string sql_command = "INSERT INTO CompleteATPList(  'ID',`PathOfPdfFile`, 'Adress', Agent_1, Agent_2, DateWork, FIO, DopuskFlag, Number,NumberLS,PuNewNumber,PuNewPokazanie,PuNewPoverkaEar,PuNewPoverKvartal,PuNewType,PuOldMPI,PuOldNumber,PuOldPokazanie,PuOldType,TypeOfWork, Page1, Page2, NumberMail, DateMail,`Ustanovka`,`SapNumberAkt`,`EdOborudovania`)"
                   + "VALUES ('"
                    + akt.ID.ToString() + "', '"
-                     + akt.PathOfPdfFile + "', '"
+                     + akt.NamePdfFile + "', '"
                     + akt.Adress + "', '"
                     + (akt.Agent_1 != null ? akt.Agent_1.SapNumber : "") + "', '"
                     + (akt.Agent_2 != null ? akt.Agent_2.SapNumber : "") + "', '"
@@ -551,7 +551,7 @@ namespace MyApp.Model
 
                     resultCommand += sql_command;
                     // Создаем Таблицу для пломб к текущему акту
-                    if (akt.plomb.Count > 0)
+                    if (akt.plombs.Count > 0)
                     {
                         string plombTableName = akt.ID.ToString() + akt.Number + akt.NumberLS + "Plobm"; //Имя таблицы пломб
                         sql_command = "DROP TABLE IF EXISTS '" + plombTableName + "';"
@@ -562,7 +562,7 @@ namespace MyApp.Model
                           + "'Remove' INTEGER,     "
                           + "'Place' TEXT );";
                         resultCommand += sql_command;
-                        foreach (plomba Plomba in akt.plomb)
+                        foreach (Plomba Plomba in akt.plombs)
                         {
                             //добавляем строку с пломбой
                             sql_command = "INSERT INTO `" + plombTableName + "` (Type, Number, Remove, Place) "
@@ -588,7 +588,7 @@ namespace MyApp.Model
                 MessageBox.Show(ex.Message);
             }
         }
-        public void InsertCompleteAktAPT(aktATP akt)
+        public void InsertCompleteAktAPT(AktTehProverki akt)
         {
             if (!chekForContainsCompleteAktATP(akt))
             {
@@ -596,7 +596,7 @@ namespace MyApp.Model
                 string sql_command = "INSERT INTO CompleteATPList(  'ID',`PathOfPdfFile`, 'Adress', Agent_1, Agent_2, DateWork, FIO, DopuskFlag, Number,NumberLS,PuNewNumber,PuNewPokazanie,PuNewPoverkaEar,PuNewPoverKvartal,PuNewType,PuOldMPI,PuOldNumber,PuOldPokazanie,PuOldType,TypeOfWork, Page1, Page2, NumberMail, DateMail,`Ustanovka`,`SapNumberAkt`,`EdOborudovania`)"
               + "VALUES ('"
                + akt.ID.ToString() + "', '"
-                 + akt.PathOfPdfFile + "', '"
+                 + akt.NamePdfFile + "', '"
                 + akt.Adress + "', '"
                 + (akt.Agent_1 != null ? akt.Agent_1.SapNumber : "") + "', '"
                 + (akt.Agent_2 != null ? akt.Agent_2.SapNumber : "") + "', '"
@@ -633,7 +633,7 @@ namespace MyApp.Model
                     MessageBox.Show(ex.Message);
                 }
                 // Создаем Таблицу для пломб к текущему акту
-                if (akt.plomb.Count > 0)
+                if (akt.plombs.Count > 0)
                 {
                     cmd = connector.CreateCommand();
                     string plombTableName = akt.ID.ToString() + akt.Number + akt.NumberLS + "Plobm"; //Имя таблицы пломб
@@ -654,7 +654,7 @@ namespace MyApp.Model
                         MessageBox.Show(ex.Message);
                         connector.Close();
                     }
-                    foreach (plomba Plomba in akt.plomb)
+                    foreach (Plomba Plomba in akt.plombs)
                     {
                         //добавляем строку с пломбой
                         cmd = connector.CreateCommand();

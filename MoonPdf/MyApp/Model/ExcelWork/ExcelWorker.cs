@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Data;
-using System.Collections;
 using OfficeOpenXml;
 using System.Drawing;
 using System.IO;
 using OfficeOpenXml.Style;
 using ExcelCOM = Microsoft.Office.Interop.Excel;
-using System.ComponentModel.DataAnnotations;
-using ExcelLibrary;
 using ExcelDataReader;
 
 namespace MyApp.Model
@@ -44,7 +40,7 @@ namespace MyApp.Model
             AllATPObserv dopuski = new AllATPObserv();
             AllATPObserv demontag = new AllATPObserv();
             DataTable table;
-            foreach (aktATP item in akti)
+            foreach (AktTehProverki item in akti)
             {
                 if (item.DopuskFlag) dopuski.Add(item);
                 else proverki.Add(item);
@@ -74,8 +70,8 @@ namespace MyApp.Model
             DataTable table = new DataTable("Reestr");
             DataColumn column;
             DataRow row;
-            List<aktATP> akti = new List<aktATP>();
-            foreach (aktATP item in Temp_akti)
+            List<AktTehProverki> akti = new List<AktTehProverki>();
+            foreach (AktTehProverki item in Temp_akti)
             {
                 akti.Add(item);
             }
@@ -104,7 +100,7 @@ namespace MyApp.Model
             DataColumn[] PrimaryKeyColumns = new DataColumn[1];
             PrimaryKeyColumns[0] = table.Columns["id"];
             table.PrimaryKey = PrimaryKeyColumns;
-            foreach (aktATP item in akti)
+            foreach (AktTehProverki item in akti)
             {
                 row = table.NewRow();
                 row["Number"] = item.Number;

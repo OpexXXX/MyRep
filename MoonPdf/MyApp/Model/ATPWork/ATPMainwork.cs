@@ -1,136 +1,20 @@
-﻿using iTextSharp.text;
-using iTextSharp.text.pdf;
+﻿using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.parser;
-using Microsoft.Win32;
 using MoonPdfLib;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using winForms = System.Windows.Forms;
-using System.Windows.Media.Animation;
-
 
 namespace MyApp.Model
 {
-    public class SpisokPUObserv : ObservableCollection<PriborUcheta>
-    {
-        public SpisokPUObserv() { }
-    }
-    public class PriborUcheta : INotifyPropertyChanged, IEquatable<PriborUcheta>
-    {
-
-        private string sapNumberPU;
-        public string SapNumberPU
-        {
-            get { return this.sapNumberPU; }
-            set { this.sapNumberPU = value; this.OnPropertyChanged("SapNumberPU"); }
-        }
-        private string nazvanie;
-        public string Nazvanie
-        {
-            get { return this.nazvanie; }
-            set { this.nazvanie = value; this.OnPropertyChanged("Nazvanie"); }
-        }
-        private int poverka;
-        public int Poverka
-        {
-            get { return this.poverka; }
-            set { this.poverka = value; this.OnPropertyChanged("Poverka"); }
-        }
-        private string znachnost;
-        public string Znachnost
-        {
-            get { return this.znachnost; }
-            set { this.znachnost = value; this.OnPropertyChanged("Znachnost"); }
-        }
 
 
-        public PriborUcheta(string SapNumberPU, string Nazvanie, int Poverka, string Znachnost)
-        {
-            this.SapNumberPU = SapNumberPU;
-            this.Nazvanie = Nazvanie;
-            this.Poverka = Poverka;
-            this.Znachnost = Znachnost;
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string info) // На изменение полей
-        {
-            if (this.PropertyChanged != null)
-                this.PropertyChanged(this, new PropertyChangedEventArgs(info));
-        }
-        public bool Equals(PriborUcheta item) //Сравнение
-        {
-            return item.sapNumberPU == this.sapNumberPU;
-        }
-        public override string ToString()
-        {
-            return this.nazvanie.ToString();
-        }
 
-    }
-    public class AllATPObserv : ObservableCollection<aktATP>
-    {
-        public AllATPObserv() { }
-    }
-    public class AgentList : ObservableCollection<Agent>
-    {
-        public AgentList() { }
-    }
-    public class Agent : INotifyPropertyChanged, IEquatable<Agent>
-    {
-        private string sapNumber;
-        public string SapNumber
-        {
-            get { return this.sapNumber; }
-            set { this.sapNumber = value; this.OnPropertyChanged("SapNumber"); }
-        }
-        private string surname;
-        public string Surname
-        {
-            get { return this.surname; }
-            set { this.surname = value; this.OnPropertyChanged("Surname"); }
-        }
-        private string post;
-        public string Post
-        {
-            get { return this.post; }
-            set { this.post = value; this.OnPropertyChanged("Post"); }
-        }
-        private string searchString;
-        public string SearchString
-        {
-            get { return this.searchString; }
-            set { this.searchString = value; this.OnPropertyChanged("searchString"); }
-        }
-        public Agent(string SapNumber, string Post, string Surname, string SearchString)
-        {
-            this.SapNumber = SapNumber;
-            this.Surname = Surname;
-            this.Post = Post;
-            this.SearchString = SearchString;
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string info) // На изменение полей
-        {
-            if (this.PropertyChanged != null)
-                this.PropertyChanged(this, new PropertyChangedEventArgs(info));
-        }
-        public bool Equals(Agent item) //Сравнение
-        {
-            return item.sapNumber == this.sapNumber;
-        }
-        public override string ToString()
-        {
-            return this.surname.ToString();
-        }
-    }
+
     public class ATPWorker : INotifyPropertyChanged
     {
         public DataBaseWorker DbWork;
@@ -175,8 +59,8 @@ namespace MyApp.Model
         /// <summary>
         /// Ссылка на текущий редактируемый акт
         /// </summary>
-        private aktATP aktATPInWork;
-        public aktATP AktATPInWork
+        private AktTehProverki aktATPInWork;
+        public AktTehProverki AktATPInWork
         {
             get { return this.aktATPInWork; }
             set
@@ -214,18 +98,18 @@ namespace MyApp.Model
                 {
                     if (pdfReader.CurrentSource == null)
                     {
-                        pdfReader.OpenFile(value.PathOfPdfFile);
+                        pdfReader.OpenFile(value.NamePdfFile);
                     }
                     MoonPdfLib.MuPdf.FileSource File_name;
                     File_name = (MoonPdfLib.MuPdf.FileSource)pdfReader.CurrentSource;
-                    if (File_name.Filename == value.PathOfPdfFile)
+                    if (File_name.Filename == value.NamePdfFile)
                     {
                         pdfReader.GotoPage(value.NumberOfPagesInSoursePdf[0] + 1);
                     }
                     else
                     {
                        // pdfReader.Unload();
-                        pdfReader.OpenFile(value.PathOfPdfFile);
+                        pdfReader.OpenFile(value.NamePdfFile);
                         pdfReader.GotoPage(value.NumberOfPagesInSoursePdf[0] + 1);
                     }
                 }
@@ -303,7 +187,7 @@ namespace MyApp.Model
 
             set
             {
-                foreach (aktATP item in AllAtpInWorkList)                      //прогоняем все акты на наличие текущей страницы
+                foreach (AktTehProverki item in AllAtpInWorkList)                      //прогоняем все акты на наличие текущей страницы
                 {
                     if (item.NumberOfPagesInSoursePdf.Contains(value) && AktATPInWork != item)   //Если страница найденна в акте и он не текущий
                     {
@@ -357,16 +241,16 @@ namespace MyApp.Model
                 this.OnPropertyChanged("CurrentSaveFileAtp");
             }
         }
-        private void createAktPdf(aktATP akt)
+        private void createAktPdf(AktTehProverki akt)
         {
-            string FileName = akt.Number.ToString() + " " + akt.DateWork.ToString("d") + "" + akt.NumberLS + ".pdf";
+            string FileName = akt.Number.ToString() + " " + akt.DateWork.ToString("d") + " " + akt.NumberLS + ".pdf";
             string FilePath = AktDirektory + "\\" + FileName;
             try
             {
                 using (FileStream FStream = new System.IO.FileStream(FilePath, System.IO.FileMode.Create))
                 {
                     iTextSharp.text.Document doc = new iTextSharp.text.Document();
-                    iTextSharp.text.pdf.PdfReader ReaderDoc1 = new iTextSharp.text.pdf.PdfReader(akt.PathOfPdfFile);
+                    iTextSharp.text.pdf.PdfReader ReaderDoc1 = new iTextSharp.text.pdf.PdfReader(akt.NamePdfFile);
                     iTextSharp.text.pdf.PdfCopy Writer = new iTextSharp.text.pdf.PdfCopy(doc, FStream);
                     Writer.SetPdfVersion(PdfWriter.PDF_VERSION_1_5);
                     Writer.SetFullCompression();
@@ -386,7 +270,7 @@ namespace MyApp.Model
                     doc.Close();
                     //  Writer.Close();
                     // ReaderDoc1.Close();
-                   akt.PathOfPdfFile = FileName;
+                   akt.NamePdfFile = FileName;
                 }
             }
             catch (Exception)
@@ -398,7 +282,7 @@ namespace MyApp.Model
         {
             AllATPObserv proverki = new AllATPObserv();
             AllATPObserv dopuski = new AllATPObserv();
-            foreach (aktATP item in allATP)
+            foreach (AktTehProverki item in allATP)
             {
                 if (item.DopuskFlag) dopuski.Add(item);
                 else proverki.Add(item);
@@ -421,7 +305,7 @@ namespace MyApp.Model
 
                         foreach (var item in dopuski)
                         {
-                            iTextSharp.text.pdf.PdfReader ReaderDoc1 = new iTextSharp.text.pdf.PdfReader(AktDirektory+item.PathOfPdfFile);
+                            iTextSharp.text.pdf.PdfReader ReaderDoc1 = new iTextSharp.text.pdf.PdfReader(AktDirektory+item.NamePdfFile);
                             Writer.AddDocument(ReaderDoc1);
                         }
                         doc.Close();
@@ -448,7 +332,7 @@ namespace MyApp.Model
                         doc.Open();
                         foreach (var item in proverki)
                         {
-                            iTextSharp.text.pdf.PdfReader ReaderDoc1 = new iTextSharp.text.pdf.PdfReader(AktDirektory+item.PathOfPdfFile);
+                            iTextSharp.text.pdf.PdfReader ReaderDoc1 = new iTextSharp.text.pdf.PdfReader(AktDirektory+item.NamePdfFile);
                             Writer.AddDocument(ReaderDoc1);
                         }
                         doc.Close();
@@ -468,7 +352,7 @@ namespace MyApp.Model
                 if (!this.selectAktFolder()) return 0;
             }
             int i = 0;
-            foreach (aktATP item in AllAtpInWorkList)
+            foreach (AktTehProverki item in AllAtpInWorkList)
             {
                 item.checkToComplete();
                 if (item.Complete)
@@ -501,12 +385,12 @@ namespace MyApp.Model
             {
                 listOfpagesInPDf.Add((i + 1) * 2 - 2);
                 listOfpagesInPDf.Add((i + 1) * 2 - 1);
-                addedAkt.Add(new aktATP(i + 1 + maxIDAkt, listOfpagesInPDf, pathOfPdfFile)); //добавляем в лист проверок объекты 
+                addedAkt.Add(new AktTehProverki(i + 1 + maxIDAkt, listOfpagesInPDf, pathOfPdfFile)); //добавляем в лист проверок объекты 
                 listOfpagesInPDf.Clear();
                 countAdded++;
             }
 
-            foreach (aktATP item in addedAkt)
+            foreach (AktTehProverki item in addedAkt)
             {
                 string textOfPage = GetTextOfPdfPage(item.NumberOfPagesInSoursePdf[0]);
 
@@ -527,7 +411,7 @@ namespace MyApp.Model
                 }
 
             }
-            foreach (aktATP added in addedAkt)
+            foreach (AktTehProverki added in addedAkt)
             {
                 this.AllAtpInWorkList.Add(added);
             }
@@ -572,24 +456,7 @@ namespace MyApp.Model
                 return "";
             }
         }
-        private void agentsListInit()
-        {
-            agents.Add(new Agent("40004461", "электромонтер УТЭЭ ", "Глушков Александр Сергеевич", "лушков"));
-            agents.Add(new Agent("40222271", "электромонтер УТЭЭ ", "Дубинин Сергей Геннадьевич", "убинин"));
-            agents.Add(new Agent("40000562", "электромонтер УТЭЭ ", "Кропочева Анна Сергеевна", "ропочева"));
-            agents.Add(new Agent("40004895", "началиник УТЭЭ ", "Лавренова Светлана Николаевна", "авренова"));
-            agents.Add(new Agent("40221533", "электромонтер УТЭЭ ", "Назаров Дмитрий Анатольевич", "азаров"));
-            agents.Add(new Agent("40002703", "Инспектор УТЭЭ ", "Сяткина Елена Эдуардовна", "яткина"));
-        }
-        private void PUListInit()
-        {
-            SpisokPU.Add(new PriborUcheta("15", "Нева 101", 16, "5"));
-            SpisokPU.Add(new PriborUcheta("16", "Меркурий 201", 16, "5"));
-            SpisokPU.Add(new PriborUcheta("17", "СЕ 101", 16, "5"));
-            SpisokPU.Add(new PriborUcheta("18", "ЦЭ 6803", 16, "6"));
-            SpisokPU.Add(new PriborUcheta("19", "СКАТ101", 16, "5"));
-            SpisokPU.Add(new PriborUcheta("20", "NP73-1.10.1", 10, "7"));
-        }
+
 
         public void createMailPath(string path)
         {
@@ -621,7 +488,6 @@ namespace MyApp.Model
             {
                 return false;
             }
-
         }
         public bool selectAktFolder()
         {
@@ -635,7 +501,6 @@ namespace MyApp.Model
             {
                 return false;
             }
-
         }
     }
 }

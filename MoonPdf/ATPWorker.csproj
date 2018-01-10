@@ -168,6 +168,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="MyApp\Model\ATPWork\Agent.cs" />
+    <Compile Include="MyApp\Model\ATPWork\Plomba.cs" />
+    <Compile Include="MyApp\Model\ATPWork\PriborUcheta.cs" />
     <Compile Include="MyApp\Model\ExcelWork\ExcelWorker.cs" />
     <Compile Include="MyApp\Model\Zayvki na oplombirovku\Oplobbirovki.cs" />
     <Compile Include="MyApp\View\ResultSearchWindow.xaml.cs">
@@ -184,7 +187,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="MyApp\Model\ATPWork\aktATP.cs" />
+    <Compile Include="MyApp\Model\ATPWork\AktTehProverki.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>

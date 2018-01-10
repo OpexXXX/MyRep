@@ -37,7 +37,7 @@ namespace MyApp.Model
 
         }
     }
-    public class ZayvkaOplomb : INotifyPropertyChanged, IEquatable<aktATP>, IComparable<aktATP>
+    public class ZayvkaOplomb : INotifyPropertyChanged, IEquatable<AktTehProverki>, IComparable<AktTehProverki>
     {
         private int numberMail;
         public int NumberMail
@@ -263,7 +263,7 @@ namespace MyApp.Model
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public bool Equals(aktATP item) //Сравнение
+        public bool Equals(AktTehProverki item) //Сравнение
         {
             bool result = false;
            
@@ -276,7 +276,7 @@ namespace MyApp.Model
             if (this.PropertyChanged != null)
                 this.PropertyChanged(this, new PropertyChangedEventArgs(info));
         }
-        public int CompareTo(aktATP other)
+        public int CompareTo(AktTehProverki other)
         {
             if (other == null)
                 return 1;

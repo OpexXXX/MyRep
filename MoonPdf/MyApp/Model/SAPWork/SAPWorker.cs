@@ -70,7 +70,7 @@ namespace MyApp.Model
             }
             return true;
         }
-        public void shopPlomb(plomba plomb, string dateOfPlacement)
+        public void shopPlomb(Plomba plomb, string dateOfPlacement)
         {
             SapSession.StartTransaction("/SAPCE/IUSEALS");
             //Жмем кнопку закупка
@@ -125,13 +125,13 @@ namespace MyApp.Model
             }
 
         }
-        public void enterAktTehProverki(aktATP akt, string pdfDirectory)
+        public void enterAktTehProverki(AktTehProverki akt, string pdfDirectory)
         {
             string dataProvodkiAkta = akt.DateWork.ToString("d");
 
             string pokazanieProverki, primechanieKAkty;
             //Закупаем пломбы 
-            foreach (plomba item in akt.plomb)
+            foreach (Plomba item in akt.plombs)
             {
                 shopPlomb(item, akt.DateWork.ToString("d"));
             }
@@ -256,7 +256,7 @@ namespace MyApp.Model
         /// <summary>
         /// Добавление файлов в карточку, запускается  из окна занесения акта
         /// </summary>
-        private void addFIleToAkt(aktATP akt, string pdfDirectory)
+        private void addFIleToAkt(AktTehProverki akt, string pdfDirectory)
         {
             GuiTab FilesTab = (GuiTab)SapSession.ActiveWindow.FindByName("TSFILES", "GuiTab");
             FilesTab.Select();
@@ -270,7 +270,7 @@ namespace MyApp.Model
             GuiButton okFileBtn = (GuiButton)SapSession.ActiveWindow.FindByName("btn[0]", "GuiButton"); //btn[0] КнопкаОК
             typeFile.Text = "PDF";
             primechanieFile.Text = "";
-            pathFile.Text = pdfDirectory + akt.PathOfPdfFile;
+            pathFile.Text = pdfDirectory + akt.NamePdfFile;
             okFileBtn.Press();
             try
             {
@@ -286,9 +286,9 @@ namespace MyApp.Model
         /// <summary>
         /// Добавление пломб к акту, запускается  из окна занесения акта
         /// </summary>
-        private void ustanovkaPlomb(aktATP akt)
+        private void ustanovkaPlomb(AktTehProverki akt)
         {
-            if (akt.plomb.Count == 0) return;
+            if (akt.plombs.Count == 0) return;
             GuiButton VedeniePlombBtn = (GuiButton)SapSession.ActiveWindow.FindByName("BT_SEAL", "GuiButton");
             VedeniePlombBtn.Press();
             GuiGridView GridPlomb = ((GuiGridView)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/usr/cntlALV_SEALS/shellcont/shell"));
@@ -296,7 +296,7 @@ namespace MyApp.Model
             GuiButton ustanovitPlombBtn = (GuiButton)SapSession.ActiveWindow.FindByName("btn[32]", "GuiButton"); // Установть выделенные
             GuiStatusbar statusBar = (GuiStatusbar)SapSession.ActiveWindow.FindByName("sbar", "GuiStatusbar");//sbar
 
-            foreach (plomba Plomba in akt.plomb)
+            foreach (Plomba Plomba in akt.plombs)
             {
                 addPlombBtn.Press();
                 /*Окно Добавить выданные*/
@@ -366,7 +366,7 @@ namespace MyApp.Model
             backBtn.Press();
         }
 
-        private string demontirovatPU(aktATP akt, DateTime dataP)
+        private string demontirovatPU(AktTehProverki akt, DateTime dataP)
         {
             DateTime dataProvodki = new DateTime(dataP.Year, dataP.Month, dataP.Day);
 
@@ -448,7 +448,7 @@ namespace MyApp.Model
             return "ok";
 
         }
-        private string montirovatPU(aktATP akt, string date)
+        private string montirovatPU(AktTehProverki akt, string date)
         {
             SapSession.StartTransaction("/MRSKS/ISU_CARD");
             GuiCTextField ustanovka = (GuiCTextField)SapSession.ActiveWindow.FindByName("P_ANLAGE", "GuiCTextField");
