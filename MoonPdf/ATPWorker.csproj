@@ -170,6 +170,9 @@
     </ApplicationDefinition>
     <Compile Include="ExcelWorker.cs" />
     <Compile Include="Oplobbirovki.cs" />
+    <Compile Include="PlomdEditor.xaml.cs">
+      <DependentUpon>PlomdEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ResultSearchWindow.xaml.cs">
       <DependentUpon>ResultSearchWindow.xaml</DependentUpon>
     </Compile>
@@ -195,6 +198,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="PlomdEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ResultSearchWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

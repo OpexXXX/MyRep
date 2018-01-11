@@ -137,6 +137,7 @@ namespace MoonPdf
         private MoonPdfPanel pdfReader; // Ссылка на вьювер формы //???
         private PdfReader iTextPDFReader; // Конструктор пдф
         private ITextExtractionStrategy strategyOfFinder;
+        
         /// <summary>
         /// Список агентов 
         /// </summary>
@@ -476,6 +477,7 @@ namespace MoonPdf
                 {
                     if (!CompleteAtpWorkList.Contains(item))
                     {
+                        
                         CompleteAtpWorkList.Add(item);
                         createAktPdf(item);
                         if (!DbWork.chekForContainsCompleteAktATP(item)) DbWork.InsertCompleteAktAPT(item);
@@ -610,6 +612,7 @@ namespace MoonPdf
                 MessageBox.Show("The process failed: {0}", e.ToString());
             }
         }
+
         public bool selectMailFolder()
         {
             winForms.FolderBrowserDialog open = new winForms.FolderBrowserDialog();

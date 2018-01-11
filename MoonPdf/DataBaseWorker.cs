@@ -790,7 +790,7 @@ namespace MoonPdf
                             transaction.Commit();
                         }
                     }
-                    MessageBox.Show("File imported into sql server.");
+                    MessageBox.Show("База ФЛ успешно обновлена");
                 }
                 catch (Exception ex)
                 {

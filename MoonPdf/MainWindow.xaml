@@ -196,7 +196,7 @@
                                         <TextBlock x:Name="textBlock5" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Тип" VerticalAlignment="Top" Height="19" Width="24" Margin="10,2,0,0"/>
                                         <TextBlock x:Name="textBlock6" Grid.Column="2" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Показание" VerticalAlignment="Top" Width="83" Height="19" Margin="10,0,0,0"/>
                                         <ComboBox x:Name="comboBox2" SelectedItem="{Binding PuNewType}"
-                                      HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="95" Height="25">
+                                      HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="95" Height="25" TextOptions.TextFormattingMode="Display">
                                             <ComboBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal">
