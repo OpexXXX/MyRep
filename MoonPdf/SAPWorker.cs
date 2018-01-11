@@ -8,13 +8,28 @@ using System.Windows;
 
 namespace MoonPdf
 {
+    /// <summary>
+    /// Класс для работы с SAPGui
+    /// </summary>
     public class SAPActive
     {
+        /// <summary>
+        /// Приложение SAP
+        /// </summary>
         private GuiApplication SapGuiApp { get; set; }
+        /// <summary>
+        /// SAP
+        /// </summary>
         private GuiConnection SapConnection { get; set; }
+        /// <summary>
+        /// Сессия для работы
+        /// </summary>
         private GuiSession SapSession { get; set; }
-
-        public SAPActive(string env)
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        /// <param name="env">SID сервер SAP</param>
+        public SAPActive(string env="ER2")
         {
             SapGuiApp = new GuiApplication();
 
@@ -31,6 +46,14 @@ namespace MoonPdf
             SapSession = (GuiSession)SapConnection.Sessions.Item(0); //creates the Gui session off the connection you made
 
         }
+        /// <summary>
+        /// Авторизация в SAP
+        /// </summary>
+        /// <param name="myclient">200</param>
+        /// <param name="mylogin">Логин</param>
+        /// <param name="mypass">Пароль</param>
+        /// <param name="mylang"></param>
+        /// <returns>Возвращает true при удачной авторизации</returns>
         public bool login(string myclient = "200", string mylogin = "MS24_3_RU", string mypass = "Jht[jdcrbq", string mylang = "")
         {
             try
@@ -70,6 +93,11 @@ namespace MoonPdf
             }
             return true;
         }
+        /// <summary>
+        /// Закупка и выдача пломбы, , запускаеся самостоятельной транзакцией
+        /// </summary>
+        /// <param name="plomb">Пломба</param>
+        /// <param name="dateOfPlacement">Дата закупки, выдачи</param>
         public void shopPlomb(plomba plomb, string dateOfPlacement)
         {
             SapSession.StartTransaction("/SAPCE/IUSEALS");
@@ -125,6 +153,11 @@ namespace MoonPdf
             }
 
         }
+        /// <summary>
+        /// Занесение акта тех. проверки в SAP
+        /// </summary>
+        /// <param name="akt">Акт тех. проверки</param>
+        /// <param name="pdfDirectory">Дериктория с PDF файлами проверок</param>
         public void enterAktTehProverki(aktATP akt, string pdfDirectory)
         {
             string dataProvodkiAkta = akt.DateWork.ToString("d");
@@ -140,15 +173,13 @@ namespace MoonPdf
             {
                 pokazanieProverki = akt.PuNewPokazanie; //Показания для акта проверки
                 primechanieKAkty = "Допуск " + ((akt.Agent_2 != null) ? (akt.Agent_2.Surname) : "") + " "; //Примечание для акта
-                string result = demontirovatPU(akt,akt.DateWork);
-
-                if (result =="") return;//Демонтируем счетчик
+                string result = demontirovatPU(akt, akt.DateWork);//Демонтируем счетчик
+                if (result == "") return;
                 if (result != "ok") dataProvodkiAkta = result;
-                string dateMontagPU = akt.DateWork.ToString("d"); 
-                 
+                string dateMontagPU = akt.DateWork.ToString("d");
                 if (result != "ok") dateMontagPU = result;
-
-                if (montirovatPU(akt, dateMontagPU) == "") return;//Монтируем счетчик
+                result = montirovatPU(akt, dateMontagPU);//Монтируем счетчик
+                if (result == "") return;
             }
 
             else//Если тип акта проверка
@@ -256,6 +287,8 @@ namespace MoonPdf
         /// <summary>
         /// Добавление файлов в карточку, запускается  из окна занесения акта
         /// </summary>
+        /// <param name="akt">Акт тех. проверки</param>
+        /// <param name="pdfDirectory">Дериктория с PDF файлами проверок</param>
         private void addFIleToAkt(aktATP akt, string pdfDirectory)
         {
             GuiTab FilesTab = (GuiTab)SapSession.ActiveWindow.FindByName("TSFILES", "GuiTab");
@@ -286,6 +319,7 @@ namespace MoonPdf
         /// <summary>
         /// Добавление пломб к акту, запускается  из окна занесения акта
         /// </summary>
+        /// <param name="akt">Акт тех. проверки</param>
         private void ustanovkaPlomb(aktATP akt)
         {
             if (akt.plomb.Count == 0) return;
@@ -365,7 +399,12 @@ namespace MoonPdf
             SaveAktOKBtn.Press();
             backBtn.Press();
         }
-
+        /// <summary>
+        /// Демонтирует старый ПУ, запускаеся самостоятельной транзакцией
+        /// </summary>
+        /// <param name="akt"> Акт тех. проверки</param>
+        /// <param name="dataP"> Дата демонтажа</param>
+        /// <returns>Возвращает "" при неудачной попытке демонтажа, "ok" при удачной попытке и "02.01.2017" строку с датой при разноске в закрытый период</returns>
         private string demontirovatPU(aktATP akt, DateTime dataP)
         {
             DateTime dataProvodki = new DateTime(dataP.Year, dataP.Month, dataP.Day);
@@ -418,15 +457,12 @@ namespace MoonPdf
                 serNumberDemontag.Text = serNumberOldPU;
                 SapSession.SendCommand("");
             }
-
-
             statusBar = (GuiStatusbar)SapSession.ActiveWindow.FindByName("sbar", "GuiStatusbar");//sbar
             if (statusBar.Text.Contains("не соответствует введенным данным")) return "ok";
-
             if (statusBar.Text.Contains("рассчитана после"))
             {
-                dataProvodki= dataProvodki.AddMonths(1);
-               // dataProvodki.AddDays(1);
+                dataProvodki = dataProvodki.AddMonths(1);
+                // dataProvodki.AddDays(1);
                 DateTime datet = new DateTime(dataProvodki.Year, dataProvodki.Month, 2);
                 string res = demontirovatPU(akt, datet);
                 if (res == "ok")
@@ -437,17 +473,19 @@ namespace MoonPdf
                 {
                     return "";
                 }
-
-
             }
-
             GuiTextField Pokazanie = ((GuiTextField)SapSession.FindById("/app/con[0]/ses[0]/wnd[0]/usr/tblSAPLE30DCONTROL_RE_REM/txtREG30-ZWSTANDCA[5,0]"));
             Pokazanie.Text = akt.PuOldPokazanie;
             GuiButton SaveAktBtn = (GuiButton)SapSession.ActiveWindow.FindByName("btn[11]", "GuiButton"); //Сохранить акт
             SaveAktBtn.Press();
             return "ok";
-
         }
+        /// <summary>
+        /// Монтирует новый ПУ к установке, запускаеся самостоятельной транзакцией
+        /// </summary>
+        /// <param name="akt">Акт тех. проверки</param>
+        /// <param name="date">Дата монтажа</param>
+        /// <returns>Возвращает серийный номер смонтированного ПУ  при удачной попытке демонтажа, "" при неудачной попытке</returns>
         private string montirovatPU(aktATP akt, string date)
         {
             SapSession.StartTransaction("/MRSKS/ISU_CARD");

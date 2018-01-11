@@ -11,12 +11,24 @@ using System.Windows;
 
 namespace MoonPdf
 {
-
+    /// <summary>
+    /// Класс для работы с базой SQLite
+    /// </summary>
     public class DataBaseWorker
     {
+        /// <summary>
+        /// Коннектор к рабочей базе данных
+        /// </summary>
         SQLiteConnection connector;
+        /// <summary>
+        /// Коннектор к базе для сохранения загрузки
+        /// </summary>
         SQLiteConnection connectorOnSaveLoad;
+        /// <summary>
+        /// Коннектор к базе данных заявок
+        /// </summary>
         SQLiteConnection connectorOplombirovki;
+
         public DataBaseWorker()
         {
             connector = new SQLiteConnection("Data Source=filename.db; Version=3;");
@@ -38,6 +50,10 @@ namespace MoonPdf
                 MessageBox.Show(ex.Message);
             }
         }
+        /// <summary>
+        /// Заполнение списка монтируеммых ПУ
+        /// </summary>
+        /// <param name="spisokPU">ссылка на список ПУ</param>
         public void PUListInit(SpisokPUObserv spisokPU)
         {
             SQLiteCommand CommandSQL = new SQLiteCommand(connector);
@@ -46,10 +62,14 @@ namespace MoonPdf
             SQLiteDataReader r = CommandSQL.ExecuteReader();
             while (r.Read())
             {
-                spisokPU.Add(new PriborUcheta(r["SapNumberPU"].ToString(), r["NamePU"].ToString(), Int32.Parse( r["Poverka"].ToString()), r["Znachnost"].ToString()));
+                spisokPU.Add(new PriborUcheta(r["SapNumberPU"].ToString(), r["NamePU"].ToString(), Int32.Parse(r["Poverka"].ToString()), r["Znachnost"].ToString()));
             }
             r.Close();
         }
+        /// <summary>
+        /// Заполнение списка Агентов
+        /// </summary>
+        /// <param name="agentList"></param>
         public void AgentListInit(AgentList agentList)
         {
             SQLiteCommand CommandSQL = new SQLiteCommand(connector);
@@ -63,11 +83,14 @@ namespace MoonPdf
             r.Close();
 
         }
+        /// <summary>
+        /// Поиск абонента в базе по номеру лицевого счета
+        /// </summary>
+        /// <param name="numberLS">Номер лицевого счета</param>
+        /// <returns>Лист словарей с данными если успешно, null если не найден</returns>
         public List<Dictionary<String, String>> GetAbonentFromLS(string numberLS)
-
         {
             List<Dictionary<String, String>> result = new List<Dictionary<string, string>>();
-
             SQLiteCommand CommandSQL = new SQLiteCommand(connector);
             CommandSQL.CommandText = "SELECT FIO, PuType, LsNumber,City,Street,House,Korpus,PuNumber,Kv, Ustanovka,PuKod "
   + " FROM SAPFL WHERE LsNumber LIKE '%" + numberLS + "%' ";
@@ -102,6 +125,11 @@ namespace MoonPdf
                 return null;
             }
         }
+        /// <summary>
+        /// Поиск абонента в базе по номеру ПУ
+        /// </summary>
+        /// <param name="numberPU">Номер ПУ</param>
+        /// <returns>Лист словарей с данными если успешно, null если не найден</returns>
         public List<Dictionary<String, String>> GetAbonentFromDbByPU(string numberPU)
         {
             List<Dictionary<String, String>> result = new List<Dictionary<string, string>>();
@@ -142,6 +170,12 @@ namespace MoonPdf
             }
 
         }
+        /// <summary>
+        /// Сохранение актов находящихся в работе
+        /// </summary>
+        /// <param name="ATP"></param>
+        /// <param name="Path">Путь к файлу сохранения *.atp</param>
+        /// <returns></returns>
         public bool SaveATP(ATPWorker ATP, string Path)
         {
             //Открываем соединение
@@ -263,6 +297,12 @@ namespace MoonPdf
             return true;
 
         }
+        /// <summary>
+        /// Загрузка актов для работы
+        /// </summary>
+        /// <param name="ATP"></param>
+        /// <param name="Path">Путь к файлу сохранения *.atp</param>
+        /// <returns></returns>
         public bool LoadATP(string Path, ATPWorker ATP)
         {
             //Открываем соединение
@@ -377,6 +417,9 @@ namespace MoonPdf
             ATP.AktATPInWork = ATP.AllAtpInWorkList[0];
             return true;
         }
+        /// <summary>
+        /// Очистка таблицы заполненных актов
+        /// </summary>
         internal void DromCompliteTable()
         {
             SQLiteCommand cmd = connector.CreateCommand();
@@ -391,6 +434,10 @@ namespace MoonPdf
                 MessageBox.Show(ex.Message);
             }
         }
+        /// <summary>
+        /// Инициализация листа актов из базы при загрузке приложения
+        /// </summary>
+        /// <param name="ATP"></param>
         public void LoadCompleteATP(ATPWorker ATP)
         {
             //Открываем соединение
@@ -436,7 +483,6 @@ namespace MoonPdf
                 }
                 result[i].PuOldMPI = Int32.Parse(r["PuOldMPI"].ToString()) == 0 ? false : true;
                 result[i].DopuskFlag = Int32.Parse(r["DopuskFlag"].ToString()) == 0 ? false : true;
-                // result[i].PuOldMPI = Int32.Parse(r["DopuskFlag"].ToString()) == 0 ? false : true;
                 result[i].Adress = r["Adress"].ToString();
                 DateTime date1 = DateTime.Parse(r["DateWork"].ToString());
                 result[i].DateWork = date1;
@@ -487,12 +533,7 @@ namespace MoonPdf
                 i++;
             }
             r.Close();
-            /* }
-             catch (SQLiteException ex)
-             {
-                 MessageBox.Show(ex.Message);
-
-             }*/
+        
 
 
             ATP.CompleteAtpWorkList.Clear();
@@ -502,6 +543,11 @@ namespace MoonPdf
             }
 
         }
+        /// <summary>
+        /// Проверка на наличие акта в базе данных
+        /// </summary>
+        /// <param name="akt"></param>
+        /// <returns></returns>
         public bool chekForContainsCompleteAktATP(aktATP akt)
         {
             SQLiteCommand CommandSQL = new SQLiteCommand(connector);
@@ -512,6 +558,10 @@ namespace MoonPdf
             r.Close();
             return result;
         }
+        /// <summary>
+        /// Запись в базу данных завершенных актов
+        /// </summary>
+        /// <param name="akti">Лист с актами тех. проверок</param>
         public void InsertCompleteAktAPT(AllATPObserv akti)
         {
             string resultCommand = "BEGIN; ";
@@ -588,6 +638,10 @@ namespace MoonPdf
                 MessageBox.Show(ex.Message);
             }
         }
+        /// <summary>
+        /// Запись в базу данных завершенного акта
+        /// </summary>
+        /// <param name="akt">Акт тех. проверки</param>
         public void InsertCompleteAktAPT(aktATP akt)
         {
             if (!chekForContainsCompleteAktATP(akt))
@@ -677,6 +731,10 @@ namespace MoonPdf
                 }
             }
         }
+        /// <summary>
+        /// Обновление базы данных физ.  лиц
+        /// </summary>
+        /// <param name="dataSetSAPFL"></param>
         public void RefreshSAPFL(DataSet dataSetSAPFL)
         {
             if (dataSetSAPFL != null)

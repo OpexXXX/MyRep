@@ -468,6 +468,7 @@ namespace MoonPdf
                 if (!this.selectAktFolder()) return 0;
             }
             int i = 0;
+
             foreach (aktATP item in AllAtpInWorkList)
             {
                 item.checkToComplete();

@@ -16,14 +16,23 @@ using ExcelDataReader;
 
 namespace MoonPdf
 {
+    /// <summary>
+    /// Класс для заполнения реестров в excel и импорта в PDF
+    /// </summary>
     public class ExcelWorker
     {
+        /// <summary>
+        /// Лист с заголовками для реестра XLSX
+        /// </summary>
         private List<string[]> HeaderColumn;
         public enum AktType
         {
             Proverka,
             Dopusk
         }
+        /// <summary>
+        /// Конструктор класса, заполняет заголовки таблицы 
+        /// </summary>
         public ExcelWorker()
         {
             HeaderColumn = new List<string[]>(2);
@@ -37,6 +46,11 @@ namespace MoonPdf
             HeaderColumn.Add(new string[] { "Номер ПУ", "PuNumber" });
             HeaderColumn.Add(new string[] { "Показание", "Pokazanie" });
         }
+        /// <summary>
+        /// Создает DataSet с набором таблиц допусков, проверок из массива тех. проверок
+        /// </summary>
+        /// <param name="akti">Массив тех. проверок</param>
+        /// <returns>DataSet с набором таблиц допусков, проверок</returns>
         private DataSet MakeDataSet(AllATPObserv akti)
         {
             DataSet Result = new DataSet("Reestr");
@@ -69,6 +83,11 @@ namespace MoonPdf
             }
             return Result;
         }
+        /// <summary>
+        /// Создает DataTable из массива тех. проверок
+        /// </summary>
+        /// <param name="Temp_akti">Массив тех. проверок</param>
+        /// <returns>DataTable из массива тех. проверок</returns>
         private DataTable MakeDataTable(AllATPObserv Temp_akti)
         {
             DataTable table = new DataTable("Reestr");
@@ -180,6 +199,12 @@ namespace MoonPdf
                 item.Style.Border.BorderAround(ExcelBorderStyle.Thin);
             }
         }
+        /// <summary>
+        /// Создание реестра тех. проверок в XLSX, экспорт в PDF
+        /// </summary>
+        /// <param name="akti">Массив тех. проверок</param>
+        /// <param name="path">Путь к файлу XLSX для сохранения</param>
+        /// <param name="options">Опции стилей XLSX</param>
         public void DataTableToExcel(AllATPObserv akti, string path, Dictionary<string, string> options = null)
         {
             if (options == null)
@@ -282,6 +307,11 @@ namespace MoonPdf
 
 
         }
+        /// <summary>
+        /// Создает DataSet для импорта в базу данных физ. лиц
+        /// </summary>
+        /// <param name="excelFilePath">Фаил xlsx с выгрузкой из SAP</param>
+        /// <returns>DataSet для импорта в базу данных</returns>
         public DataSet makeDataSetForSAPFL(FileStream excelFilePath)
         {
             using (IExcelDataReader reader = ExcelReaderFactory.CreateOpenXmlReader(excelFilePath))
