@@ -16,21 +16,21 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    
+
                     <ComboBox />
-                    <TextBox Text="23" Grid.Column="1" FontWeight="Bold"/>
-                    <ComboBox Grid.Column="2" />
+                    <TextBox Text="23" Grid.Column="1" FontWeight="Bold" Width="Auto"/>
+                    <ComboBox Grid.Column="2" Width="Auto" />
                 </Grid>
             </Border>
         </DataTemplate>
     </UserControl.Resources>
-     <Grid>
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition/>
-         </Grid.RowDefinitions>
+        </Grid.RowDefinitions>
         <ListBox Grid.Row="1" ItemTemplate="{StaticResource ListBoxPlomb}">
-                <TextBlock></TextBlock>
+            <TextBlock></TextBlock>
         </ListBox>
     </Grid>
 </UserControl>

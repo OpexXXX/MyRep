@@ -274,12 +274,18 @@
                                 <ComboBox x:Name="comboBox3" Margin="212,1,0,0" VerticalAlignment="Top" Height="25" SelectedItem="{Binding AktATPInWork}" SelectionChanged="comboBox3_SelectionChanged_1">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding Path=Title}" />
-                                                <Image x:Name="imageCombo" Visibility="{Binding Path=Complete, Converter={StaticResource VisConverter}}" HorizontalAlignment="Right" Height="20" Margin="116,0,-5,0"  Width="20" Source="Resources/ok.png" AllowDrop="True"/>
-                                            </StackPanel>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="15"/>
+                                                    <ColumnDefinition/>
+                                                </Grid.ColumnDefinitions>
+                                                <Image  x:Name="imageCombo" Visibility="{Binding Path=Complete, Converter={StaticResource VisConverter}}" HorizontalAlignment="Stretch" Height="20" Margin="0,0,0,0"  Width="Auto" Source="Resources/ok.png" AllowDrop="True"/>
+                                                <TextBlock Grid.Column="1" Text="{Binding Path=Title}" />
+                                            </Grid>
+
                                         </DataTemplate>
                                     </ComboBox.ItemTemplate>
+                                    
                                 </ComboBox>
                                 <Button x:Name="button2" Content="Назад" HorizontalAlignment="Left" Margin="0,1,0,0" VerticalAlignment="Top" Width="75" Click="button2_Click" Height="25"/>
                                 <Button x:Name="button3" Content="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="30" Margin="75,1,0,0" Click="button3_Click" Height="25"/>
