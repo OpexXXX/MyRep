@@ -14,8 +14,8 @@ namespace MyApp.Model
             get { return this.type; }
             set { this.type = value;}
         }
-        private string number;
-        public string Number
+        private float number;
+        public float Number
         {
             get { return this.number; }
             set { this.number = value;}
@@ -32,7 +32,7 @@ namespace MyApp.Model
             get { return this.remove; }
             set { this.remove = value;}
         }
-        public Plomba(string type, string number, string place, bool remove)
+        public Plomba(string type, float number, string place, bool remove)
         {
             this.Type = type;
             this.Number = number;

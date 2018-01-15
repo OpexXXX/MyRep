@@ -39,14 +39,6 @@ namespace MyApp.Model
             get { return this.dopuskFlag; }
             set
             {
-                if (value)
-                {
-                    TypeOfWork = "Допуск";
-                }
-                else
-                {
-                    TypeOfWork = "Проверка";
-                }
                 this.dopuskFlag = value;
             }
         }

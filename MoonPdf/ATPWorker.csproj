@@ -171,12 +171,20 @@
     <Compile Include="MyApp\Model\ATPWork\Agent.cs" />
     <Compile Include="MyApp\Model\ATPWork\Plomba.cs" />
     <Compile Include="MyApp\Model\ATPWork\PriborUcheta.cs" />
-    <Compile Include="MyApp\Model\ExcelWork\ExcelWorker.cs" />
     <Compile Include="MyApp\Model\Zayvki na oplombirovku\Oplobbirovki.cs" />
+    <Compile Include="MyApp\ViewModel\BaseCommand.cs" />
+    <Compile Include="MyApp\ViewModel\DelegateComand.cs" />
+    <Compile Include="MyApp\ViewModel\PlombEditor\Commands.cs" />
+    <Compile Include="MyApp\ViewModel\PlombEditor\PlombEditor.cs" />
+    <Compile Include="MyApp\View\AtpEditor.xaml.cs">
+      <DependentUpon>AtpEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyApp\View\PlombEditor.xaml.cs">
+      <DependentUpon>PlombEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MyApp\View\ResultSearchWindow.xaml.cs">
       <DependentUpon>ResultSearchWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MyApp\Model\SAPWork\SAPWorker.cs" />
     <Compile Include="MyApp\View\SearchWindowOplombirovki.xaml.cs">
       <DependentUpon>SearchWindowOplombirovki.xaml</DependentUpon>
     </Compile>
@@ -192,12 +200,18 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MyApp\Model\ATPWork\ATPMainwork.cs" />
-    <Compile Include="MyApp\Model\DbWork\DataBaseWorker.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="MyApp\View\AtpEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyApp\View\PlombEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MyApp\View\ResultSearchWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -288,6 +302,9 @@
     <Resource Include="Resources\ok.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\icons8Add-50.png" />
+    <Resource Include="Resources\icons8Copy-50.png" />
+    <Resource Include="Resources\icons8Delete-50.png" />
     <Content Include="Resources\Interop.SAPFEWSELib.dll" />
     <Content Include="Resources\Interop.SAPLogonCtrl.dll" />
     <Content Include="Resources\libmupdf.dll" />
@@ -296,7 +313,9 @@
     <Content Include="Resources\sapfewse.ocx" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="MyApp\ViewModel\" />
+    <Folder Include="MyApp\Model\DbWork\" />
+    <Folder Include="MyApp\Model\ExcelWork\" />
+    <Folder Include="MyApp\Model\SAPWork\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

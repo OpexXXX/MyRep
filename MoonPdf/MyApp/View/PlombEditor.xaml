@@ -1,0 +1,63 @@
+﻿<UserControl x:Class="ATPWork.MyApp.View.PlombEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ATPWork.MyApp.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+            >
+    <UserControl.Resources>
+        <Style x:Key="TextBoxStyle">
+            <Setter Property="Control.Height" Value="26" />
+            <Setter Property="Control.Margin" Value="1,1,1,1" />
+            <Setter Property="Control.FontFamily" Value="Century Gothic" />
+            <Setter Property="Control.FontSize" Value="16" />
+        </Style>
+        <DataTemplate x:Key="ListBoxPlomb">
+            <StackPanel Orientation="Horizontal">
+               
+                <ComboBox ItemsSource="{Binding DataContext.typePL,
+                          RelativeSource={RelativeSource FindAncestor,
+                              AncestorType=ItemsControl}}"
+                      SelectedItem="{Binding Type}"
+                          MinWidth="30" Margin="20,1,1,1" >
+                </ComboBox>
+                <TextBox  MinWidth="50"  Margin="1,1,1,1">
+                <TextBox.Text>
+                        <Binding Path="Number"  ValidatesOnExceptions="True"  NotifyOnValidationError="True"  UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <ExceptionValidationRule />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+                    </TextBox>
+                <ComboBox ItemsSource="{Binding DataContext.placePL,
+                          RelativeSource={RelativeSource FindAncestor,
+                              AncestorType=ItemsControl}}"
+                      SelectedItem="{Binding Place}"     
+                          MinWidth="50"  Margin="1,1,1,1">
+                </ComboBox>
+            </StackPanel>
+        </DataTemplate>
+    </UserControl.Resources>
+    <StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Button  Focusable="False" Command="{Binding Commands.AddPlombCommand}">
+                <Image  Height="25" Source="/ATPWork;component/Resources/icons8Add-50.png" Width="25" />
+            </Button>
+            <Button  Command="{Binding Commands.DeletePlombCommand}" Focusable="False">
+                <Image  Height="25" Source="/ATPWork;component/Resources/icons8Delete-50.png" Width="25" />
+            </Button>
+            <Button Focusable="False"  Command="{Binding Commands.IncrementAddPlombComand}">
+                <Image x:Name="image" Height="25" Source="/ATPWork;component/Resources/icons8Copy-50.png" Width="25" />
+            </Button>
+            <TextBlock x:Name="textBlock" TextWrapping="Wrap" Text=""/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" >
+            <ListBox x:Name="ListBoxW" ItemsSource="{Binding Path=pl}" SelectedItem="{Binding SelectedPlomb}" KeyboardNavigation.TabNavigation="Continue" ItemTemplate="{StaticResource ListBoxPlomb}" SelectionMode="Extended" ContextMenuService.ShowOnDisabled="False">
+               
+            </ListBox>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

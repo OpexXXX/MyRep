@@ -1,0 +1,118 @@
+﻿<UserControl x:Class="ATPWork.MyApp.View.AtpEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ATPWork.MyApp.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+              KeyboardNavigation.TabNavigation="Cycle">
+    <UserControl.Resources>
+        <Style x:Key="TextBoxStyle">
+            <Setter Property="Control.Height" Value="26" />
+            <Setter Property="Control.Margin" Value="1,1,1,1" />
+            <Setter Property="Control.FontFamily" Value="Segoe UI" />
+            <Setter Property="Control.FontSize" Value="15" />
+        </Style>
+        <DataTemplate x:Key="comboAgentsDataTemplate">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Surname}" />
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="comboNewPuTypeDataTemplate">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Path=Nazvanie}" />
+            </StackPanel>
+        </DataTemplate>
+    </UserControl.Resources>
+    <StackPanel>
+        <GroupBox  Header="Номер акта">
+            <StackPanel>
+                <StackPanel  Orientation="Horizontal">
+                    <TextBlock Text="Номер 91/Е-" VerticalAlignment="Center"/>
+                    <TextBox   VerticalAlignment="Center" Style="{StaticResource TextBoxStyle}"  Text="{Binding Path=Number}"  Width="50" MaxLength="5" />
+                    <DatePicker  Margin="5,0,0,0"
+                    x:Name="dateWorkPicker"
+                                        SelectedDate ="{Binding Path=DateWork}"
+                                        HorizontalAlignment="Left" 
+                                       VerticalAlignment="Center" Height="25" Width="111" SelectedDateFormat="Short" 
+                           
+                            DisplayDateEnd="2025-12-31" 
+                            DisplayDateStart="2017-01-01" 
+                            TextOptions.TextFormattingMode="Display" 
+                            IsManipulationEnabled="True">
+                        <DatePicker.BlackoutDates>
+                            <CalendarDateRange End="2017-01-01" Start="2025-12-31"/>
+                        </DatePicker.BlackoutDates>
+                    </DatePicker>
+                </StackPanel>
+                <StackPanel  Orientation="Horizontal">
+                    <CheckBox x:Name="chekBoxDopusk" VerticalAlignment="Center" IsChecked="{Binding Path=DopuskFlag}" Content="Допуск"      Height="20"/>
+                    <CheckBox x:Name="chekBoxProverka" VerticalAlignment="Center" IsChecked="{Binding Path=ProverkaFlag}" Content="Проверка"     Height="20" Margin="5,0,0,0"/>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox  Header="Потребитель">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock TextWrapping="Wrap" Text="№Л/С:" VerticalAlignment="Center"  />
+                    <TextBox  VerticalAlignment="Center"  Style="{StaticResource TextBoxStyle}"
+                         Text="{Binding Path=NumberLS}"  Width="120"  
+                         MaxLength="12"/>
+                    <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=FIO}"  />
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock   Text="{Binding Path=Adress}"  Style="{StaticResource TextBoxStyle}" VerticalAlignment="Top"/>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Агенты">
+            <StackPanel Orientation="Horizontal">
+                <ComboBox  Height="25" Width="157" SelectedItem="{Binding Agent_2}" ItemTemplate="{StaticResource comboAgentsDataTemplate}"/>
+                <ComboBox  Height="25" Width="157" SelectedItem="{Binding Agent_1}" ItemTemplate="{StaticResource comboAgentsDataTemplate}"/>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Допускаемый прибор учета" >
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock  VerticalAlignment="Center"  Text="Тип:" Margin="1,1,1,1"/>
+                    <ComboBox VerticalAlignment="Center" Height="25" SelectedItem="{Binding PuNewType}" ItemTemplate="{StaticResource comboNewPuTypeDataTemplate}" Margin="1,1,1,1"/>
+                    <TextBlock VerticalAlignment="Center" Text="Номер:" Margin="1,1,1,1"/>
+                    <TextBox VerticalAlignment="Center" Text="51164861561" Style="{StaticResource TextBoxStyle}" Width="133" Margin="1" ToolTip="Номер допускаемого прибора учета"/>
+
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock  VerticalAlignment="Center"  Text="Показание:" Margin="1,1,1,1"/>
+                    <TextBox VerticalAlignment="Center" Text="{Binding Path=PuNewPokazanie}" Style="{StaticResource TextBoxStyle}" Width="96" MaxLength="7"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center" Text="Поверка:"  Margin="1,1,1,1"/>
+                    <TextBox VerticalAlignment="Center" Text="{Binding Path=PuNewPoverkaEar}" Style="{StaticResource TextBoxStyle}"   Width="44"  MaxLength="4" />
+                    <TextBlock VerticalAlignment="Center" Text="Квартал:" Margin="1,1,1,1"/>
+                    <TextBox VerticalAlignment="Center" Text="{Binding Path=PuNewPoverKvartal}" Style="{StaticResource TextBoxStyle}" Width="20" MaxLength="1" MaxLines="1" />
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Прибор учета">
+            <StackPanel  >
+                <StackPanel Orientation="Horizontal"  >
+                    <TextBlock Text="{Binding Path=PuOldType}"   VerticalAlignment="Center" Margin="1,1,1,1"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" >
+                    <TextBlock Text="Номер:" VerticalAlignment="Center" Margin="1,1,1,1"/>
+                    <TextBox Text="{Binding Path=PuOldNumber}"  Style="{StaticResource TextBoxStyle}"  Width="120"  VerticalAlignment="Center"/>
+                    <TextBlock Text="Показание:" VerticalAlignment="Center" Margin="1,1,1,1"/>
+                    <TextBox Text="{Binding Path=PuOldPokazanie}" Style="{StaticResource TextBoxStyle}"  MaxLength="7" Width="70" VerticalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" >
+                    <CheckBox Content="Истек МПИ " HorizontalAlignment="Left"    IsChecked="{Binding Path=PuOldMPI}"  VerticalAlignment="Center" Margin="1,1,1,1"/>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Пломбы">
+            <StackPanel>
+                <local:PlombEditor x:Name="PlombEditorR"/>
+            </StackPanel>
+        </GroupBox>
+    </StackPanel>
+</UserControl>
