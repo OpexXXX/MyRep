@@ -4,10 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ATPWork.MyApp.View"
+             xmlns:vm="clr-namespace:ATPWork.MyApp.ViewModel.PlombEditorVm"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
+          
             >
     <UserControl.Resources>
+       
         <Style x:Key="TextBoxStyle">
             <Setter Property="Control.Height" Value="26" />
             <Setter Property="Control.Margin" Value="1,1,1,1" />
@@ -55,7 +58,7 @@
             <TextBlock x:Name="textBlock" TextWrapping="Wrap" Text=""/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" >
-            <ListBox x:Name="ListBoxW" ItemsSource="{Binding Path=pl}" SelectedItem="{Binding SelectedPlomb}" KeyboardNavigation.TabNavigation="Continue" ItemTemplate="{StaticResource ListBoxPlomb}" SelectionMode="Extended" ContextMenuService.ShowOnDisabled="False">
+            <ListBox x:Name="ListBoxW" ItemsSource="{Binding Path=PlombList}" SelectedItem="{Binding SelectedPlomb}" KeyboardNavigation.TabNavigation="Continue" ItemTemplate="{StaticResource ListBoxPlomb}" SelectionMode="Extended" ContextMenuService.ShowOnDisabled="False">
                
             </ListBox>
         </StackPanel>

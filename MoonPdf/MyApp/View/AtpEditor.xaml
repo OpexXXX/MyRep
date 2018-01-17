@@ -4,16 +4,54 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ATPWork.MyApp.View"
+             xmlns:val="clr-namespace:ATPWork.MyApp.ViewModel.AtpEditor"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300"
+             d:DesignHeight="500" d:DesignWidth="350"
               KeyboardNavigation.TabNavigation="Cycle">
     <UserControl.Resources>
-        <Style x:Key="TextBoxStyle">
+        <Style x:Key="TextBoxStyle" TargetType="TextBox">
             <Setter Property="Control.Height" Value="26" />
             <Setter Property="Control.Margin" Value="1,1,1,1" />
             <Setter Property="Control.FontFamily" Value="Segoe UI" />
             <Setter Property="Control.FontSize" Value="15" />
+            <Setter Property="Validation.ErrorTemplate">
+
+                <Setter.Value>
+                    <ControlTemplate>
+                        <DockPanel LastChildFill="True">
+                            <TextBlock DockPanel.Dock="Right" Foreground="Red" FontSize="14" FontWeight="Bold"
+                                                       Text="*"/>
+                            <Border BorderBrush="Green" BorderThickness="1">
+                                <AdornedElementPlaceholder Name="adornerPlaceholder"/>
+                            </Border>
+                        </DockPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="Foreground" Value="Red"/>
+                    <Setter Property="ToolTip" 
+                         Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
+
+
+        <Style x:Key="Hidden" TargetType="TextBlock">
+            <Setter Property="Control.Height" Value="26" />
+            <Setter Property="Control.Margin" Value="1,1,1,1" />
+            <Setter Property="Control.FontFamily" Value="Segoe UI" />
+            <Setter Property="Control.FontSize" Value="15" />
+            <Style.Triggers>
+                <Trigger Property="Text" Value="">
+                    <Setter Property="Visibility" Value="Collapsed"  />
+                </Trigger>
+
+            </Style.Triggers>
+
+        </Style>
+
         <DataTemplate x:Key="comboAgentsDataTemplate">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{Binding Surname}" />
@@ -30,13 +68,21 @@
             <StackPanel>
                 <StackPanel  Orientation="Horizontal">
                     <TextBlock Text="Номер 91/Е-" VerticalAlignment="Center"/>
-                    <TextBox   VerticalAlignment="Center" Style="{StaticResource TextBoxStyle}"  Text="{Binding Path=Number}"  Width="50" MaxLength="5" />
+                    <TextBox   VerticalAlignment="Center" Style="{StaticResource TextBoxStyle}"   Width="50" MaxLength="5" >
+                        <TextBox.Text>
+                            <Binding Path="AktInWork.Number" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
+        UpdateSourceTrigger="LostFocus">
+                                <Binding.ValidationRules>
+                                    <val:ValidNumber/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
                     <DatePicker  Margin="5,0,0,0"
                     x:Name="dateWorkPicker"
-                                        SelectedDate ="{Binding Path=DateWork}"
+                                        SelectedDate ="{Binding Path=AktInWork.DateWork}"
                                         HorizontalAlignment="Left" 
                                        VerticalAlignment="Center" Height="25" Width="111" SelectedDateFormat="Short" 
-                           
                             DisplayDateEnd="2025-12-31" 
                             DisplayDateStart="2017-01-01" 
                             TextOptions.TextFormattingMode="Display" 
@@ -47,8 +93,8 @@
                     </DatePicker>
                 </StackPanel>
                 <StackPanel  Orientation="Horizontal">
-                    <CheckBox x:Name="chekBoxDopusk" VerticalAlignment="Center" IsChecked="{Binding Path=DopuskFlag}" Content="Допуск"      Height="20"/>
-                    <CheckBox x:Name="chekBoxProverka" VerticalAlignment="Center" IsChecked="{Binding Path=ProverkaFlag}" Content="Проверка"     Height="20" Margin="5,0,0,0"/>
+                    <CheckBox Name="chekBoxDopusk" VerticalAlignment="Center" IsChecked="{Binding AktInWork.DopuskFlag}" Content="Допуск"      Height="20"/>
+                    <CheckBox x:Name="chekBoxProverka" VerticalAlignment="Center" IsChecked="{Binding AktInWork.ProverkaFlag}" Content="Проверка"     Height="20" Margin="5,0,0,0"/>
                 </StackPanel>
             </StackPanel>
         </GroupBox>
@@ -56,56 +102,135 @@
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock TextWrapping="Wrap" Text="№Л/С:" VerticalAlignment="Center"  />
-                    <TextBox  VerticalAlignment="Center"  Style="{StaticResource TextBoxStyle}"
-                         Text="{Binding Path=NumberLS}"  Width="120"  
-                         MaxLength="12"/>
-                    <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding Path=FIO}"  />
+                    <TextBox x:Name="NumberLsWPF"  VerticalAlignment="Center"  Style="{StaticResource TextBoxStyle}"
+                           Width="120"  
+                         MaxLength="12">
+                        <TextBox.Text>
+                            <Binding Path="AktInWork.NumberLS" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
+        UpdateSourceTrigger="LostFocus">
+                                <Binding.ValidationRules>
+                                    <val:ValidNumberLS/>
+                                    <ExceptionValidationRule/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+
+                    <Button  Focusable="False" Command="{Binding Commands.GetDataFromDbByNumberLs}">
+                        <Image  Height="20" Source="/ATPWork;component/Resources/icons8Find50.png" Width="20" />
+                    </Button>
+
                 </StackPanel>
                 <StackPanel>
-                    <TextBlock   Text="{Binding Path=Adress}"  Style="{StaticResource TextBoxStyle}" VerticalAlignment="Top"/>
+                    <TextBlock  TextWrapping="Wrap" Text="{Binding AktInWork.FIO}" Style="{StaticResource Hidden}"/>
+                    <TextBlock   Text="{Binding AktInWork.Adress}"  Style="{StaticResource Hidden}"  />
                 </StackPanel>
             </StackPanel>
         </GroupBox>
         <GroupBox Header="Агенты">
             <StackPanel Orientation="Horizontal">
-                <ComboBox  Height="25" Width="157" SelectedItem="{Binding Agent_2}" ItemTemplate="{StaticResource comboAgentsDataTemplate}"/>
-                <ComboBox  Height="25" Width="157" SelectedItem="{Binding Agent_1}" ItemTemplate="{StaticResource comboAgentsDataTemplate}"/>
+                <ComboBox  Height="25" Width="157" SelectedItem="{Binding AktInWork.Agent_2}" ItemTemplate="{StaticResource comboAgentsDataTemplate}"/>
+                <ComboBox  Height="25" Width="157" SelectedItem="{Binding AktInWork.Agent_1}" ItemTemplate="{StaticResource comboAgentsDataTemplate}"/>
             </StackPanel>
         </GroupBox>
         <GroupBox Header="Допускаемый прибор учета" >
+            <GroupBox.Style>
+                <Style TargetType="GroupBox">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsChecked, ElementName=chekBoxDopusk}" Value="false">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </GroupBox.Style>
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock  VerticalAlignment="Center"  Text="Тип:" Margin="1,1,1,1"/>
-                    <ComboBox VerticalAlignment="Center" Height="25" SelectedItem="{Binding PuNewType}" ItemTemplate="{StaticResource comboNewPuTypeDataTemplate}" Margin="1,1,1,1"/>
+                    <ComboBox VerticalAlignment="Center" Height="25" SelectedItem="{Binding AktInWork.PuNewType}" ItemTemplate="{StaticResource comboNewPuTypeDataTemplate}" Margin="1,1,1,1"/>
                     <TextBlock VerticalAlignment="Center" Text="Номер:" Margin="1,1,1,1"/>
-                    <TextBox VerticalAlignment="Center" Text="51164861561" Style="{StaticResource TextBoxStyle}" Width="133" Margin="1" ToolTip="Номер допускаемого прибора учета"/>
 
+                    <TextBox VerticalAlignment="Center"  Style="{StaticResource TextBoxStyle}" Width="133" Margin="1" ToolTip="Номер допускаемого прибора учета">
+                        <TextBox.Text>
+                            <Binding Path="AktInWork.PuNewNumber" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
+        UpdateSourceTrigger="LostFocus">
+
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock  VerticalAlignment="Center"  Text="Показание:" Margin="1,1,1,1"/>
-                    <TextBox VerticalAlignment="Center" Text="{Binding Path=PuNewPokazanie}" Style="{StaticResource TextBoxStyle}" Width="96" MaxLength="7"/>
+                    <TextBox VerticalAlignment="Center"  Style="{StaticResource TextBoxStyle}" Width="96" MaxLength="7">
+                        <TextBox.Text>
+                            <Binding Path="AktInWork.PuNewPokazanie" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
+        UpdateSourceTrigger="LostFocus">
+                                <Binding.ValidationRules>
+                                    <val:ValidPokazanie/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock VerticalAlignment="Center" Text="Поверка:"  Margin="1,1,1,1"/>
-                    <TextBox VerticalAlignment="Center" Text="{Binding Path=PuNewPoverkaEar}" Style="{StaticResource TextBoxStyle}"   Width="44"  MaxLength="4" />
+                    <TextBox VerticalAlignment="Center"  Style="{StaticResource TextBoxStyle}"   Width="44"  MaxLength="4" >
+                        <TextBox.Text>
+                            <Binding Path="AktInWork.PuNewPoverkaEar" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
+        UpdateSourceTrigger="LostFocus">
+                                <Binding.ValidationRules>
+                                    <val:ValidYearPu/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
                     <TextBlock VerticalAlignment="Center" Text="Квартал:" Margin="1,1,1,1"/>
-                    <TextBox VerticalAlignment="Center" Text="{Binding Path=PuNewPoverKvartal}" Style="{StaticResource TextBoxStyle}" Width="20" MaxLength="1" MaxLines="1" />
+                    <TextBox VerticalAlignment="Center"  Style="{StaticResource TextBoxStyle}" Width="20" MaxLength="1" MaxLines="1" >
+                        <TextBox.Text>
+                            <Binding Path="AktInWork.PuNewPoverKvartal" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
+        UpdateSourceTrigger="LostFocus">
+                                <Binding.ValidationRules>
+                                    <val:ValidKvartal/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
                 </StackPanel>
             </StackPanel>
         </GroupBox>
         <GroupBox Header="Прибор учета">
             <StackPanel  >
                 <StackPanel Orientation="Horizontal"  >
-                    <TextBlock Text="{Binding Path=PuOldType}"   VerticalAlignment="Center" Margin="1,1,1,1"/>
+                    <TextBlock Text="{Binding Path=AktInWork.PuOldType}"  Style="{StaticResource Hidden}"  VerticalAlignment="Center" Margin="1,1,1,1"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" >
                     <TextBlock Text="Номер:" VerticalAlignment="Center" Margin="1,1,1,1"/>
-                    <TextBox Text="{Binding Path=PuOldNumber}"  Style="{StaticResource TextBoxStyle}"  Width="120"  VerticalAlignment="Center"/>
-                    <TextBlock Text="Показание:" VerticalAlignment="Center" Margin="1,1,1,1"/>
-                    <TextBox Text="{Binding Path=PuOldPokazanie}" Style="{StaticResource TextBoxStyle}"  MaxLength="7" Width="70" VerticalAlignment="Center"/>
+                    <TextBox   Style="{StaticResource TextBoxStyle}"  Width="120"  VerticalAlignment="Center">
+                        <TextBox.Text>
+                            <Binding Path="AktInWork.PuOldNumber" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
+        UpdateSourceTrigger="LostFocus">
+                                <Binding.ValidationRules>
+                                    <val:ValidOldNumberPU/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                    <Button  Focusable="False" Command="{Binding Commands.GetDataFromDbByNumberPu}">
+                        <Image  Height="20" Source="/ATPWork;component/Resources/icons8Find50.png" Width="20" />
+                    </Button>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" >
-                    <CheckBox Content="Истек МПИ " HorizontalAlignment="Left"    IsChecked="{Binding Path=PuOldMPI}"  VerticalAlignment="Center" Margin="1,1,1,1"/>
+                    <TextBlock Text="Показание:" VerticalAlignment="Center" Margin="1,1,1,1"/>
+                    <TextBox Style="{StaticResource TextBoxStyle}"  MaxLength="7" Width="70" VerticalAlignment="Center">
+                        <TextBox.Text>
+                            <Binding Path="AktInWork.PuOldPokazanie" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
+        UpdateSourceTrigger="LostFocus">
+                                <Binding.ValidationRules>
+                                    <val:ValidPokazanie/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                    <CheckBox Content="Истек МПИ " HorizontalAlignment="Left"    IsChecked="{Binding Path=AktInWork.PuOldMPI}"  VerticalAlignment="Center" Margin="1,1,1,1"/>
                 </StackPanel>
             </StackPanel>
         </GroupBox>

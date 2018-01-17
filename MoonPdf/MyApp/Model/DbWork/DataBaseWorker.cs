@@ -1,6 +1,8 @@
 ﻿using ExcelDataReader;
+using MyApp.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.OleDb;
 using System.Data.SQLite;
@@ -11,15 +13,28 @@ using System.Windows;
 
 namespace MyApp.Model
 {
-
-    public class DataBaseWorker
+    static public class DataBaseWorker
     {
-        SQLiteConnection connector;
-        SQLiteConnection connectorOnSaveLoad;
-        SQLiteConnection connectorOplombirovki;
-        public DataBaseWorker()
+        /// <summary>
+        /// Коннектор к рабочей базе данных
+        /// </summary>
+        static SQLiteConnection connector = new SQLiteConnection("Data Source=filename.db; Version=3;");
+
+        /// <summary>
+        /// Коннектор к базе данных заявок
+        /// </summary>
+        static SQLiteConnection connectorOplombirovki = new SQLiteConnection("Data Source=oplombirovki.db; Version=3;");
+
+
+
+
+
+        /// <summary>
+        /// Заполнение списка монтируеммых ПУ
+        /// </summary>
+        /// <param name="spisokPU">ссылка на список ПУ</param>
+        public static void PUListInit(List<PriborUcheta> spisokPU)
         {
-            connector = new SQLiteConnection("Data Source=filename.db; Version=3;");
             try
             {
                 connector.Open();
@@ -28,30 +43,34 @@ namespace MyApp.Model
             {
                 MessageBox.Show(ex.Message);
             }
-            connectorOplombirovki = new SQLiteConnection("Data Source=oplombirovki.db; Version=3;");
-            try
-            {
-                connectorOplombirovki.Open();
-            }
-            catch (SQLiteException ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-        public void PUListInit(SpisokPUObserv spisokPU)
-        {
+
             SQLiteCommand CommandSQL = new SQLiteCommand(connector);
             CommandSQL.CommandText = "SELECT * "
             + " FROM `PriboriUcheta`;";
             SQLiteDataReader r = CommandSQL.ExecuteReader();
             while (r.Read())
             {
-                spisokPU.Add(new PriborUcheta(r["SapNumberPU"].ToString(), r["NamePU"].ToString(), Int32.Parse( r["Poverka"].ToString()), r["Znachnost"].ToString()));
+                spisokPU.Add(new PriborUcheta(r["SapNumberPU"].ToString(), r["NamePU"].ToString(), Int32.Parse(r["Poverka"].ToString()), r["Znachnost"].ToString()));
             }
             r.Close();
+            connector.Close();
+
         }
-        public void AgentListInit(AgentList agentList)
+        /// <summary>
+        /// Заполнение списка Агентов
+        /// </summary>
+        /// <param name="agentList"></param>
+        public static void AgentListInit(List<Agent> agentList)
         {
+            try
+            {
+                connector.Open();
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
             SQLiteCommand CommandSQL = new SQLiteCommand(connector);
             CommandSQL.CommandText = "SELECT * "
             + " FROM `AgentList`;";
@@ -61,18 +80,30 @@ namespace MyApp.Model
                 agentList.Add(new Agent(r["SapNumber"].ToString(), r["Post"].ToString(), r["Surname"].ToString(), r["SearchString"].ToString()));
             }
             r.Close();
-
+            connector.Close();
         }
-        public List<Dictionary<String, String>> GetAbonentFromLS(string numberLS)
-
+        /// <summary>
+        /// Поиск абонента в базе по номеру лицевого счета
+        /// </summary>
+        /// <param name="numberLS">Номер лицевого счета</param>
+        /// <returns>Лист словарей с данными если успешно, null если не найден</returns>
+        static public List<Dictionary<String, String>> GetAbonentFromLS(string numberLS)
         {
-            List<Dictionary<String, String>> result = new List<Dictionary<string, string>>();
-
-            SQLiteCommand CommandSQL = new SQLiteCommand(connector);
-            CommandSQL.CommandText = "SELECT FIO, PuType, LsNumber,City,Street,House,Korpus,PuNumber,Kv, Ustanovka,PuKod "
-  + " FROM SAPFL WHERE LsNumber LIKE '%" + numberLS + "%' ";
             try
             {
+                connector.Open();
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            List<Dictionary<String, String>> result = new List<Dictionary<string, string>>();
+            SQLiteCommand CommandSQL = new SQLiteCommand(connector);
+            CommandSQL.CommandText = "SELECT FIO, PuType, LsNumber,City,Street,House,Korpus,PuNumber,Kv, Ustanovka,PuKod "
+    + " FROM SAPFL WHERE LsNumber LIKE '%" + numberLS + "%' ";
+            try
+            {
+               
                 SQLiteDataReader r = CommandSQL.ExecuteReader();
                 string line = String.Empty;
                 int i = 0;
@@ -94,6 +125,7 @@ namespace MyApp.Model
                     i++;
                 }
                 r.Close();
+                connector.Close();
                 return result;
             }
             catch (SQLiteException ex)
@@ -102,13 +134,26 @@ namespace MyApp.Model
                 return null;
             }
         }
-        public List<Dictionary<String, String>> GetAbonentFromDbByPU(string numberPU)
+        /// <summary>
+        /// Поиск абонента в базе по номеру ПУ
+        /// </summary>
+        /// <param name="numberPU">Номер ПУ</param>
+        /// <returns>Лист словарей с данными если успешно, null если не найден</returns>
+        static public List<Dictionary<String, String>> GetAbonentFromDbByPU(string numberPU)
         {
+            try
+            {
+                connector.Open();
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
             List<Dictionary<String, String>> result = new List<Dictionary<string, string>>();
 
             SQLiteCommand CommandSQL = new SQLiteCommand(connector);
             CommandSQL.CommandText = "SELECT FIO, PuType, LsNumber,City,Street,House,Korpus,PuNumber, Kv, Ustanovka,PuKod "
-  + " FROM SAPFL WHERE PuNumber LIKE '%" + numberPU + "%' ";
+    + " FROM SAPFL WHERE PuNumber LIKE '%" + numberPU + "%' ";
             try
             {
                 SQLiteDataReader r = CommandSQL.ExecuteReader();
@@ -133,16 +178,26 @@ namespace MyApp.Model
                     i++;
                 }
                 r.Close();
+                connector.Close();
                 return result;
+
             }
             catch (SQLiteException ex)
             {
                 MessageBox.Show(ex.Message);
+                connector.Close();
                 return null;
             }
 
         }
-        public bool SaveATP(ATPWorker ATP, string Path)
+        /*
+        /// <summary>
+        /// Сохранение актов находящихся в работе
+        /// </summary>
+        /// <param name="ATP"></param>
+        /// <param name="Path">Путь к файлу сохранения *.atp</param>
+        /// <returns></returns>
+        static public bool SaveATP(ATPWorker ATP, string Path)
         {
             //Открываем соединение
             connectorOnSaveLoad = new SQLiteConnection("Data Source=" + Path + "; Version=3;");
@@ -193,13 +248,13 @@ namespace MyApp.Model
                + "TypeOfWork TEXT"
               + ");";
             result_command += sql_command;
-            foreach (AktTehProverki item in ATP.AllAtpInWorkList)
+            foreach (aktATP item in ATP.AllAtpInWorkList)
             {
                 //добавляем строку с актом
                 sql_command = "INSERT INTO ATPList(  'ID',`PathOfPdfFile`, 'Adress', Agent_1, Agent_2, DateWork, FIO, DopuskFlag, Number,NumberLS,PuNewNumber,PuNewPokazanie,PuNewPoverkaEar,PuNewPoverKvartal,PuNewType,PuOldMPI,PuOldNumber,PuOldPokazanie,PuOldType,TypeOfWork, Page1, Page2)"
               + "VALUES ('"
                + item.ID.ToString() + "', '"
-                 + item.NamePdfFile + "', '"
+                 + item.PathOfPdfFile + "', '"
                 + item.Adress + "', '"
                 + (item.Agent_1 != null ? item.Agent_1.SapNumber : "") + "', '"
                 + (item.Agent_2 != null ? item.Agent_2.SapNumber : "") + "', '"
@@ -222,7 +277,7 @@ namespace MyApp.Model
                 + item.NumberOfPagesInSoursePdf[1] + "');";
                 result_command += sql_command;
                 // Создаем Таблицу для пломб к текущему акту
-                if (item.plombs.Count > 0)
+                if (item.plomb.Count > 0)
                 {
                     string plombTableName = item.ID.ToString() + item.Number + item.NumberLS + "Plobm";
                     //Имя таблицы пломб
@@ -234,7 +289,7 @@ namespace MyApp.Model
                       + "'Remove' INTEGER,     "
                       + "'Place' TEXT );";
                     result_command += sql_command;
-                    foreach (Plomba Plomba in item.plombs)
+                    foreach (plomba Plomba in item.plomb)
                     {
                         //добавляем строку с пломбой
                         sql_command = "INSERT INTO `" + plombTableName + "` (Type, Number, Remove, Place) "
@@ -263,7 +318,13 @@ namespace MyApp.Model
             return true;
 
         }
-        public bool LoadATP(string Path, ATPWorker ATP)
+        /// <summary>
+        /// Загрузка актов для работы
+        /// </summary>
+        /// <param name="ATP"></param>
+        /// <param name="Path">Путь к файлу сохранения *.atp</param>
+        /// <returns></returns>
+        static public bool LoadATP(string Path, ATPWorker ATP)
         {
             //Открываем соединение
             connectorOnSaveLoad = new SQLiteConnection("Data Source=" + Path + "; Version=3;");
@@ -277,7 +338,7 @@ namespace MyApp.Model
                 return false;
             }
             // Загрузка листа проверок
-            List<AktTehProverki> result = new List<AktTehProverki>();
+            List<aktATP> result = new List<aktATP>();
             SQLiteCommand CommandSQL = new SQLiteCommand(connectorOnSaveLoad);
             CommandSQL.CommandText = "SELECT * "
             + " FROM `ATPList`;";
@@ -291,7 +352,7 @@ namespace MyApp.Model
                     List<int> Page = new List<int>();
                     Page.Add(Int32.Parse(r["Page1"].ToString()));
                     Page.Add(Int32.Parse(r["Page2"].ToString()));
-                    result.Add(new AktTehProverki(Int32.Parse(r["ID"].ToString()), Page, r["PathOfPdfFile"].ToString()));
+                    result.Add(new aktATP(Int32.Parse(r["ID"].ToString()), Page, r["PathOfPdfFile"].ToString()));
                     //Ищем агентов по номеру
                     string temp_agent = r["Agent_1"].ToString();
                     if (temp_agent != "")
@@ -353,7 +414,7 @@ namespace MyApp.Model
                                 plomb_Number = plomb_reader["Number"].ToString();
                                 plomb_Remove = Int32.Parse(plomb_reader["Remove"].ToString()) == 0 ? false : true; ;
                                 plomb_Place = plomb_reader["Place"].ToString();
-                                result[i].plombs.Add(new Plomba(plomb_Type, plomb_Number, plomb_Place, plomb_Remove));
+                                result[i].plomb.Add(new plomba(plomb_Type, plomb_Number, plomb_Place, plomb_Remove));
                             }
                         }
                     }
@@ -370,13 +431,18 @@ namespace MyApp.Model
                 MessageBox.Show(ex.Message);
             }
             ATP.AllAtpInWorkList.Clear();
-            foreach (AktTehProverki item in result)
+            foreach (aktATP item in result)
             {
                 ATP.AllAtpInWorkList.Add(item);
             }
             ATP.AktATPInWork = ATP.AllAtpInWorkList[0];
             return true;
         }
+        */
+            /*
+        /// <summary>
+        /// Очистка таблицы заполненных актов
+        /// </summary>
         internal void DromCompliteTable()
         {
             SQLiteCommand cmd = connector.CreateCommand();
@@ -391,11 +457,15 @@ namespace MyApp.Model
                 MessageBox.Show(ex.Message);
             }
         }
+        /// <summary>
+        /// Инициализация листа актов из базы при загрузке приложения
+        /// </summary>
+        /// <param name="ATP"></param>
         public void LoadCompleteATP(ATPWorker ATP)
         {
             //Открываем соединение
             // Загрузка листа проверок
-            List<AktTehProverki> result = new List<AktTehProverki>();
+            List<aktATP> result = new List<aktATP>();
             SQLiteCommand CommandSQL = new SQLiteCommand(connector);
             CommandSQL.CommandText = "SELECT * "
             + " FROM `CompleteATPList`;";
@@ -407,7 +477,7 @@ namespace MyApp.Model
                 List<int> Page = new List<int>();
                 Page.Add(Int32.Parse(r["Page1"].ToString()));
                 Page.Add(Int32.Parse(r["Page2"].ToString()));
-                result.Add(new AktTehProverki(Int32.Parse(r["ID"].ToString()), Page, r["PathOfPdfFile"].ToString()));
+                result.Add(new aktATP(Int32.Parse(r["ID"].ToString()), Page, r["PathOfPdfFile"].ToString()));
                 //Ищем агентов по номеру
                 string temp_agent = r["Agent_1"].ToString();
                 if (temp_agent != "")
@@ -436,7 +506,6 @@ namespace MyApp.Model
                 }
                 result[i].PuOldMPI = Int32.Parse(r["PuOldMPI"].ToString()) == 0 ? false : true;
                 result[i].DopuskFlag = Int32.Parse(r["DopuskFlag"].ToString()) == 0 ? false : true;
-                // result[i].PuOldMPI = Int32.Parse(r["DopuskFlag"].ToString()) == 0 ? false : true;
                 result[i].Adress = r["Adress"].ToString();
                 DateTime date1 = DateTime.Parse(r["DateWork"].ToString());
                 result[i].DateWork = date1;
@@ -476,7 +545,7 @@ namespace MyApp.Model
                             plomb_Number = plomb_reader["Number"].ToString();
                             plomb_Remove = Int32.Parse(plomb_reader["Remove"].ToString()) == 0 ? false : true; ;
                             plomb_Place = plomb_reader["Place"].ToString();
-                            result[i].plombs.Add(new Plomba(plomb_Type, plomb_Number, plomb_Place, plomb_Remove));
+                            result[i].plomb.Add(new plomba(plomb_Type, plomb_Number, plomb_Place, plomb_Remove));
                         }
                     }
                 }
@@ -487,22 +556,22 @@ namespace MyApp.Model
                 i++;
             }
             r.Close();
-            /* }
-             catch (SQLiteException ex)
-             {
-                 MessageBox.Show(ex.Message);
 
-             }*/
 
 
             ATP.CompleteAtpWorkList.Clear();
-            foreach (AktTehProverki item in result)
+            foreach (aktATP item in result)
             {
                 ATP.CompleteAtpWorkList.Add(item);
             }
 
         }
-        public bool chekForContainsCompleteAktATP(AktTehProverki akt)
+        /// <summary>
+        /// Проверка на наличие акта в базе данных
+        /// </summary>
+        /// <param name="akt"></param>
+        /// <returns></returns>
+        public bool chekForContainsCompleteAktATP(aktATP akt)
         {
             SQLiteCommand CommandSQL = new SQLiteCommand(connector);
             CommandSQL.CommandText = "SELECT DateWork, Number, NumberLS "
@@ -512,17 +581,21 @@ namespace MyApp.Model
             r.Close();
             return result;
         }
+        /// <summary>
+        /// Запись в базу данных завершенных актов
+        /// </summary>
+        /// <param name="akti">Лист с актами тех. проверок</param>
         public void InsertCompleteAktAPT(AllATPObserv akti)
         {
             string resultCommand = "BEGIN; ";
-            foreach (AktTehProverki akt in akti)
+            foreach (aktATP akt in akti)
             {
                 if (!chekForContainsCompleteAktATP(akt))
                 {
                     string sql_command = "INSERT INTO CompleteATPList(  'ID',`PathOfPdfFile`, 'Adress', Agent_1, Agent_2, DateWork, FIO, DopuskFlag, Number,NumberLS,PuNewNumber,PuNewPokazanie,PuNewPoverkaEar,PuNewPoverKvartal,PuNewType,PuOldMPI,PuOldNumber,PuOldPokazanie,PuOldType,TypeOfWork, Page1, Page2, NumberMail, DateMail,`Ustanovka`,`SapNumberAkt`,`EdOborudovania`)"
                   + "VALUES ('"
                    + akt.ID.ToString() + "', '"
-                     + akt.NamePdfFile + "', '"
+                     + akt.PathOfPdfFile + "', '"
                     + akt.Adress + "', '"
                     + (akt.Agent_1 != null ? akt.Agent_1.SapNumber : "") + "', '"
                     + (akt.Agent_2 != null ? akt.Agent_2.SapNumber : "") + "', '"
@@ -551,7 +624,7 @@ namespace MyApp.Model
 
                     resultCommand += sql_command;
                     // Создаем Таблицу для пломб к текущему акту
-                    if (akt.plombs.Count > 0)
+                    if (akt.plomb.Count > 0)
                     {
                         string plombTableName = akt.ID.ToString() + akt.Number + akt.NumberLS + "Plobm"; //Имя таблицы пломб
                         sql_command = "DROP TABLE IF EXISTS '" + plombTableName + "';"
@@ -562,7 +635,7 @@ namespace MyApp.Model
                           + "'Remove' INTEGER,     "
                           + "'Place' TEXT );";
                         resultCommand += sql_command;
-                        foreach (Plomba Plomba in akt.plombs)
+                        foreach (plomba Plomba in akt.plomb)
                         {
                             //добавляем строку с пломбой
                             sql_command = "INSERT INTO `" + plombTableName + "` (Type, Number, Remove, Place) "
@@ -588,7 +661,11 @@ namespace MyApp.Model
                 MessageBox.Show(ex.Message);
             }
         }
-        public void InsertCompleteAktAPT(AktTehProverki akt)
+        /// <summary>
+        /// Запись в базу данных завершенного акта
+        /// </summary>
+        /// <param name="akt">Акт тех. проверки</param>
+        public void InsertCompleteAktAPT(aktATP akt)
         {
             if (!chekForContainsCompleteAktATP(akt))
             {
@@ -596,7 +673,7 @@ namespace MyApp.Model
                 string sql_command = "INSERT INTO CompleteATPList(  'ID',`PathOfPdfFile`, 'Adress', Agent_1, Agent_2, DateWork, FIO, DopuskFlag, Number,NumberLS,PuNewNumber,PuNewPokazanie,PuNewPoverkaEar,PuNewPoverKvartal,PuNewType,PuOldMPI,PuOldNumber,PuOldPokazanie,PuOldType,TypeOfWork, Page1, Page2, NumberMail, DateMail,`Ustanovka`,`SapNumberAkt`,`EdOborudovania`)"
               + "VALUES ('"
                + akt.ID.ToString() + "', '"
-                 + akt.NamePdfFile + "', '"
+                 + akt.PathOfPdfFile + "', '"
                 + akt.Adress + "', '"
                 + (akt.Agent_1 != null ? akt.Agent_1.SapNumber : "") + "', '"
                 + (akt.Agent_2 != null ? akt.Agent_2.SapNumber : "") + "', '"
@@ -633,7 +710,7 @@ namespace MyApp.Model
                     MessageBox.Show(ex.Message);
                 }
                 // Создаем Таблицу для пломб к текущему акту
-                if (akt.plombs.Count > 0)
+                if (akt.plomb.Count > 0)
                 {
                     cmd = connector.CreateCommand();
                     string plombTableName = akt.ID.ToString() + akt.Number + akt.NumberLS + "Plobm"; //Имя таблицы пломб
@@ -654,7 +731,7 @@ namespace MyApp.Model
                         MessageBox.Show(ex.Message);
                         connector.Close();
                     }
-                    foreach (Plomba Plomba in akt.plombs)
+                    foreach (plomba Plomba in akt.plomb)
                     {
                         //добавляем строку с пломбой
                         cmd = connector.CreateCommand();
@@ -676,8 +753,14 @@ namespace MyApp.Model
                     }
                 }
             }
-        }
-        public void RefreshSAPFL(DataSet dataSetSAPFL)
+        }*/
+        /// <summary>
+        /// Обновление базы данных физ.  лиц
+        /// </summary>
+        /// <param name="dataSetSAPFL"></param>
+        /// 
+
+        static public void RefreshSAPFL(DataSet dataSetSAPFL)
         {
             if (dataSetSAPFL != null)
             {
@@ -732,7 +815,7 @@ namespace MyApp.Model
                             transaction.Commit();
                         }
                     }
-                    MessageBox.Show("File imported into sql server.");
+                    MessageBox.Show("База ФЛ успешно обновлена");
                 }
                 catch (Exception ex)
                 {

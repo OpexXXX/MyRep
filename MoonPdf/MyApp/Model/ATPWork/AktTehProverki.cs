@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 
 namespace MyApp.Model
 {
-    public class AktTehProverki
+    public class AktTehProverki:INotifyPropertyChanged
     {
         private int numberMail;
         public int NumberMail
@@ -21,6 +22,7 @@ namespace MyApp.Model
             set
             {
                 this.numberMail = value;
+                this.OnPropertyChanged("NumberMail");
             }
         }
         public List<int> NumberOfPagesInSoursePdf = new List<int>();
@@ -31,6 +33,8 @@ namespace MyApp.Model
             set
             {
                 this.DopuskFlag = !value;
+                this.OnPropertyChanged("ProverkaFlag");
+                this.OnPropertyChanged("DopuskFlag");
             }
         }
         private bool dopuskFlag;
@@ -40,6 +44,8 @@ namespace MyApp.Model
             set
             {
                 this.dopuskFlag = value;
+                this.OnPropertyChanged("ProverkaFlag");
+                this.OnPropertyChanged("DopuskFlag");
             }
         }
         private string ustanovka;
@@ -76,6 +82,7 @@ namespace MyApp.Model
             set
             {
                 this.puOldNumber = value;
+                this.OnPropertyChanged("PuOldNumber");
             }
         }
         private string puOldType;
@@ -84,7 +91,8 @@ namespace MyApp.Model
             get { return this.puOldType; }
             set
             {
-                this.puOldType = value; 
+                this.puOldType = value;
+                this.OnPropertyChanged("PuOldType");
             }
         }
         private string puNewNumber;
@@ -94,6 +102,7 @@ namespace MyApp.Model
             set
             {
                 this.puNewNumber = value;
+                this.OnPropertyChanged("PuNewNumber");
             }
         }
         private PriborUcheta puNewType;
@@ -103,6 +112,7 @@ namespace MyApp.Model
             set
             {
                 this.puNewType = value;
+                this.OnPropertyChanged("PuNewType");
             }
         }
         private string puOldPokaz;
@@ -111,7 +121,8 @@ namespace MyApp.Model
             get { return this.puOldPokaz; }
             set
             {
-                this.puOldPokaz = value; 
+                this.puOldPokaz = value;
+                this.OnPropertyChanged("PuOldPokazanie");
             }
         }
         private bool puOldMPI;
@@ -121,6 +132,7 @@ namespace MyApp.Model
             set
             {
                 this.puOldMPI = value;
+                this.OnPropertyChanged("PuOldMPI");
             }
         }
         private bool complete;
@@ -130,6 +142,7 @@ namespace MyApp.Model
             private set
             {
                 this.complete = value;
+                this.OnPropertyChanged("Complete");
             }
         }
         private string puNewPokazanie;
@@ -138,7 +151,8 @@ namespace MyApp.Model
             get { return this.puNewPokazanie; }
             set
             {
-                this.puNewPokazanie = value; 
+                this.puNewPokazanie = value;
+                this.OnPropertyChanged("PuNewPokazanie");
             }
         }
         private string puNewPoverkaEar;
@@ -147,7 +161,8 @@ namespace MyApp.Model
             get { return this.puNewPoverkaEar; }
             set
             {
-                this.puNewPoverkaEar = value; 
+                this.puNewPoverkaEar = value;
+                this.OnPropertyChanged("PuNewPoverkaEar");
             }
         }
         private string puNewPoverkaKvartal;
@@ -157,6 +172,7 @@ namespace MyApp.Model
             set
             {
                 this.puNewPoverkaKvartal = value;
+                this.OnPropertyChanged("PuNewPoverKvartal");
             }
         }
         private string adress;
@@ -166,15 +182,17 @@ namespace MyApp.Model
             set
             {
                 this.adress = value;
+                this.OnPropertyChanged("Adress");
             }
         }
-        private string number;
-        public string Number
+        private int number;
+        public int Number
         {
             get { return this.number; }
             set
             {
                 this.number = value;
+                this.OnPropertyChanged("Number");
             }
         }
         private string dateMail;
@@ -190,23 +208,24 @@ namespace MyApp.Model
         public DateTime? DateWork
         {
             get { return this.dateWork; }
-            set { this.dateWork = value;  }
+            set { this.dateWork = value; this.OnPropertyChanged("DateWork"); }
         }
         private string fIO;
         public string FIO
         {
             get { return this.fIO; }
-            set { this.fIO = value; }
+            set { this.fIO = value; this.OnPropertyChanged("FIO"); }
         }
         private int iD;
         public int ID
         {
             get { return this.iD; }
-            set { this.iD = value;  }
+            set { this.iD = value; this.OnPropertyChanged("ID"); }
         }
-        private List<Plomba> _plombs = new List<Plomba>();
-        public IEnumerable<Plomba> plombs {
-            get { return new List<Plomba>(_plombs); }
+        private ObservableCollection<Plomba> _plombs = new ObservableCollection<Plomba>();
+        public ObservableCollection<Plomba> Plombs {
+            get { return _plombs; }
+            set { this._plombs =  value; }
         }
         private Agent agent_1;
         public Agent Agent_1
@@ -214,29 +233,29 @@ namespace MyApp.Model
             get { return this.agent_1; }
             set
             {
-                this.agent_1 = value; 
+                this.agent_1 = value; this.OnPropertyChanged("Agent_1");
             }
         }
         private Agent agent_2;
         public Agent Agent_2
         {
-            get { return this.agent_2; }
+            get { return this.agent_2;  }
             set
             {
-                this.agent_2 = value; 
+                this.agent_2 = value; this.OnPropertyChanged("Agent_2");
             }
         }
-        private string numberLS;
-        public string NumberLS
+        private  string numberLS;
+        public  string NumberLS
         {
             get { return this.numberLS; }
-            set { this.numberLS = value;  }
+            set { this.numberLS = value; this.OnPropertyChanged("NumberLS"); }
         }
         private string namePdfFile;
         public string NamePdfFile
         {
             get { return this.namePdfFile; }
-            set { this.namePdfFile = value;  }
+            set { this.namePdfFile = value; this.OnPropertyChanged("NamePdfFile"); }
         }
         private string groupOfMail;
         public AktTehProverki(int id, List<int> numbersOfPageInPdf, string pathOfPdfFile)
@@ -249,7 +268,7 @@ namespace MyApp.Model
                 NumberOfPagesInSoursePdf.Add(page);
             }
         }
-        public void setDataByDb(Dictionary<string, string> dict)
+       public void setDataByDb(Dictionary<string, string> dict)
         {
             NumberLS = dict["LsNumber"];
             PuOldType = dict["PuType"];
@@ -263,6 +282,7 @@ namespace MyApp.Model
             Ustanovka = dict["Ustanovka"]; ;
             EdOborudovania = dict["EdOborudovania"]; ;
         }
+
         public bool checkToComplete()
         {
             bool result = true;
@@ -270,7 +290,7 @@ namespace MyApp.Model
             if (adress == null || adress == "") result = false;
             if (dateWork == null) result = false;
             if (fIO == null || fIO == "") result = false;
-            if (number == null || number == "") result = false;
+            if (number ==0) result = false;
             if (numberLS == null || numberLS == "") result = false;
             if (puOldNumber == null || puOldNumber == "") result = false;
             if (puOldPokaz == null || puOldPokaz == "") result = false;
@@ -285,6 +305,12 @@ namespace MyApp.Model
             }
             Complete = result;
             return result;
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged([CallerMemberName]string prop = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
     }
 }

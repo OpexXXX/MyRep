@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 namespace MyApp
 {
     
-    public class ListBoxView :INotifyPropertyChanged, IEquatable<ListBoxView>
+    public class ListBoxView :INotifyPropertyChanged
     {
         private Dictionary<String, String> val;
         public Dictionary<String, String> Val
@@ -26,7 +26,6 @@ namespace MyApp
                 this.val = value; this.OnPropertyChanged("Val");
             }
         }
-
 
         private string puOldNumber;
         public string PuOldNumber
@@ -74,10 +73,7 @@ namespace MyApp
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public bool Equals(ListBoxView item) //Сравнение
-        {
-            return item.numberLS == this.numberLS;
-        }
+        
         protected void OnPropertyChanged(string info) // На изменение полей
         {
             if (this.PropertyChanged != null)
@@ -114,9 +110,16 @@ namespace MyApp
                 this.selectVal = value; 
             }
         }
-        public ResultSearchWindow()
+
+        public ResultSearchWindow(List<Dictionary<String, String>> Abonents)
         {
             InitializeComponent();
+            List<ListBoxView> ListForDataGrid = new List<ListBoxView>();
+            foreach (var item in Abonents)
+            {
+                ListForDataGrid.Add(new ListBoxView(item));
+            }
+            dataGrid.ItemsSource = ListForDataGrid;
         }
 
         private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)

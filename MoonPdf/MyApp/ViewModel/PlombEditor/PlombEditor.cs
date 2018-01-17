@@ -12,9 +12,8 @@ using System.Windows.Input;
 
 namespace ATPWork.MyApp.ViewModel.PlombEditorVm
 {
-    public class plombDataContext : INotifyPropertyChanged
+    public class PlombEditorVM : INotifyPropertyChanged
     {
-        private PlombEditor plombEd;
         private Commands _commands;
         public Commands Commands
         {
@@ -35,43 +34,37 @@ namespace ATPWork.MyApp.ViewModel.PlombEditorVm
                 OnPropertyChanged("SelectedPlomb");
             }
         }
-        private List<string> _typePL;
-        public List<string> typePL
-        {
-            get { return this._typePL; }
-            set { this._typePL = value; }
-        }
-        private List<string> _placePL;
-        public List<string> placePL
-        {
-            get { return this._placePL; }
-            set { this._placePL = value; }
-        }
-        private ObservableCollection<Plomba> _pl;
-        public ObservableCollection<Plomba> pl
-        {
-            get { return this._pl; }
-            set { this._pl = value; }
-        }
-        public plombDataContext(PlombEditor plombEdit)
-        {
-            this.Commands = new Commands(this, plombEdit);
-            this.plombEd = plombEdit;
-           
-            typePL = new List<string>();
-            placePL = new List<string>();
-            typePL.Add("2400_4");
-            typePL.Add("2400_5");
-            typePL.Add("2400_6");
-            placePL.Add("ВКА");
-            placePL.Add("Щит Учета");
-            placePL.Add("Кл. кр. ПУ");
-            placePL.Add("Корпус ПУ");
-            pl = new ObservableCollection<Plomba>();
 
-            pl.Add(new Plomba("2400_5", 240501801, "ВКА", false));
-            pl.Add(new Plomba("2400_5", 24021, "Щит Учета", false));
+        private static List<string> _typePL;
+        public static List<string> typePL
+        {
+            get { return _typePL; }
+            set { _typePL = value; }
+        }
+        private static List<string> _placePL;
+        public static List<string> placePL
+        {
+            get { return _placePL; }
+            set { _placePL = value; }
+        }
+       
 
+
+        public ObservableCollection<Plomba> _pl;
+        public ObservableCollection<Plomba> PlombList
+        {
+            get { return  this._pl; }
+
+        }
+        public PlombEditorVM()
+        {
+            this.Commands = new Commands(this);
+            GetPlacePLFromDb();
+            GetTypePLFromDb();
+            _pl = new ObservableCollection<Plomba>();
+
+            PlombList.Add(new Plomba("2400_5", 240501801, "ВКА", false));
+            PlombList.Add(new Plomba("2400_5", 24021, "Щит Учета", false));
         }
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")
@@ -81,16 +74,35 @@ namespace ATPWork.MyApp.ViewModel.PlombEditorVm
 
        public void AddPlomb()
         {
-            pl.Add(new Plomba("2400_4", 0, "ВКА", false));
+            PlombList.Add(new Plomba("2400_4", 0, "ВКА", false));
         }
         public void DeletePlobm()
         {
-            pl.Remove(SelectedPlomb);
+            PlombList.Remove(SelectedPlomb);
         }
         public void ClonePlomb()
         {
             Plomba f = SelectedPlomb;
-            pl.Add(new Plomba(f.Type, f.Number, f.Place, f.Remove));
+            PlombList.Add(new Plomba(f.Type, f.Number, f.Place, f.Remove));
+        }
+        public bool checkSecection()
+        {
+            return SelectedPlomb != null;
+        }
+        public static void GetPlacePLFromDb()
+        {
+            placePL = new List<string>();
+            placePL.Add("ВКА");
+            placePL.Add("Щит Учета");
+            placePL.Add("Кл. кр. ПУ");
+            placePL.Add("Корпус ПУ");
+        }
+        public static void GetTypePLFromDb()
+        {
+            typePL = new List<string>();
+            typePL.Add("2400_4");
+            typePL.Add("2400_5");
+            typePL.Add("2400_6");
         }
     }
 }

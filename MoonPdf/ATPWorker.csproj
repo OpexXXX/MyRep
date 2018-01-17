@@ -171,11 +171,17 @@
     <Compile Include="MyApp\Model\ATPWork\Agent.cs" />
     <Compile Include="MyApp\Model\ATPWork\Plomba.cs" />
     <Compile Include="MyApp\Model\ATPWork\PriborUcheta.cs" />
+    <Compile Include="MyApp\Model\DbWork\DataBaseWorker.cs" />
     <Compile Include="MyApp\Model\Zayvki na oplombirovku\Oplobbirovki.cs" />
+    <Compile Include="MyApp\ViewModel\AtpEditor\AptEditor.cs" />
+    <Compile Include="MyApp\ViewModel\AtpEditor\Commands.cs" />
+    <Compile Include="MyApp\ViewModel\AtpEditor\Validators.cs" />
     <Compile Include="MyApp\ViewModel\BaseCommand.cs" />
     <Compile Include="MyApp\ViewModel\DelegateComand.cs" />
     <Compile Include="MyApp\ViewModel\PlombEditor\Commands.cs" />
     <Compile Include="MyApp\ViewModel\PlombEditor\PlombEditor.cs" />
+    <Compile Include="MyApp\ViewModel\PlombEditor\Validators.cs" />
+    <Compile Include="MyApp\ViewModel\ViewModelBase.cs" />
     <Compile Include="MyApp\View\AtpEditor.xaml.cs">
       <DependentUpon>AtpEditor.xaml</DependentUpon>
     </Compile>
@@ -305,6 +311,7 @@
     <Resource Include="Resources\icons8Add-50.png" />
     <Resource Include="Resources\icons8Copy-50.png" />
     <Resource Include="Resources\icons8Delete-50.png" />
+    <Resource Include="Resources\icons8Find50.png" />
     <Content Include="Resources\Interop.SAPFEWSELib.dll" />
     <Content Include="Resources\Interop.SAPLogonCtrl.dll" />
     <Content Include="Resources\libmupdf.dll" />
@@ -313,7 +320,6 @@
     <Content Include="Resources\sapfewse.ocx" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="MyApp\Model\DbWork\" />
     <Folder Include="MyApp\Model\ExcelWork\" />
     <Folder Include="MyApp\Model\SAPWork\" />
   </ItemGroup>

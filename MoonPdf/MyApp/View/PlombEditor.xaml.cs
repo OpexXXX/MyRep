@@ -28,9 +28,6 @@ namespace ATPWork.MyApp.View
         {
             InitializeComponent();
         }
-        public bool checkSecection()
-        {
-            return ListBoxW.SelectedItem != null;
-        }
+       
     }
 }

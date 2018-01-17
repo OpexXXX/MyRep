@@ -26,7 +26,7 @@ using System.Threading;
 using MyApp.Model;
 using System.ComponentModel.Design;
 using System.Runtime.CompilerServices;
-using ATPWork.MyApp.ViewModel;
+using ATPWork.MyApp.ViewModel.AtpEditor;
 using ATPWork.MyApp.ViewModel.PlombEditorVm;
 
 namespace MyApp
@@ -39,8 +39,13 @@ namespace MyApp
         public MainWindow()
         {
             InitializeComponent();
-            plombDataContext context = new plombDataContext(AtpEditorR.PlombEditorR);
-            AtpEditorR.PlombEditorR.DataContext = context;
+            AktTehProverki akt = new AktTehProverki(1, new List<int> { 1, 2 }, "123.pdf");
+            akt.Plombs.Add(new Plomba("2400_4", 12, "ÂÊÀ", false));
+            akt.Plombs.Add(new Plomba("2400_5", 13, "ÂÊÀ", false));
+            akt.Plombs.Add(new Plomba("2400_6", 14, "ÂÊÀ", false));
+
+            AtpEditor ate = new AtpEditor(AtpEditorR);
+            ate.AktInWork = akt;
 
             this.Loaded += MainWindow_Loaded;
         }

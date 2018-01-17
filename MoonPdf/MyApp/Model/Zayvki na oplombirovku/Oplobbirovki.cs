@@ -37,7 +37,7 @@ namespace MyApp.Model
 
         }
     }
-    public class ZayvkaOplomb : INotifyPropertyChanged, IEquatable<AktTehProverki>, IComparable<AktTehProverki>
+    public class ZayvkaOplomb : INotifyPropertyChanged
     {
         private int numberMail;
         public int NumberMail
@@ -263,32 +263,13 @@ namespace MyApp.Model
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public bool Equals(AktTehProverki item) //Сравнение
-        {
-            bool result = false;
-           
-                result = (item.Number == this.Number) && (item.DateWork == this.DateWork) && (item.NumberLS == this.NumberLS);
-            return result;
-        }
+
         protected void OnPropertyChanged(string info) // На изменение полей
         {
             if (info != "Complete") this.checkToComplete();
             if (this.PropertyChanged != null)
                 this.PropertyChanged(this, new PropertyChangedEventArgs(info));
         }
-        public int CompareTo(AktTehProverki other)
-        {
-            if (other == null)
-                return 1;
-            else
-            {
-                int res = 0;
-                Int32.TryParse(other.Number, out res);
 
-                return this.Number.CompareTo(other.Number);
-
-            }
-
-        }
     }
 }
