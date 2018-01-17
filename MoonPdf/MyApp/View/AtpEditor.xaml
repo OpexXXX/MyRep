@@ -15,13 +15,12 @@
             <Setter Property="Control.FontFamily" Value="Segoe UI" />
             <Setter Property="Control.FontSize" Value="15" />
             <Setter Property="Validation.ErrorTemplate">
-
                 <Setter.Value>
                     <ControlTemplate>
                         <DockPanel LastChildFill="True">
                             <TextBlock DockPanel.Dock="Right" Foreground="Red" FontSize="14" FontWeight="Bold"
                                                        Text="*"/>
-                            <Border BorderBrush="Green" BorderThickness="1">
+                            <Border BorderBrush="Red" BorderThickness="1">
                                 <AdornedElementPlaceholder Name="adornerPlaceholder"/>
                             </Border>
                         </DockPanel>
@@ -30,7 +29,7 @@
             </Setter>
             <Style.Triggers>
                 <Trigger Property="Validation.HasError" Value="True">
-                    <Setter Property="Foreground" Value="Red"/>
+                    <Setter Property="Background" Value="#FFF5DFDF"/>
                     <Setter Property="ToolTip" 
                          Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
                 </Trigger>
@@ -71,7 +70,7 @@
                     <TextBox   VerticalAlignment="Center" Style="{StaticResource TextBoxStyle}"   Width="50" MaxLength="5" >
                         <TextBox.Text>
                             <Binding Path="AktInWork.Number" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
-        UpdateSourceTrigger="LostFocus">
+        UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
                                     <val:ValidNumber/>
                                 </Binding.ValidationRules>
@@ -106,8 +105,8 @@
                            Width="120"  
                          MaxLength="12">
                         <TextBox.Text>
-                            <Binding Path="AktInWork.NumberLS" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
-        UpdateSourceTrigger="LostFocus">
+                            <Binding Path="AktInWork.NumberLS" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" NotifyOnValidationError="True"
+      >
                                 <Binding.ValidationRules>
                                     <val:ValidNumberLS/>
                                     <ExceptionValidationRule/>
@@ -152,7 +151,7 @@
                     <TextBox VerticalAlignment="Center"  Style="{StaticResource TextBoxStyle}" Width="133" Margin="1" ToolTip="Номер допускаемого прибора учета">
                         <TextBox.Text>
                             <Binding Path="AktInWork.PuNewNumber" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
-        UpdateSourceTrigger="LostFocus">
+        UpdateSourceTrigger="PropertyChanged">
 
                             </Binding>
                         </TextBox.Text>
@@ -163,7 +162,7 @@
                     <TextBox VerticalAlignment="Center"  Style="{StaticResource TextBoxStyle}" Width="96" MaxLength="7">
                         <TextBox.Text>
                             <Binding Path="AktInWork.PuNewPokazanie" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
-        UpdateSourceTrigger="LostFocus">
+        UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
                                     <val:ValidPokazanie/>
                                 </Binding.ValidationRules>
@@ -176,7 +175,7 @@
                     <TextBox VerticalAlignment="Center"  Style="{StaticResource TextBoxStyle}"   Width="44"  MaxLength="4" >
                         <TextBox.Text>
                             <Binding Path="AktInWork.PuNewPoverkaEar" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
-        UpdateSourceTrigger="LostFocus">
+        UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
                                     <val:ValidYearPu/>
                                 </Binding.ValidationRules>
@@ -187,7 +186,7 @@
                     <TextBox VerticalAlignment="Center"  Style="{StaticResource TextBoxStyle}" Width="20" MaxLength="1" MaxLines="1" >
                         <TextBox.Text>
                             <Binding Path="AktInWork.PuNewPoverKvartal" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
-        UpdateSourceTrigger="LostFocus">
+        UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
                                     <val:ValidKvartal/>
                                 </Binding.ValidationRules>
@@ -207,7 +206,7 @@
                     <TextBox   Style="{StaticResource TextBoxStyle}"  Width="120"  VerticalAlignment="Center">
                         <TextBox.Text>
                             <Binding Path="AktInWork.PuOldNumber" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
-        UpdateSourceTrigger="LostFocus">
+        UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
                                     <val:ValidOldNumberPU/>
                                 </Binding.ValidationRules>
@@ -223,7 +222,7 @@
                     <TextBox Style="{StaticResource TextBoxStyle}"  MaxLength="7" Width="70" VerticalAlignment="Center">
                         <TextBox.Text>
                             <Binding Path="AktInWork.PuOldPokazanie" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
-        UpdateSourceTrigger="LostFocus">
+        UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
                                     <val:ValidPokazanie/>
                                 </Binding.ValidationRules>

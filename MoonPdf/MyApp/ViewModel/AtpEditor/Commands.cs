@@ -10,7 +10,6 @@ using System.Windows.Input;
 
 namespace ATPWork.MyApp.ViewModel.AtpEditor
 {
-    
         public class Commands
         {
             public DelegateCommand GetDataFromDbByNumberLs { get; private set; }

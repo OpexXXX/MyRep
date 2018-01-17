@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyApp"
         mc:Ignorable="d"
-        Title="Результаты поиска" Height="300" Width="300" WindowStyle="ToolWindow" SizeToContent="WidthAndHeight" Icon="/ATPWork;component/Resources/iconATP.ico">
+        Title="Результаты поиска"  Height="300" Width="300"  SizeToContent="WidthAndHeight" Icon="/ATPWork;component/Resources/iconATP.ico">
     <Grid>
        
         <DataGrid x:Name="dataGrid" Grid.Row="1" IsReadOnly="True" SelectionChanged="dataGrid_SelectionChanged" MouseDoubleClick="dataGrid_MouseDoubleClick" SelectionMode="Single" AutoGenerateColumns="False">
