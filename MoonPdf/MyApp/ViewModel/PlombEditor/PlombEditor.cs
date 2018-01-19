@@ -47,14 +47,11 @@ namespace ATPWork.MyApp.ViewModel.PlombEditorVm
             get { return _placePL; }
             set { _placePL = value; }
         }
-       
-
-
-        public ObservableCollection<Plomba> _pl;
+        private ObservableCollection<Plomba> _pl;
         public ObservableCollection<Plomba> PlombList
         {
             get { return  this._pl; }
-
+            set { this._pl = value; }
         }
         public PlombEditorVM()
         {
@@ -62,9 +59,8 @@ namespace ATPWork.MyApp.ViewModel.PlombEditorVm
             GetPlacePLFromDb();
             GetTypePLFromDb();
             _pl = new ObservableCollection<Plomba>();
-
-            PlombList.Add(new Plomba("2400_5", 240501801, "ВКА", false));
-            PlombList.Add(new Plomba("2400_5", 24021, "Щит Учета", false));
+            PlombList.Add(new Plomba("2400_5", "240501801", "ВКА", false));
+            PlombList.Add(new Plomba("2400_5", "24021", "Щит Учета", false));
         }
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")
@@ -74,16 +70,19 @@ namespace ATPWork.MyApp.ViewModel.PlombEditorVm
 
        public void AddPlomb()
         {
-            PlombList.Add(new Plomba("2400_4", 0, "ВКА", false));
+            PlombList.Add(new Plomba("", "", "", false));
         }
         public void DeletePlobm()
         {
             PlombList.Remove(SelectedPlomb);
         }
-        public void ClonePlomb()
+        public void ClonePlomb(bool inc=true)
         {
+            int incr;
+            incr= inc? (1): (-1);
             Plomba f = SelectedPlomb;
-            PlombList.Add(new Plomba(f.Type, f.Number, f.Place, f.Remove));
+            long res;
+            PlombList.Add(new Plomba(f.Type, long.TryParse(f.Number, out res)?(res + incr).ToString():f.Number, f.Place, f.Remove));
         }
         public bool checkSecection()
         {

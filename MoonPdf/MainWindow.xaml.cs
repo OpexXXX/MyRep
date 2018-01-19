@@ -31,8 +31,6 @@ using ATPWork.MyApp.ViewModel.PlombEditorVm;
 
 namespace MyApp
 {
-    
-
     public partial class MainWindow : Window
     {
         internal MoonPdfPanel MoonPdfPanel { get { return this.moonPdfPanel; } }
@@ -40,22 +38,17 @@ namespace MyApp
         {
             InitializeComponent();
             AktTehProverki akt = new AktTehProverki(1, new List<int> { 1, 2 }, "123.pdf");
-            akt.Plombs.Add(new Plomba("2400_4", 12, "ÂÊÀ", false));
-            akt.Plombs.Add(new Plomba("2400_5", 13, "ÂÊÀ", false));
-            akt.Plombs.Add(new Plomba("2400_6", 14, "ÂÊÀ", false));
+            akt.Plombs.Add(new Plomba("2400_4", "12", "ÂÊÀ", false));
+            akt.Plombs.Add(new Plomba("2400_5", "13", "ÂÊÀ", false));
+            akt.Plombs.Add(new Plomba("2400_6", "14", "ÂÊÀ", false));
 
             AtpEditor ate = new AtpEditor(AtpEditorR);
             ate.AktInWork = akt;
-
             this.Loaded += MainWindow_Loaded;
         }
-
         void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-
         }
-
-
     }
 }
 

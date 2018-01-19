@@ -32,6 +32,7 @@ namespace ATPWork.MyApp.ViewModel.AtpEditor
         {
             return (AktInWork != null) ? ((AktInWork.PuOldNumber!=null)? AktInWork.PuOldNumber.ToString().Length > 4:false) : false;
         }
+
         private PlombEditorVM PlombEditorV = new PlombEditorVM();
         public View.AtpEditor AtpEdirorWPF;
         private AktTehProverki _aktInWork;
@@ -39,7 +40,6 @@ namespace ATPWork.MyApp.ViewModel.AtpEditor
             get { return _aktInWork; }
             set {
                 _aktInWork = value;
-                PlombEditorV._pl = _aktInWork.Plombs;
                 OnPropertyChanged("AktInWork");
             }
         }
@@ -49,7 +49,7 @@ namespace ATPWork.MyApp.ViewModel.AtpEditor
            Commands = new Commands(this);
             AtpEdirorWPF = AtpEdit;
             AtpEdit.DataContext = this;
-            AtpEdit.PlombEditorR.DataContext = PlombEditorV;
+           // AtpEdit.PlombEditorR.DataContext = PlombEditorV;
         }
     }
 }

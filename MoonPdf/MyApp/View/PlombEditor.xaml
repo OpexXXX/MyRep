@@ -7,10 +7,10 @@
              xmlns:vm="clr-namespace:ATPWork.MyApp.ViewModel.PlombEditorVm"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
-          
+             Name="PlobmEdit"
             >
     <UserControl.Resources>
-       
+        <vm:PlombEditorVM x:Key="PlombEditorViewModel"/>
         <Style x:Key="TextBoxStyle">
             <Setter Property="Control.Height" Value="26" />
             <Setter Property="Control.Margin" Value="1,1,1,1" />
@@ -19,10 +19,8 @@
         </Style>
         <DataTemplate x:Key="ListBoxPlomb">
             <StackPanel Orientation="Horizontal">
-               
-                <ComboBox ItemsSource="{Binding DataContext.typePL,
-                          RelativeSource={RelativeSource FindAncestor,
-                              AncestorType=ItemsControl}}"
+
+                <ComboBox ItemsSource="{Binding Source={StaticResource PlombEditorViewModel}, Path=typePL}" 
                       SelectedItem="{Binding Type}"
                           MinWidth="30" Margin="20,1,1,1" >
                 </ComboBox>
@@ -35,9 +33,7 @@
                     </Binding>
                 </TextBox.Text>
                     </TextBox>
-                <ComboBox ItemsSource="{Binding DataContext.placePL,
-                          RelativeSource={RelativeSource FindAncestor,
-                              AncestorType=ItemsControl}}"
+                <ComboBox ItemsSource="{Binding Source={StaticResource PlombEditorViewModel}, Path=placePL}" 
                       SelectedItem="{Binding Place}"     
                           MinWidth="50"  Margin="1,1,1,1">
                 </ComboBox>
@@ -46,19 +42,23 @@
     </UserControl.Resources>
     <StackPanel>
         <StackPanel Orientation="Horizontal">
-            <Button  Focusable="False" Command="{Binding Commands.AddPlombCommand}">
+            <Button  Focusable="False" Command="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.AddPlombCommand}">
                 <Image  Height="25" Source="/ATPWork;component/Resources/icons8Add-50.png" Width="25" />
             </Button>
-            <Button  Command="{Binding Commands.DeletePlombCommand}" Focusable="False">
+            <Button  Command="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.DeletePlombCommand}" Focusable="False">
                 <Image  Height="25" Source="/ATPWork;component/Resources/icons8Delete-50.png" Width="25" />
             </Button>
-            <Button Focusable="False"  Command="{Binding Commands.IncrementAddPlombComand}">
-                <Image x:Name="image" Height="25" Source="/ATPWork;component/Resources/icons8Copy-50.png" Width="25" />
+            <StackPanel>
+            <Button Focusable="False"  Command="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.IncrementAddPlombComand}">
+                <Image x:Name="image" Height="13" Source="/ATPWork;component/Resources/icons8Copy-50.png" Width="25" />
             </Button>
-            <TextBlock x:Name="textBlock" TextWrapping="Wrap" Text=""/>
+                <Button Focusable="False"  Command="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.DecrementAddPlombComand}">
+                    <Image  Height="13" Source="/ATPWork;component/Resources/icons8Copy-50.png" Width="25" />
+                </Button>
+            </StackPanel>
         </StackPanel>
         <StackPanel Orientation="Horizontal" >
-            <ListBox x:Name="ListBoxW" ItemsSource="{Binding Path=PlombList}" SelectedItem="{Binding SelectedPlomb}" KeyboardNavigation.TabNavigation="Continue" ItemTemplate="{StaticResource ListBoxPlomb}" SelectionMode="Extended" ContextMenuService.ShowOnDisabled="False">
+            <ListBox x:Name="ListBoxW" ItemsSource="{Binding Source={StaticResource PlombEditorViewModel}, Path=PlombList}" SelectedItem="{Binding Source={StaticResource PlombEditorViewModel}, Path=SelectedPlomb}" KeyboardNavigation.TabNavigation="Continue" ItemTemplate="{StaticResource ListBoxPlomb}" SelectionMode="Extended" ContextMenuService.ShowOnDisabled="False">
                
             </ListBox>
         </StackPanel>

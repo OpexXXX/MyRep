@@ -14,6 +14,7 @@ namespace ATPWork.MyApp.ViewModel.PlombEditorVm
         public DelegateCommand DeletePlombCommand { get; private set; }
         public DelegateCommand AddPlombCommand { get; private set; }
         public DelegateCommand IncrementAddPlombComand { get; private set; }
+        public DelegateCommand DecrementAddPlombComand { get; private set; }
 
         public Commands(PlombEditorVM plmbData)
        {
@@ -21,7 +22,7 @@ namespace ATPWork.MyApp.ViewModel.PlombEditorVm
             this.DeletePlombCommand = new DelegateCommand("Удалить пломбу", f => plmbData.DeletePlobm(), isSelection, new KeyGesture(Key.Left));
             this.AddPlombCommand = new DelegateCommand("Добавить пустую пломбу", f => plmbData.AddPlomb(),null, new KeyGesture(Key.Right));
             this.IncrementAddPlombComand = new DelegateCommand("Клонировать пломбу", f => plmbData.ClonePlomb(), isSelection, new KeyGesture(Key.Home));
-          
+            this.DecrementAddPlombComand = new DelegateCommand("Клонировать пломбу", f => plmbData.ClonePlomb(false), isSelection, new KeyGesture(Key.Up));
         }
         
     }
