@@ -34,7 +34,6 @@ namespace ATPWork.MyApp.ViewModel.PlombEditorVm
                 OnPropertyChanged("SelectedPlomb");
             }
         }
-
         private static List<string> _typePL;
         public static List<string> typePL
         {
@@ -55,19 +54,17 @@ namespace ATPWork.MyApp.ViewModel.PlombEditorVm
         }
         public PlombEditorVM()
         {
+
             this.Commands = new Commands(this);
             GetPlacePLFromDb();
             GetTypePLFromDb();
-            _pl = new ObservableCollection<Plomba>();
-            PlombList.Add(new Plomba("2400_5", "240501801", "ВКА", false));
-            PlombList.Add(new Plomba("2400_5", "24021", "Щит Учета", false));
+
         }
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
-
        public void AddPlomb()
         {
             PlombList.Add(new Plomba("", "", "", false));
@@ -83,6 +80,10 @@ namespace ATPWork.MyApp.ViewModel.PlombEditorVm
             Plomba f = SelectedPlomb;
             long res;
             PlombList.Add(new Plomba(f.Type, long.TryParse(f.Number, out res)?(res + incr).ToString():f.Number, f.Place, f.Remove));
+        }
+        public bool checkSourse()
+        {
+            return PlombList != null;
         }
         public bool checkSecection()
         {

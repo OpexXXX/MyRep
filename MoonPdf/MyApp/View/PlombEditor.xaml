@@ -19,7 +19,6 @@
         </Style>
         <DataTemplate x:Key="ListBoxPlomb">
             <StackPanel Orientation="Horizontal">
-
                 <ComboBox ItemsSource="{Binding Source={StaticResource PlombEditorViewModel}, Path=typePL}" 
                       SelectedItem="{Binding Type}"
                           MinWidth="30" Margin="20,1,1,1" >
@@ -48,18 +47,15 @@
             <Button  Command="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.DeletePlombCommand}" Focusable="False">
                 <Image  Height="25" Source="/ATPWork;component/Resources/icons8Delete-50.png" Width="25" />
             </Button>
-            <StackPanel>
             <Button Focusable="False"  Command="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.IncrementAddPlombComand}">
-                <Image x:Name="image" Height="13" Source="/ATPWork;component/Resources/icons8Copy-50.png" Width="25" />
+                <Image x:Name="image" Height="25" Source="/ATPWork;component/Resources/icons8+1.png" Width="25" />
             </Button>
                 <Button Focusable="False"  Command="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.DecrementAddPlombComand}">
-                    <Image  Height="13" Source="/ATPWork;component/Resources/icons8Copy-50.png" Width="25" />
+                    <Image  Height="25" Source="/ATPWork;component/Resources/icons8-1.png" Width="25" />
                 </Button>
-            </StackPanel>
         </StackPanel>
         <StackPanel Orientation="Horizontal" >
             <ListBox x:Name="ListBoxW" ItemsSource="{Binding Source={StaticResource PlombEditorViewModel}, Path=PlombList}" SelectedItem="{Binding Source={StaticResource PlombEditorViewModel}, Path=SelectedPlomb}" KeyboardNavigation.TabNavigation="Continue" ItemTemplate="{StaticResource ListBoxPlomb}" SelectionMode="Extended" ContextMenuService.ShowOnDisabled="False">
-               
             </ListBox>
         </StackPanel>
     </StackPanel>

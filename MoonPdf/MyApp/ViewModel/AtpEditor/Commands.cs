@@ -14,10 +14,10 @@ namespace ATPWork.MyApp.ViewModel.AtpEditor
         {
             public DelegateCommand GetDataFromDbByNumberLs { get; private set; }
             public DelegateCommand GetDataFromDbByNumberPu { get; private set; }
-            public Commands(AtpEditor AtpEdit)
+            public Commands(AtpEditorVM AtpEdit)
             {
-            Predicate<object> findByLs = f => AtpEdit.findByLs(); // 
-            Predicate<object> findByPu= f => AtpEdit.findByPu(); // 
+            Predicate<object> findByLs = f => AtpEdit.CheckFindByLs(); // 
+            Predicate<object> findByPu= f => AtpEdit.CheckFindByPu(); // 
             this.GetDataFromDbByNumberLs = new DelegateCommand("Поиск по номеру лицевого счета", f =>
             {
                 string number = AtpEdit.AktInWork.NumberLS;

@@ -43,14 +43,14 @@ namespace ATPWork.MyApp.View
                 control.OnItemsSourceChanged((IEnumerable)e.OldValue, (IEnumerable)e.NewValue);
         }
 
-
+       
 
         private void OnItemsSourceChanged(IEnumerable oldValue, IEnumerable newValue)
         {
+
             // Remove handler for oldValue.CollectionChanged
             var oldValueINotifyCollectionChanged = oldValue as INotifyCollectionChanged;
-
-            if (null != oldValueINotifyCollectionChanged)
+                        if (null != oldValueINotifyCollectionChanged)
             {
                 oldValueINotifyCollectionChanged.CollectionChanged -= new NotifyCollectionChangedEventHandler(newValueINotifyCollectionChanged_CollectionChanged);
             }
@@ -58,12 +58,10 @@ namespace ATPWork.MyApp.View
             var newValueINotifyCollectionChanged = newValue as INotifyCollectionChanged;
             if (null != newValueINotifyCollectionChanged)
             {
-                editVM.PlombList = ItemsSource as ObservableCollection<Plomba>;
-                ListBoxW.ItemsSource = editVM.PlombList;
-
                 newValueINotifyCollectionChanged.CollectionChanged += new NotifyCollectionChangedEventHandler(newValueINotifyCollectionChanged_CollectionChanged);
             }
-
+            editVM.PlombList = ItemsSource as ObservableCollection<Plomba>;
+            ListBoxW.ItemsSource = editVM.PlombList;
         }
 
         void newValueINotifyCollectionChanged_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

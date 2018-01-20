@@ -4,11 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ATPWork.MyApp.View"
-             xmlns:val="clr-namespace:ATPWork.MyApp.ViewModel.AtpEditor"
+             xmlns:viewModel="clr-namespace:ATPWork.MyApp.ViewModel.AtpEditor"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="350"
               KeyboardNavigation.TabNavigation="Cycle">
     <UserControl.Resources>
+        <viewModel:AtpEditorVM x:Key="AtpEditorViewModel"/>
         <Style x:Key="TextBoxStyle" TargetType="TextBox">
             <Setter Property="Control.Height" Value="26" />
             <Setter Property="Control.Margin" Value="1,1,1,1" />
@@ -35,8 +36,6 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-
-
         <Style x:Key="Hidden" TargetType="TextBlock">
             <Setter Property="Control.Height" Value="26" />
             <Setter Property="Control.Margin" Value="1,1,1,1" />
@@ -50,7 +49,6 @@
             </Style.Triggers>
 
         </Style>
-
         <DataTemplate x:Key="comboAgentsDataTemplate">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{Binding Surname}" />
@@ -69,17 +67,16 @@
                     <TextBlock Text="Номер 91/Е-" VerticalAlignment="Center"/>
                     <TextBox   VerticalAlignment="Center" Style="{StaticResource TextBoxStyle}"   Width="50" MaxLength="5" >
                         <TextBox.Text>
-                            <Binding Path="AktInWork.Number" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
+                            <Binding Source="{StaticResource AtpEditorViewModel}" Path="AktInWork.Number" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
         UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
-                                    <val:ValidNumber/>
+                                    <viewModel:ValidNumber/>
                                 </Binding.ValidationRules>
                             </Binding>
                         </TextBox.Text>
                     </TextBox>
                     <DatePicker  Margin="5,0,0,0"
-                    x:Name="dateWorkPicker"
-                                        SelectedDate ="{Binding Path=AktInWork.DateWork}"
+                                        SelectedDate ="{Binding Source={StaticResource AtpEditorViewModel}, Path=AktInWork.DateWork}"
                                         HorizontalAlignment="Left" 
                                        VerticalAlignment="Center" Height="25" Width="111" SelectedDateFormat="Short" 
                             DisplayDateEnd="2025-12-31" 
@@ -87,13 +84,14 @@
                             TextOptions.TextFormattingMode="Display" 
                             IsManipulationEnabled="True">
                         <DatePicker.BlackoutDates>
-                            <CalendarDateRange End="2017-01-01" Start="2025-12-31"/>
+                            <CalendarDateRange End="2025-12-31" Start="2017-01-01"/>
                         </DatePicker.BlackoutDates>
                     </DatePicker>
                 </StackPanel>
                 <StackPanel  Orientation="Horizontal">
-                    <CheckBox Name="chekBoxDopusk" VerticalAlignment="Center" IsChecked="{Binding AktInWork.DopuskFlag}" Content="Допуск"      Height="20"/>
-                    <CheckBox x:Name="chekBoxProverka" VerticalAlignment="Center" IsChecked="{Binding AktInWork.ProverkaFlag}" Content="Проверка"     Height="20" Margin="5,0,0,0"/>
+                    <CheckBox Name="chekBoxDopusk" VerticalAlignment="Center" IsChecked="{Binding Source={StaticResource AtpEditorViewModel}, Path=AktInWork.DopuskFlag}" Content="Допуск"      Height="20"/>
+                    <CheckBox x:Name="chekBoxProverka" VerticalAlignment="Center" IsChecked="{Binding Source={StaticResource AtpEditorViewModel}, Path=AktInWork.ProverkaFlag}" Content="Проверка"     Height="20" Margin="5,0,0,0"/>
+                
                 </StackPanel>
             </StackPanel>
         </GroupBox>
@@ -105,31 +103,31 @@
                            Width="120"  
                          MaxLength="12">
                         <TextBox.Text>
-                            <Binding Path="AktInWork.NumberLS" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" NotifyOnValidationError="True"
+                            <Binding Source="{StaticResource AtpEditorViewModel}" Path="AktInWork.NumberLS" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" NotifyOnValidationError="True"
       >
                                 <Binding.ValidationRules>
-                                    <val:ValidNumberLS/>
+                                    <viewModel:ValidNumberLS/>
                                     <ExceptionValidationRule/>
                                 </Binding.ValidationRules>
                             </Binding>
                         </TextBox.Text>
                     </TextBox>
 
-                    <Button  Focusable="False" Command="{Binding Commands.GetDataFromDbByNumberLs}">
+                    <Button  Focusable="False" Command="{Binding Source={StaticResource AtpEditorViewModel}, Path=Commands.GetDataFromDbByNumberLs}">
                         <Image  Height="20" Source="/ATPWork;component/Resources/icons8Find50.png" Width="20" />
                     </Button>
 
                 </StackPanel>
                 <StackPanel>
-                    <TextBlock  TextWrapping="Wrap" Text="{Binding AktInWork.FIO}" Style="{StaticResource Hidden}"/>
-                    <TextBlock   Text="{Binding AktInWork.Adress}"  Style="{StaticResource Hidden}"  />
+                    <TextBlock  TextWrapping="Wrap" Text="{Binding Source={StaticResource AtpEditorViewModel}, Path=AktInWork.FIO}" Style="{StaticResource Hidden}"/>
+                    <TextBlock   Text="{Binding Source={StaticResource AtpEditorViewModel}, Path=AktInWork.Adress}"  Style="{StaticResource Hidden}"  />
                 </StackPanel>
             </StackPanel>
         </GroupBox>
         <GroupBox Header="Агенты">
             <StackPanel Orientation="Horizontal">
-                <ComboBox  Height="25" Width="157" SelectedItem="{Binding AktInWork.Agent_2}" ItemTemplate="{StaticResource comboAgentsDataTemplate}"/>
-                <ComboBox  Height="25" Width="157" SelectedItem="{Binding AktInWork.Agent_1}" ItemTemplate="{StaticResource comboAgentsDataTemplate}"/>
+                <ComboBox  Height="25" Width="157" ItemsSource="{Binding Source={StaticResource AtpEditorViewModel}, Path=AgentList}" SelectedItem="{Binding Source={StaticResource AtpEditorViewModel}, Path=AktInWork.Agent_2}" ItemTemplate="{StaticResource comboAgentsDataTemplate}"/>
+                <ComboBox  Height="25" Width="157" ItemsSource="{Binding Source={StaticResource AtpEditorViewModel}, Path=AgentList}" SelectedItem="{Binding Source={StaticResource AtpEditorViewModel}, Path=AktInWork.Agent_1}" ItemTemplate="{StaticResource comboAgentsDataTemplate}"/>
             </StackPanel>
         </GroupBox>
         <GroupBox Header="Допускаемый прибор учета" >
@@ -145,12 +143,12 @@
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock  VerticalAlignment="Center"  Text="Тип:" Margin="1,1,1,1"/>
-                    <ComboBox VerticalAlignment="Center" Height="25" SelectedItem="{Binding AktInWork.PuNewType}" ItemTemplate="{StaticResource comboNewPuTypeDataTemplate}" Margin="1,1,1,1"/>
+                    <ComboBox VerticalAlignment="Center" Height="25" SelectedItem="{Binding Source={StaticResource AtpEditorViewModel}, Path=AktInWork.PuNewType}" ItemTemplate="{StaticResource comboNewPuTypeDataTemplate}" Margin="1,1,1,1"/>
                     <TextBlock VerticalAlignment="Center" Text="Номер:" Margin="1,1,1,1"/>
 
                     <TextBox VerticalAlignment="Center"  Style="{StaticResource TextBoxStyle}" Width="133" Margin="1" ToolTip="Номер допускаемого прибора учета">
                         <TextBox.Text>
-                            <Binding Path="AktInWork.PuNewNumber" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
+                            <Binding Source="{StaticResource AtpEditorViewModel}" Path="AktInWork.PuNewNumber" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
         UpdateSourceTrigger="PropertyChanged">
 
                             </Binding>
@@ -161,10 +159,10 @@
                     <TextBlock  VerticalAlignment="Center"  Text="Показание:" Margin="1,1,1,1"/>
                     <TextBox VerticalAlignment="Center"  Style="{StaticResource TextBoxStyle}" Width="96" MaxLength="7">
                         <TextBox.Text>
-                            <Binding Path="AktInWork.PuNewPokazanie" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
+                            <Binding Source="{StaticResource AtpEditorViewModel}" Path="AktInWork.PuNewPokazanie" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
         UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
-                                    <val:ValidPokazanie/>
+                                    <viewModel:ValidPokazanie/>
                                 </Binding.ValidationRules>
                             </Binding>
                         </TextBox.Text>
@@ -174,10 +172,10 @@
                     <TextBlock VerticalAlignment="Center" Text="Поверка:"  Margin="1,1,1,1"/>
                     <TextBox VerticalAlignment="Center"  Style="{StaticResource TextBoxStyle}"   Width="44"  MaxLength="4" >
                         <TextBox.Text>
-                            <Binding Path="AktInWork.PuNewPoverkaEar" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
+                            <Binding Source="{StaticResource AtpEditorViewModel}" Path="AktInWork.PuNewPoverkaEar" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
         UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
-                                    <val:ValidYearPu/>
+                                    <viewModel:ValidYearPu/>
                                 </Binding.ValidationRules>
                             </Binding>
                         </TextBox.Text>
@@ -185,10 +183,10 @@
                     <TextBlock VerticalAlignment="Center" Text="Квартал:" Margin="1,1,1,1"/>
                     <TextBox VerticalAlignment="Center"  Style="{StaticResource TextBoxStyle}" Width="20" MaxLength="1" MaxLines="1" >
                         <TextBox.Text>
-                            <Binding Path="AktInWork.PuNewPoverKvartal" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
+                            <Binding Source="{StaticResource AtpEditorViewModel}" Path="AktInWork.PuNewPoverKvartal" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
         UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
-                                    <val:ValidKvartal/>
+                                    <viewModel:ValidKvartal/>
                                 </Binding.ValidationRules>
                             </Binding>
                         </TextBox.Text>
@@ -199,21 +197,21 @@
         <GroupBox Header="Прибор учета">
             <StackPanel  >
                 <StackPanel Orientation="Horizontal"  >
-                    <TextBlock Text="{Binding Path=AktInWork.PuOldType}"  Style="{StaticResource Hidden}"  VerticalAlignment="Center" Margin="1,1,1,1"/>
+                    <TextBlock Text="{Binding Source={StaticResource AtpEditorViewModel}, Path=AktInWork.PuOldType}"  Style="{StaticResource Hidden}"  VerticalAlignment="Center" Margin="1,1,1,1"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" >
                     <TextBlock Text="Номер:" VerticalAlignment="Center" Margin="1,1,1,1"/>
                     <TextBox   Style="{StaticResource TextBoxStyle}"  Width="120"  VerticalAlignment="Center">
                         <TextBox.Text>
-                            <Binding Path="AktInWork.PuOldNumber" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
+                            <Binding Source="{StaticResource AtpEditorViewModel}" Path="AktInWork.PuOldNumber" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
         UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
-                                    <val:ValidOldNumberPU/>
+                                    <viewModel:ValidOldNumberPU/>
                                 </Binding.ValidationRules>
                             </Binding>
                         </TextBox.Text>
                     </TextBox>
-                    <Button  Focusable="False" Command="{Binding Commands.GetDataFromDbByNumberPu}">
+                    <Button  Focusable="False" Command="{Binding  Source={StaticResource AtpEditorViewModel}, Path=Commands.GetDataFromDbByNumberPu}">
                         <Image  Height="20" Source="/ATPWork;component/Resources/icons8Find50.png" Width="20" />
                     </Button>
                 </StackPanel>
@@ -221,21 +219,21 @@
                     <TextBlock Text="Показание:" VerticalAlignment="Center" Margin="1,1,1,1"/>
                     <TextBox Style="{StaticResource TextBoxStyle}"  MaxLength="7" Width="70" VerticalAlignment="Center">
                         <TextBox.Text>
-                            <Binding Path="AktInWork.PuOldPokazanie" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
+                            <Binding Source="{StaticResource AtpEditorViewModel}" Path="AktInWork.PuOldPokazanie" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
         UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
-                                    <val:ValidPokazanie/>
+                                    <viewModel:ValidPokazanie/>
                                 </Binding.ValidationRules>
                             </Binding>
                         </TextBox.Text>
                     </TextBox>
-                    <CheckBox Content="Истек МПИ " HorizontalAlignment="Left"    IsChecked="{Binding Path=AktInWork.PuOldMPI}"  VerticalAlignment="Center" Margin="1,1,1,1"/>
+                    <CheckBox Content="Истек МПИ " HorizontalAlignment="Left"    IsChecked="{Binding Source={StaticResource AtpEditorViewModel}, Path=AktInWork.PuOldMPI}"  VerticalAlignment="Center" Margin="1,1,1,1"/>
                 </StackPanel>
             </StackPanel>
         </GroupBox>
         <GroupBox Header="Пломбы">
             <StackPanel>
-                <local:PlombEditor ItemsSource="{Binding Path=AktInWork.Plombs}"/>
+                <local:PlombEditor ItemsSource="{Binding Source={StaticResource AtpEditorViewModel}, Path=AktInWork.Plombs}" />
             </StackPanel>
         </GroupBox>
     </StackPanel>

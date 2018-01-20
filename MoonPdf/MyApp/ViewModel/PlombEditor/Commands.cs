@@ -19,8 +19,9 @@ namespace ATPWork.MyApp.ViewModel.PlombEditorVm
         public Commands(PlombEditorVM plmbData)
        {
             Predicate<object> isSelection = f => plmbData.checkSecection(); // used for the CanExecute callback
+            Predicate<object> isSourse = f => plmbData.checkSourse();
             this.DeletePlombCommand = new DelegateCommand("Удалить пломбу", f => plmbData.DeletePlobm(), isSelection, new KeyGesture(Key.Left));
-            this.AddPlombCommand = new DelegateCommand("Добавить пустую пломбу", f => plmbData.AddPlomb(),null, new KeyGesture(Key.Right));
+            this.AddPlombCommand = new DelegateCommand("Добавить пустую пломбу", f => plmbData.AddPlomb(), isSourse, new KeyGesture(Key.Right));
             this.IncrementAddPlombComand = new DelegateCommand("Клонировать пломбу", f => plmbData.ClonePlomb(), isSelection, new KeyGesture(Key.Home));
             this.DecrementAddPlombComand = new DelegateCommand("Клонировать пломбу", f => plmbData.ClonePlomb(false), isSelection, new KeyGesture(Key.Up));
         }

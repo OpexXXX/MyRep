@@ -33,21 +33,33 @@ namespace MyApp
 {
     public partial class MainWindow : Window
     {
+        AktTehProverki akt1 = new AktTehProverki(1, new List<int> { 1, 2 }, "123.pdf");
+        AktTehProverki akt2 = new AktTehProverki(2, new List<int> { 1, 2 }, "123.pdf");
+
         internal MoonPdfPanel MoonPdfPanel { get { return this.moonPdfPanel; } }
         public MainWindow()
         {
             InitializeComponent();
-            AktTehProverki akt = new AktTehProverki(1, new List<int> { 1, 2 }, "123.pdf");
-            akt.Plombs.Add(new Plomba("2400_4", "12", "ÂÊÀ", false));
-            akt.Plombs.Add(new Plomba("2400_5", "13", "ÂÊÀ", false));
-            akt.Plombs.Add(new Plomba("2400_6", "14", "ÂÊÀ", false));
+            akt1.Plombs.Add(new Plomba("2400_4", "12", "ÂÊÀ", false));
+            AtpEditorR.AtpInWorkSourse = akt1;
 
-            AtpEditor ate = new AtpEditor(AtpEditorR);
-            ate.AktInWork = akt;
             this.Loaded += MainWindow_Loaded;
         }
         void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (AtpEditorR.AtpInWorkSourse == akt1)
+            {
+                AtpEditorR.AtpInWorkSourse = akt2;
+            }
+            else
+            {
+                AtpEditorR.AtpInWorkSourse = akt1;
+            }
         }
     }
 }

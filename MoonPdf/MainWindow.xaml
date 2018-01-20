@@ -104,6 +104,7 @@
                         </TabControl.RenderTransform>
                         <TabItem Header="Заполнение" FontSize="14">
                             <StackPanel>
+                                <Button Click="Button_Click">213</Button>
                                 <local:AtpEditor x:Name="AtpEditorR"/>
                             </StackPanel>
                         </TabItem >

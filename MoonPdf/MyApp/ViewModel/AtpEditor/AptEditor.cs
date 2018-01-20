@@ -11,8 +11,9 @@ using System.Threading.Tasks;
 
 namespace ATPWork.MyApp.ViewModel.AtpEditor
 {
-    public class AtpEditor : ViewModelBase
+    public class AtpEditorVM : ViewModelBase
     {
+        #region Команды
         private Commands _commands;
         public Commands Commands
         {
@@ -23,18 +24,24 @@ namespace ATPWork.MyApp.ViewModel.AtpEditor
                 OnPropertyChanged("Commands");
             }
         }
-
-        public bool findByLs()
+        public bool CheckFindByLs()
         {
             return  (AktInWork != null) ? ((AktInWork.NumberLS != null) ? AktInWork.NumberLS.ToString().Length > 9 : false) : false; 
         }
-        public bool findByPu()
+        public bool CheckFindByPu()
         {
             return (AktInWork != null) ? ((AktInWork.PuOldNumber!=null)? AktInWork.PuOldNumber.ToString().Length > 4:false) : false;
         }
+        #endregion
 
-        private PlombEditorVM PlombEditorV = new PlombEditorVM();
-        public View.AtpEditor AtpEdirorWPF;
+        private static List<string> _alentList;
+        public static List<string> AgentList
+        {
+            get { return _alentList; }
+            set { _alentList = value; }
+        }
+
+
         private AktTehProverki _aktInWork;
         public AktTehProverki AktInWork {
             get { return _aktInWork; }
@@ -44,12 +51,9 @@ namespace ATPWork.MyApp.ViewModel.AtpEditor
             }
         }
 
-        public AtpEditor(View.AtpEditor AtpEdit)
+        public AtpEditorVM()
         {
            Commands = new Commands(this);
-            AtpEdirorWPF = AtpEdit;
-            AtpEdit.DataContext = this;
-           // AtpEdit.PlombEditorR.DataContext = PlombEditorV;
         }
     }
 }
