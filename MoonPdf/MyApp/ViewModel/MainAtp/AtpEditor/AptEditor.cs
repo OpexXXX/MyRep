@@ -33,15 +33,18 @@ namespace ATPWork.MyApp.ViewModel.AtpEditor
             return (AktInWork != null) ? ((AktInWork.PuOldNumber!=null)? AktInWork.PuOldNumber.ToString().Length > 4:false) : false;
         }
         #endregion
-
-        private static List<string> _alentList;
-        public static List<string> AgentList
+        private static ObservableCollection<Agent> _alentList;
+        public static ObservableCollection<Agent> AgentList
         {
             get { return _alentList; }
             set { _alentList = value; }
         }
-
-
+        private static ObservableCollection<PriborUcheta> _puList;
+        public static ObservableCollection<PriborUcheta> PuList
+        {
+            get { return _puList; }
+            set { _puList = value; }
+        }
         private AktTehProverki _aktInWork;
         public AktTehProverki AktInWork {
             get { return _aktInWork; }
@@ -50,10 +53,18 @@ namespace ATPWork.MyApp.ViewModel.AtpEditor
                 OnPropertyChanged("AktInWork");
             }
         }
-
         public AtpEditorVM()
         {
            Commands = new Commands(this);
+            GetListForComboBox();
+            MainAtpModel.ComboRefresh += GetListForComboBox;
         }
+
+        private void GetListForComboBox()
+        {
+            PuList = new ObservableCollection<PriborUcheta>(MainAtpModel.NewPuList);
+            AgentList = new ObservableCollection<Agent>(MainAtpModel.AgentList);
+        }
+       
     }
 }

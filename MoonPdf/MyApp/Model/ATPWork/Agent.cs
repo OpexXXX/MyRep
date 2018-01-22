@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyApp.Model
 {
-    public class Agent
+    public class Agent: IEquatable<Agent>
     {
         private string sapNumber;
         public string SapNumber
@@ -43,6 +43,17 @@ namespace MyApp.Model
         public override string ToString()
         {
             return this.surname.ToString();
+        }
+
+        public bool Equals(Agent other)
+        {
+            if (other == null)
+                return false;
+
+            if (this.SapNumber == other.SapNumber)
+                return true;
+            else
+                return false;
         }
     }
 }

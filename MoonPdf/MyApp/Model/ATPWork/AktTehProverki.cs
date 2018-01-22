@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MyApp.Model
 {
-    public class AktTehProverki:INotifyPropertyChanged
+    public class AktTehProverki:INotifyPropertyChanged 
     {
         private int numberMail;
         public int NumberMail
@@ -312,5 +312,7 @@ namespace MyApp.Model
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
+
+       
     }
 }

@@ -12,8 +12,9 @@ using System.Windows.Input;
 
 namespace ATPWork.MyApp.ViewModel.PlombEditorVm
 {
-    public class PlombEditorVM : INotifyPropertyChanged
+    public class PlombEditorVM :ViewModelBase
     {
+        #region Команды
         private Commands _commands;
         public Commands Commands
         {
@@ -24,6 +25,15 @@ namespace ATPWork.MyApp.ViewModel.PlombEditorVm
                 OnPropertyChanged("Commands");
             }
         }
+        public bool checkSourse()
+        {
+            return PlombList != null;
+        }
+        public bool checkSecection()
+        {
+            return SelectedPlomb != null;
+        }
+        #endregion
         private Plomba _selectedPlomb;
         public Plomba SelectedPlomb
         {
@@ -34,38 +44,31 @@ namespace ATPWork.MyApp.ViewModel.PlombEditorVm
                 OnPropertyChanged("SelectedPlomb");
             }
         }
-        private static List<string> _typePL;
-        public static List<string> typePL
+        private static ObservableCollection<string> _typePL = new ObservableCollection<string>();
+        public static ObservableCollection<string> typePL
         {
             get { return _typePL; }
             set { _typePL = value; }
         }
-        private static List<string> _placePL;
-        public static List<string> placePL
+        private static ObservableCollection<string> _placePL = new ObservableCollection<string>();
+        public static ObservableCollection<string> placePL
         {
             get { return _placePL; }
             set { _placePL = value; }
         }
-        private ObservableCollection<Plomba> _pl;
+        private ObservableCollection<Plomba> _pl = new ObservableCollection<Plomba>();
         public ObservableCollection<Plomba> PlombList
         {
-            get { return  this._pl; }
+            get { return this._pl; }
             set { this._pl = value; }
         }
         public PlombEditorVM()
         {
-
             this.Commands = new Commands(this);
-            GetPlacePLFromDb();
-            GetTypePLFromDb();
-
+            GetListForComboBoxFromDb();
+            MainAtpModel.ComboRefresh += GetListForComboBoxFromDb;
         }
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName]string prop = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
-        }
-       public void AddPlomb()
+        public void AddPlomb()
         {
             PlombList.Add(new Plomba("", "", "", false));
         }
@@ -73,36 +76,18 @@ namespace ATPWork.MyApp.ViewModel.PlombEditorVm
         {
             PlombList.Remove(SelectedPlomb);
         }
-        public void ClonePlomb(bool inc=true)
+        public void ClonePlomb(bool inc = true)
         {
             int incr;
-            incr= inc? (1): (-1);
+            incr = inc ? (1) : (-1);
             Plomba f = SelectedPlomb;
             long res;
-            PlombList.Add(new Plomba(f.Type, long.TryParse(f.Number, out res)?(res + incr).ToString():f.Number, f.Place, f.Remove));
+            PlombList.Add(new Plomba(f.Type, long.TryParse(f.Number, out res) ? (res + incr).ToString() : f.Number, f.Place, f.Remove));
         }
-        public bool checkSourse()
+        public static void GetListForComboBoxFromDb()
         {
-            return PlombList != null;
-        }
-        public bool checkSecection()
-        {
-            return SelectedPlomb != null;
-        }
-        public static void GetPlacePLFromDb()
-        {
-            placePL = new List<string>();
-            placePL.Add("ВКА");
-            placePL.Add("Щит Учета");
-            placePL.Add("Кл. кр. ПУ");
-            placePL.Add("Корпус ПУ");
-        }
-        public static void GetTypePLFromDb()
-        {
-            typePL = new List<string>();
-            typePL.Add("2400_4");
-            typePL.Add("2400_5");
-            typePL.Add("2400_6");
+            placePL = new ObservableCollection<string>(MainAtpModel.PlacePlomb);
+            typePL = new ObservableCollection<string>(MainAtpModel.PlacePlomb);
         }
     }
 }

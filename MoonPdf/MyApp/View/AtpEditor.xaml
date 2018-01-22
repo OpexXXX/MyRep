@@ -83,9 +83,7 @@
                             DisplayDateStart="2017-01-01" 
                             TextOptions.TextFormattingMode="Display" 
                             IsManipulationEnabled="True">
-                        <DatePicker.BlackoutDates>
-                            <CalendarDateRange End="2025-12-31" Start="2017-01-01"/>
-                        </DatePicker.BlackoutDates>
+                       
                     </DatePicker>
                 </StackPanel>
                 <StackPanel  Orientation="Horizontal">
@@ -126,8 +124,8 @@
         </GroupBox>
         <GroupBox Header="Агенты">
             <StackPanel Orientation="Horizontal">
-                <ComboBox  Height="25" Width="157" ItemsSource="{Binding Source={StaticResource AtpEditorViewModel}, Path=AgentList}" SelectedItem="{Binding Source={StaticResource AtpEditorViewModel}, Path=AktInWork.Agent_2}" ItemTemplate="{StaticResource comboAgentsDataTemplate}"/>
-                <ComboBox  Height="25" Width="157" ItemsSource="{Binding Source={StaticResource AtpEditorViewModel}, Path=AgentList}" SelectedItem="{Binding Source={StaticResource AtpEditorViewModel}, Path=AktInWork.Agent_1}" ItemTemplate="{StaticResource comboAgentsDataTemplate}"/>
+                <ComboBox  Height="25" Width="157" ItemsSource="{Binding Source={StaticResource AtpEditorViewModel}, Path=AgentList}" SelectedItem="{Binding Source={StaticResource AtpEditorViewModel}, Path=AktInWork.Agent_1}" />
+                <ComboBox  Height="25" Width="157" ItemsSource="{Binding Source={StaticResource AtpEditorViewModel}, Path=AgentList}" SelectedItem="{Binding Source={StaticResource AtpEditorViewModel}, Path=AktInWork.Agent_2}" />
             </StackPanel>
         </GroupBox>
         <GroupBox Header="Допускаемый прибор учета" >
@@ -143,7 +141,7 @@
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock  VerticalAlignment="Center"  Text="Тип:" Margin="1,1,1,1"/>
-                    <ComboBox VerticalAlignment="Center" Height="25" SelectedItem="{Binding Source={StaticResource AtpEditorViewModel}, Path=AktInWork.PuNewType}" ItemTemplate="{StaticResource comboNewPuTypeDataTemplate}" Margin="1,1,1,1"/>
+                    <ComboBox VerticalAlignment="Center" Height="25" ItemsSource="{Binding Source={StaticResource AtpEditorViewModel}, Path=PuList}" SelectedItem="{Binding Source={StaticResource AtpEditorViewModel}, Path=AktInWork.PuNewType}" ItemTemplate="{StaticResource comboNewPuTypeDataTemplate}" Margin="1,1,1,1"/>
                     <TextBlock VerticalAlignment="Center" Text="Номер:" Margin="1,1,1,1"/>
 
                     <TextBox VerticalAlignment="Center"  Style="{StaticResource TextBoxStyle}" Width="133" Margin="1" ToolTip="Номер допускаемого прибора учета">

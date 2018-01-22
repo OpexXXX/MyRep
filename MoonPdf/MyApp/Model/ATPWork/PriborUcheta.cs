@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyApp.Model
 {
-    public class PriborUcheta
+    public class PriborUcheta: IEquatable<PriborUcheta>
     {
         private string sapNumberPU;
         public string SapNumberPU
@@ -38,6 +38,15 @@ namespace MyApp.Model
             this.Nazvanie = Nazvanie;
             this.Poverka = Poverka;
             this.Znachnost = Znachnost;
+        }
+        public bool Equals(PriborUcheta other)
+        {
+            if (other == null)
+                return false;
+            if (this.SapNumberPU == other.SapNumberPU)
+                return true;
+            else
+                return false;
         }
     }
 }

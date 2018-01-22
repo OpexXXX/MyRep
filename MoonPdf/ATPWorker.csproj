@@ -181,18 +181,21 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="MyApp\Model\ATPWork\Agent.cs" />
+    <Compile Include="MyApp\Model\ATPWork\MainAtpModel.cs" />
     <Compile Include="MyApp\Model\ATPWork\Plomba.cs" />
     <Compile Include="MyApp\Model\ATPWork\PriborUcheta.cs" />
     <Compile Include="MyApp\Model\DbWork\DataBaseWorker.cs" />
     <Compile Include="MyApp\Model\Zayvki na oplombirovku\Oplobbirovki.cs" />
-    <Compile Include="MyApp\ViewModel\AtpEditor\AptEditor.cs" />
-    <Compile Include="MyApp\ViewModel\AtpEditor\Commands.cs" />
-    <Compile Include="MyApp\ViewModel\AtpEditor\Validators.cs" />
+    <Compile Include="MyApp\ViewModel\MainAtp\AtpEditor\AptEditor.cs" />
+    <Compile Include="MyApp\ViewModel\MainAtp\AtpEditor\Commands.cs" />
+    <Compile Include="MyApp\ViewModel\MainAtp\AtpEditor\Validators.cs" />
     <Compile Include="MyApp\ViewModel\BaseCommand.cs" />
     <Compile Include="MyApp\ViewModel\DelegateComand.cs" />
-    <Compile Include="MyApp\ViewModel\PlombEditor\Commands.cs" />
-    <Compile Include="MyApp\ViewModel\PlombEditor\PlombEditor.cs" />
-    <Compile Include="MyApp\ViewModel\PlombEditor\Validators.cs" />
+    <Compile Include="MyApp\ViewModel\MainAtp\Commands.cs" />
+    <Compile Include="MyApp\ViewModel\MainAtp\MainAtpVM.cs" />
+    <Compile Include="MyApp\ViewModel\MainAtp\PlombEditor\Commands.cs" />
+    <Compile Include="MyApp\ViewModel\MainAtp\PlombEditor\PlombEditor.cs" />
+    <Compile Include="MyApp\ViewModel\MainAtp\PlombEditor\Validators.cs" />
     <Compile Include="MyApp\ViewModel\ViewModelBase.cs" />
     <Compile Include="MyApp\View\AtpEditor.xaml.cs">
       <DependentUpon>AtpEditor.xaml</DependentUpon>
