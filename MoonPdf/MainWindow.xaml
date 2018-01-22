@@ -61,8 +61,11 @@
                 <MenuItem Header="{Binding Source={StaticResource MainAtpVM}, Path=Commands.CreatePdfToWork.Name}" Command="{Binding Source={StaticResource MainAtpVM}, Path=Commands.CreatePdfToWork}" InputGestureText="{Binding Source={StaticResource MainAtpVM}, Path=Commands.CreatePdfToWork.GestureText}"/>
                 <MenuItem Header="{Binding Source={StaticResource MainAtpVM}, Path=Commands.AddAktToworkFromPDF.Name}" Command="{Binding Source={StaticResource MainAtpVM}, Path=Commands.AddAktToworkFromPDF}" InputGestureText="{Binding Source={StaticResource MainAtpVM}, Path=Commands.AddAktToworkFromPDF.GestureText}"/>
                 <Separator  Margin="1" />
+                <MenuItem Header="{Binding Source={StaticResource MainAtpVM}, Path=Commands.ProcessCompletedActs.Name}" Command="{Binding Source={StaticResource MainAtpVM}, Path=Commands.ProcessCompletedActs}" InputGestureText="{Binding Source={StaticResource MainAtpVM}, Path=Commands.ProcessCompletedActs.GestureText}"/>
+                <Separator  Margin="1" />
+                <MenuItem Header="{Binding Source={StaticResource MainAtpVM}, Path=Commands.SaveCurrentWork.Name}" Command="{Binding Source={StaticResource MainAtpVM}, Path=Commands.SaveCurrentWork}" InputGestureText="{Binding Source={StaticResource MainAtpVM}, Path=Commands.SaveCurrentWork.GestureText}"/>
                 <MenuItem Header="Сохранить как..." />
-                <MenuItem Header="Сохранить " />
+                
                 <Separator  Margin="1" />
                 <MenuItem Header="Загрузить" />
                 <Separator  Margin="1" />

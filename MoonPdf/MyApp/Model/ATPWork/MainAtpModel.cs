@@ -11,10 +11,11 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.parser;
 using System.Threading;
+using System.IO;
+using System.Windows;
 
 namespace MyApp.Model
 {   
-
     static class MainAtpModel
     {
        
@@ -53,13 +54,10 @@ namespace MyApp.Model
 
         #endregion
         #region коллекция актов
-
         public delegate void AllAtpListRefreshHandler();
         public static event AllAtpListRefreshHandler AllAtpRefreshRefresh;
-
         public delegate void CurrentWorkListRefreshHandler();
         public static event CurrentWorkListRefreshHandler CurrentWorkRefresh;
-
         private static List<AktTehProverki> _allAkt = new List<AktTehProverki>();
         public static List<AktTehProverki> AllAkt
         {
@@ -73,7 +71,14 @@ namespace MyApp.Model
             set { _allAktInCurrentWork = value; }
         }
         #endregion
+        private static string _aktDirektory;
+        public static string AktDirektory
+        {
+            get { return _aktDirektory; }
+            set { _aktDirektory = value;
 
+            }
+        }
         public static void InitMainAtpModel()
         {
             InitListsForCombos();
@@ -158,6 +163,128 @@ namespace MyApp.Model
                 return "";
             }
 
+        }
+        private static void  createAktPdf(AktTehProverki akt)
+        {
+            string FileName = akt.Number.ToString() + " " + akt.DateWork?.ToString("d") + "" + akt.NumberLS + ".pdf";
+            string FilePath = AktDirektory + "\\" + FileName;
+            try
+            {
+                using (FileStream FStream = new System.IO.FileStream(FilePath, System.IO.FileMode.Create))
+                {
+                    iTextSharp.text.Document doc = new iTextSharp.text.Document();
+                    iTextSharp.text.pdf.PdfReader ReaderDoc1 = new iTextSharp.text.pdf.PdfReader(akt.NamePdfFile);
+                    iTextSharp.text.pdf.PdfCopy Writer = new iTextSharp.text.pdf.PdfCopy(doc, FStream);
+                    Writer.SetPdfVersion(PdfWriter.PDF_VERSION_1_5);
+                    Writer.SetFullCompression();
+                    Writer.CompressionLevel = PdfStream.BEST_COMPRESSION;
+                    doc.Open();
+                    List<int> Pages = new List<int>();
+                    for (int ii = 0; ii < akt.NumberOfPagesInSoursePdf.Count; ii++)
+                    {
+                        Pages.Add(ii);
+                        Writer.AddPage(Writer.GetImportedPage(ReaderDoc1, akt.NumberOfPagesInSoursePdf[ii] + 1));
+                    }
+                    akt.NumberOfPagesInSoursePdf.Clear();
+                    foreach (var item in Pages)
+                    {
+                        akt.NumberOfPagesInSoursePdf.Add(item);
+                    }
+                    doc.Close();
+                    akt.NamePdfFile = FileName;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public static void blindPdf(List<AktTehProverki> akts, string folderPath)
+        {
+            List<AktTehProverki> proverki = new List<AktTehProverki>();
+            List<AktTehProverki> dopuski = new List<AktTehProverki>();
+            foreach (AktTehProverki item in akts)
+            {
+                if (item.DopuskFlag) dopuski.Add(item);
+                else proverki.Add(item);
+            }
+            string FileName, FilePath;
+            if (dopuski.Count > 0)
+            {
+                FileName = "Допуски.pdf";
+                FilePath = folderPath + "\\" + FileName;
+                try
+                {
+                    using (FileStream FStream = new System.IO.FileStream(FilePath, System.IO.FileMode.Create))
+                    {
+                        iTextSharp.text.Document doc = new iTextSharp.text.Document();
+                        iTextSharp.text.pdf.PdfCopy Writer = new iTextSharp.text.pdf.PdfCopy(doc, FStream);
+                        Writer.SetPdfVersion(PdfWriter.PDF_VERSION_1_5);
+                        Writer.SetFullCompression();
+                        Writer.CompressionLevel = PdfStream.BEST_COMPRESSION;
+                        doc.Open();
+                        foreach (var item in dopuski)
+                        {
+                            iTextSharp.text.pdf.PdfReader ReaderDoc1 = new iTextSharp.text.pdf.PdfReader(AktDirektory + item.NamePdfFile);
+                            Writer.AddDocument(ReaderDoc1);
+                        }
+                        doc.Close();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+            if (proverki.Count > 0)
+            {
+                FileName = "Проверки.pdf";
+                FilePath = folderPath + "\\" + FileName;
+                try
+                {
+                    using (FileStream FStream = new System.IO.FileStream(FilePath, System.IO.FileMode.Create))
+                    {
+                        iTextSharp.text.Document doc = new iTextSharp.text.Document();
+                        iTextSharp.text.pdf.PdfCopy Writer = new iTextSharp.text.pdf.PdfCopy(doc, FStream);
+                        Writer.SetPdfVersion(PdfWriter.PDF_VERSION_1_5);
+                        Writer.SetFullCompression();
+                        Writer.CompressionLevel = PdfStream.BEST_COMPRESSION;
+                        doc.Open();
+                        foreach (var item in proverki)
+                        {
+                            iTextSharp.text.pdf.PdfReader ReaderDoc1 = new iTextSharp.text.pdf.PdfReader(AktDirektory + item.NamePdfFile);
+                            Writer.AddDocument(ReaderDoc1);
+                        }
+                        doc.Close();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+
+        }
+        public static int MoveComleteAtp(IProgress<double> progress)
+        {
+            int i = 0;
+            foreach (AktTehProverki item in AllAktInCurrentWork)
+            {
+                item.checkToComplete();
+                if (item.Complete)
+                {
+                    if (!AllAkt.Contains(item))
+                    {
+                        AllAkt.Add(item);
+                        createAktPdf(item);
+                        if (!DataBaseWorker.chekForContainsCompleteAktATP(item)) DataBaseWorker.InsertCompleteAktAPT(item);
+                        i++;
+                        double rep = (100.0 * ((double)i / (double)AllAktInCurrentWork.Count));
+                        progress.Report(rep);
+                    }
+                }
+            }
+            return i;
         }
     }
 }
