@@ -27,7 +27,7 @@ namespace ATPWork.MyApp.ViewModel.PlombEditorVm
         }
         public bool checkSourse()
         {
-            return PlombList != null;
+            return NewPlombList != null;
         }
         public bool checkSecection()
         {
@@ -44,6 +44,7 @@ namespace ATPWork.MyApp.ViewModel.PlombEditorVm
                 OnPropertyChanged("SelectedPlomb");
             }
         }
+
         private static ObservableCollection<string> _typePL = new ObservableCollection<string>();
         public static ObservableCollection<string> typePL
         {
@@ -57,11 +58,24 @@ namespace ATPWork.MyApp.ViewModel.PlombEditorVm
             set { _placePL = value; }
         }
         private ObservableCollection<Plomba> _pl = new ObservableCollection<Plomba>();
-        public ObservableCollection<Plomba> PlombList
+        public ObservableCollection<Plomba> NewPlombList
         {
             get { return this._pl; }
-            set { this._pl = value; }
+            set { this._pl = value;
+                OnPropertyChanged("NewPlombList");
+            }
         }
+        private ObservableCollection<Plomba> _oldPl = new ObservableCollection<Plomba>();
+        public ObservableCollection<Plomba> OldPlombList
+        {
+            get { return this._oldPl; }
+            set
+            {
+                this._oldPl = value;
+                OnPropertyChanged("OldPlombList");
+            }
+        }
+
         public PlombEditorVM()
         {
             this.Commands = new Commands(this);
@@ -70,11 +84,11 @@ namespace ATPWork.MyApp.ViewModel.PlombEditorVm
         }
         public void AddPlomb()
         {
-            PlombList.Add(new Plomba("", "", "", false));
+            NewPlombList.Add(new Plomba("", "", "", false));
         }
         public void DeletePlobm()
         {
-            PlombList.Remove(SelectedPlomb);
+            NewPlombList.Remove(SelectedPlomb);
         }
         public void ClonePlomb(bool inc = true)
         {
@@ -82,7 +96,7 @@ namespace ATPWork.MyApp.ViewModel.PlombEditorVm
             incr = inc ? (1) : (-1);
             Plomba f = SelectedPlomb;
             long res;
-            PlombList.Add(new Plomba(f.Type, long.TryParse(f.Number, out res) ? (res + incr).ToString() : f.Number, f.Place, f.Remove));
+            NewPlombList.Add(new Plomba(f.Type, long.TryParse(f.Number, out res) ? (res + incr).ToString() : f.Number, f.Place, f.Demontage));
         }
         public static void GetListForComboBoxFromDb()
         {

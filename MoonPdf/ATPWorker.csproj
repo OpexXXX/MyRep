@@ -138,6 +138,9 @@
       <HintPath>..\packages\iTextSharp.5.5.12\lib\itextsharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Expression.Drawing, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Expression.Effects, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="MoonPdfLib, Version=0.3.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Downloads\MoonPdfLib-0.3.0-x86\MoonPdfLib-0.3.0-x86\MoonPdfLib.dll</HintPath>
@@ -159,6 +162,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -185,6 +189,7 @@
     <Compile Include="MyApp\Model\ATPWork\Plomba.cs" />
     <Compile Include="MyApp\Model\ATPWork\PriborUcheta.cs" />
     <Compile Include="MyApp\Model\DbWork\DataBaseWorker.cs" />
+    <Compile Include="MyApp\Model\ExcelWork\ExcelWorker.cs" />
     <Compile Include="MyApp\Model\Zayvki na oplombirovku\Oplobbirovki.cs" />
     <Compile Include="MyApp\ViewModel\MainAtp\AtpEditor\AptEditor.cs" />
     <Compile Include="MyApp\ViewModel\MainAtp\AtpEditor\Commands.cs" />
@@ -337,7 +342,6 @@
     <Content Include="Resources\sapfewse.ocx" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="MyApp\Model\ExcelWork\" />
     <Folder Include="MyApp\Model\SAPWork\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

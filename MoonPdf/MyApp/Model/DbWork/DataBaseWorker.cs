@@ -15,6 +15,10 @@ namespace MyApp.Model
 {
     static public class DataBaseWorker
     {
+        public static bool ConnectorBusy()
+        {
+            return connector.State == ConnectionState.Closed;
+        }
         /// <summary>
         /// Коннектор к рабочей базе данных
         /// </summary>
@@ -139,6 +143,49 @@ namespace MyApp.Model
             connector.Close();
             return agentList;
         }
+
+        static public List<Dictionary<String, String>> GetPlombsFromEdOb(string edenicaOborudovania)
+        {
+            try
+            {
+                connector.Open();
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            List<Dictionary<String, String>> result = new List<Dictionary<string, string>>();
+            SQLiteCommand CommandSQL = new SQLiteCommand(connector);
+            CommandSQL.CommandText = "SELECT Type, Number, Place, InstallDate, Status  "
+    + " FROM SAPPlomb WHERE EdenicaOborud LIKE '%" + edenicaOborudovania + "%' ";
+            try
+            {
+
+                SQLiteDataReader r = CommandSQL.ExecuteReader();
+                string line = String.Empty;
+                int i = 0;
+                while (r.Read())
+                {
+                    result.Add(new Dictionary<string, string>());
+
+                    result[i].Add("Type", r["Type"].ToString());
+                    result[i].Add("Number", r["Number"].ToString());
+                    result[i].Add("Place", r["Place"].ToString());
+                    result[i].Add("InstallDate", r["InstallDate"].ToString());
+                    result[i].Add("Status", r["Status"].ToString());
+                    i++;
+                }
+                r.Close();
+                connector.Close();
+                return result;
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+                return null;
+            }
+        }
+
         /// <summary>
         /// Поиск абонента в базе по номеру лицевого счета
         /// </summary>
@@ -308,15 +355,36 @@ namespace MyApp.Model
                         CommandPlomb.CommandText = "SELECT * "
                         + " FROM `" + plombTableName + "`;";
                         plomb_reader = CommandPlomb.ExecuteReader();
+
+
                         while (plomb_reader.Read())
                         {
-                            string plomb_Type, plomb_Number, plomb_Place;
+                            string plomb_Type, plomb_Number, plomb_Place, plomb_Status, plomb_DateInstall;
                             bool plomb_Remove;
-                            plomb_Type = plomb_reader["Type"].ToString();
-                            plomb_Number = plomb_reader["Number"].ToString();
-                            plomb_Remove = Int32.Parse(plomb_reader["Remove"].ToString()) == 0 ? false : true; ;
-                            plomb_Place = plomb_reader["Place"].ToString();
-                            result[i].Plombs.Add(new Plomba(plomb_Type, plomb_Number, plomb_Place, plomb_Remove));
+                            bool old_Plomb;
+
+                           /* try
+                            {
+                                r["OldPlomb"].ToString();
+                                plomb_Type = plomb_reader["Type"].ToString();
+                                plomb_Number = plomb_reader["Number"].ToString();
+                                plomb_Remove = Int32.Parse(plomb_reader["Remove"].ToString()) == 0 ? false : true; ;
+                                plomb_Place = plomb_reader["Place"].ToString();
+                                plomb_Status = plomb_reader["Status"].ToString();
+                                plomb_DateInstall = plomb_reader["InstallDate"].ToString();
+                                result[i].OldPlombs.Add(new Plomba(plomb_Type, plomb_Number, plomb_Place, plomb_Remove, true, plomb_Status, plomb_DateInstall));
+
+                            }
+                            catch (Exception)
+                            {*/
+                                plomb_Type = plomb_reader["Type"].ToString();
+                                plomb_Number = plomb_reader["Number"].ToString();
+                                plomb_Remove = Int32.Parse(plomb_reader["Remove"].ToString()) == 0 ? false : true; ;
+                                plomb_Place = plomb_reader["Place"].ToString();
+                                result[i].NewPlombs.Add(new Plomba(plomb_Type, plomb_Number, plomb_Place, plomb_Remove));
+                           // }
+                          
+                            
                         }
                     }
                 }
@@ -387,7 +455,7 @@ namespace MyApp.Model
 
                     resultCommand += sql_command;
                     // Создаем Таблицу для пломб к текущему акту
-                    if (akt.Plombs.Count > 0)
+                    if (akt.NewPlombs.Count > 0)
                     {
                         string plombTableName = akt.ID.ToString() + akt.Number + akt.NumberLS + "Plobm"; //Имя таблицы пломб
                         sql_command = "DROP TABLE IF EXISTS '" + plombTableName + "';"
@@ -396,17 +464,22 @@ namespace MyApp.Model
                           + "'Type' TEXT,     "
                           + "'Number' TEXT,     "
                           + "'Remove' INTEGER,     "
+                           + "'OldPlomb' INTEGER,     "
+                            + "'InstallDate' TEXT,     "
+                            + "'Status' TEXT,     "
                           + "'Place' TEXT );";
                         resultCommand += sql_command;
-                        foreach (Plomba Plomba in akt.Plombs)
+                        foreach (Plomba Plomba in akt.NewPlombs)
                         {
-                            //добавляем строку с пломбой
-                            sql_command = "INSERT INTO `" + plombTableName + "` (Type, Number, Remove, Place) "
-                          + "VALUES ('"
-                           + Plomba.Type + "', '"
-                            + Plomba.Number + "', '"
-                            + ((Plomba.Remove) ? "1'" : "0'") + ", '"
-                            + Plomba.Place + "');";
+                            sql_command = "INSERT INTO `" + plombTableName + "` (Type, Number, Remove, Place, OldPlomb, InstallDate, Status) "
+                      + "VALUES ('"
+                       + Plomba.Type + "', '"
+                        + Plomba.Number + "', '"
+                        + ((Plomba.Demontage) ? "1'" : "0'") + ", '"
+                        + Plomba.Place + "', '"
+                         + ((Plomba.OldPlomb) ? "1'" : "0'") + ", '"
+                          + Plomba.InstallDate + "', '"
+                        + Plomba.Status + "');";
                             resultCommand += sql_command;
                         }
                     }
@@ -459,7 +532,7 @@ namespace MyApp.Model
                 cmd.CommandText = sql_command;
                 cmd.ExecuteNonQuery();
                 // Создаем Таблицу для пломб к текущему акту
-                if (akt.Plombs.Count > 0)
+                if (akt.NewPlombs.Count > 0)
                 {
                     cmd = connector.CreateCommand();
                     string plombTableName = akt.ID.ToString() + akt.Number + akt.NumberLS + "Plobm"; //Имя таблицы пломб
@@ -469,19 +542,25 @@ namespace MyApp.Model
                       + "'Type' TEXT,     "
                       + "'Number' TEXT,     "
                       + "'Remove' INTEGER,     "
+                       + "'OldPlomb' INTEGER,     "
+                        + "'InstallDate' TEXT,     "
+                        + "'Status' TEXT,     "
                       + "'Place' TEXT );";
                     cmd.CommandText = sql_command;
                     cmd.ExecuteNonQuery();
-                    foreach (Plomba Plomba in akt.Plombs)
+                    foreach (Plomba Plomba in akt.NewPlombs)
                     {
                         //добавляем строку с пломбой
                         cmd = connector.CreateCommand();
-                        sql_command = "INSERT INTO `" + plombTableName + "` (Type, Number, Remove, Place) "
+                        sql_command = "INSERT INTO `" + plombTableName + "` (Type, Number, Remove, Place, OldPlomb, InstallDate, Status) "
                       + "VALUES ('"
                        + Plomba.Type + "', '"
                         + Plomba.Number + "', '"
-                        + ((Plomba.Remove) ? "1'" : "0'") + ", '"
-                        + Plomba.Place + "');";
+                        + ((Plomba.Demontage) ? "1'" : "0'") + ", '"
+                        + Plomba.Place + "', '"
+                         + ((Plomba.OldPlomb) ? "1'" : "0'") + ", '"
+                          + Plomba.InstallDate + "', '"
+                        + Plomba.Status + "');";
                         cmd.CommandText = sql_command;
                         cmd.ExecuteNonQuery();
                     }
@@ -512,6 +591,7 @@ namespace MyApp.Model
                     {
                         using (var transaction = connector.BeginTransaction())
                         {
+
                             foreach (DataRow row in dt.Rows)
                             {
                                 try
@@ -537,6 +617,7 @@ namespace MyApp.Model
                                        + row["Номер телефона абонента"] + "\", \""
                                        + row["Код прибора"] + "\", \""
                                        + row["КЛАДР"] + "\");";
+
                                 }
                                 catch (Exception ex)
                                 {
@@ -550,10 +631,72 @@ namespace MyApp.Model
                             transaction.Commit();
                         }
                     }
+                    connector.Close();
                     MessageBox.Show("База ФЛ успешно обновлена");
                 }
                 catch (Exception ex)
                 {
+                    connector.Close();
+                    MessageBox.Show(ex.Message);
+                }
+            }
+            else
+            {
+                return;
+            }
+        }
+        public static void RefreshSAPPlomb(DataSet dataSetSAPFL)
+        {
+            connector.Open();
+            if (dataSetSAPFL != null)
+            {
+                try
+                {
+                    string sSQLTable = @"SAPPlomb"; //Таблица с сервера
+                    DataTable dt = dataSetSAPFL.Tables[0];
+                    string sclearsql = "delete from " + sSQLTable;
+                    SQLiteCommand cmd = connector.CreateCommand();
+                    cmd.CommandText = sclearsql;
+                    cmd.ExecuteNonQuery();
+                    string sql_command;
+                    using (var cmdd = new SQLiteCommand(connector))
+                    {
+                        using (var transaction = connector.BeginTransaction())
+                        {
+
+                            foreach (DataRow row in dt.Rows)
+                            {
+                                try
+                                {
+                                    sql_command = "INSERT INTO `" + sSQLTable + "` ( `Type` , `Number` , `Place` , `InstallDate` , `EdenicaOborud` , `Status` ) "
+                                    + "VALUES (\""
+                                       + row["Тип пломбы - группа пломб одного вида"] + "\", \""
+                                       + row["Код пломбы - разные пломбы в рамках типа"] + "\", \""
+                                        + row["ПоложенПломбы"] + "\", \""
+                                       + row["Дата установки пломбы"] + "\", \""
+                                        + row["ЕдОборуд"] + "\", \""
+                                       + row["Статус пломбы - статус ЖизнЦикла пломбы"] + "\");";
+
+
+                                }
+                                catch (Exception ex)
+                                {
+                                    MessageBox.Show(ex.Message);
+                                    return;
+                                }
+                                cmdd.CommandText = sql_command;
+                                cmdd.ExecuteNonQuery();
+                            }
+                            dt.Dispose();
+                            transaction.Commit();
+                        }
+                    }
+                    connector.Close();
+                    MessageBox.Show("База пломб успешно обновлена");
+                }
+                catch (Exception ex)
+                {
+                    connector.Close();
                     MessageBox.Show(ex.Message);
                 }
             }

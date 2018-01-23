@@ -12,15 +12,15 @@ using ExcelDataReader;
 
 namespace MyApp.Model
 {
-    public class ExcelWorker
+    public static class ExcelWorker
     {
-        private List<string[]> HeaderColumn;
+        private static List<string[]> HeaderColumn = new List<string[]>();
         public enum AktType
         {
             Proverka,
             Dopusk
         }
-        public ExcelWorker()
+        public static void InitHeader()
         {
             HeaderColumn = new List<string[]>(2);
             HeaderColumn.Add(new string[] { "№ пп", "id" });
@@ -33,6 +33,7 @@ namespace MyApp.Model
             HeaderColumn.Add(new string[] { "Номер ПУ", "PuNumber" });
             HeaderColumn.Add(new string[] { "Показание", "Pokazanie" });
         }
+        /*
         private DataSet MakeDataSet(AllATPObserv akti)
         {
             DataSet Result = new DataSet("Reestr");
@@ -278,7 +279,9 @@ namespace MyApp.Model
 
 
         }
-        public DataSet makeDataSetForSAPFL(FileStream excelFilePath)
+        */
+
+        public static DataSet makeDataSetForSAPFL(FileStream excelFilePath)
         {
             using (IExcelDataReader reader = ExcelReaderFactory.CreateOpenXmlReader(excelFilePath))
             {
@@ -302,6 +305,9 @@ namespace MyApp.Model
             }
 
         }
+ 
+
+       
     }
 }
 

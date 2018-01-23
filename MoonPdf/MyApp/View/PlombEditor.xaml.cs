@@ -27,25 +27,20 @@ namespace ATPWork.MyApp.View
     /// 
     public partial class PlombEditor : UserControl
     {
-        public IEnumerable ItemsSource
+        public IEnumerable NewPlombItemsSource
         {
-            get { return (IEnumerable)GetValue(ItemsSourceProperty); }
-            set { SetValue(ItemsSourceProperty, value); }
+            get { return (IEnumerable)GetValue(NewPlombItemsSourceProperty); }
+            set { SetValue(NewPlombItemsSourceProperty, value); }
         }
-
-        public static readonly DependencyProperty ItemsSourceProperty =
-            DependencyProperty.Register("ItemsSource", typeof(IEnumerable), typeof(PlombEditor), new PropertyMetadata(new PropertyChangedCallback(OnItemsSourcePropertyChanged)));
-
-        private static void OnItemsSourcePropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        public static readonly DependencyProperty NewPlombItemsSourceProperty =
+            DependencyProperty.Register("NewPlombItemsSource", typeof(IEnumerable), typeof(PlombEditor), new PropertyMetadata(new PropertyChangedCallback(OnNewPlombItemsSourcePropertyChanged)));
+        private static void OnNewPlombItemsSourcePropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e) // при изменении источника
         {
             var control = sender as PlombEditor;
             if (control != null)
-                control.OnItemsSourceChanged((IEnumerable)e.OldValue, (IEnumerable)e.NewValue);
+                control.OnNewPlombItemsSourceChanged((IEnumerable)e.OldValue, (IEnumerable)e.NewValue);
         }
-
-       
-
-        private void OnItemsSourceChanged(IEnumerable oldValue, IEnumerable newValue)
+        private void OnNewPlombItemsSourceChanged(IEnumerable oldValue, IEnumerable newValue) //Отписка подписка на события изменения самой коллекции
         {
 
             // Remove handler for oldValue.CollectionChanged
@@ -60,16 +55,50 @@ namespace ATPWork.MyApp.View
             {
                 newValueINotifyCollectionChanged.CollectionChanged += new NotifyCollectionChangedEventHandler(newValueINotifyCollectionChanged_CollectionChanged);
             }
-            editVM.PlombList = ItemsSource as ObservableCollection<Plomba>;
-            ListBoxW.ItemsSource = editVM.PlombList;
-        }
 
-        void newValueINotifyCollectionChanged_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+            editVM.NewPlombList = NewPlombItemsSource as ObservableCollection<Plomba>;
+        }
+        void newValueINotifyCollectionChanged_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) // при изменениях внутри коллекции
         {
             //Do your stuff here.
         }
 
-        
+        public IEnumerable OldPlombItemsSource
+        {
+            get { return (IEnumerable)GetValue(OldPlombItemsSourceProperty); }
+            set { SetValue(OldPlombItemsSourceProperty, value); }
+        }
+        public static readonly DependencyProperty OldPlombItemsSourceProperty =
+            DependencyProperty.Register("OldPlombItemsSource", typeof(IEnumerable), typeof(PlombEditor), new PropertyMetadata(new PropertyChangedCallback(OnOldPlombItemsSourcePropertyChanged)));
+        private static void OnOldPlombItemsSourcePropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e) // при изменении источника
+        {
+            var control = sender as PlombEditor;
+            if (control != null)
+                control.OnOldPlombItemsSourceChanged((IEnumerable)e.OldValue, (IEnumerable)e.OldValue);
+        }
+        private void OnOldPlombItemsSourceChanged(IEnumerable oldValue, IEnumerable newValue) //Отписка подписка на события изменения самой коллекции
+        {
+
+            // Remove handler for oldValue.CollectionChanged
+            var oldValueINotifyCollectionChanged = oldValue as INotifyCollectionChanged;
+            if (null != oldValueINotifyCollectionChanged)
+            {
+                oldValueINotifyCollectionChanged.CollectionChanged -= new NotifyCollectionChangedEventHandler(oldValueINotifyCollectionChanged_CollectionChanged);
+            }
+            // Add handler for newValue.CollectionChanged (if possible)
+            var newValueINotifyCollectionChanged = newValue as INotifyCollectionChanged;
+            if (null != newValueINotifyCollectionChanged)
+            {
+                newValueINotifyCollectionChanged.CollectionChanged += new NotifyCollectionChangedEventHandler(oldValueINotifyCollectionChanged_CollectionChanged);
+            }
+
+            editVM.OldPlombList = OldPlombItemsSource as ObservableCollection<Plomba>;
+        }
+        void oldValueINotifyCollectionChanged_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) // при изменениях внутри коллекции
+        {
+            //Do your stuff here.
+        }
+
 
         private PlombEditorVM editVM;
         public PlombEditor()
@@ -77,6 +106,10 @@ namespace ATPWork.MyApp.View
             InitializeComponent();
             editVM = (PlombEditorVM)this.Resources["PlombEditorViewModel"];
         }
-       
+
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            OldPlombListBox.SelectedItem = null;
+        }
     }
 }

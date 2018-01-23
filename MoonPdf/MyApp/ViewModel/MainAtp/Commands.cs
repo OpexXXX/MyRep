@@ -1,6 +1,7 @@
 ﻿using MyApp.Model;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,11 @@ namespace ATPWork.MyApp.ViewModel.MainAtp
         public DelegateCommand AddAktToworkFromPDF { get; private set; }
         public DelegateCommand ProcessCompletedActs { get; private set; }
         public DelegateCommand SaveCurrentWork { get; private set; }
+        public DelegateCommand RefreshSapFlTable { get; private set; }
+        public DelegateCommand RefreshSapPlombTable { get; private set; }
+
         private  MainAtpVM mainAtpVm;
+
 
         private bool checkCurrentWork()
         {
@@ -34,6 +39,7 @@ namespace ATPWork.MyApp.ViewModel.MainAtp
             }
             return !mainAtpVm.WorkinAddAktFromPdf && itemComplete;
         }
+        
 
         public Commands(MainAtpVM mainAtpVm)
         {
@@ -41,6 +47,7 @@ namespace ATPWork.MyApp.ViewModel.MainAtp
             Predicate<object> isCurrrentWork = f => checkCurrentWork(); 
             Predicate<object> isBysyAddWork = f => checkBysyWork();
             Predicate<object> isCanProcessCompleteAkts = f => CanProcessCompleteAkts();
+            Predicate<object> isDatabaseConnectorBusy = f => DataBaseWorker.ConnectorBusy();
 
             this.CreatePdfToWork = new DelegateCommand("Создать задание из PDF", async f =>
             {
@@ -110,7 +117,48 @@ namespace ATPWork.MyApp.ViewModel.MainAtp
                     {
                     });
             }, isCurrrentWork, new KeyGesture(Key.S, ModifierKeys.Control));
-
+            this.RefreshSapPlombTable = new DelegateCommand("Обновить базу пломб", async f =>
+           {
+               var dlg = new Microsoft.Win32.OpenFileDialog { Title = "Выберите XLSX фаил с выгрузкой поиска SAP", DefaultExt = ".xlsx", Filter = "Excel фаил (.xlsx)|*.xlsx", CheckFileExists = true };
+               if (dlg.ShowDialog() == true)
+               {
+                   await Task.Run(() =>
+                   {
+                       try
+                       {
+                           using (FileStream stream = File.Open(dlg.FileName, FileMode.Open, FileAccess.Read))
+                           {
+                               DataBaseWorker.RefreshSAPPlomb(ExcelWorker.makeDataSetForSAPFL(stream));
+                           }
+                       }
+                       catch (Exception ex)
+                       {
+                           MessageBox.Show(string.Format("Ошибка: " + ex.Message));
+                       }
+                   });
+               }
+           }, isDatabaseConnectorBusy, null);
+            this.RefreshSapFlTable = new DelegateCommand("Обновить базу потребителей", async f =>
+            {
+                var dlg = new Microsoft.Win32.OpenFileDialog { Title = "Выберите XLSX фаил с выгрузкой поиска SAP", DefaultExt = ".xlsx", Filter = "Excel фаил (.xlsx)|*.xlsx", CheckFileExists = true };
+                if (dlg.ShowDialog() == true)
+                {
+                    await Task.Run(() =>
+                    {
+                        try
+                        {
+                            using (FileStream stream = File.Open(dlg.FileName, FileMode.Open, FileAccess.Read))
+                            {
+                                DataBaseWorker.RefreshSAPFL(ExcelWorker.makeDataSetForSAPFL(stream));
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(string.Format("Ошибка: " + ex.Message));
+                        }
+                    });
+                }
+            }, isDatabaseConnectorBusy, null);
         }
     }
 }

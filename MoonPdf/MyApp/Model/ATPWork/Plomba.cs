@@ -26,18 +26,41 @@ namespace MyApp.Model
             get { return this.place; }
             set { this.place = value;}
         }
-        private bool remove;
-        public bool Remove
+        private bool _oldPlomb;
+        public bool OldPlomb
         {
-            get { return this.remove; }
-            set { this.remove = value;}
+            get { return this._oldPlomb; }
+            set { this._oldPlomb = value; }
         }
-        public Plomba(string type, string number, string place, bool remove)
+        private bool _demontage;
+        public bool Demontage
+        {
+            get { return this._demontage; }
+            set { this._demontage = value;}
+        }
+        private string _installDate;
+        public string InstallDate
+        {
+            get { return this._installDate; }
+            set { this._installDate = value; }
+        }
+        private string _status;
+        public string Status
+        {
+            get { return this._status; }
+            set { this._status = value; }
+        }
+
+        public Plomba(string type, string number, string place, bool remove = false, bool old =false,  string status = "",string dateInstall = "")
         {
             this.Type = type;
             this.Number = number;
             this.Place = place;
-            this.Remove = remove;
+            this.Demontage = remove;
+            this.Status = status;
+            this.InstallDate = dateInstall;
+            this.OldPlomb = old;
         }
     }
+    
 }

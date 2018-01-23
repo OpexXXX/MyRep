@@ -222,10 +222,22 @@ namespace MyApp.Model
             get { return this.iD; }
             set { this.iD = value; this.OnPropertyChanged("ID"); }
         }
-        private ObservableCollection<Plomba> _plombs = new ObservableCollection<Plomba>();
-        public ObservableCollection<Plomba> Plombs {
-            get { return _plombs; }
-            set { this._plombs =  value; }
+        private ObservableCollection<Plomba> _newPlombs = new ObservableCollection<Plomba>();
+        public ObservableCollection<Plomba> NewPlombs {
+            get { return _newPlombs; }
+            set { this._newPlombs =  value;
+                this.OnPropertyChanged("NewPlombs");
+            }
+        }
+        private ObservableCollection<Plomba> _oldPlombs = new ObservableCollection<Plomba>();
+        public ObservableCollection<Plomba> OldPlombs
+        {
+            get { return _oldPlombs; }
+            set
+            {
+                this._oldPlombs = value;
+                this.OnPropertyChanged("OldPlombs");
+            }
         }
         private Agent agent_1;
         public Agent Agent_1
@@ -257,7 +269,6 @@ namespace MyApp.Model
             get { return this.namePdfFile; }
             set { this.namePdfFile = value; this.OnPropertyChanged("NamePdfFile"); }
         }
-        private string groupOfMail;
         public AktTehProverki(int id, List<int> numbersOfPageInPdf, string pathOfPdfFile)
         {
             this.ID = id;
@@ -268,7 +279,7 @@ namespace MyApp.Model
                 NumberOfPagesInSoursePdf.Add(page);
             }
         }
-       public void setDataByDb(Dictionary<string, string> dict)
+        public void setDataByDb(Dictionary<string, string> dict,List<Dictionary<string, string>> oldPlombs)
         {
             NumberLS = dict["LsNumber"];
             PuOldType = dict["PuType"];
@@ -279,10 +290,22 @@ namespace MyApp.Model
             if (dict.ContainsKey("Korpus")) tmpadress += dict["Korpus"];
             if (dict.ContainsKey("Kv")) tmpadress += ", кв." + dict["Kv"];
             Adress = tmpadress;
-            Ustanovka = dict["Ustanovka"]; ;
-            EdOborudovania = dict["EdOborudovania"]; ;
-        }
+            Ustanovka = dict["Ustanovka"]; 
+            EdOborudovania = dict["EdOborudovania"];
+            OldPlombs.Clear();
+            foreach (Dictionary<string,string> item in oldPlombs)
+            {
+                string plomb_Type, plomb_Number, plomb_Place, plomb_Status, plomb_DateInstall;
+                bool plomb_Remove;
+                plomb_Type = item["Type"].ToString();
+                plomb_Number = item["Number"].ToString();
+                plomb_Place = item["Place"].ToString();
+                plomb_Status = item["Status"].ToString();
+                plomb_DateInstall = item["InstallDate"].ToString();
+                OldPlombs.Add(new Plomba(plomb_Type, plomb_Number, plomb_Place, false, true, plomb_Status, plomb_DateInstall));
+            }
 
+        }
         public bool checkToComplete()
         {
             bool result = true;
@@ -312,7 +335,5 @@ namespace MyApp.Model
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
-
-       
     }
 }

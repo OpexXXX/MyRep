@@ -37,25 +37,33 @@
                 </ComboBox>
             </StackPanel>
         </DataTemplate>
+        <DataTemplate x:Key="OldListBoxPlomb">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <CheckBox Margin="1,1,8,1" IsChecked="{Binding Path=Demontage}" ToolTip="Демонтировать" VerticalAlignment="Center"/>
+                <TextBox IsReadOnly ="True"  MinWidth="50"  Margin="1,0,1,0" Text="{Binding Path=Type}" Focusable="False" VerticalAlignment="Center"/>
+                <TextBox IsReadOnly ="True" MinWidth="50"  Margin="1,0,1,0" Text="{Binding Path=Number}" VerticalAlignment="Center"/>
+                <TextBox IsReadOnly ="True" MinWidth="50"  Margin="1,0,1,0" Text="{Binding Path=Place}" VerticalAlignment="Center"/>
+            </StackPanel>
+        </DataTemplate>
     </UserControl.Resources>
     <StackPanel>
         <StackPanel Orientation="Horizontal">
-            <Button  Focusable="False" Command="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.AddPlombCommand}">
+            <Button Margin="1,1,1,1" Focusable="False" Command="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.AddPlombCommand}" ToolTip="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.AddPlombCommand.Name}">
                 <Image  Height="25" Source="/ATPWork;component/Resources/icons8Add-50.png" Width="25" />
             </Button>
-            <Button  Command="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.DeletePlombCommand}" Focusable="False">
+            <Button Margin="1,1,1,1" Command="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.DeletePlombCommand}" Focusable="False" ToolTip="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.DeletePlombCommand.Name}">
                 <Image  Height="25" Source="/ATPWork;component/Resources/icons8Delete-50.png" Width="25" />
             </Button>
-            <Button Focusable="False"  Command="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.IncrementAddPlombComand}">
+            <Button Margin="1,1,1,1" Focusable="False"  Command="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.IncrementAddPlombComand}" ToolTip="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.IncrementAddPlombComand.Name}">
                 <Image x:Name="image" Height="25" Source="/ATPWork;component/Resources/icons8+1.png" Width="25" />
             </Button>
-                <Button Focusable="False"  Command="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.DecrementAddPlombComand}">
+            <Button Margin="1,1,1,1" Focusable="False"  Command="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.DecrementAddPlombComand}" ToolTip="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.DecrementAddPlombComand.Name}">
                     <Image  Height="25" Source="/ATPWork;component/Resources/icons8-1.png" Width="25" />
                 </Button>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" >
-            <ListBox x:Name="ListBoxW" ItemsSource="{Binding Source={StaticResource PlombEditorViewModel}, Path=PlombList}" SelectedItem="{Binding Source={StaticResource PlombEditorViewModel}, Path=SelectedPlomb}" KeyboardNavigation.TabNavigation="Continue" ItemTemplate="{StaticResource ListBoxPlomb}" SelectionMode="Extended" ContextMenuService.ShowOnDisabled="False">
-            </ListBox>
+        <StackPanel Orientation="Vertical" >
+            <ListBox ItemsSource="{Binding Source={StaticResource PlombEditorViewModel}, Path=NewPlombList}" SelectedItem="{Binding Source={StaticResource PlombEditorViewModel}, Path=SelectedPlomb}" KeyboardNavigation.TabNavigation="Continue" ItemTemplate="{StaticResource ListBoxPlomb}" SelectionMode="Extended" ContextMenuService.ShowOnDisabled="False"/>
+            <ListBox Focusable="False" x:Name="OldPlombListBox" SelectionChanged="ListBox_SelectionChanged" ItemsSource="{Binding Source={StaticResource PlombEditorViewModel}, Path=OldPlombList}" KeyboardNavigation.TabNavigation="Continue" ItemTemplate="{StaticResource OldListBoxPlomb}" SelectionMode="Single" ContextMenuService.ShowOnDisabled="False"/>
         </StackPanel>
     </StackPanel>
 </UserControl>

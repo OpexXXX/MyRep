@@ -16,24 +16,32 @@ namespace ATPWork.MyApp.ViewModel.AtpEditor
             public DelegateCommand GetDataFromDbByNumberPu { get; private set; }
             public Commands(AtpEditorVM AtpEdit)
             {
-            Predicate<object> findByLs = f => AtpEdit.CheckFindByLs(); // 
-            Predicate<object> findByPu= f => AtpEdit.CheckFindByPu(); // 
+            Predicate<object> findByLs = f => AtpEdit.CheckFindByLs()&& DataBaseWorker.ConnectorBusy(); // 
+            Predicate<object> findByPu= f => AtpEdit.CheckFindByPu() && DataBaseWorker.ConnectorBusy(); // 
+
             this.GetDataFromDbByNumberLs = new DelegateCommand("Поиск по номеру лицевого счета", f =>
             {
                 string number = AtpEdit.AktInWork.NumberLS;
-                List<Dictionary<String, String>> resultSearch;
-                resultSearch = DataBaseWorker.GetAbonentFromLS(number);
+                List<Dictionary<String, String>> resultSearchAbonent;
+                resultSearchAbonent = DataBaseWorker.GetAbonentFromLS(number);
                 
-                if(resultSearch.Count == 1)
+                if(resultSearchAbonent.Count == 1)
                 {
-                    AtpEdit.AktInWork.setDataByDb(resultSearch[0]);
-                } else if (resultSearch.Count > 1)
+                    string edob = resultSearchAbonent[0]["EdOborudovania"];
+                    List<Dictionary<String, String>> resultSearchPlombs;
+                    resultSearchPlombs = DataBaseWorker.GetPlombsFromEdOb(edob);
+
+                    AtpEdit.AktInWork.setDataByDb(resultSearchAbonent[0],resultSearchPlombs);
+                } else if (resultSearchAbonent.Count > 1)
                 {
-                    ResultSearchWindow wndResult = new ResultSearchWindow(resultSearch);
+                    ResultSearchWindow wndResult = new ResultSearchWindow(resultSearchAbonent);
                     wndResult.ShowDialog();
                     if ((bool)wndResult.DialogResult)
                     {
-                        AtpEdit.AktInWork.setDataByDb(wndResult.SelectVal);
+                        string edob = wndResult.SelectVal["EdOborudovania"];
+                        List<Dictionary<String, String>> resultSearchPlombs;
+                        resultSearchPlombs = DataBaseWorker.GetPlombsFromEdOb(edob);
+                        AtpEdit.AktInWork.setDataByDb(wndResult.SelectVal, resultSearchPlombs);
                     }
                 }
              }
@@ -41,19 +49,26 @@ namespace ATPWork.MyApp.ViewModel.AtpEditor
             this.GetDataFromDbByNumberPu = new DelegateCommand("Поиск по номеру прибора учета", f => 
             {
                 string number = AtpEdit.AktInWork.PuOldNumber;
-                List<Dictionary<String, String>> resultSearch;
-                resultSearch = DataBaseWorker.GetAbonentFromDbByPU(number);
-                if (resultSearch.Count == 1)
+                List<Dictionary<String, String>> resultSearchAbonent;
+                resultSearchAbonent = DataBaseWorker.GetAbonentFromDbByPU(number);
+                if (resultSearchAbonent.Count == 1)
                 {
-                    AtpEdit.AktInWork.setDataByDb(resultSearch[0]);
+                    string edob = resultSearchAbonent[0]["EdOborudovania"];
+                    List<Dictionary<String, String>> resultSearchPlombs;
+                    resultSearchPlombs = DataBaseWorker.GetPlombsFromEdOb(edob);
+
+                    AtpEdit.AktInWork.setDataByDb(resultSearchAbonent[0], resultSearchPlombs);
                 }
-                else if (resultSearch.Count > 1)
+                else if (resultSearchAbonent.Count > 1)
                 {
-                    ResultSearchWindow wndResult = new ResultSearchWindow(resultSearch);
+                    ResultSearchWindow wndResult = new ResultSearchWindow(resultSearchAbonent);
                     wndResult.ShowDialog();
                     if ((bool)wndResult.DialogResult)
                     {
-                        AtpEdit.AktInWork.setDataByDb(wndResult.SelectVal);
+                        string edob = wndResult.SelectVal["EdOborudovania"];
+                        List<Dictionary<String, String>> resultSearchPlombs;
+                        resultSearchPlombs = DataBaseWorker.GetPlombsFromEdOb(edob);
+                        AtpEdit.AktInWork.setDataByDb(wndResult.SelectVal, resultSearchPlombs);
                     }
                 }
             }, findByPu, new KeyGesture(Key.Right));
