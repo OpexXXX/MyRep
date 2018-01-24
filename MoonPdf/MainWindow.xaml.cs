@@ -541,8 +541,17 @@ namespace MoonPdf
 
             if (sAP == null)
             {
-                sAP = new SAPActive("ER2");
+                try
+                {
+                    sAP = new SAPActive("ER2");
                 sAP.login();
+                }
+                catch (Exception ex)
+                {
+
+                    MessageBox.Show(ex.Message);
+                    return;
+                }
             }
 
             progressBar.Minimum = 0;
@@ -555,20 +564,20 @@ namespace MoonPdf
 
                 if ((item.SapNumberAkt == "") && (File.Exists(ATPWork.AktDirektory + item.PathOfPdfFile)))
                 {
-                   /* try
-                    {*/
+                    try
+                    {
                         sAP.enterAktTehProverki(item, ATPWork.AktDirektory);
                         // item.PathOfPdfFile = item.Number.ToString() + ".pdf";
                         //MessageBox.Show(item.PathOfPdfFile);
                         ATPWork.DbWork.DromCompliteTable();
                         ATPWork.DbWork.InsertCompleteAktAPT(ATPWork.CompleteAtpWorkList);
 
-                   /* }
+                    }
                     catch (Exception ex)
                     {
 
                         MessageBox.Show(ex.Message);
-                    }*/
+                    }
                    
 
                 }

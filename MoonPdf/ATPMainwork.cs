@@ -477,7 +477,6 @@ namespace MoonPdf
                 {
                     if (!CompleteAtpWorkList.Contains(item))
                     {
-                        
                         CompleteAtpWorkList.Add(item);
                         createAktPdf(item);
                         if (!DbWork.chekForContainsCompleteAktATP(item)) DbWork.InsertCompleteAktAPT(item);

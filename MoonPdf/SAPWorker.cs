@@ -29,7 +29,7 @@ namespace MoonPdf
         /// Конструктор
         /// </summary>
         /// <param name="env">SID сервер SAP</param>
-        public SAPActive(string env="ER2")
+        public SAPActive(string env = "ER2")
         {
             SapGuiApp = new GuiApplication();
 
@@ -166,7 +166,7 @@ namespace MoonPdf
             //Закупаем пломбы 
             foreach (plomba item in akt.plomb)
             {
-                shopPlomb(item, akt.DateWork.ToString("d"));
+                if (item.Number.Length > 0) shopPlomb(item, akt.DateWork.ToString("d"));
             }
 
             if (akt.DopuskFlag) //Если тип акта допуск
@@ -332,65 +332,68 @@ namespace MoonPdf
 
             foreach (plomba Plomba in akt.plomb)
             {
-                addPlombBtn.Press();
-                /*Окно Добавить выданные*/
-                GuiCTextField typePlombAdd = (GuiCTextField)SapSession.ActiveWindow.FindByName("P_SCAT-LOW", "GuiCTextField"); //P_SCAT-LOW Тип пломбы
-                GuiTextField kodPlombAdd = (GuiTextField)SapSession.ActiveWindow.FindByName("P_SCODE-LOW", "GuiTextField");//P_SCODE-LOW
-                GuiButton addPlombOk = (GuiButton)SapSession.ActiveWindow.FindByName("btn[8]", "GuiButton");//btn[8] Выполнить
-                typePlombAdd.Text = Plomba.Type; //Тип пломбы
-                kodPlombAdd.Text = Plomba.Number; //Номер Пломбы
-                addPlombOk.Press();
-                if (statusBar.Text.Contains("недавно добавлено"))
+                if (Plomba.Number.Length > 0)
                 {
-                    GridPlomb.SelectColumn("SCODE");
-                    GridPlomb.PressToolbarButton("&MB_FILTER");
-                    /**Окно фильтра***************************/
-                    GuiCTextField NumberPlombFilter = (GuiCTextField)SapSession.ActiveWindow.FindByName("%%DYN001-LOW", "GuiCTextField");
-                    GuiButton Okbtn = ((GuiButton)SapSession.FindById("wnd[1]/tbar[0]/btn[0]")); //Ок
-                    NumberPlombFilter.Text = Plomba.Number;//Код пломбы для фильтра
-                    Okbtn.Press();
-                    /*************************/
-                    if (GridPlomb.RowCount > 0)
+                    addPlombBtn.Press();
+                    /*Окно Добавить выданные*/
+                    GuiCTextField typePlombAdd = (GuiCTextField)SapSession.ActiveWindow.FindByName("P_SCAT-LOW", "GuiCTextField"); //P_SCAT-LOW Тип пломбы
+                    GuiTextField kodPlombAdd = (GuiTextField)SapSession.ActiveWindow.FindByName("P_SCODE-LOW", "GuiTextField");//P_SCODE-LOW
+                    GuiButton addPlombOk = (GuiButton)SapSession.ActiveWindow.FindByName("btn[8]", "GuiButton");//btn[8] Выполнить
+                    typePlombAdd.Text = Plomba.Type; //Тип пломбы
+                    kodPlombAdd.Text = Plomba.Number; //Номер Пломбы
+                    addPlombOk.Press();
+                    if (statusBar.Text.Contains("недавно добавлено"))
                     {
-                        GridPlomb.SelectAll(); //ВЫделяем все
-                        ustanovitPlombBtn.Press(); //Установить
-                                                   /*Окно установки пломбы*/
-                        GuiButton findMaterial = (GuiButton)SapSession.ActiveWindow.FindByName("ISU_FINDER_DIALOG", "GuiButton"); //ISU_FINDER_DIALOG
-                        GuiButton copyToAll = (GuiButton)SapSession.ActiveWindow.FindByName("btn[5]", "GuiButton"); //Скопировать во все
-                        findMaterial.Press();
-
-                        /*Окно поиска материала*/
-                        GuiTab TabTwo = (GuiTab)SapSession.ActiveWindow.FindByName("TAB2", "GuiTab"); //TAB2
-                        TabTwo.Select();
-                        GuiCTextField ustanovkaTextFind = (GuiCTextField)SapSession.ActiveWindow.FindByName("EFINDD-I_ANLAGE", "GuiCTextField");//EFINDD-I_ANLAGE
-                        ustanovkaTextFind.Text = akt.Ustanovka;
-                        GuiButton FindOk = (GuiButton)SapSession.ActiveWindow.FindByName("btn[0]", "GuiButton");//btn[8] Выполнить//btn[0]
-                        FindOk.Press();
-                        try
+                        GridPlomb.SelectColumn("SCODE");
+                        GridPlomb.PressToolbarButton("&MB_FILTER");
+                        /**Окно фильтра***************************/
+                        GuiCTextField NumberPlombFilter = (GuiCTextField)SapSession.ActiveWindow.FindByName("%%DYN001-LOW", "GuiCTextField");
+                        GuiButton Okbtn = ((GuiButton)SapSession.FindById("wnd[1]/tbar[0]/btn[0]")); //Ок
+                        NumberPlombFilter.Text = Plomba.Number;//Код пломбы для фильтра
+                        Okbtn.Press();
+                        /*************************/
+                        if (GridPlomb.RowCount > 0)
                         {
-                            GuiLabel Label = ((GuiLabel)SapSession.FindById("wnd[2]/usr/lbl[1,4]")); //Ок
-                            Label.SetFocus();
-                            GuiModalWindow rWindow = ((GuiModalWindow)SapSession.FindById("/app/con[0]/ses[0]/wnd[2]"));
-                            rWindow.SendVKey(2);
-                            ///findById" @()
-                            ///app/con[0]/ses[0]/wnd[2]/usr/lbl[1,4] Описать окно выбора счетчика при установке пломбы
+                            GridPlomb.SelectAll(); //ВЫделяем все
+                            ustanovitPlombBtn.Press(); //Установить
+                                                       /*Окно установки пломбы*/
+                            GuiButton findMaterial = (GuiButton)SapSession.ActiveWindow.FindByName("ISU_FINDER_DIALOG", "GuiButton"); //ISU_FINDER_DIALOG
+                            GuiButton copyToAll = (GuiButton)SapSession.ActiveWindow.FindByName("btn[5]", "GuiButton"); //Скопировать во все
+                            findMaterial.Press();
+
+                            /*Окно поиска материала*/
+                            GuiTab TabTwo = (GuiTab)SapSession.ActiveWindow.FindByName("TAB2", "GuiTab"); //TAB2
+                            TabTwo.Select();
+                            GuiCTextField ustanovkaTextFind = (GuiCTextField)SapSession.ActiveWindow.FindByName("EFINDD-I_ANLAGE", "GuiCTextField");//EFINDD-I_ANLAGE
+                            ustanovkaTextFind.Text = akt.Ustanovka;
+                            GuiButton FindOk = (GuiButton)SapSession.ActiveWindow.FindByName("btn[0]", "GuiButton");//btn[8] Выполнить//btn[0]
+                            FindOk.Press();
+                            try
+                            {
+                                GuiLabel Label = ((GuiLabel)SapSession.FindById("wnd[2]/usr/lbl[1,4]")); //Ок
+                                Label.SetFocus();
+                                GuiModalWindow rWindow = ((GuiModalWindow)SapSession.FindById("/app/con[0]/ses[0]/wnd[2]"));
+                                rWindow.SendVKey(2);
+                                ///findById" @()
+                                ///app/con[0]/ses[0]/wnd[2]/usr/lbl[1,4] Описать окно выбора счетчика при установке пломбы
+                            }
+                            catch (Exception)
+                            {
+
+
+                            }
+
+                            /************************/
+                            GuiTextField placePlomb = (GuiTextField)SapSession.ActiveWindow.FindByName("/SAPCE/IURU_SEALS_CHANGED-PLACE", "GuiTextField");////Место установки пломбы /SAPCE/IURU_SEALS_CHANGED-PLACE
+                            GuiCTextField datePlacePlomb = (GuiCTextField)SapSession.ActiveWindow.FindByName("/SAPCE/IURU_SEALS_CHANGED-DINST", "GuiCTextField");//Дата установки пломбы /SAPCE/IURU_SEALS_CHANGED-DINST
+                            placePlomb.Text = Plomba.Place;
+                            datePlacePlomb.Text = akt.DateWork.ToString("d");
+                            copyToAll.Press();
+                            /*******************************/
                         }
-                        catch (Exception)
-                        {
-
-
-                        }
-
-                        /************************/
-                        GuiTextField placePlomb = (GuiTextField)SapSession.ActiveWindow.FindByName("/SAPCE/IURU_SEALS_CHANGED-PLACE", "GuiTextField");////Место установки пломбы /SAPCE/IURU_SEALS_CHANGED-PLACE
-                        GuiCTextField datePlacePlomb = (GuiCTextField)SapSession.ActiveWindow.FindByName("/SAPCE/IURU_SEALS_CHANGED-DINST", "GuiCTextField");//Дата установки пломбы /SAPCE/IURU_SEALS_CHANGED-DINST
-                        placePlomb.Text = Plomba.Place;
-                        datePlacePlomb.Text = akt.DateWork.ToString("d");
-                        copyToAll.Press();
-                        /*******************************/
+                        GridPlomb.PressToolbarContextButton("&MB_FILTER");
+                        GridPlomb.SelectContextMenuItem("&DELETE_FILTER");
                     }
-                    GridPlomb.PressToolbarContextButton("&MB_FILTER");
-                    GridPlomb.SelectContextMenuItem("&DELETE_FILTER");
                 }
             }
 

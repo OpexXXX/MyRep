@@ -541,8 +541,7 @@ namespace MoonPdf
             {
                 ATP.CompleteAtpWorkList.Add(item);
             }
-
-        }
+       }
         /// <summary>
         /// Проверка на наличие акта в базе данных
         /// </summary>
