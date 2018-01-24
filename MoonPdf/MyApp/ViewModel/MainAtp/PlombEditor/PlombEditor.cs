@@ -45,6 +45,10 @@ namespace ATPWork.MyApp.ViewModel.PlombEditorVm
             }
         }
 
+        public bool OldPlomb
+        {
+            get { return OldPlombList.Count>0; }
+        }
         private static ObservableCollection<string> _typePL = new ObservableCollection<string>();
         public static ObservableCollection<string> typePL
         {
@@ -73,6 +77,7 @@ namespace ATPWork.MyApp.ViewModel.PlombEditorVm
             {
                 this._oldPl = value;
                 OnPropertyChanged("OldPlombList");
+                OnPropertyChanged("OldPlomb");
             }
         }
 

@@ -48,7 +48,7 @@
     </UserControl.Resources>
     <StackPanel>
         <StackPanel Orientation="Horizontal">
-            <Button Margin="1,1,1,1" Focusable="False" Command="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.AddPlombCommand}" ToolTip="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.AddPlombCommand.Name}">
+            <Button Margin="1,1,1,1" Focusable="False" Command="{Binding Source={ StaticResource  PlombEditorViewModel}, Path=Commands.AddPlombCommand}" ToolTip="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.AddPlombCommand.Name}">
                 <Image  Height="25" Source="/ATPWork;component/Resources/icons8Add-50.png" Width="25" />
             </Button>
             <Button Margin="1,1,1,1" Command="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.DeletePlombCommand}" Focusable="False" ToolTip="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.DeletePlombCommand.Name}">
@@ -62,8 +62,11 @@
                 </Button>
         </StackPanel>
         <StackPanel Orientation="Vertical" >
-            <ListBox ItemsSource="{Binding Source={StaticResource PlombEditorViewModel}, Path=NewPlombList}" SelectedItem="{Binding Source={StaticResource PlombEditorViewModel}, Path=SelectedPlomb}" KeyboardNavigation.TabNavigation="Continue" ItemTemplate="{StaticResource ListBoxPlomb}" SelectionMode="Extended" ContextMenuService.ShowOnDisabled="False"/>
-            <ListBox Focusable="False" x:Name="OldPlombListBox" SelectionChanged="ListBox_SelectionChanged" ItemsSource="{Binding Source={StaticResource PlombEditorViewModel}, Path=OldPlombList}" KeyboardNavigation.TabNavigation="Continue" ItemTemplate="{StaticResource OldListBoxPlomb}" SelectionMode="Single" ContextMenuService.ShowOnDisabled="False"/>
+            <StackPanel Orientation="Vertical">
+                <TextBlock>Установленные пломбы</TextBlock>
+                <ListBox Focusable="False" x:Name="OldPlombListBox" SelectionChanged="ListBox_SelectionChanged" ItemsSource="{Binding Source={StaticResource PlombEditorViewModel}, Path=OldPlombList}" KeyboardNavigation.TabNavigation="Continue" ItemTemplate="{StaticResource OldListBoxPlomb}" SelectionMode="Single" ContextMenuService.ShowOnDisabled="False" Background="{x:Null}" BorderThickness="1" BorderBrush="{x:Null}"/>
+            </StackPanel>
+            <ListBox  ItemsSource="{Binding Source={StaticResource PlombEditorViewModel}, Path=NewPlombList}" SelectedItem="{Binding Source={StaticResource PlombEditorViewModel}, Path=SelectedPlomb}" KeyboardNavigation.TabNavigation="Continue" ItemTemplate="{StaticResource ListBoxPlomb}" SelectionMode="Extended" ContextMenuService.ShowOnDisabled="False" BorderBrush="{x:Null}" Background="{x:Null}"/>
         </StackPanel>
     </StackPanel>
 </UserControl>

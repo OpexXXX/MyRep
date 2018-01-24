@@ -25,7 +25,17 @@ namespace MyApp.Model
                 this.OnPropertyChanged("NumberMail");
             }
         }
-        public List<int> NumberOfPagesInSoursePdf = new List<int>();
+        public List<int> _numberOfPagesInSoursePdf = new List<int>();
+        public List<int> NumberOfPagesInSoursePdf
+        {
+            get { return this._numberOfPagesInSoursePdf; }
+            set
+            {
+                this._numberOfPagesInSoursePdf = value;
+                this.OnPropertyChanged("NumberOfPagesInSoursePdf");
+                
+            }
+        }
         public bool ProverkaFlag
         {
             get { return !this.dopuskFlag; }
@@ -55,6 +65,7 @@ namespace MyApp.Model
             set
             {
                 this.ustanovka = value;
+                this.OnPropertyChanged("Ustanovka");
             }
         }
         private string edOborudovania;
@@ -64,6 +75,7 @@ namespace MyApp.Model
             set
             {
                 this.edOborudovania = value;
+                this.OnPropertyChanged("EdOborudovania");
             }
         }
         private string sapNumberAkt;
@@ -73,6 +85,7 @@ namespace MyApp.Model
             set
             {
                 this.sapNumberAkt = value;
+                this.OnPropertyChanged("SapNumberAkt");
             }
         }
         private string puOldNumber;
@@ -202,6 +215,7 @@ namespace MyApp.Model
             set
             {
                 this.dateMail = value;
+                this.OnPropertyChanged("DateMail");
             }
         }
         private DateTime? dateWork;
@@ -330,7 +344,6 @@ namespace MyApp.Model
             return result;
         }
         public event PropertyChangedEventHandler PropertyChanged;
-
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));

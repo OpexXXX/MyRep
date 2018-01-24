@@ -28,9 +28,13 @@ using System.ComponentModel.Design;
 using System.Runtime.CompilerServices;
 using ATPWork.MyApp.ViewModel.AtpEditor;
 using ATPWork.MyApp.ViewModel.PlombEditorVm;
+using System.Windows.Markup;
+using System.Globalization;
 
 namespace MyApp
 {
+   
+
     public partial class MainWindow : Window
     {
 
@@ -48,10 +52,7 @@ namespace MyApp
         }
 
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            MainAtpModel.InitListsForCombos();
-        }
+       
     }
 }
 

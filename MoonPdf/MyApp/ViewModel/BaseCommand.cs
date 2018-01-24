@@ -55,5 +55,6 @@ namespace ATPWork.MyApp.ViewModel
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
         }
+
     }
 }
