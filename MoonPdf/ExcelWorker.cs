@@ -22,7 +22,7 @@ namespace MoonPdf
     public class ExcelWorker
     {
         /// <summary>
-        /// Лист с заголовками для реестра XLSX
+        /// Лист с заголовками для реестра  XLSX
         /// </summary>
         private List<string[]> HeaderColumn;
         public enum AktType
