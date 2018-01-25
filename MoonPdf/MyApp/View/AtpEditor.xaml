@@ -61,8 +61,15 @@
             </StackPanel>
         </DataTemplate>
     </UserControl.Resources>
-    <StackPanel>
-        <GroupBox  Header="Номер акта">
+    
+    <StackPanel Background="White">
+        <GroupBox  BorderBrush="#FF999999" BorderThickness="2">
+            <GroupBox.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/ATPWork;component/Resources/icons8-документ-40.png" Height="20" Width="20"/>
+                    <TextBlock Text="Номер акта" FontWeight="Bold" FontSize="14" />
+                </StackPanel>
+            </GroupBox.Header>
             <StackPanel>
                 <StackPanel  Orientation="Horizontal">
                     <TextBlock Text="Номер 91/Е-" VerticalAlignment="Center"/>
@@ -90,7 +97,13 @@
                 </StackPanel>
             </StackPanel>
         </GroupBox>
-        <GroupBox  Header="Потребитель">
+        <GroupBox  BorderThickness="2" BorderBrush="#FF999999">
+            <GroupBox.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/ATPWork;component/Resources/icons8-гость-мужчина-40.png" Height="20" Width="20"/>
+                    <TextBlock Text="Потребитель" FontWeight="Bold" FontSize="14" />
+                </StackPanel>
+            </GroupBox.Header>
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock TextWrapping="Wrap" Text="№Л/С:" VerticalAlignment="Center"  />
@@ -107,7 +120,7 @@
                     </TextBox>
 
                     <Button  Focusable="False" Command="{Binding Commands.GetDataFromDbByNumberLs, Source={StaticResource AtpEditorViewModel}}">
-                        <Image  Height="20" Source="/ATPWork;component/Resources/icons8Find50.png" Width="20" />
+                        <Image  Height="20" Source="/ATPWork;component/Resources/icons8-поиск-40.png" Width="20" />
                     </Button>
 
                 </StackPanel>
@@ -117,13 +130,33 @@
                 </StackPanel>
             </StackPanel>
         </GroupBox>
-        <GroupBox Header="Агенты">
-            <StackPanel Orientation="Horizontal">
-                <ComboBox  Height="25" Width="157" ItemsSource="{Binding AgentList, Source={StaticResource AtpEditorViewModel}}" SelectedItem="{Binding AktInWork.Agent_1, Source={StaticResource AtpEditorViewModel}}" />
-                <ComboBox  Height="25" Width="157" ItemsSource="{Binding AgentList, Source={StaticResource AtpEditorViewModel}}" SelectedItem="{Binding AktInWork.Agent_2, Source={StaticResource AtpEditorViewModel}}" />
+        <GroupBox  BorderBrush="#FF999999" BorderThickness="2">
+            <GroupBox.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/ATPWork;component/Resources/icons8-группа-пользователей-40.png" Height="20" Width="20"/>
+                    <TextBlock Text="Агенты" FontWeight="Bold" FontSize="14" />
+                </StackPanel>
+            </GroupBox.Header>
+            <StackPanel Orientation="Vertical">
+                <ComboBox xmlns:sys="clr-namespace:System;assembly=mscorlib" HorizontalAlignment="Left" Height="25" Width="240" ItemsSource="{Binding AgentList, Source={StaticResource AtpEditorViewModel}}" SelectedItem="{Binding AktInWork.Agent_1, Source={StaticResource AtpEditorViewModel}}" Background="{x:Null}" BorderBrush="{x:Null}" >
+                    <ComboBox.Resources>
+                        <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">0</sys:Double>
+                    </ComboBox.Resources>
+                </ComboBox>
+                <ComboBox xmlns:sys="clr-namespace:System;assembly=mscorlib" HorizontalAlignment="Left" Height="25" Width="240" ItemsSource="{Binding AgentList, Source={StaticResource AtpEditorViewModel}}" SelectedItem="{Binding AktInWork.Agent_2, Source={StaticResource AtpEditorViewModel}}" Background="{x:Null}" BorderBrush="{x:Null}" >
+                    <ComboBox.Resources>
+                        <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">0</sys:Double>
+                    </ComboBox.Resources>
+                </ComboBox>
             </StackPanel>
         </GroupBox>
-        <GroupBox Header="Допускаемый прибор учета" >
+        <GroupBox BorderBrush="#FF999999" BorderThickness="2" >
+            <GroupBox.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/ATPWork;component/Resources/icons8-счетчик-энергии.png" Height="20" Width="20"/>
+                    <TextBlock Text="Допускаемый прибор учета" FontWeight="Bold" FontSize="14" />
+                </StackPanel>
+            </GroupBox.Header>
             <GroupBox.Style>
                 <Style TargetType="{x:Type GroupBox}">
                     <Style.Triggers>
@@ -174,7 +207,13 @@
                 </StackPanel>
             </StackPanel>
         </GroupBox>
-        <GroupBox Header="Прибор учета">
+        <GroupBox BorderThickness="2" BorderBrush="#FF999999" >
+            <GroupBox.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/ATPWork;component/Resources/icons8-счетчик-энергии.png" Height="20" Width="20"/>
+                    <TextBlock Text="Прибор учета" FontWeight="Bold" FontSize="14" />
+                </StackPanel>
+            </GroupBox.Header>
             <StackPanel  >
                 <StackPanel Orientation="Horizontal"  >
                     <TextBlock Text="{Binding AktInWork.PuOldType, Source={StaticResource AtpEditorViewModel}}"  Style="{StaticResource Hidden}"  VerticalAlignment="Center" Margin="1,1,1,1"/>
@@ -190,11 +229,11 @@
                         </Binding>
                     </TextBox>
                     <Button  Focusable="False" Command="{Binding Commands.GetDataFromDbByNumberPu, Source={StaticResource AtpEditorViewModel}}">
-                        <Image  Height="20" Source="/ATPWork;component/Resources/icons8Find50.png" Width="20" />
+                        <Image  Height="20" Source="/ATPWork;component/Resources/icons8-поиск-40.png" Width="20" />
                     </Button>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" >
-                    <TextBlock Text="Показание:" VerticalAlignment="Center" Margin="1,1,1,1"/>
+                    <TextBlock  VerticalAlignment="Center"  Text="Показание:" Margin="1,1,1,1"/>
                     <TextBox Style="{StaticResource TextBoxStyle}"  MaxLength="7" Width="70" VerticalAlignment="Center">
                         <Binding Source="{StaticResource AtpEditorViewModel}" Path="AktInWork.PuOldPokazanie" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
         UpdateSourceTrigger="PropertyChanged">
@@ -207,7 +246,13 @@
                 </StackPanel>
             </StackPanel>
         </GroupBox>
-        <GroupBox Header="Пломбы">
+        <GroupBox   BorderThickness="2" BorderBrush="#FF999999">
+            <GroupBox.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/ATPWork;component/Resources/icons8-защать-от-магнитного-поля-40 (1).png" Height="20" Width="20"/>
+                    <TextBlock Text="Пломбы" FontWeight="Bold" FontSize="14" />
+                </StackPanel>
+            </GroupBox.Header>
             <StackPanel>
                 <local:PlombEditor OldPlombItemsSource="{Binding AktInWork.OldPlombs, Source={StaticResource AtpEditorViewModel}}" NewPlombItemsSource="{Binding AktInWork.NewPlombs, Source={StaticResource AtpEditorViewModel}}" />
             </StackPanel>

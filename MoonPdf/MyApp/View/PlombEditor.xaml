@@ -19,10 +19,15 @@
         <DataTemplate x:Key="ListBoxPlomb">
             <StackPanel Orientation="Horizontal">
                 <ComboBox ItemsSource="{Binding Source={StaticResource PlombEditorViewModel}, Path=typePL}" 
+                          Background="{x:Null}" BorderBrush="{x:Null}"
                       SelectedItem="{Binding Type}"
-                          MinWidth="30" Margin="20,1,1,1" >
+                          MinWidth="30" Margin="40,1,1,1" >
+                    <ComboBox.Resources>
+                        <sys:Double  xmlns:sys="clr-namespace:System;assembly=mscorlib"  x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">0</sys:Double>
+                    </ComboBox.Resources>
                 </ComboBox>
-                <TextBox  MinWidth="50"  Margin="1,1,1,1">
+                <StackPanel Orientation="Vertical">
+                    <TextBox  MinWidth="50"   TextWrapping="Wrap" BorderBrush="{x:Null}" BorderThickness="0">
                 <TextBox.Text>
                         <Binding Path="Number"  ValidatesOnExceptions="True"  NotifyOnValidationError="True"  UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
@@ -31,28 +36,47 @@
                     </Binding>
                 </TextBox.Text>
                     </TextBox>
-                <ComboBox ItemsSource="{Binding Source={StaticResource PlombEditorViewModel}, Path=placePL}" 
-                      SelectedItem="{Binding Place}"     
-                          MinWidth="50"  Margin="1,1,1,1">
-                </ComboBox>
+                    <ComboBox xmlns:sys="clr-namespace:System;assembly=mscorlib" 
+                              FontSize="10" ItemsSource="{Binding Source={StaticResource PlombEditorViewModel}, Path=placePL}" 
+                              Background="{x:Null}" BorderBrush="{x:Null}"
+                            MinWidth="50"
+                               SelectedItem="{Binding Place}"     >
+                        
+                        <ComboBox.Resources>
+                            <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">0</sys:Double>
+                        </ComboBox.Resources>
+                    </ComboBox>
+                </StackPanel>
             </StackPanel>
         </DataTemplate>
         <DataTemplate x:Key="OldListBoxPlomb">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <CheckBox Margin="1,1,8,1" IsChecked="{Binding Path=Demontage}" ToolTip="Демонтировать" VerticalAlignment="Center"/>
-                <TextBox IsReadOnly ="True"  MinWidth="50"  Margin="1,0,1,0" Text="{Binding Path=Type}" Focusable="False" VerticalAlignment="Center"/>
-                <TextBox IsReadOnly ="True" MinWidth="50"  Margin="1,0,1,0" Text="{Binding Path=Number}" VerticalAlignment="Center"/>
-                <TextBox IsReadOnly ="True" MinWidth="50"  Margin="1,0,1,0" Text="{Binding Path=Place}" VerticalAlignment="Center"/>
+                <ToggleButton Height="10" Width="10" IsChecked="{Binding Path=Demontage}" ToolTip="Демонтировать" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Image ToolTip="{Binding Path=Type}" Width="30" Height="30">
+                <Image.Style>
+                    <Style>
+                        <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=Type}" Value="01">
+                                    <Setter Property="Image.Source" Value="/ATPWork;component/Resources/fenix.png"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+                </Image>
+                <StackPanel Orientation="Vertical">
+                <TextBlock  TextWrapping="Wrap"   Margin="1,0,1,0" Text="{Binding Path=Number}" VerticalAlignment="Center" />
+                <TextBlock  TextWrapping="Wrap"  Margin="1,0,1,0" Text="{Binding Path=Place}" VerticalAlignment="Center" FontSize="10" />
+                </StackPanel>
             </StackPanel>
         </DataTemplate>
     </UserControl.Resources>
     <StackPanel>
         <StackPanel Orientation="Horizontal">
             <Button Margin="1,1,1,1" Focusable="False" Command="{Binding Source={ StaticResource  PlombEditorViewModel}, Path=Commands.AddPlombCommand}" ToolTip="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.AddPlombCommand.Name}">
-                <Image  Height="25" Source="/ATPWork;component/Resources/icons8Add-50.png" Width="25" />
+                <Image  Height="25" Source="/ATPWork;component/Resources/icons8-создать-новый.png" Width="25" />
             </Button>
             <Button Margin="1,1,1,1" Command="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.DeletePlombCommand}" Focusable="False" ToolTip="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.DeletePlombCommand.Name}">
-                <Image  Height="25" Source="/ATPWork;component/Resources/icons8Delete-50.png" Width="25" />
+                <Image  Height="25" Source="/ATPWork;component/Resources/icons8-удалить.png" Width="25" />
             </Button>
             <Button Margin="1,1,1,1" Focusable="False"  Command="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.IncrementAddPlombComand}" ToolTip="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.IncrementAddPlombComand.Name}">
                 <Image x:Name="image" Height="25" Source="/ATPWork;component/Resources/icons8+1.png" Width="25" />

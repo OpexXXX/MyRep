@@ -328,12 +328,25 @@
     <Resource Include="Resources\ok.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\view-counter.png" />
     <Resource Include="Resources\icons8Add-50.png" />
     <Resource Include="Resources\icons8Copy-50.png" />
     <Resource Include="Resources\icons8Delete-50.png" />
     <Resource Include="Resources\icons8Find50.png" />
     <Resource Include="Resources\icons8+1.png" />
     <Resource Include="Resources\icons8-1.png" />
+    <Resource Include="Resources\icons8-мужчина-пользователь.png" />
+    <Resource Include="Resources\icons8-плюс.png" />
+    <Resource Include="Resources\icons8-создать-новый.png" />
+    <Resource Include="Resources\icons8-счетчик-энергии.png" />
+    <Resource Include="Resources\icons8-счетчик.png" />
+    <Resource Include="Resources\icons8-удалить.png" />
+    <Resource Include="Resources\icons8-поиск-40.png" />
+    <Resource Include="Resources\icons8-документ-40.png" />
+    <Resource Include="Resources\icons8-гость-мужчина-40.png" />
+    <Resource Include="Resources\icons8-группа-пользователей-40.png" />
+    <Resource Include="Resources\icons8-защать-от-магнитного-поля-40 %281%29.png" />
+    <Resource Include="Resources\fenix.png" />
     <Content Include="Resources\Interop.SAPFEWSELib.dll" />
     <Content Include="Resources\Interop.SAPLogonCtrl.dll" />
     <Content Include="Resources\libmupdf.dll" />
