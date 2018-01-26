@@ -91,7 +91,7 @@ namespace ATPWork.MyApp.ViewModel.MainAtp
                         });
 
                 }
-            }, isCurrrentWork, new KeyGesture(Key.O, ModifierKeys.Control|ModifierKeys.Shift));
+            }, isBysyAddWork, new KeyGesture(Key.O, ModifierKeys.Control|ModifierKeys.Shift));
             this.ProcessCompletedActs = new DelegateCommand("Обработать акты", async f =>
             {
                 mainAtpVm.WorkinAddAktFromPdf = true;

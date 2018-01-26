@@ -106,7 +106,7 @@ namespace ATPWork.MyApp.ViewModel.PlombEditorVm
         public static void GetListForComboBoxFromDb()
         {
             placePL = new ObservableCollection<string>(MainAtpModel.PlacePlomb);
-            typePL = new ObservableCollection<string>(MainAtpModel.PlacePlomb);
+            typePL = new ObservableCollection<string>(MainAtpModel.TypePlobm);
         }
     }
 }

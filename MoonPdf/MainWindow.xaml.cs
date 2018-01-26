@@ -41,18 +41,22 @@ namespace MyApp
         internal MoonPdfPanel MoonPdfPanel { get { return this.moonPdfPanel; } }
         public MainWindow()
         {
+            DataBaseWorker.Initial();
             MainAtpModel.InitMainAtpModel();
             InitializeComponent();
-
             this.Loaded += MainWindow_Loaded;
         }
+
         void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            
         }
 
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            MainAtpModel.SaveBeforeCloseApp();
+            DataBaseWorker.ClosedApp();
 
-       
+        }
     }
 }
 

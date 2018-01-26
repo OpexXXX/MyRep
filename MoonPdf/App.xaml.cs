@@ -36,6 +36,7 @@ namespace MyApp
             base.OnStartup(e);
         }
 
+
         private static void WalkDictionary(ResourceDictionary resources)
         {
             foreach (DictionaryEntry entry in resources)

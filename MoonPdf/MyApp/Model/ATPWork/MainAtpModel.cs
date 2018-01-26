@@ -46,6 +46,15 @@ namespace MyApp.Model
             set { _typePL = value; }
         }
         private static List<string> _placePL = new List<string>();
+
+        internal static void SaveBeforeCloseApp()
+        {
+            DataBaseWorker.DromCompliteTable();
+            DataBaseWorker.InsertCompleteAktAPT(AllAkt);
+            DataBaseWorker.DromInWorkTable();
+            DataBaseWorker.InsertAPTInWork(AllAktInCurrentWork);
+        }
+
         public static List<string> PlacePlomb
         {
             get { return _placePL; }
@@ -71,7 +80,7 @@ namespace MyApp.Model
             set { _allAktInCurrentWork = value; }
         }
         #endregion
-        private static string _aktDirektory;
+        private static string _aktDirektory = Environment.CurrentDirectory;
         public static string AktDirektory
         {
             get { return _aktDirektory; }
@@ -82,12 +91,18 @@ namespace MyApp.Model
         public static void InitMainAtpModel()
         {
             InitListsForCombos();
-            InitAllAktCollection();
+            InitCompleteAktCollection();
+            InitAktInWorkCollection();
         }
-        public static void InitAllAktCollection()
+        public static void InitCompleteAktCollection()
         {
             AllAkt = new List<AktTehProverki>(DataBaseWorker.LoadCompleteATP());
             AllAtpRefreshRefresh?.Invoke();
+        }
+        public static void InitAktInWorkCollection()
+        {
+            AllAktInCurrentWork = new List<AktTehProverki>(DataBaseWorker.LoadATPInWork());
+            CurrentWorkRefresh?.Invoke();
         }
         public static void InitListsForCombos()
         {
@@ -166,7 +181,7 @@ namespace MyApp.Model
         }
         private static void  createAktPdf(AktTehProverki akt)
         {
-            string FileName = akt.Number.ToString() + " " + akt.DateWork?.ToString("d") + "" + akt.NumberLS + ".pdf";
+            string FileName = akt.Number.ToString() + " " + akt.DateWork?.ToString("d") + " " + akt.NumberLS + ".pdf";
             string FilePath = AktDirektory + "\\" + FileName;
             try
             {
@@ -268,21 +283,31 @@ namespace MyApp.Model
         public static int MoveComleteAtp(IProgress<double> progress)
         {
             int i = 0;
+            List<AktTehProverki> Complete = new List<AktTehProverki>();
+
             foreach (AktTehProverki item in AllAktInCurrentWork)
             {
                 item.checkToComplete();
                 if (item.Complete)
                 {
-                    if (!AllAkt.Contains(item))
-                    {
-                        AllAkt.Add(item);
-                        createAktPdf(item);
-                        if (!DataBaseWorker.chekForContainsCompleteAktATP(item)) DataBaseWorker.InsertCompleteAktAPT(item);
-                        i++;
-                        double rep = (100.0 * ((double)i / (double)AllAktInCurrentWork.Count));
-                        progress.Report(rep);
-                    }
+                    Complete.Add(item);
                 }
+            }
+
+                foreach (AktTehProverki item in Complete)
+            {
+               createAktPdf(item);
+                AllAkt.Add(item);
+                AllAktInCurrentWork.Remove(item);
+                i++;
+                        double rep = (100.0 * ((double)i / (double)Complete.Count));
+                        progress.Report(rep);
+            }
+
+            if(i>0)
+            {
+                AllAtpRefreshRefresh?.Invoke();
+                CurrentWorkRefresh?.Invoke();
             }
             return i;
         }

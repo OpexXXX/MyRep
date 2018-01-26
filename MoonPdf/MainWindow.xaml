@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:ATPWork.MyApp.View"
         xmlns:viewModel="clr-namespace:ATPWork.MyApp.ViewModel"
         xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing" xmlns:ee="http://schemas.microsoft.com/expression/2010/effects" xmlns:Custom="http://schemas.microsoft.com/wpf/2008/toolkit" x:Class="MyApp.MainWindow"
-        Title="ATPWorker" WindowStartupLocation="CenterScreen" Height="864.5" Width="581.5" UseLayoutRounding="True" MinHeight="300" MinWidth="430" Icon="Resources/iconATP.ico" ScrollViewer.CanContentScroll="True" AllowDrop="True" >
+        Title="ATPWorker" WindowStartupLocation="CenterScreen" Height="864.5" Width="581.5" UseLayoutRounding="True" MinHeight="300" MinWidth="430" Icon="Resources/iconATP.ico" ScrollViewer.CanContentScroll="True" AllowDrop="True" Closing="Window_Closing" >
     <Window.Resources>
         <viewModel:MainAtpVM x:Key="MainAtpVM"/>
 

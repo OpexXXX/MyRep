@@ -108,6 +108,7 @@ namespace ATPWork.MyApp.ViewModel
         {
             Commands = new Commands(this);
             refreshAllAktList();
+            refreshCurrentWorkAktList();
             MainAtpModel.AllAtpRefreshRefresh += refreshAllAktList;
             MainAtpModel.CurrentWorkRefresh += refreshCurrentWorkAktList;
         }

@@ -18,13 +18,32 @@
         </Style>
         <DataTemplate x:Key="ListBoxPlomb">
             <StackPanel Orientation="Horizontal">
-                <ComboBox ItemsSource="{Binding Source={StaticResource PlombEditorViewModel}, Path=typePL}" 
+                <ComboBox  ItemsSource="{Binding 
+                    Source={StaticResource PlombEditorViewModel}, Path=typePL}" 
                           Background="{x:Null}" BorderBrush="{x:Null}"
                       SelectedItem="{Binding Type}"
-                          MinWidth="30" Margin="40,1,1,1" >
+                          MinWidth="30" Margin="10,0,0,0" >
                     <ComboBox.Resources>
                         <sys:Double  xmlns:sys="clr-namespace:System;assembly=mscorlib"  x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">0</sys:Double>
                     </ComboBox.Resources>
+                    <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                                <Image ToolTip="{Binding}" Width="30" Height="30">
+                                    <Image.Style>
+                                        <Style>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding}" Value="01">
+                                                    <Setter Property="Image.Source" Value="/ATPWork;component/Resources/fenix.png"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding}" Value="2400_6">
+                                                    <Setter Property="Image.Source" Value="/ATPWork;component/Resources/icons8-защать-от-магнитного-поля-40 (1).png"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Image.Style>
+                                </Image>
+                    </DataTemplate>
+                        </ComboBox.ItemTemplate>
                 </ComboBox>
                 <StackPanel Orientation="Vertical">
                     <TextBox  MinWidth="50"   TextWrapping="Wrap" BorderBrush="{x:Null}" BorderThickness="0">
