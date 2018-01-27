@@ -34,6 +34,7 @@ namespace ATPWork.MyApp.ViewModel.PlombEditorVm
             return SelectedPlomb != null;
         }
         #endregion
+
         private Plomba _selectedPlomb;
         public Plomba SelectedPlomb
         {
@@ -48,6 +49,17 @@ namespace ATPWork.MyApp.ViewModel.PlombEditorVm
         public bool OldPlomb
         {
             get { return OldPlombList.Count>0; }
+        }
+
+        public List<string> PlombsNumberList
+        {
+            get {
+                List<string> result = new List<string>();
+                foreach (Plomba item in NewPlombList)
+                {
+                    result.Add(item.Number);
+                }
+                return result; }
         }
         private static ObservableCollection<string> _typePL = new ObservableCollection<string>();
         public static ObservableCollection<string> typePL

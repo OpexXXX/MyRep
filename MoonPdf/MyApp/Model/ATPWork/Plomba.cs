@@ -61,6 +61,10 @@ namespace MyApp.Model
             this.InstallDate = dateInstall;
             this.OldPlomb = old;
         }
+        public override string ToString()
+        {
+            return Number;
+        }
     }
     
 }

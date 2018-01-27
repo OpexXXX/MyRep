@@ -52,6 +52,36 @@ namespace ATPWork.MyApp.ViewModel
             }
         }
         #endregion
+
+        #region PdfView
+        private int _currentPagePdf;
+        public int CurrentPagePdf
+        {
+            get { return _currentPagePdf; }
+            set
+            {
+                if (_currentPagePdf != value)
+                {
+                   
+                    OnPropertyChanged("CurrentPagePdf");
+                };
+
+               
+            }
+        }
+        private string _currentFilePdf;
+        public string CurrentFilePdf
+        {
+            get { return _currentFilePdf; }
+            set
+            {
+                _currentFilePdf = value;
+                OnPropertyChanged("CurrentFilePdf");
+            }
+        }
+
+        #endregion
+
         private ObservableCollection<AktTehProverki> _allAkt;
         public ObservableCollection<AktTehProverki> AllAkt
         {
@@ -61,7 +91,6 @@ namespace ATPWork.MyApp.ViewModel
                 OnPropertyChanged("AllAkt");
             }
         }
-
         private ObservableCollection<AktTehProverki> _allAktInCurrentWork = new ObservableCollection<AktTehProverki>();
         public ObservableCollection<AktTehProverki> AllAktInCurrentWork
         {
@@ -72,7 +101,18 @@ namespace ATPWork.MyApp.ViewModel
                 OnPropertyChanged("AllAktInCurrentWork");
             }
         }
+        public string SizeUnmailedPdf
+            {
+            get {
+                long result = 0;
+                foreach (AktTehProverki item in AllAkt)
+                {
+                    if (item.NumberMail == 0) result += item.SizePDF;
+                }
 
+                return result.ToString(); }
+            
+        }
         private bool _workinAddAktFromPdf;
         public bool WorkinAddAktFromPdf
         {
@@ -83,7 +123,6 @@ namespace ATPWork.MyApp.ViewModel
                 OnPropertyChanged("WorkinAddAktFromPdf");
             }
         }
-
         private bool _inCurrentWork;
         public bool InCurrentWork
         {
@@ -92,13 +131,14 @@ namespace ATPWork.MyApp.ViewModel
                 OnPropertyChanged("InCurrentWork");
             }
         }
-
         private AktTehProverki _selectedAkt;
         public AktTehProverki SelectedAkt
         {
             get { return _selectedAkt; }
             set {
                 _selectedAkt = value;
+                CurrentFilePdf = value.NamePdfFile;
+                CurrentPagePdf = value.NumberOfPagesInSoursePdf[0];
                 OnPropertyChanged("SelectedAkt");
                 if (InCurrentWork!= (_allAktInCurrentWork.Count > 0) && (SelectedAkt != null)) InCurrentWork = (_allAktInCurrentWork.Count > 0) && (SelectedAkt != null);
 

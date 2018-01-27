@@ -23,8 +23,44 @@ namespace MyApp.Model
             {
                 this.numberMail = value;
                 this.OnPropertyChanged("NumberMail");
+                this.OnPropertyChanged("MailName");
             }
         }
+
+        private long _sizePDF;
+        public long SizePDF
+        {
+            get
+            {
+                return this._sizePDF;
+            }
+            set
+            {
+                this._sizePDF = value;
+                this.OnPropertyChanged("SizePDF");
+            }
+        }
+
+
+        public string MailName
+        {
+            get {
+                string result;
+                result = "исх.№91-" + numberMail + " от " + DateMail;
+                return result;
+            }
+            
+        }
+        public string AktName
+        {
+            get
+            {
+                string result;
+                result = "№91-" + number + " от " + DateWork?.ToString("d") ;
+                return result;
+            }
+        }
+
         public List<int> _numberOfPagesInSoursePdf = new List<int>();
         public List<int> NumberOfPagesInSoursePdf
         {
@@ -206,6 +242,7 @@ namespace MyApp.Model
             {
                 this.number = value;
                 this.OnPropertyChanged("Number");
+                this.OnPropertyChanged("AktName");
             }
         }
         private string dateMail;
@@ -216,13 +253,17 @@ namespace MyApp.Model
             {
                 this.dateMail = value;
                 this.OnPropertyChanged("DateMail");
+                this.OnPropertyChanged("MailName"); 
             }
         }
         private DateTime? dateWork;
         public DateTime? DateWork
         {
             get { return this.dateWork; }
-            set { this.dateWork = value; this.OnPropertyChanged("DateWork"); }
+            set { this.dateWork = value;
+                this.OnPropertyChanged("DateWork");
+                this.OnPropertyChanged("AktName");
+            }
         }
         private string fIO;
         public string FIO
@@ -283,11 +324,12 @@ namespace MyApp.Model
             get { return this.namePdfFile; }
             set { this.namePdfFile = value; this.OnPropertyChanged("NamePdfFile"); }
         }
-        public AktTehProverki(int id, List<int> numbersOfPageInPdf, string pathOfPdfFile)
+        public AktTehProverki(int id, List<int> numbersOfPageInPdf, string pathOfPdfFile, long size)
         {
             this.ID = id;
             this.Complete = false;
             this.namePdfFile = pathOfPdfFile;
+            this.SizePDF = size;
             foreach (var page in numbersOfPageInPdf)
             {
                 NumberOfPagesInSoursePdf.Add(page);

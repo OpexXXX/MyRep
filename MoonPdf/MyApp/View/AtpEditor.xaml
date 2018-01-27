@@ -66,7 +66,7 @@
         <GroupBox  BorderBrush="#FF999999" BorderThickness="2">
             <GroupBox.Header>
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="/ATPWork;component/Resources/icons8-документ-40.png" Height="20" Width="20"/>
+                    <Image Visibility="Collapsed" Source="/ATPWork;component/Resources/icons8-документ-40.png" Height="20" Width="20"/>
                     <TextBlock Text="Номер акта" FontWeight="Bold" FontSize="14" />
                 </StackPanel>
             </GroupBox.Header>
@@ -100,7 +100,7 @@
         <GroupBox  BorderThickness="2" BorderBrush="#FF999999">
             <GroupBox.Header>
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="/ATPWork;component/Resources/icons8-гость-мужчина-40.png" Height="20" Width="20"/>
+                    <Image Source="/ATPWork;component/Resources/icons8-гость-мужчина-40.png" Height="20" Width="20" Visibility="Collapsed"/>
                     <TextBlock Text="Потребитель" FontWeight="Bold" FontSize="14" />
                 </StackPanel>
             </GroupBox.Header>
@@ -133,17 +133,17 @@
         <GroupBox  BorderBrush="#FF999999" BorderThickness="2">
             <GroupBox.Header>
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="/ATPWork;component/Resources/icons8-группа-пользователей-40.png" Height="20" Width="20"/>
+                    <Image Source="/ATPWork;component/Resources/icons8-группа-пользователей-40.png" Height="20" Width="20" Visibility="Collapsed"/>
                     <TextBlock Text="Агенты" FontWeight="Bold" FontSize="14" />
                 </StackPanel>
             </GroupBox.Header>
             <StackPanel Orientation="Vertical">
-                <ComboBox xmlns:sys="clr-namespace:System;assembly=mscorlib" HorizontalAlignment="Left" Height="25" Width="240" ItemsSource="{Binding AgentList, Source={StaticResource AtpEditorViewModel}}" SelectedItem="{Binding AktInWork.Agent_1, Source={StaticResource AtpEditorViewModel}}" Background="{x:Null}" BorderBrush="{x:Null}" >
+                <ComboBox xmlns:sys="clr-namespace:System;assembly=mscorlib" HorizontalAlignment="Left" Height="25" Width="240" ItemsSource="{Binding AgentList, Source={StaticResource AtpEditorViewModel}}" SelectedItem="{Binding AktInWork.Agent_1, Source={StaticResource AtpEditorViewModel}}" Background="{x:Null}" BorderBrush="#FF9CDEC6" BorderThickness="1">
                     <ComboBox.Resources>
                         <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">0</sys:Double>
                     </ComboBox.Resources>
                 </ComboBox>
-                <ComboBox xmlns:sys="clr-namespace:System;assembly=mscorlib" HorizontalAlignment="Left" Height="25" Width="240" ItemsSource="{Binding AgentList, Source={StaticResource AtpEditorViewModel}}" SelectedItem="{Binding AktInWork.Agent_2, Source={StaticResource AtpEditorViewModel}}" Background="{x:Null}" BorderBrush="{x:Null}" >
+                <ComboBox xmlns:sys="clr-namespace:System;assembly=mscorlib" HorizontalAlignment="Left" Height="25" Width="240" ItemsSource="{Binding AgentList, Source={StaticResource AtpEditorViewModel}}" SelectedItem="{Binding AktInWork.Agent_2, Source={StaticResource AtpEditorViewModel}}" Background="{x:Null}" BorderBrush="#FF9CDEC6" BorderThickness="1">
                     <ComboBox.Resources>
                         <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">0</sys:Double>
                     </ComboBox.Resources>
@@ -210,7 +210,7 @@
         <GroupBox BorderThickness="2" BorderBrush="#FF999999" >
             <GroupBox.Header>
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="/ATPWork;component/Resources/icons8-счетчик-энергии.png" Height="20" Width="20"/>
+                    <Image Source="/ATPWork;component/Resources/icons8-счетчик-энергии.png" Height="20" Width="20" Visibility="Collapsed"/>
                     <TextBlock Text="Прибор учета" FontWeight="Bold" FontSize="14" />
                 </StackPanel>
             </GroupBox.Header>
@@ -220,7 +220,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" >
                     <TextBlock Text="Номер:" VerticalAlignment="Center" Margin="1,1,1,1"/>
-                    <TextBox   Style="{StaticResource TextBoxStyle}"  Width="120"  VerticalAlignment="Center">
+                    <TextBox   Style="{StaticResource TextBoxStyle}"  MinWidth="120"  VerticalAlignment="Center">
                         <Binding Source="{StaticResource AtpEditorViewModel}" Path="AktInWork.PuOldNumber" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
         UpdateSourceTrigger="PropertyChanged">
                             <Binding.ValidationRules>
@@ -234,7 +234,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" >
                     <TextBlock  VerticalAlignment="Center"  Text="Показание:" Margin="1,1,1,1"/>
-                    <TextBox Style="{StaticResource TextBoxStyle}"  MaxLength="7" Width="70" VerticalAlignment="Center">
+                    <TextBox Style="{StaticResource TextBoxStyle}"  MaxLength="7" MinWidth="70" VerticalAlignment="Center">
                         <Binding Source="{StaticResource AtpEditorViewModel}" Path="AktInWork.PuOldPokazanie" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
         UpdateSourceTrigger="PropertyChanged">
                             <Binding.ValidationRules>

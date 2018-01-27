@@ -69,6 +69,7 @@ namespace ATPWork.MyApp.ViewModel.MainAtp
                             }
                         });
                 }
+                else mainAtpVm.WorkinAddAktFromPdf = false;
             }, isBysyAddWork, new KeyGesture(Key.O, ModifierKeys.Control));
             this.AddAktToworkFromPDF = new DelegateCommand("Добавить к заданию  из PDF", async f =>
             {
@@ -80,7 +81,7 @@ namespace ATPWork.MyApp.ViewModel.MainAtp
                         {
                             try
                             {
-                                MainAtpModel.CreateWorkFromPdf(dlg.FileName, new Progress<double>(mainAtpVm.SetProgressBarValue), true);
+                                MainAtpModel.CreateWorkFromPdf(dlg.FileName, new Progress<double>(mainAtpVm.SetProgressBarValue));
                                 mainAtpVm.WorkinAddAktFromPdf = false;
                             }
                             catch (Exception ex)
@@ -90,7 +91,7 @@ namespace ATPWork.MyApp.ViewModel.MainAtp
                             }
                         });
 
-                }
+                }else mainAtpVm.WorkinAddAktFromPdf = false;
             }, isBysyAddWork, new KeyGesture(Key.O, ModifierKeys.Control|ModifierKeys.Shift));
             this.ProcessCompletedActs = new DelegateCommand("Обработать акты", async f =>
             {

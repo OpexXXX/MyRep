@@ -257,7 +257,7 @@ namespace MyApp.Model
                 List<int> Page = new List<int>();
                 Page.Add(Int32.Parse(r["Page1"].ToString()));
                 Page.Add(Int32.Parse(r["Page2"].ToString()));
-                result.Add(new AktTehProverki(Int32.Parse(r["ID"].ToString()), Page, r["PathOfPdfFile"].ToString()));
+                result.Add(new AktTehProverki(Int32.Parse(r["ID"].ToString()), Page, r["PathOfPdfFile"].ToString(), long.Parse( r["SizePDF"].ToString())));
                 //Ищем агентов по номеру
                 string temp_agent = r["Agent_1"].ToString();
                 if (temp_agent != "")
@@ -330,7 +330,8 @@ namespace MyApp.Model
                 List<int> Page = new List<int>();
                 Page.Add(Int32.Parse(r["Page1"].ToString()));
                 Page.Add(Int32.Parse(r["Page2"].ToString()));
-                result.Add(new AktTehProverki(Int32.Parse(r["ID"].ToString()), Page, r["PathOfPdfFile"].ToString()));
+                result.Add(new AktTehProverki(Int32.Parse(r["ID"].ToString()), Page, r["PathOfPdfFile"].ToString(), long.Parse(r["SizePDF"].ToString())));
+
                 //Ищем агентов по номеру
                 string temp_agent = r["Agent_1"].ToString();
                 if (temp_agent != "")
@@ -450,15 +451,12 @@ namespace MyApp.Model
         }
         private static void InsertPlombs(SQLiteCommand cmdd, IEnumerable<Plomba> plombs, string aktName)
         {
-            string sql_command;
-            sql_command = "DELETE FROM `InstallingPlombs` WHERE Akt = \""+aktName+"\";";
-            cmdd.CommandText = sql_command;
-            cmdd.ExecuteNonQuery();
+            
 
             foreach (Plomba Plomba in plombs)
             {
                 
-                sql_command = "INSERT INTO `InstallingPlombs` (Akt, Type, Number, Remove, Place, OldPlomb, InstallDate, Status) "
+               string sql_command = "INSERT INTO `InstallingPlombs` (Akt, Type, Number, Remove, Place, OldPlomb, InstallDate, Status) "
           + "VALUES ('"
            + aktName + "', '"
            + Plomba.Type + "', '"
@@ -484,7 +482,7 @@ namespace MyApp.Model
                 {
                     foreach (AktTehProverki akt in akti)
                     {
-                        string sql_command = "INSERT INTO CompleteATPList(  'ID',`PathOfPdfFile`, 'Adress', Agent_1, Agent_2, DateWork, FIO, DopuskFlag, Number,NumberLS,PuNewNumber,PuNewPokazanie,PuNewPoverkaEar,PuNewPoverKvartal,PuNewType,PuOldMPI,PuOldNumber,PuOldPokazanie,PuOldType, Page1, Page2, NumberMail, DateMail,`Ustanovka`,`SapNumberAkt`,`EdOborudovania`)"
+                        string sql_command = "INSERT INTO CompleteATPList(  'ID',`PathOfPdfFile`, 'Adress', Agent_1, Agent_2, DateWork, FIO, DopuskFlag, Number,NumberLS,PuNewNumber,PuNewPokazanie,PuNewPoverkaEar,PuNewPoverKvartal,PuNewType,PuOldMPI,PuOldNumber,PuOldPokazanie,PuOldType, Page1, Page2, NumberMail, DateMail,`Ustanovka`,`SapNumberAkt`,`SizePDF`,`EdOborudovania`)"
                       + "VALUES ('"
                        + akt.ID.ToString() + "', '"
                          + akt.NamePdfFile + "', '"
@@ -511,14 +509,20 @@ namespace MyApp.Model
                            + (akt.DateMail != null ? akt.DateMail : "") + "','"
                            + akt.Ustanovka + "','"
                            + akt.SapNumberAkt + "','"
+                             + akt.SizePDF + "','"
                         + akt.EdOborudovania + "');";
 
                         cmdd.CommandText = sql_command;
                         cmdd.ExecuteNonQuery();
 
-                        string plombTableName = akt.ID.ToString() + akt.Number + akt.NumberLS;
-                        if (akt.NewPlombs.Count > 0) InsertPlombs(cmdd, akt.NewPlombs, plombTableName);
-                        if (akt.OldPlombs.Count > 0) InsertPlombs(cmdd, akt.OldPlombs, plombTableName);
+                        string aktName = akt.ID.ToString() + akt.Number + akt.NumberLS;
+
+                        sql_command = "DELETE FROM `InstallingPlombs` WHERE Akt = \"" + aktName + "\";";
+                        cmdd.CommandText = sql_command;
+                        cmdd.ExecuteNonQuery();
+
+                        if (akt.NewPlombs.Count > 0) InsertPlombs(cmdd, akt.NewPlombs, aktName);
+                        if (akt.OldPlombs.Count > 0) InsertPlombs(cmdd, akt.OldPlombs, aktName);
 
                     }
                     transaction.Commit();
@@ -537,7 +541,7 @@ namespace MyApp.Model
                 {
                     foreach (AktTehProverki akt in akti)
                     {
-                        string sql_command = "INSERT INTO ATPInWorkList(  'ID',`PathOfPdfFile`, 'Adress', Agent_1, Agent_2, DateWork, FIO, DopuskFlag, Number,NumberLS,PuNewNumber,PuNewPokazanie,PuNewPoverkaEar,PuNewPoverKvartal,PuNewType,PuOldMPI,PuOldNumber,PuOldPokazanie,PuOldType, Page1, Page2, NumberMail, DateMail,`Ustanovka`,`SapNumberAkt`,`EdOborudovania`)"
+                        string sql_command = "INSERT INTO ATPInWorkList(  'ID',`PathOfPdfFile`, 'Adress', Agent_1, Agent_2, DateWork, FIO, DopuskFlag, Number,NumberLS,PuNewNumber,PuNewPokazanie,PuNewPoverkaEar,PuNewPoverKvartal,PuNewType,PuOldMPI,PuOldNumber,PuOldPokazanie,PuOldType, Page1, Page2, NumberMail, DateMail,`Ustanovka`,`SapNumberAkt`,`SizePDF`,`EdOborudovania`)"
                       + "VALUES ('"
                        + akt.ID.ToString() + "', '"
                          + akt.NamePdfFile + "', '"
@@ -564,14 +568,20 @@ namespace MyApp.Model
                            + (akt.DateMail != null ? akt.DateMail : "") + "','"
                            + akt.Ustanovka + "','"
                            + akt.SapNumberAkt + "','"
+                             + akt.SizePDF + "','"
                         + akt.EdOborudovania + "');";
 
                         cmdd.CommandText = sql_command;
                         cmdd.ExecuteNonQuery();
 
-                        string plombTableName = akt.ID.ToString() + akt.Number + akt.NumberLS;
-                        if (akt.NewPlombs.Count > 0) InsertPlombs(cmdd, akt.NewPlombs, plombTableName);
-                        if (akt.OldPlombs.Count > 0) InsertPlombs(cmdd, akt.OldPlombs, plombTableName);
+                        string aktName = akt.ID.ToString() + akt.Number + akt.NumberLS;
+
+                        sql_command = "DELETE FROM `InstallingPlombs` WHERE Akt = \"" + aktName + "\";";
+                        cmdd.CommandText = sql_command;
+                        cmdd.ExecuteNonQuery();
+
+                        if (akt.NewPlombs.Count > 0) InsertPlombs(cmdd, akt.NewPlombs, aktName);
+                        if (akt.OldPlombs.Count > 0) InsertPlombs(cmdd, akt.OldPlombs, aktName);
 
                     }
                     transaction.Commit();

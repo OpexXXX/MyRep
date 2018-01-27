@@ -5,10 +5,21 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ATPWork.MyApp.View"
              xmlns:plombEditVm="clr-namespace:ATPWork.MyApp.ViewModel.PlombEditorVm"
+             xmlns:behaviors="clr-namespace:WPFTextBoxAutoComplete;assembly=WPFTextBoxAutoComplete"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
             >
     <UserControl.Resources>
+        <Style x:Key="myListboxStyle">
+            <Style.Resources>
+
+
+                <!-- Background of selected item when focussed -->
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#FFCCF3FF" />
+                <!-- Background of selected item when not focussed -->
+                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#FFCCF3FF" />
+            </Style.Resources>
+        </Style>
         <plombEditVm:PlombEditorVM x:Key="PlombEditorViewModel"/>
         <Style x:Key="TextBoxStyle">
             <Setter Property="Control.Height" Value="26" />
@@ -17,18 +28,19 @@
             <Setter Property="Control.FontSize" Value="16" />
         </Style>
         <DataTemplate x:Key="ListBoxPlomb">
-            <StackPanel Orientation="Horizontal">
-                <ComboBox  ItemsSource="{Binding 
+            <Border CornerRadius="2" BorderBrush="#FFA6A6A6" BorderThickness="1">
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox  ItemsSource="{Binding 
                     Source={StaticResource PlombEditorViewModel}, Path=typePL}" 
                           Background="{x:Null}" BorderBrush="{x:Null}"
                       SelectedItem="{Binding Type}"
                           MinWidth="30" Margin="10,0,0,0" >
-                    <ComboBox.Resources>
-                        <sys:Double  xmlns:sys="clr-namespace:System;assembly=mscorlib"  x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">0</sys:Double>
-                    </ComboBox.Resources>
-                    <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                                <Image ToolTip="{Binding}" Width="30" Height="30">
+                        <ComboBox.Resources>
+                            <sys:Double  xmlns:sys="clr-namespace:System;assembly=mscorlib"  x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">0</sys:Double>
+                        </ComboBox.Resources>
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <Image ToolTip="{Binding}" Width="25" Height="25">
                                     <Image.Style>
                                         <Style>
                                             <Style.Triggers>
@@ -42,51 +54,56 @@
                                         </Style>
                                     </Image.Style>
                                 </Image>
-                    </DataTemplate>
+                            </DataTemplate>
                         </ComboBox.ItemTemplate>
-                </ComboBox>
-                <StackPanel Orientation="Vertical">
-                    <TextBox  MinWidth="50"   TextWrapping="Wrap" BorderBrush="{x:Null}" BorderThickness="0">
-                <TextBox.Text>
-                        <Binding Path="Number"  ValidatesOnExceptions="True"  NotifyOnValidationError="True"  UpdateSourceTrigger="PropertyChanged">
-                        <Binding.ValidationRules>
-                            <ExceptionValidationRule />
-                        </Binding.ValidationRules>
-                    </Binding>
-                </TextBox.Text>
-                    </TextBox>
-                    <ComboBox xmlns:sys="clr-namespace:System;assembly=mscorlib" 
-                              FontSize="10" ItemsSource="{Binding Source={StaticResource PlombEditorViewModel}, Path=placePL}" 
-                              Background="{x:Null}" BorderBrush="{x:Null}"
-                            MinWidth="50"
-                               SelectedItem="{Binding Place}"     >
-                        
-                        <ComboBox.Resources>
-                            <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">0</sys:Double>
-                        </ComboBox.Resources>
                     </ComboBox>
+                    <StackPanel Orientation="Vertical">
+                        <TextBox  MinWidth="50"   TextWrapping="Wrap" BorderBrush="{x:Null}" 
+                              BorderThickness="0"
+                              behaviors:AutoCompleteBehavior.AutoCompleteItemsSource="{Binding Source={StaticResource PlombEditorViewModel}, Path=PlombsNumberList}"
+                               behaviors:AutoCompleteBehavior.AutoCompleteStringComparison="InvariantCultureIgnoreCase"
+                             >
+                            <TextBox.Text>
+                                <Binding Path="Number"  ValidatesOnExceptions="True"  NotifyOnValidationError="True"  UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <ExceptionValidationRule />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+                        <TextBox  FontSize="10" 
+                              Text="{Binding Place, UpdateSourceTrigger=PropertyChanged}"
+                              behaviors:AutoCompleteBehavior.AutoCompleteItemsSource="{Binding Source={StaticResource PlombEditorViewModel}, Path=placePL}" 
+                              behaviors:AutoCompleteBehavior.AutoCompleteStringComparison="InvariantCultureIgnoreCase"
+                              Background="{x:Null}" BorderBrush="{x:Null}"/>
+                    </StackPanel>
                 </StackPanel>
-            </StackPanel>
+            </Border>
         </DataTemplate>
         <DataTemplate x:Key="OldListBoxPlomb">
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <ToggleButton Height="10" Width="10" IsChecked="{Binding Path=Demontage}" ToolTip="Демонтировать" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <Image ToolTip="{Binding Path=Type}" Width="30" Height="30">
-                <Image.Style>
-                    <Style>
-                        <Style.Triggers>
-                                <DataTrigger Binding="{Binding Path=Type}" Value="01">
-                                    <Setter Property="Image.Source" Value="/ATPWork;component/Resources/fenix.png"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Image.Style>
-                </Image>
-                <StackPanel Orientation="Vertical">
-                <TextBlock  TextWrapping="Wrap"   Margin="1,0,1,0" Text="{Binding Path=Number}" VerticalAlignment="Center" />
-                <TextBlock  TextWrapping="Wrap"  Margin="1,0,1,0" Text="{Binding Path=Place}" VerticalAlignment="Center" FontSize="10" />
+            <Border CornerRadius="2" BorderBrush="#FFA6A6A6" BorderThickness="1">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <ToggleButton Height="20" Width="20" IsChecked="{Binding Path=Demontage}" ToolTip="Демонтировать" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Image ToolTip="{Binding Path=Type}" Width="25" Height="25">
+                        <Image.Style>
+                            <Style>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=Type}" Value="01">
+                                        <Setter Property="Image.Source" Value="/ATPWork;component/Resources/fenix.png"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Path=Type}" Value="2400_6">
+                                        <Setter Property="Image.Source" Value="/ATPWork;component/Resources/icons8-защать-от-магнитного-поля-40 (1).png"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Image.Style>
+                    </Image>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock  TextWrapping="Wrap"   Margin="1,0,1,0" Text="{Binding Path=Number}" VerticalAlignment="Center" />
+                        <TextBlock  TextWrapping="Wrap"  Margin="1,0,1,0" Text="{Binding Path=Place}" VerticalAlignment="Center" FontSize="10" />
+                    </StackPanel>
                 </StackPanel>
-            </StackPanel>
+            </Border>
         </DataTemplate>
     </UserControl.Resources>
     <StackPanel>
@@ -101,15 +118,12 @@
                 <Image x:Name="image" Height="25" Source="/ATPWork;component/Resources/icons8+1.png" Width="25" />
             </Button>
             <Button Margin="1,1,1,1" Focusable="False"  Command="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.DecrementAddPlombComand}" ToolTip="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.DecrementAddPlombComand.Name}">
-                    <Image  Height="25" Source="/ATPWork;component/Resources/icons8-1.png" Width="25" />
-                </Button>
+                <Image  Height="25" Source="/ATPWork;component/Resources/icons8-1.png" Width="25" />
+            </Button>
         </StackPanel>
         <StackPanel Orientation="Vertical" >
-            <StackPanel Orientation="Vertical">
-                <TextBlock>Установленные пломбы</TextBlock>
-                <ListBox Focusable="False" x:Name="OldPlombListBox" SelectionChanged="ListBox_SelectionChanged" ItemsSource="{Binding Source={StaticResource PlombEditorViewModel}, Path=OldPlombList}" KeyboardNavigation.TabNavigation="Continue" ItemTemplate="{StaticResource OldListBoxPlomb}" SelectionMode="Single" ContextMenuService.ShowOnDisabled="False" Background="{x:Null}" BorderThickness="1" BorderBrush="{x:Null}"/>
-            </StackPanel>
-            <ListBox  ItemsSource="{Binding Source={StaticResource PlombEditorViewModel}, Path=NewPlombList}" SelectedItem="{Binding Source={StaticResource PlombEditorViewModel}, Path=SelectedPlomb}" KeyboardNavigation.TabNavigation="Continue" ItemTemplate="{StaticResource ListBoxPlomb}" SelectionMode="Extended" ContextMenuService.ShowOnDisabled="False" BorderBrush="{x:Null}" Background="{x:Null}"/>
+            <ListBox Focusable="False" x:Name="OldPlombListBox" SelectionChanged="ListBox_SelectionChanged" ItemsSource="{Binding Source={StaticResource PlombEditorViewModel}, Path=OldPlombList}" KeyboardNavigation.TabNavigation="Continue" ItemTemplate="{StaticResource OldListBoxPlomb}" SelectionMode="Single" ContextMenuService.ShowOnDisabled="False" Background="{x:Null}" BorderThickness="1" BorderBrush="{x:Null}"/>
+            <ListBox Style="{StaticResource myListboxStyle}" ItemsSource="{Binding Source={StaticResource PlombEditorViewModel}, Path=NewPlombList}" SelectedItem="{Binding Source={StaticResource PlombEditorViewModel}, Path=SelectedPlomb}" KeyboardNavigation.TabNavigation="Continue" ItemTemplate="{StaticResource ListBoxPlomb}" SelectionMode="Extended" ContextMenuService.ShowOnDisabled="False" BorderBrush="{x:Null}" Background="{x:Null}"/>
         </StackPanel>
     </StackPanel>
 </UserControl>

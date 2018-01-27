@@ -4,9 +4,38 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ATPWork.MyApp.View"
+        xmlns:vm="clr-namespace:ATPWork.MyApp.ViewModel"
         mc:Ignorable="d"
-        Title="Settings" Height="300" Width="300">
-    <Grid>
-        
-    </Grid>
+        Title="Настройки" Height="334.958" Width="421.398" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow">
+    <Window.Resources>
+        <vm:SettingsVM x:Key="SetVM"/>
+    </Window.Resources>
+    <DockPanel Margin="0,0,0,0">
+        <TabControl DockPanel.Dock="Top" TabStripPlacement="Left" Height="280"   >
+            <TabItem Header="Директории">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="Агенты">
+                <Grid Background="#FFE5E5E5">
+                    <DataGrid Margin="2"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="ПУ">
+                <Grid Background="#FFE5E5E5">
+                    <DataGrid Margin="2"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Пломбы" >
+                <Grid Background="#FFE5E5E5">
+                    <DataGrid  />
+                   
+                </Grid>
+                
+            </TabItem>
+        </TabControl>
+        <StackPanel Height="30" Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right">
+            <Button Content="Сохранить" Height="24" Width="67" />
+            <Button Content="Отмена" Height="24" Width="53" Margin="5,0,5,0" />
+        </StackPanel>
+    </DockPanel>
 </Window>

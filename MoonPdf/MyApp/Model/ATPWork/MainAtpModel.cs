@@ -15,10 +15,10 @@ using System.IO;
 using System.Windows;
 
 namespace MyApp.Model
-{   
+{
     static class MainAtpModel
     {
-       
+
         #region Коллекции для comboBox's
 
         public delegate void ComboListRefreshHandler();
@@ -84,7 +84,9 @@ namespace MyApp.Model
         public static string AktDirektory
         {
             get { return _aktDirektory; }
-            set { _aktDirektory = value;
+            set
+            {
+                _aktDirektory = value;
 
             }
         }
@@ -112,59 +114,58 @@ namespace MyApp.Model
             PlacePlomb = DataBaseWorker.PlacePlombListInit();
             ComboRefresh?.Invoke();
         }
-        public static  void CreateWorkFromPdf(string pathOfPdfFile, IProgress<double> progress, bool addedToCurentWork = false)
+        public static void CreateWorkFromPdf(string pathOfPdfFile, IProgress<double> progress)
         {
-                PdfReader iTextPDFReader = new PdfReader(pathOfPdfFile); //Загружаем документ в iTextPdf
-                ITextExtractionStrategy strategyOfFinder = new SimpleTextExtractionStrategy();
-                List<int> listOfpagesInPDf = new List<int>(); // Временно для хранения массива номеров страниц для каждого акта
-                List<AktTehProverki> addedAkt = new List<AktTehProverki>();
-                int maxIDAkt = 0;
-                if ((AllAktInCurrentWork.Count > 0) && addedToCurentWork) maxIDAkt = AllAktInCurrentWork.Max(aktATP => aktATP.ID);
-                double countAdded = 0;
-                for (int i = 0; i < (iTextPDFReader.NumberOfPages / 2); i++) // перебираем страницы
+            FileInfo file = new FileInfo(pathOfPdfFile);
+        
+            PdfReader iTextPDFReader = new PdfReader(pathOfPdfFile); //Загружаем документ в iTextPdf
+            ITextExtractionStrategy strategyOfFinder = new SimpleTextExtractionStrategy();
+            List<int> listOfpagesInPDf = new List<int>(); // Временно для хранения массива номеров страниц для каждого акта
+            List<AktTehProverki> addedAkt = new List<AktTehProverki>();
+            int maxIDAkt = 0;
+            if (AllAktInCurrentWork.Count > 0) maxIDAkt = AllAktInCurrentWork.Max(aktATP => aktATP.ID);
+            double countAdded = 0;
+            long sizeAktPdf = ((file.Length / 1024) / iTextPDFReader.NumberOfPages) * 2;
+
+            for (int i = 0; i < (iTextPDFReader.NumberOfPages / 2); i++) // перебираем страницы
+            {
+                listOfpagesInPDf.Add((i + 1) * 2 - 2);
+                listOfpagesInPDf.Add((i + 1) * 2 - 1);
+                addedAkt.Add(new AktTehProverki(i + 1 + maxIDAkt, listOfpagesInPDf, pathOfPdfFile, sizeAktPdf)); //добавляем в лист проверок объекты 
+                listOfpagesInPDf.Clear();
+                countAdded++;
+            }
+            int ii = 0;
+            foreach (AktTehProverki item in addedAkt)
+            {
+                string textOfPage = GetTextOfPdfPage(item.NumberOfPagesInSoursePdf[0], iTextPDFReader);
+                item.DopuskFlag = (textOfPage.Contains("допуска"));
+                foreach (var agent in AgentList)
                 {
-                    listOfpagesInPDf.Add((i + 1) * 2 - 2);
-                    listOfpagesInPDf.Add((i + 1) * 2 - 1);
-                    addedAkt.Add(new AktTehProverki(i + 1 + maxIDAkt, listOfpagesInPDf, pathOfPdfFile)); //добавляем в лист проверок объекты 
-                    listOfpagesInPDf.Clear();
-                    countAdded++;
-                }
-                int ii = 0;
-                foreach (AktTehProverki item in addedAkt)
-                {
-                    string textOfPage = GetTextOfPdfPage(item.NumberOfPagesInSoursePdf[0], iTextPDFReader);
-                    item.DopuskFlag = (textOfPage.Contains("допуска"));
-                    foreach (var agent in AgentList)
+                    string search_text = agent.SearchString;
+                    if (textOfPage.Contains(search_text) && item.Agent_1 == null)
                     {
-                        string search_text = agent.SearchString;
-                        if (textOfPage.Contains(search_text) && item.Agent_1 == null)
-                        {
-                            item.Agent_1 = agent;
-                            continue;
-                        }
-                        if (textOfPage.Contains(search_text) && item.Agent_1 != null)
-                        {
-                            item.Agent_2 = agent;
-                        }
+                        item.Agent_1 = agent;
+                        continue;
                     }
-                    ii++;
-                    double rep = (100.0 * ((double)ii / (double)addedAkt.Count));
-                    progress.Report(rep);
-                }
-                if (addedToCurentWork)
-                {
-                    foreach (AktTehProverki item in addedAkt)
+                    if (textOfPage.Contains(search_text) && item.Agent_1 != null)
                     {
-                        AllAktInCurrentWork.Add(item);
+                        item.Agent_2 = agent;
                     }
                 }
-                else
-                {
-                    AllAktInCurrentWork = addedAkt;
-                }
-                iTextPDFReader.Close();
-                CurrentWorkRefresh?.Invoke();
-         }
+                ii++;
+                double rep = (100.0 * ((double)ii / (double)addedAkt.Count));
+                progress.Report(rep);
+            }
+
+            foreach (AktTehProverki item in addedAkt)
+            {
+                AllAktInCurrentWork.Add(item);
+            }
+
+            iTextPDFReader.Close();
+            CurrentWorkRefresh?.Invoke();
+        }
         private static string GetTextOfPdfPage(int indexPageForSearch, PdfReader iTextPDFReader)
         {
 
@@ -179,7 +180,7 @@ namespace MyApp.Model
             }
 
         }
-        private static void  createAktPdf(AktTehProverki akt)
+        private static void createAktPdf(AktTehProverki akt)
         {
             string FileName = akt.Number.ToString() + " " + akt.DateWork?.ToString("d") + " " + akt.NumberLS + ".pdf";
             string FilePath = AktDirektory + "\\" + FileName;
@@ -294,17 +295,17 @@ namespace MyApp.Model
                 }
             }
 
-                foreach (AktTehProverki item in Complete)
+            foreach (AktTehProverki item in Complete)
             {
-               createAktPdf(item);
+                createAktPdf(item);
                 AllAkt.Add(item);
                 AllAktInCurrentWork.Remove(item);
                 i++;
-                        double rep = (100.0 * ((double)i / (double)Complete.Count));
-                        progress.Report(rep);
+                double rep = (100.0 * ((double)i / (double)Complete.Count));
+                progress.Report(rep);
             }
 
-            if(i>0)
+            if (i > 0)
             {
                 AllAtpRefreshRefresh?.Invoke();
                 CurrentWorkRefresh?.Invoke();
