@@ -1,4 +1,5 @@
 ﻿using ATPWork.MyApp.ViewModel.MainAtp;
+using MoonPdfLib;
 using MyApp.Model;
 using System;
 using System.Collections.Generic;
@@ -6,13 +7,12 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace ATPWork.MyApp.ViewModel
 {
     public class MainAtpVM:ViewModelBase
     {
-
-
         #region Статус Бар 
         private double _progressBarValue;
         public double ProgressBarValue
@@ -38,8 +38,6 @@ namespace ATPWork.MyApp.ViewModel
             ProgressBarText = ((int)val).ToString() + '%';
         }
         #endregion
-
-
         #region Команды
         private Commands _commands;
         public Commands Commands
@@ -52,7 +50,6 @@ namespace ATPWork.MyApp.ViewModel
             }
         }
         #endregion
-
         #region PdfView
         private int _currentPagePdf;
         public int CurrentPagePdf
@@ -62,11 +59,11 @@ namespace ATPWork.MyApp.ViewModel
             {
                 if (_currentPagePdf != value)
                 {
+                    _currentPagePdf = value;
+                    PdfViewer.GotoPage(value+1);
                    
-                    OnPropertyChanged("CurrentPagePdf");
+                   OnPropertyChanged("CurrentPagePdf");
                 };
-
-               
             }
         }
         private string _currentFilePdf;
@@ -75,13 +72,39 @@ namespace ATPWork.MyApp.ViewModel
             get { return _currentFilePdf; }
             set
             {
-                _currentFilePdf = value;
-                OnPropertyChanged("CurrentFilePdf");
+                if (_currentFilePdf != value)
+                {
+                    _currentFilePdf = value;
+                    PdfViewer.OpenFile(value);
+                    PdfViewer.ZoomToWidth();
+                    OnPropertyChanged("CurrentFilePdf");
+                }
             }
         }
-
+        public MoonPdfPanel PdfViewer;
         #endregion
-
+        public ListView ListBoxAktInWork { get; internal set; }
+        private AktTehProverki _selectedAkt;
+        public AktTehProverki SelectedAkt
+        {
+            get { return _selectedAkt; }
+            set
+            {
+                if (value == null)
+                {
+                    
+                }
+                
+                if ((_selectedAkt != value)&& (value != null))
+                {
+                    _selectedAkt = value;
+                    CurrentFilePdf = value.NamePdfFile;
+                    CurrentPagePdf = value.NumberOfPagesInSoursePdf[0];
+                    OnPropertyChanged("SelectedAkt");
+                    if (InCurrentWork != (_allAktInCurrentWork.Count > 0) && (SelectedAkt != null)) InCurrentWork = (_allAktInCurrentWork.Count > 0) && (SelectedAkt != null);
+                }
+            }
+        }
         private ObservableCollection<AktTehProverki> _allAkt;
         public ObservableCollection<AktTehProverki> AllAkt
         {
@@ -113,6 +136,18 @@ namespace ATPWork.MyApp.ViewModel
                 return result.ToString(); }
             
         }
+
+        private AktTehProverki _selectedAktComplete;
+        public AktTehProverki SelectedAktComplete
+        {
+            get { return _selectedAktComplete; }
+            set
+            {
+                _selectedAktComplete = value;
+                    OnPropertyChanged("SelectedAktComplete");
+            }
+        }
+
         private bool _workinAddAktFromPdf;
         public bool WorkinAddAktFromPdf
         {
@@ -123,6 +158,7 @@ namespace ATPWork.MyApp.ViewModel
                 OnPropertyChanged("WorkinAddAktFromPdf");
             }
         }
+
         private bool _inCurrentWork;
         public bool InCurrentWork
         {
@@ -131,19 +167,8 @@ namespace ATPWork.MyApp.ViewModel
                 OnPropertyChanged("InCurrentWork");
             }
         }
-        private AktTehProverki _selectedAkt;
-        public AktTehProverki SelectedAkt
-        {
-            get { return _selectedAkt; }
-            set {
-                _selectedAkt = value;
-                CurrentFilePdf = value.NamePdfFile;
-                CurrentPagePdf = value.NumberOfPagesInSoursePdf[0];
-                OnPropertyChanged("SelectedAkt");
-                if (InCurrentWork!= (_allAktInCurrentWork.Count > 0) && (SelectedAkt != null)) InCurrentWork = (_allAktInCurrentWork.Count > 0) && (SelectedAkt != null);
 
-            }
-        }
+
         public MainAtpVM()
         {
             Commands = new Commands(this);
@@ -151,6 +176,7 @@ namespace ATPWork.MyApp.ViewModel
             refreshCurrentWorkAktList();
             MainAtpModel.AllAtpRefreshRefresh += refreshAllAktList;
             MainAtpModel.CurrentWorkRefresh += refreshCurrentWorkAktList;
+           
         }
         public void refreshAllAktList()
         {
@@ -159,6 +185,32 @@ namespace ATPWork.MyApp.ViewModel
         public void refreshCurrentWorkAktList()
         {
             AllAktInCurrentWork = new ObservableCollection<AktTehProverki>(MainAtpModel.AllAktInCurrentWork);
+        }
+
+
+        internal void GoNextAkt()
+        {
+            AktTehProverki oldAkt =(AktTehProverki) ListBoxAktInWork.SelectedItem;
+            ListBoxAktInWork.SelectedIndex++;
+            AktTehProverki NewAkt = (AktTehProverki)ListBoxAktInWork.SelectedItem;
+            if (NewAkt.Number == 0 && oldAkt.Number != 0) NewAkt.Number = oldAkt.Number + 1;
+            if (NewAkt.DateWork == null && oldAkt.DateWork != null) NewAkt.DateWork = oldAkt.DateWork;
+
+        }
+
+        internal void GoPrevousAkt()
+        {
+            ListBoxAktInWork.SelectedIndex--;
+        }
+
+        internal void GoFirstPageAkt()
+        {
+            CurrentPagePdf = SelectedAkt.NumberOfPagesInSoursePdf[0];
+        }
+
+        internal void GoSecongPageAkt()
+        {
+            CurrentPagePdf = SelectedAkt.NumberOfPagesInSoursePdf[1];
         }
     }
 }

@@ -9,7 +9,7 @@
         xmlns:viewModel="clr-namespace:ATPWork.MyApp.ViewModel"
         xmlns:behaviors="clr-namespace:WPFTextBoxAutoComplete;assembly=WPFTextBoxAutoComplete"
         xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing" xmlns:ee="http://schemas.microsoft.com/expression/2010/effects" xmlns:Custom="http://schemas.microsoft.com/wpf/2008/toolkit" x:Class="MyApp.MainWindow"
-        Title="ATPWorker" WindowStartupLocation="CenterScreen" Height="864.5" Width="581.5" UseLayoutRounding="True" MinHeight="300" MinWidth="430" Icon="Resources/iconATP.ico" ScrollViewer.CanContentScroll="True" AllowDrop="True" Closing="Window_Closing" >
+        Title="ATPWorker" WindowStartupLocation="CenterScreen" Height="939.167" Width="1202.167" UseLayoutRounding="True" MinHeight="300" MinWidth="430" Icon="Resources/iconATP.ico" ScrollViewer.CanContentScroll="True" AllowDrop="True" Closing="Window_Closing" >
     <Window.Resources>
 
 
@@ -18,7 +18,6 @@
         <CollectionViewSource x:Key="AllAktSourse" Source="{Binding AllAkt, Source={StaticResource MainAtpVM}}">
             <CollectionViewSource.GroupDescriptions>
                 <PropertyGroupDescription PropertyName="MailName"/>
-                <PropertyGroupDescription PropertyName="DopuskFlag"/>
             </CollectionViewSource.GroupDescriptions>
         </CollectionViewSource>
 
@@ -27,7 +26,6 @@
                 <PropertyGroupDescription PropertyName="NamePdfFile"/>
             </CollectionViewSource.GroupDescriptions>
         </CollectionViewSource>
-
 
         <Style x:Key="GroupHeaderStyle" TargetType="{x:Type GroupItem}">
             <Setter Property="Template">
@@ -77,51 +75,64 @@
         </StatusBar>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Тех. проверки" >
-                <MenuItem Header="{Binding Commands.CreatePdfToWork.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.CreatePdfToWork, Source={StaticResource MainAtpVM}}" InputGestureText="{Binding Commands.CreatePdfToWork.GestureText, Source={StaticResource MainAtpVM}}"/>
                 <MenuItem Header="{Binding Commands.AddAktToworkFromPDF.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.AddAktToworkFromPDF, Source={StaticResource MainAtpVM}}" InputGestureText="{Binding Commands.AddAktToworkFromPDF.GestureText, Source={StaticResource MainAtpVM}}"/>
+                <MenuItem Header="{Binding Commands.SaveCurrentWork.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.SaveCurrentWork, Source={StaticResource MainAtpVM}}" InputGestureText="{Binding Commands.SaveCurrentWork.GestureText, Source={StaticResource MainAtpVM}}"/>
                 <Separator  Margin="1" />
                 <MenuItem Header="{Binding Commands.ProcessCompletedActs.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.ProcessCompletedActs, Source={StaticResource MainAtpVM}}" InputGestureText="{Binding Commands.ProcessCompletedActs.GestureText, Source={StaticResource MainAtpVM}}"/>
-                <Separator  Margin="1" />
-                <MenuItem Header="{Binding Commands.SaveCurrentWork.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.SaveCurrentWork, Source={StaticResource MainAtpVM}}" InputGestureText="{Binding Commands.SaveCurrentWork.GestureText, Source={StaticResource MainAtpVM}}"/>
-                <MenuItem Header="Сохранить как..." />
-
-                <Separator  Margin="1" />
-                <MenuItem Header="Загрузить" />
-                <Separator  Margin="1" />
-                <MenuItem Header="Выход" />
-            </MenuItem>
-            <MenuItem Header="Акты тех. проверок" >
-                <MenuItem Header="Обработать заполненные акты" />
+                <MenuItem Header="Занести в SAP" />
                 <MenuItem Header="Создать сопроводиловку"/>
                 <Separator  Margin="1" />
-                <MenuItem Header="Занести в SAP" />
+                <MenuItem Header="Выход" />
             </MenuItem>
             <MenuItem Header="База" >
                 <MenuItem Header="{Binding Commands.RefreshSapPlombTable.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.RefreshSapPlombTable, Source={StaticResource MainAtpVM}}" InputGestureText="{Binding Commands.RefreshSapPlombTable.GestureText, Source={StaticResource MainAtpVM}}" />
                 <MenuItem Header="{Binding Commands.RefreshSapFlTable.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.RefreshSapFlTable, Source={StaticResource MainAtpVM}}" InputGestureText="{Binding Commands.RefreshSapFlTable.GestureText, Source={StaticResource MainAtpVM}}" />
-
             </MenuItem>
         </Menu>
         <TabControl DockPanel.Dock="Left">
             <TabItem Header="Тех. проверки" FontSize="14">
                 <Grid Margin="0,0,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition  Width="494"/>
-                    </Grid.ColumnDefinitions>
-                    <GridSplitter  Grid.Column="1" HorizontalAlignment="Left" Height="718" VerticalAlignment="Top" Width="5"/>
-                    <TabControl  Grid.Column="1" Margin="5,0,0,1" RenderTransformOrigin="0.5,0.5">
+                    <TabControl Margin="5,0,0,1" RenderTransformOrigin="0.5,0.5">
                         <TabItem Header="Акты в работе" FontSize="14">
-                            <DockPanel   >
-                                <local:AtpEditor  DockPanel.Dock="Left" AtpInWorkSourse="{Binding SelectedItem, ElementName=DatagridInWork}" Width="327" />
-                                <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" DockPanel.Dock="Right" Name="DatagridInWork" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling"  ItemsSource="{Binding Source={StaticResource AktInWorkSourse}}" SelectedItem="{Binding  Path=SelectedAkt, Source={StaticResource MainAtpVM}}" Width="200">
+                            <Grid   >
+                                <Grid.InputBindings>
+                                    <KeyBinding Key="Right" Modifiers="Ctrl"  Command="{Binding Commands.GoNextAkt, Source={StaticResource MainAtpVM}}" />
+                                </Grid.InputBindings>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="683*"/>
+                                    <ColumnDefinition Width="320"/>
+                                    <ColumnDefinition Width="180"/>
+                                </Grid.ColumnDefinitions>
+                                <mpp:MoonPdfPanel Background="LightGray" PageRowDisplay="ContinuousPageRows" x:Name="moonPdfPanel" x:FieldModifier="private"  AllowDrop="False" />
+                                <DockPanel Grid.Column="1">
+                                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                                        <Button Content="{Binding Commands.GoPrevousAkt.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.GoPrevousAkt, Source={StaticResource MainAtpVM}}"  Height="25"/>
+                                        <Button Content="{Binding Commands.GoFirstPageAkt.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.GoFirstPageAkt, Source={StaticResource MainAtpVM}}"  Height="25"/>
+                                        <Button Content="{Binding Commands.GoSecongPageAkt.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.GoSecongPageAkt, Source={StaticResource MainAtpVM}}"  Height="25"/>
+                                        <Button Content="{Binding Commands.GoNextAkt.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.GoNextAkt, Source={StaticResource MainAtpVM}}" Height="25"/>
+                                    <TextBlock Text="{Binding SelectedIndex, ElementName=DatagridInWork}"/>
+                                    </StackPanel>
+                                    <local:AtpEditor   AtpInWorkSourse="{Binding SelectedItem, ElementName=DatagridInWork}"  Margin="5,0" >
+                                        <local:AtpEditor.Style>
+                                            <Style TargetType="local:AtpEditor">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Path=SelectedIndex, ElementName=DatagridInWork}" Value="-1">
+                                                        <Setter Property="IsEnabled" Value="False"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </local:AtpEditor.Style>
+                                    </local:AtpEditor>
+                                </DockPanel>
+                                <ListView  ScrollViewer.HorizontalScrollBarVisibility="Disabled"   Name="DatagridInWork" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling"  ItemsSource="{Binding Source={StaticResource AktInWorkSourse}}" SelectedItem="{Binding  Path=SelectedAkt, Source={StaticResource MainAtpVM}}" Grid.Column="2" >
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Path=AktName}"/>
+                                            <TextBlock Text="{Binding Path=AktName}">
+                                               
+                                            </TextBlock>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
                                     <ListView.GroupStyle>
-                                        <!-- Style for groups at top level. -->
                                         <GroupStyle>
                                             <GroupStyle.ContainerStyle>
                                                 <Style TargetType="{x:Type GroupItem}">
@@ -130,8 +141,16 @@
                                                         <Setter.Value>
                                                             <ControlTemplate TargetType="{x:Type GroupItem}">
                                                                 <Expander IsExpanded="False"  BorderThickness="1,1,1,5" ToolTip="{Binding Path=Name}">
+
                                                                     <Expander.Header>
                                                                         <DockPanel>
+                                                                            <DockPanel.ContextMenu>
+                                                                                <ContextMenu>
+                                                                                    <MenuItem Header="do it"
+    Command="{Binding Commands.ShowAktPage, Source={StaticResource MainAtpVM}}"
+    CommandParameter="{Binding}"/>
+                                                                                </ContextMenu>
+                                                                            </DockPanel.ContextMenu>
                                                                             <TextBlock DockPanel.Dock="Top" TextWrapping="WrapWithOverflow" FontWeight="Bold" Text="{Binding Path=Name, Converter={local:FileName}}"  Margin="5,0,0,0"/>
                                                                             <TextBlock DockPanel.Dock="Left"  Text="{Binding Path=Items.Count }"/>
                                                                             <TextBlock DockPanel.Dock="Left" Text=" шт."/>
@@ -150,10 +169,9 @@
                                         <!-- Style for groups under the top level. -->
                                     </ListView.GroupStyle>
                                     <ListView.Items>
-
                                     </ListView.Items>
                                 </ListView>
-                            </DockPanel>
+                            </Grid>
 
                         </TabItem>
                         <TabItem Header="Заполненные акты" FontSize="14">
@@ -161,6 +179,7 @@
 
                                 <DataGrid IsReadOnly="True" ItemsSource="{Binding Source={StaticResource AllAktSourse}}"
           CanUserAddRows="False"
+                                          SelectedItem=""
                                         AutoGenerateColumns="True" Margin="0,31,0,0" >
                                     <DataGrid.GroupStyle>
                                         <!-- Style for groups at top level. -->
@@ -174,17 +193,10 @@
                                                                     <Expander.Header>
                                                                         <DockPanel>
                                                                             <TextBlock FontWeight="Bold" Text="{Binding Path=Name}" Margin="5,0,0,0" Width="100">
-                                                                                <TextBlock.Style>
-                                                                                    <Style TargetType="TextBlock">
-                                                                                        <Style.Triggers>
-                                                                                            <DataTrigger Binding="{Binding Path=Name}" Value="исх.№91-0 от ">
-                                                                                                <Setter Property="Visibility" Value="Collapsed"/>
-                                                                                            </DataTrigger>
-                                                                                        </Style.Triggers>
-                                                                                    </Style>
-                                                                                </TextBlock.Style>
                                                                             </TextBlock>
-                                                                            <TextBlock FontWeight="Bold" Text="{Binding Path=Items.Count }"/>
+                                                                            <TextBlock Text=" " >
+                                                                            </TextBlock>
+                                                                            <TextBlock Text="{Binding Path=Items.Count }"/>
                                                                             <TextBlock Text="шт. "></TextBlock>
                                                                             <TextBlock Text=" ~" >
                                                                             </TextBlock>
@@ -216,23 +228,6 @@
                                             </GroupStyle.HeaderTemplate>
                                         </GroupStyle>
                                     </DataGrid.GroupStyle>
-                                    <DataGrid.RowDetailsTemplate>
-                                        <DataTemplate>
-                                            <StackPanel>
-                                                <Border Margin="10" Padding="10" BorderBrush="SteelBlue"
-                         BorderThickness="2" CornerRadius="5">
-                                                    <TextBlock HorizontalAlignment="Left" Text="{Binding Path=NumberLS}" TextWrapping="Wrap" 
-                         FontSize="10" MaxWidth="350"></TextBlock>
-                                                </Border>
-                                                <Border Margin="10" Padding="10" BorderBrush="SteelBlue"
-                         BorderThickness="2" CornerRadius="5">
-                                                    <ListBox ItemsSource="{Binding Path=NewPlombs}">
-
-                                                    </ListBox>
-                                                </Border>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </DataGrid.RowDetailsTemplate>
                                 </DataGrid>
 
                                 <TextBox Name ="numberMailTextBlock" HorizontalAlignment="Left" Height="23" Margin="55,3,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="64"/>
@@ -243,7 +238,6 @@
                             </Grid>
                         </TabItem>
                     </TabControl>
-                    <mpp:MoonPdfPanel x:Name="MoonPdfViewer" Background="LightGray" ViewType="SinglePage" PageRowDisplay="ContinuousPageRows" PageMargin="0,2,4,2" x:Name="moonPdfPanel" x:FieldModifier="private" RenderTransformOrigin="0.243,0.495" Margin="0,1,3,0" AllowDrop="False" />
                 </Grid>
             </TabItem>
             <TabItem Header="Внеплан" FontSize="14">

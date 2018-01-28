@@ -63,6 +63,7 @@
     </UserControl.Resources>
     
     <StackPanel Background="White">
+
         <GroupBox  BorderBrush="#FF999999" BorderThickness="2">
             <GroupBox.Header>
                 <StackPanel Orientation="Horizontal">
@@ -74,6 +75,11 @@
                 <StackPanel  Orientation="Horizontal">
                     <TextBlock Text="Номер 91/Е-" VerticalAlignment="Center"/>
                     <TextBox   VerticalAlignment="Center" Style="{StaticResource TextBoxStyle}"   Width="50" MaxLength="5" >
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Up" Command="{Binding Commands.NumberUp, Source={StaticResource AtpEditorViewModel}}" />
+                            <KeyBinding Key="Down" Command="{Binding Commands.NumberDown, Source={StaticResource AtpEditorViewModel}}" />
+                        </TextBox.InputBindings>
+                        
                         <Binding Source="{StaticResource AtpEditorViewModel}" Path="AktInWork.Number" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
         UpdateSourceTrigger="PropertyChanged">
                             <Binding.ValidationRules>
@@ -88,7 +94,12 @@
                             DisplayDateEnd="2025-12-31" 
                             DisplayDateStart="2017-01-01" 
                             TextOptions.TextFormattingMode="Display" 
-                            IsManipulationEnabled="True"/>
+                            IsManipulationEnabled="True">
+                        <DatePicker.InputBindings>
+                            <KeyBinding Key="Up" Command="{Binding Commands.NumberDown, Source={StaticResource AtpEditorViewModel}}" />
+                            <KeyBinding Key="Down" Command="{Binding Commands.DateDown, Source={StaticResource AtpEditorViewModel}}" />
+                        </DatePicker.InputBindings>
+                    </DatePicker>
                 </StackPanel>
                 <StackPanel  Orientation="Horizontal">
                     <CheckBox x:Name="chekBoxDopusk" VerticalAlignment="Center" IsChecked="{Binding AktInWork.DopuskFlag, Source={StaticResource AtpEditorViewModel}}" Content="Допуск"      Height="20"/>
@@ -107,10 +118,13 @@
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock TextWrapping="Wrap" Text="№Л/С:" VerticalAlignment="Center"  />
-                    <TextBox x:Name="NumberLsWPF"  VerticalAlignment="Center"  Style="{StaticResource TextBoxStyle}"
+                    <TextBox x:Name="NumberLsWPF" VerticalAlignment="Center"  Style="{StaticResource TextBoxStyle}"
                            Width="120"  
                          MaxLength="12">
-                        <Binding Source="{StaticResource AtpEditorViewModel}" Path="AktInWork.NumberLS" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" NotifyOnValidationError="True"
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Enter" Command="{Binding Commands.GetDataFromDbByNumberLs, Source={StaticResource AtpEditorViewModel}}" />
+                        </TextBox.InputBindings>
+                                <Binding Source="{StaticResource AtpEditorViewModel}" Path="AktInWork.NumberLS" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" NotifyOnValidationError="True"
       >
                             <Binding.ValidationRules>
                                 <viewModel:ValidNumberLS/>
@@ -138,16 +152,15 @@
                 </StackPanel>
             </GroupBox.Header>
             <StackPanel Orientation="Vertical">
-                <ComboBox xmlns:sys="clr-namespace:System;assembly=mscorlib" HorizontalAlignment="Left" Height="25" Width="240" ItemsSource="{Binding AgentList, Source={StaticResource AtpEditorViewModel}}" SelectedItem="{Binding AktInWork.Agent_1, Source={StaticResource AtpEditorViewModel}}" Background="{x:Null}" BorderBrush="#FF9CDEC6" BorderThickness="1">
-                    <ComboBox.Resources>
-                        <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">0</sys:Double>
-                    </ComboBox.Resources>
+                <ComboBox   HorizontalAlignment="Left" Height="25" Width="240" ItemsSource="{Binding AgentList, Source={StaticResource AtpEditorViewModel}}" SelectedItem="{Binding AktInWork.Agent_1, Source={StaticResource AtpEditorViewModel}}" Background="{x:Null}"  BorderThickness="1">
                 </ComboBox>
-                <ComboBox xmlns:sys="clr-namespace:System;assembly=mscorlib" HorizontalAlignment="Left" Height="25" Width="240" ItemsSource="{Binding AgentList, Source={StaticResource AtpEditorViewModel}}" SelectedItem="{Binding AktInWork.Agent_2, Source={StaticResource AtpEditorViewModel}}" Background="{x:Null}" BorderBrush="#FF9CDEC6" BorderThickness="1">
-                    <ComboBox.Resources>
-                        <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">0</sys:Double>
-                    </ComboBox.Resources>
+                <StackPanel Orientation="Horizontal">
+                <ComboBox  HorizontalAlignment="Left" Height="25" Width="240" ItemsSource="{Binding AgentList, Source={StaticResource AtpEditorViewModel}}" SelectedItem="{Binding AktInWork.Agent_2, Source={StaticResource AtpEditorViewModel}}" Background="{x:Null}" BorderThickness="1">
                 </ComboBox>
+                    <Button  Focusable="False" Command="{Binding Commands.RemoveSecondAgent, Source={StaticResource AtpEditorViewModel}}">
+                        <Image  Height="20" Source="/ATPWork;component/Resources/icons8-удалить.png" Width="20" />
+                    </Button>
+                </StackPanel>
             </StackPanel>
         </GroupBox>
         <GroupBox BorderBrush="#FF999999" BorderThickness="2" >
@@ -221,6 +234,9 @@
                 <StackPanel Orientation="Horizontal" >
                     <TextBlock Text="Номер:" VerticalAlignment="Center" Margin="1,1,1,1"/>
                     <TextBox   Style="{StaticResource TextBoxStyle}"  MinWidth="120"  VerticalAlignment="Center">
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Enter" Command="{Binding Commands.GetDataFromDbByNumberPu, Source={StaticResource AtpEditorViewModel}}" />
+                        </TextBox.InputBindings>
                         <Binding Source="{StaticResource AtpEditorViewModel}" Path="AktInWork.PuOldNumber" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
         UpdateSourceTrigger="PropertyChanged">
                             <Binding.ValidationRules>

@@ -46,7 +46,8 @@ namespace MyApp.Model
         {
             get {
                 string result;
-                result = "исх.№91-" + numberMail + " от " + DateMail;
+                if ((numberMail > 0) && DateMail != "") result = "исх.№91-" + numberMail + " от " + DateMail;
+                else result = "Неотправлено";
                 return result;
             }
             
@@ -56,7 +57,9 @@ namespace MyApp.Model
             get
             {
                 string result;
-                result = "№91-" + number + " от " + DateWork?.ToString("d") ;
+                if (number>0 && DateWork!=null) result = "№91-" + number + " от " + DateWork?.ToString("d");
+                else result = NumberOfPagesInSoursePdf[0] + "стр.; "+ NumberOfPagesInSoursePdf[1] + "стр.;  незаполнен";
+               
                 return result;
             }
         }
@@ -382,6 +385,12 @@ namespace MyApp.Model
                 if (puNewPoverkaKvartal == null || puNewPoverkaKvartal == "") result = false;
                 if (puNewType == null) return false;
             }
+
+            foreach (Plomba item in NewPlombs)
+            {
+                if (item.Number == "" || item.Type == "") result = false;
+            }
+
             Complete = result;
             return result;
         }

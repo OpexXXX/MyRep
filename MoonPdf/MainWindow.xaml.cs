@@ -30,6 +30,7 @@ using ATPWork.MyApp.ViewModel.AtpEditor;
 using ATPWork.MyApp.ViewModel.PlombEditorVm;
 using System.Windows.Markup;
 using System.Globalization;
+using ATPWork.MyApp.ViewModel;
 
 namespace MyApp
 {
@@ -38,13 +39,22 @@ namespace MyApp
     public partial class MainWindow : Window
     {
 
+        MainAtpVM MainAtpViemModel;
+
+
         internal MoonPdfPanel MoonPdfPanel { get { return this.moonPdfPanel; } }
         public MainWindow()
         {
             DataBaseWorker.Initial();
             MainAtpModel.InitMainAtpModel();
             InitializeComponent();
+            MainAtpViemModel = (MainAtpVM)this.Resources["MainAtpVM"];
+            MainAtpViemModel.PdfViewer = moonPdfPanel;
+            MainAtpViemModel.ListBoxAktInWork = DatagridInWork;
+                
+
             this.Loaded += MainWindow_Loaded;
+            
         }
 
         void MainWindow_Loaded(object sender, RoutedEventArgs e)
