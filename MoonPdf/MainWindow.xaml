@@ -9,7 +9,7 @@
         xmlns:viewModel="clr-namespace:ATPWork.MyApp.ViewModel"
         xmlns:behaviors="clr-namespace:WPFTextBoxAutoComplete;assembly=WPFTextBoxAutoComplete"
         xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing" xmlns:ee="http://schemas.microsoft.com/expression/2010/effects" xmlns:Custom="http://schemas.microsoft.com/wpf/2008/toolkit" x:Class="MyApp.MainWindow"
-        Title="ATPWorker" WindowStartupLocation="CenterScreen" Height="939.167" Width="1202.167" UseLayoutRounding="True" MinHeight="300" MinWidth="430" Icon="Resources/iconATP.ico" ScrollViewer.CanContentScroll="True" AllowDrop="True" Closing="Window_Closing" >
+        Title="ATPWorker" WindowStartupLocation="CenterScreen" Height="704.666" Width="1132.883" UseLayoutRounding="True" MinHeight="300" MinWidth="430" Icon="Resources/iconATP.ico" ScrollViewer.CanContentScroll="True" AllowDrop="True" Closing="Window_Closing" >
     <Window.Resources>
 
 
@@ -110,7 +110,7 @@
                                         <Button Content="{Binding Commands.GoFirstPageAkt.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.GoFirstPageAkt, Source={StaticResource MainAtpVM}}"  Height="25"/>
                                         <Button Content="{Binding Commands.GoSecongPageAkt.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.GoSecongPageAkt, Source={StaticResource MainAtpVM}}"  Height="25"/>
                                         <Button Content="{Binding Commands.GoNextAkt.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.GoNextAkt, Source={StaticResource MainAtpVM}}" Height="25"/>
-                                    <TextBlock Text="{Binding SelectedIndex, ElementName=DatagridInWork}"/>
+                                        <TextBlock Text="{Binding SelectedIndex, ElementName=DatagridInWork}"/>
                                     </StackPanel>
                                     <local:AtpEditor   AtpInWorkSourse="{Binding SelectedItem, ElementName=DatagridInWork}"  Margin="5,0" >
                                         <local:AtpEditor.Style>
@@ -128,7 +128,7 @@
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Path=AktName}">
-                                               
+
                                             </TextBlock>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>

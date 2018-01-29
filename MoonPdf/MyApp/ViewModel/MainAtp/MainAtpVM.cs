@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace ATPWork.MyApp.ViewModel
@@ -60,9 +61,16 @@ namespace ATPWork.MyApp.ViewModel
                 if (_currentPagePdf != value)
                 {
                     _currentPagePdf = value;
-                    PdfViewer.GotoPage(value+1);
-                   
-                   OnPropertyChanged("CurrentPagePdf");
+                    try
+                    {
+                        PdfViewer.GotoPage(value + 1);
+                    }
+                    catch (Exception ex)
+                    {
+
+                        MessageBox.Show(ex.Message);
+                    }
+                    OnPropertyChanged("CurrentPagePdf");
                 };
             }
         }
@@ -75,8 +83,17 @@ namespace ATPWork.MyApp.ViewModel
                 if (_currentFilePdf != value)
                 {
                     _currentFilePdf = value;
-                    PdfViewer.OpenFile(value);
-                    PdfViewer.ZoomToWidth();
+                    try
+                    {
+                        PdfViewer.OpenFile(value);
+                        PdfViewer.ZoomToWidth();
+                    }
+                    catch (Exception ex)
+                    {
+
+                        MessageBox.Show(ex.Message);
+                    }
+                    
                     OnPropertyChanged("CurrentFilePdf");
                 }
             }

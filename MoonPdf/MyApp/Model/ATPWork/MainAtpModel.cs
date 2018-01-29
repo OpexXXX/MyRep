@@ -67,19 +67,38 @@ namespace MyApp.Model
         public static event AllAtpListRefreshHandler AllAtpRefreshRefresh;
         public delegate void CurrentWorkListRefreshHandler();
         public static event CurrentWorkListRefreshHandler CurrentWorkRefresh;
+
         private static List<AktTehProverki> _allAkt = new List<AktTehProverki>();
         public static List<AktTehProverki> AllAkt
         {
             get { return _allAkt; }
             set { _allAkt = value; }
         }
+
         private static List<AktTehProverki> _allAktInCurrentWork = new List<AktTehProverki>();
         public static List<AktTehProverki> AllAktInCurrentWork
         {
             get { return _allAktInCurrentWork; }
             set { _allAktInCurrentWork = value; }
         }
+        public static List<AktTehProverki> UnmailedAkt
+        {
+            get {
+                List<AktTehProverki> result = new List<AktTehProverki>();
+
+                foreach (AktTehProverki item in _allAkt)
+                {
+                    if (item.DateMail == "")
+                    {
+                        result.Add(item);
+                    }
+                }
+
+                return result; }
+           
+        }
         #endregion
+
         private static string _aktDirektory = Environment.CurrentDirectory;
         public static string AktDirektory
         {
@@ -90,6 +109,18 @@ namespace MyApp.Model
 
             }
         }
+
+        private static string _mialDirektory = Environment.CurrentDirectory;
+        public static string MailDirektory
+        {
+            get { return _mialDirektory; }
+            set
+            {
+                _mialDirektory = value;
+
+            }
+        }
+        #region Инициализация 
         public static void InitMainAtpModel()
         {
             InitListsForCombos();
@@ -114,6 +145,10 @@ namespace MyApp.Model
             PlacePlomb = DataBaseWorker.PlacePlombListInit();
             ComboRefresh?.Invoke();
         }
+        #endregion
+
+
+
         public static void CreateWorkFromPdf(string pathOfPdfFile, IProgress<double> progress)
         {
             FileInfo file = new FileInfo(pathOfPdfFile);
@@ -166,6 +201,7 @@ namespace MyApp.Model
             iTextPDFReader.Close();
             CurrentWorkRefresh?.Invoke();
         }
+
         private static string GetTextOfPdfPage(int indexPageForSearch, PdfReader iTextPDFReader)
         {
 
@@ -215,7 +251,8 @@ namespace MyApp.Model
                 throw;
             }
         }
-        public static void blindPdf(List<AktTehProverki> akts, string folderPath)
+
+        private static void blindPdf(List<AktTehProverki> akts, string folderPath)
         {
             List<AktTehProverki> proverki = new List<AktTehProverki>();
             List<AktTehProverki> dopuski = new List<AktTehProverki>();
@@ -281,6 +318,16 @@ namespace MyApp.Model
             }
 
         }
+
+        public static void CreateMailATP(IProgress<double> progress, string numberMail, string dateMail, List<AktTehProverki> akts)
+        {
+            string mailName = "исх.№91-" + numberMail + " от " + dateMail + "г. Акты ПР ФЛ";
+            string currentMailDirectory = MailDirektory + "\\" + mailName;
+            blindPdf(akts, currentMailDirectory);
+            ExcelWorker.DataTableToExcel(akts, currentMailDirectory);
+        }
+
+
         public static int MoveComleteAtp(IProgress<double> progress)
         {
             int i = 0;

@@ -33,13 +33,12 @@ namespace MyApp.Model
             HeaderColumn.Add(new string[] { "Номер ПУ", "PuNumber" });
             HeaderColumn.Add(new string[] { "Показание", "Pokazanie" });
         }
-        /*
-        private DataSet MakeDataSet(AllATPObserv akti)
+        private static DataSet MakeDataSet(List<AktTehProverki> akti)
         {
             DataSet Result = new DataSet("Reestr");
-            AllATPObserv proverki = new AllATPObserv();
-            AllATPObserv dopuski = new AllATPObserv();
-            AllATPObserv demontag = new AllATPObserv();
+            List<AktTehProverki> proverki = new List<AktTehProverki>();
+            List<AktTehProverki> dopuski = new List<AktTehProverki>();
+            List<AktTehProverki> demontag = new List<AktTehProverki>();
             DataTable table;
             foreach (AktTehProverki item in akti)
             {
@@ -66,7 +65,7 @@ namespace MyApp.Model
             }
             return Result;
         }
-        private DataTable MakeDataTable(AllATPObserv Temp_akti)
+        private static  DataTable MakeDataTable(List<AktTehProverki> Temp_akti)
         {
             DataTable table = new DataTable("Reestr");
             DataColumn column;
@@ -116,7 +115,7 @@ namespace MyApp.Model
             }
             return table;
         }
-        private void SetDefaultOptions(Dictionary<string, string> options)
+        private static void  SetDefaultOptions(Dictionary<string, string> options)
         {
             if (!options.ContainsKey("Worksheet.name")) options["Worksheet.Name"] = "Реестр";
             if (!options.ContainsKey("Worksheet.TabColor")) options["Worksheet.TabColor"] = "Blue";
@@ -129,7 +128,7 @@ namespace MyApp.Model
             if (!options.ContainsKey("Td.Style.Fill.BackgroundColor")) options["Td.Style.Fill.BackgroundColor"] = "White";
             if (!options.ContainsKey("Td.Style.Fill.Color")) options["Td.Style.Fill.Color"] = "Black";
         }
-        private void SetWorkSheetStyles(ExcelWorksheet worksheet, Dictionary<string, string> options)
+        private static void SetWorkSheetStyles(ExcelWorksheet worksheet, Dictionary<string, string> options)
         {
             worksheet.TabColor = (Color)typeof(Color).GetProperty(options["Worksheet.TabColor"]).GetValue(null, null);
             worksheet.DefaultRowHeight = Int32.Parse(options["Worksheet.DefaultRowHeight"]);
@@ -137,7 +136,7 @@ namespace MyApp.Model
             worksheet.HeaderFooter.FirstFooter.LeftAlignedText = string.Format("Generated: {0}", DateTime.Now.ToShortDateString());
             worksheet.Row(2).Height = 45;
         }
-        private void SetThStyle(ExcelRange range, Dictionary<string, string> options)
+        private static void SetThStyle(ExcelRange range, Dictionary<string, string> options)
         {
             range.AutoFilter = true;
             range.Style.Font.Bold = Boolean.Parse(options["Th.Style.Font.Bold"]);
@@ -153,7 +152,7 @@ namespace MyApp.Model
                 item.Style.Border.BorderAround(ExcelBorderStyle.Thin);
             }
         }
-        private void SetHeaderStyle(ExcelRange range, Dictionary<string, string> options)
+        private static void SetHeaderStyle(ExcelRange range, Dictionary<string, string> options)
         {
             range.Style.Font.Bold = true;
             range.Style.Fill.PatternType = ExcelFillStyle.Solid;
@@ -164,7 +163,7 @@ namespace MyApp.Model
             range.Style.WrapText = false;
 
         }
-        private void SetTdStyle(ExcelRange range, Dictionary<string, string> options)
+        private static void SetTdStyle(ExcelRange range, Dictionary<string, string> options)
         {
             range.Style.Font.Bold = Boolean.Parse(options["Td.Style.Font.Bold"]);
             range.Style.Fill.PatternType = ExcelFillStyle.Solid;
@@ -177,7 +176,8 @@ namespace MyApp.Model
                 item.Style.Border.BorderAround(ExcelBorderStyle.Thin);
             }
         }
-        public void DataTableToExcel(AllATPObserv akti, string path, Dictionary<string, string> options = null)
+
+        public static void DataTableToExcel(List<AktTehProverki> akti, string path, Dictionary<string, string> options = null)
         {
             if (options == null)
                 options = new Dictionary<string, string>();
@@ -253,10 +253,9 @@ namespace MyApp.Model
                 //Сохраняем фаил
                 package.Save();
             }
-            //Открываем экселем сохраняем в пдф
-            
 
-            ExcelCOM.Application excelapp;
+            //Открываем экселем сохраняем в пдф
+          /*  ExcelCOM.Application excelapp;
             ExcelCOM.Workbook wb;
             ExcelCOM.Workbooks wbs;
             ExcelCOM.Worksheet wsh;
@@ -275,11 +274,11 @@ namespace MyApp.Model
             save =  path.Replace(".xlsx", ".pdf");
             wb.ExportAsFixedFormat(ExcelCOM.XlFixedFormatType.xlTypePDF, save, Type.Missing, true, Type.Missing, Type.Missing, Type.Missing, false, Type.Missing);
             wbs.Close();
-            excelapp.Quit();
+            excelapp.Quit();*/
 
 
         }
-        */
+        
 
         public static DataSet makeDataSetForSAPFL(FileStream excelFilePath)
         {
