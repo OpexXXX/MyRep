@@ -1,20 +1,15 @@
-﻿using MyApp.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using iTextSharp.text;
 using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.parser;
-using System.Threading;
 using System.IO;
 using System.Windows;
+using Ionic.Zip;
+using System.Text;
 
 namespace MyApp.Model
+
 {
     static class MainAtpModel
     {
@@ -74,7 +69,6 @@ namespace MyApp.Model
             get { return _allAkt; }
             set { _allAkt = value; }
         }
-
         private static List<AktTehProverki> _allAktInCurrentWork = new List<AktTehProverki>();
         public static List<AktTehProverki> AllAktInCurrentWork
         {
@@ -85,17 +79,14 @@ namespace MyApp.Model
         {
             get {
                 List<AktTehProverki> result = new List<AktTehProverki>();
-
                 foreach (AktTehProverki item in _allAkt)
                 {
-                    if (item.DateMail == "")
+                    if (item.DateMail == null)
                     {
                         result.Add(item);
                     }
                 }
-
                 return result; }
-           
         }
         #endregion
 
@@ -261,6 +252,7 @@ namespace MyApp.Model
                 if (item.DopuskFlag) dopuski.Add(item);
                 else proverki.Add(item);
             }
+
             string FileName, FilePath;
             if (dopuski.Count > 0)
             {
@@ -270,6 +262,7 @@ namespace MyApp.Model
                 {
                     using (FileStream FStream = new System.IO.FileStream(FilePath, System.IO.FileMode.Create))
                     {
+
                         iTextSharp.text.Document doc = new iTextSharp.text.Document();
                         iTextSharp.text.pdf.PdfCopy Writer = new iTextSharp.text.pdf.PdfCopy(doc, FStream);
                         Writer.SetPdfVersion(PdfWriter.PDF_VERSION_1_5);
@@ -278,7 +271,7 @@ namespace MyApp.Model
                         doc.Open();
                         foreach (var item in dopuski)
                         {
-                            iTextSharp.text.pdf.PdfReader ReaderDoc1 = new iTextSharp.text.pdf.PdfReader(AktDirektory + item.NamePdfFile);
+                            iTextSharp.text.pdf.PdfReader ReaderDoc1 = new iTextSharp.text.pdf.PdfReader(AktDirektory +"\\"+ item.NamePdfFile);
                             Writer.AddDocument(ReaderDoc1);
                         }
                         doc.Close();
@@ -305,7 +298,7 @@ namespace MyApp.Model
                         doc.Open();
                         foreach (var item in proverki)
                         {
-                            iTextSharp.text.pdf.PdfReader ReaderDoc1 = new iTextSharp.text.pdf.PdfReader(AktDirektory + item.NamePdfFile);
+                            iTextSharp.text.pdf.PdfReader ReaderDoc1 = new iTextSharp.text.pdf.PdfReader(AktDirektory +"\\"+ item.NamePdfFile);
                             Writer.AddDocument(ReaderDoc1);
                         }
                         doc.Close();
@@ -319,12 +312,83 @@ namespace MyApp.Model
 
         }
 
-        public static void CreateMailATP(IProgress<double> progress, string numberMail, string dateMail, List<AktTehProverki> akts)
+        public static void CreateMailATP(IProgress<string> progress, int numberMail, DateTime dateMail)
         {
-            string mailName = "исх.№91-" + numberMail + " от " + dateMail + "г. Акты ПР ФЛ";
+            List<AktTehProverki> TempList = new List<AktTehProverki>();
+
+            string mailName = "исх.№91-" + numberMail + " от " + dateMail.ToString("d") + "г. Акты ПР ФЛ";
             string currentMailDirectory = MailDirektory + "\\" + mailName;
-            blindPdf(akts, currentMailDirectory);
-            ExcelWorker.DataTableToExcel(akts, currentMailDirectory);
+            progress.Report("Создаем папку "+currentMailDirectory);
+            if (!Directory.Exists(currentMailDirectory)) Directory.CreateDirectory(currentMailDirectory);
+
+            foreach (AktTehProverki item in AllAkt)
+            {
+                item.checkToComplete();
+                string filePath = AktDirektory + "\\" + item.NamePdfFile;
+                bool PdfExist = File.Exists(filePath);
+
+                bool mailed = item.DateMail == null;
+                if (PdfExist&& mailed) TempList.Add(item);
+            }
+
+            if (TempList.Count > 0)
+            {
+                progress.Report(TempList.Count + " актов для отправки ");
+                progress.Report("Склеиваем Pdf");
+                blindPdf(TempList, currentMailDirectory);
+                progress.Report("Создаем Реестр");
+                ExcelWorker.DataTableToExcel(TempList, currentMailDirectory);
+
+                using (ZipFile zip = new ZipFile()) // Создаем объект для работы с архивом
+                {
+                    zip.UseUnicodeAsNecessary = true;
+                    zip.ProvisionalAlternateEncoding = System.Text.Encoding.GetEncoding("cp866");
+
+                    zip.CompressionLevel = Ionic.Zlib.CompressionLevel.BestCompression; // Задаем максимальную степень сжатия 
+                   if(File.Exists(currentMailDirectory + "\\" + "Проверки.pdf")) zip.AddFile(currentMailDirectory + "\\" + "Проверки.pdf","\\"); // Кладем в архив одиночный файл
+                    if (File.Exists(currentMailDirectory + "\\" + "Допуски.pdf")) zip.AddFile(currentMailDirectory + "\\" + "Допуски.pdf", "\\"); // Кладем в архив одиночный файл
+                    if (File.Exists(currentMailDirectory + "\\" + "Реестр.xlsx")) zip.AddFile(currentMailDirectory + "\\" + "Реестр.xlsx", "\\"); // Кладем в архив одиночный файл
+                    var g = zip.Count;
+                   
+                   
+
+                    zip.Save(currentMailDirectory + "\\"+mailName+".zip"); // Создаем архив     
+                }
+
+                progress.Report("Обновляем состояние актов");
+                foreach (AktTehProverki item in TempList)
+                {
+                    item.DateMail = dateMail;
+                    item.NumberMail = numberMail;
+                    AllAtpRefreshRefresh?.Invoke();
+                }
+            }
+        }
+        public static void CreateMailATP(IProgress<string> progress, int numberMail, DateTime dateMail, List<AktTehProverki> akts)
+        {
+            List<AktTehProverki> TempList = new List<AktTehProverki>();
+            string mailName = "исх.№91-" + numberMail + " от " + dateMail.ToString("d") + "г. Акты ПР ФЛ";
+            string currentMailDirectory = MailDirektory + "\\" + mailName;
+            if (!Directory.Exists(currentMailDirectory)) Directory.CreateDirectory(currentMailDirectory);
+            foreach (AktTehProverki item in akts)
+            {
+                item.checkToComplete();
+                string filePath = AktDirektory + "\\" + item.NamePdfFile;
+                bool PdfExist = File.Exists(filePath);
+                if (PdfExist) TempList.Add(item);
+            }
+            if (TempList.Count > 0)
+            {
+                blindPdf(TempList, currentMailDirectory);
+                ExcelWorker.DataTableToExcel(TempList, currentMailDirectory);
+                foreach (AktTehProverki item in TempList)
+                {
+                    item.DateMail = dateMail;
+                    item.NumberMail = numberMail;
+                    AllAtpRefreshRefresh?.Invoke();
+                }
+            }
+
         }
 
 

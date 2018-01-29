@@ -20,6 +20,7 @@ namespace ATPWork.MyApp.ViewModel
         {
             get { return _progressBarValue; }
             set { _progressBarValue = value;
+
                 OnPropertyChanged("ProgressBarValue");
             }
         }
@@ -33,11 +34,28 @@ namespace ATPWork.MyApp.ViewModel
                 OnPropertyChanged("ProgressBarText");
             }
         }
+
+        private string _logText;
+        public string LogText
+        {
+            get { return _logText; }
+            set
+            {
+                _logText += "\n";
+                _logText += DateTime.Now + value;
+                OnPropertyChanged("LogText");
+            }
+        }
         public void SetProgressBarValue(double val)
         {
             ProgressBarValue = val;
             ProgressBarText = ((int)val).ToString() + '%';
         }
+        public void SetProgressBarText(string text)
+        {
+            LogText = text;
+        }
+
         #endregion
         #region Команды
         private Commands _commands;
@@ -100,6 +118,41 @@ namespace ATPWork.MyApp.ViewModel
         }
         public MoonPdfPanel PdfViewer;
         #endregion
+
+        #region сопроводиловка
+        private  int _mailNumber ;
+        public int MailNumber
+        {
+            get { return _mailNumber; }
+            set
+            {
+                _mailNumber = value;
+                OnPropertyChanged("MailNumber");
+            }
+        }
+        private DateTime? _mailDate;
+        public DateTime? MailDate
+        {
+            get { return _mailDate; }
+            set
+            {
+                _mailDate = value;
+                OnPropertyChanged("MailDate");
+            }
+        }
+        public int UnmailedAkt
+        {
+            get {
+                int result=0;
+                foreach (AktTehProverki item in AllAkt)
+                {
+                    if (item.DateMail == null) result++;
+                }
+                return result; }
+            
+        }
+
+        #endregion
         public ListView ListBoxAktInWork { get; internal set; }
         private AktTehProverki _selectedAkt;
         public AktTehProverki SelectedAkt
@@ -152,6 +205,11 @@ namespace ATPWork.MyApp.ViewModel
 
                 return result.ToString(); }
             
+        }
+
+        internal void CreateMailAllComplete(Progress<string> progress)
+        {
+            MainAtpModel.CreateMailATP(progress, MailNumber,(DateTime) MailDate);
         }
 
         private AktTehProverki _selectedAktComplete;

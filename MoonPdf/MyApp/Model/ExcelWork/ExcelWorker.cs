@@ -75,9 +75,9 @@ namespace MyApp.Model
             {
                 akti.Add(item);
             }
-            akti.Sort();
-            // parts.Sort(delegate (Part x, Part y);
-            // Создаем новый стобец указываем тип 
+            akti.Sort(delegate (AktTehProverki akt1, AktTehProverki akt2)
+            { return akt1.Number.CompareTo(akt2.Number); });
+
             column = new DataColumn();
             column.DataType = System.Type.GetType("System.Int32");
             column.ColumnName = "id";
@@ -103,8 +103,9 @@ namespace MyApp.Model
             foreach (AktTehProverki item in akti)
             {
                 row = table.NewRow();
+
                 row["Number"] = item.Number;
-                row["DateWork"] = item.DateWork.ToString("d");
+                row["DateWork"] = item.DateWork?.ToString("d");
                 row["NumbeLS"] = item.NumberLS;
                 row["FIO"] = item.FIO;
                 row["Adress"] = item.Adress;
@@ -177,14 +178,14 @@ namespace MyApp.Model
             }
         }
 
-        public static void DataTableToExcel(List<AktTehProverki> akti, string path, Dictionary<string, string> options = null)
+        public static void DataTableToExcel(List<AktTehProverki> akti, string mailPath, Dictionary<string, string> options = null)
         {
             if (options == null)
                 options = new Dictionary<string, string>();
             SetDefaultOptions(options);
             //Создаем фаил
             
-            using (var file = new FileStream(path, FileMode.Create))
+            using (var file = new FileStream(mailPath+"\\Реестр.xlsx", FileMode.Create))
             {
                 int rowIndex = 1;
                 ExcelPackage package = new ExcelPackage(file);

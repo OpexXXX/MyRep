@@ -72,6 +72,13 @@
                 <ProgressBar Width="155" RenderTransformOrigin="0.5,0.5" Value="{Binding ProgressBarValue, Source={StaticResource MainAtpVM}}" Cursor="None"  Height="16" VerticalAlignment="Top" />
                 <TextBlock Text="{Binding ProgressBarText, Source={StaticResource MainAtpVM}}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Grid>
+            <TextBlock Text="Вывод">
+                <TextBlock.ContextMenu>
+                    <ContextMenu>
+                        <TextBox Text="{Binding LogText, Source={StaticResource MainAtpVM}}"/>
+                    </ContextMenu>
+                </TextBlock.ContextMenu>
+            </TextBlock>
         </StatusBar>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Тех. проверки" >
@@ -80,7 +87,7 @@
                 <Separator  Margin="1" />
                 <MenuItem Header="{Binding Commands.ProcessCompletedActs.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.ProcessCompletedActs, Source={StaticResource MainAtpVM}}" InputGestureText="{Binding Commands.ProcessCompletedActs.GestureText, Source={StaticResource MainAtpVM}}"/>
                 <MenuItem Header="Занести в SAP" />
-                <MenuItem Header="Создать сопроводиловку"/>
+                <MenuItem Header="{Binding Commands.CreateMailAllPossibleAkt.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.CreateMailAllPossibleAkt, Source={StaticResource MainAtpVM}}" />
                 <Separator  Margin="1" />
                 <MenuItem Header="Выход" />
             </MenuItem>
@@ -175,12 +182,18 @@
 
                         </TabItem>
                         <TabItem Header="Заполненные акты" FontSize="14">
-                            <Grid>
-
-                                <DataGrid IsReadOnly="True" ItemsSource="{Binding Source={StaticResource AllAktSourse}}"
+                            <StackPanel>
+                                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="исх.№" VerticalAlignment="Top"/>
+                                <TextBox Name ="numberMailTextBlock" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding MailNumber, Source={StaticResource MainAtpVM}}" VerticalAlignment="Top" Width="64"/>
+                                <TextBlock HorizontalAlignment="Left"  TextWrapping="Wrap" Text="от" VerticalAlignment="Top"/>
+                                <DatePicker SelectedDate="{Binding MailDate, Source={StaticResource MainAtpVM}}" x:Name ="dateMail" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                </StackPanel>
+                                <StackPanel>
+                                <DataGrid DockPanel.Dock="Left" IsReadOnly="True" ItemsSource="{Binding Source={StaticResource AllAktSourse}}"
           CanUserAddRows="False"
                                           SelectedItem=""
-                                        AutoGenerateColumns="True" Margin="0,31,0,0" >
+                                        AutoGenerateColumns="True">
                                     <DataGrid.GroupStyle>
                                         <!-- Style for groups at top level. -->
                                         <GroupStyle>
@@ -192,18 +205,38 @@
                                                                 <Expander IsExpanded="False" >
                                                                     <Expander.Header>
                                                                         <DockPanel>
-                                                                            <TextBlock FontWeight="Bold" Text="{Binding Path=Name}" Margin="5,0,0,0" Width="100">
+                                                                                <DockPanel.ContextMenu>
+                                                                                    <ContextMenu>
+                                                                                        <MenuItem Header="{Binding Commands.OpenFolderMail.Name, Source={StaticResource MainAtpVM}}" 
+                                                                                                  Command="{Binding Commands.OpenFolderMail, Source={StaticResource MainAtpVM}}" 
+                                                                                                  CommandParameter="{Binding Path=Name}"
+                                                                                                  />
+                                                                                    </ContextMenu>
+                                                                                </DockPanel.ContextMenu>
+                                                                            <TextBlock FontWeight="Bold" Text="{Binding Path=Name}" Margin="5,0,0,0">
                                                                             </TextBlock>
                                                                             <TextBlock Text=" " >
                                                                             </TextBlock>
                                                                             <TextBlock Text="{Binding Path=Items.Count }"/>
                                                                             <TextBlock Text="шт. "></TextBlock>
+                                                                                <StackPanel Orientation="Horizontal" Visibility="Visible">
+                                                                                    <StackPanel.Style>
+                                                                                        <Style TargetType="StackPanel">
+                                                                                            <Style.Triggers>
+                                                                                                <DataTrigger Binding="{Binding Path=Name}" Value="Неотправлено">
+                                                                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                                                                </DataTrigger>
+                                                                                            </Style.Triggers>
+                                                                                        </Style>
+                                                                                    </StackPanel.Style> 
                                                                             <TextBlock Text=" ~" >
+                                                                                
                                                                             </TextBlock>
                                                                             <TextBlock  Text="{Binding  Path=SizeUnmailedPdf, Source={StaticResource MainAtpVM}}">
                                                                             </TextBlock>
                                                                             <TextBlock Text=" КБ">
                                                                             </TextBlock>
+                                                                                </StackPanel>
                                                                         </DockPanel>
                                                                     </Expander.Header>
                                                                     <Expander.Content>
@@ -229,13 +262,9 @@
                                         </GroupStyle>
                                     </DataGrid.GroupStyle>
                                 </DataGrid>
-
-                                <TextBox Name ="numberMailTextBlock" HorizontalAlignment="Left" Height="23" Margin="55,3,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="64"/>
-                                <TextBlock HorizontalAlignment="Left" Margin="10,6,0,0" TextWrapping="Wrap" Text="исх.№" VerticalAlignment="Top"/>
-                                <DatePicker x:Name ="dateMail" HorizontalAlignment="Left" Margin="143,2,0,0" VerticalAlignment="Top"/>
-                                <TextBlock HorizontalAlignment="Left" Margin="124,6,0,0" TextWrapping="Wrap" Text="от" VerticalAlignment="Top"/>
-                                <Button Content="Сделать" HorizontalAlignment="Left" Margin="259,3,0,0" VerticalAlignment="Top" Width="87" />
-                            </Grid>
+                                   
+                                </StackPanel>
+                            </StackPanel>
                         </TabItem>
                     </TabControl>
                 </Grid>

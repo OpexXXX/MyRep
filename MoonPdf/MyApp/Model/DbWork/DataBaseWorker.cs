@@ -301,7 +301,13 @@ namespace MyApp.Model
                 result[i].PuOldPokazanie = r["PuOldPokazanie"].ToString();
                 result[i].PuOldType = r["PuOldType"].ToString();
                 result[i].NumberMail = Int32.Parse(r["NumberMail"].ToString());
-                result[i].DateMail = r["DateMail"].ToString();
+
+              
+
+                string dtm = r["DateMail"].ToString();
+                if (dtm == "") result[i].DateMail = null;
+                else result[i].DateMail = DateTime.Parse(dtm);
+
                 result[i].Ustanovka = r["Ustanovka"].ToString();
                 result[i].SapNumberAkt = r["SapNumberAkt"].ToString();
                 result[i].EdOborudovania = r["EdOborudovania"].ToString();
@@ -380,7 +386,11 @@ namespace MyApp.Model
                 result[i].PuOldPokazanie = r["PuOldPokazanie"].ToString();
                 result[i].PuOldType = r["PuOldType"].ToString();
                 result[i].NumberMail = Int32.Parse(r["NumberMail"].ToString());
-                result[i].DateMail = r["DateMail"].ToString();
+
+                string dtm = r["DateMail"].ToString();
+                if (dtm == "") result[i].DateMail = null;
+                else result[i].DateMail = DateTime.Parse(dtm);
+
                 result[i].Ustanovka = r["Ustanovka"].ToString();
                 result[i].SapNumberAkt = r["SapNumberAkt"].ToString();
                 result[i].EdOborudovania = r["EdOborudovania"].ToString();
@@ -506,7 +516,7 @@ namespace MyApp.Model
                         + akt.NumberOfPagesInSoursePdf[0] + "','"
                          + akt.NumberOfPagesInSoursePdf[1] + "','"
                           + akt.NumberMail.ToString() + "','"
-                           + (akt.DateMail != null ? akt.DateMail : "") + "','"
+                           + (akt.DateMail != null ? akt.DateMail?.ToString("d") : "") + "','"
                            + akt.Ustanovka + "','"
                            + akt.SapNumberAkt + "','"
                              + akt.SizePDF + "','"
@@ -565,7 +575,7 @@ namespace MyApp.Model
                         + akt.NumberOfPagesInSoursePdf[0] + "','"
                          + akt.NumberOfPagesInSoursePdf[1] + "','"
                           + akt.NumberMail.ToString() + "','"
-                           + (akt.DateMail != null ? akt.DateMail : "") + "','"
+                         + (akt.DateMail != null ? akt.DateMail?.ToString("d") : "") + "','"
                            + akt.Ustanovka + "','"
                            + akt.SapNumberAkt + "','"
                              + akt.SizePDF + "','"
