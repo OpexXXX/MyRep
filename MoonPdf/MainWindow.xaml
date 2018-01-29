@@ -79,6 +79,33 @@
                     </ContextMenu>
                 </TextBlock.ContextMenu>
             </TextBlock>
+            <StackPanel Orientation="Horizontal">
+                <StackPanel.Style>
+                    <Style TargetType="StackPanel">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding UnmailedAkt, Source={StaticResource MainAtpVM}}" Value="0">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+                <TextBlock Text="Готовых к обработке: "/>
+                <TextBlock  HorizontalAlignment="Left" Height="23"  Text="{Binding CountReadyAkt, Source={StaticResource MainAtpVM}}" />
+                <TextBlock Text="шт. ~" >
+                </TextBlock>
+                <TextBlock  Text="{Binding  Path=SizeReadyAkt, Source={StaticResource MainAtpVM}}">
+                </TextBlock>
+                <TextBlock Text=" КБ; ">
+                </TextBlock>
+                <TextBlock Text="Обработанных, не отправленных: "/>
+                <TextBlock  HorizontalAlignment="Left" Height="23"  Text="{Binding UnmailedAkt, Source={StaticResource MainAtpVM}}" />
+                <TextBlock Text="шт. ~" >
+                </TextBlock>
+                <TextBlock  Text="{Binding  Path=SizeUnmailedPdf, Source={StaticResource MainAtpVM}}">
+                </TextBlock>
+                <TextBlock Text=" КБ;">
+                </TextBlock>
+            </StackPanel>
         </StatusBar>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Тех. проверки" >
@@ -188,7 +215,7 @@
                                 <TextBox Name ="numberMailTextBlock" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding MailNumber, Source={StaticResource MainAtpVM}}" VerticalAlignment="Top" Width="64"/>
                                 <TextBlock HorizontalAlignment="Left"  TextWrapping="Wrap" Text="от" VerticalAlignment="Top"/>
                                 <DatePicker SelectedDate="{Binding MailDate, Source={StaticResource MainAtpVM}}" x:Name ="dateMail" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                                </StackPanel>
+                                    </StackPanel>
                                 <StackPanel>
                                 <DataGrid DockPanel.Dock="Left" IsReadOnly="True" ItemsSource="{Binding Source={StaticResource AllAktSourse}}"
           CanUserAddRows="False"
@@ -219,12 +246,12 @@
                                                                             </TextBlock>
                                                                             <TextBlock Text="{Binding Path=Items.Count }"/>
                                                                             <TextBlock Text="шт. "></TextBlock>
-                                                                                <StackPanel Orientation="Horizontal" Visibility="Visible">
+                                                                                <StackPanel Orientation="Horizontal" >
                                                                                     <StackPanel.Style>
                                                                                         <Style TargetType="StackPanel">
                                                                                             <Style.Triggers>
                                                                                                 <DataTrigger Binding="{Binding Path=Name}" Value="Неотправлено">
-                                                                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                                                                    <Setter Property="Visibility" Value="Collapsed"/>
                                                                                                 </DataTrigger>
                                                                                             </Style.Triggers>
                                                                                         </Style>

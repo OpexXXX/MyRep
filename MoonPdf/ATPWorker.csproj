@@ -225,6 +225,7 @@
     <Compile Include="MyApp\Model\ATPWork\PriborUcheta.cs" />
     <Compile Include="MyApp\Model\DbWork\DataBaseWorker.cs" />
     <Compile Include="MyApp\Model\ExcelWork\ExcelWorker.cs" />
+    <Compile Include="MyApp\Model\SAPWork\SAPWorker.cs" />
     <Compile Include="MyApp\Model\Zayvki na oplombirovku\Oplobbirovki.cs" />
     <Compile Include="MyApp\ViewModel\MainAtp\AtpEditor\AptEditor.cs" />
     <Compile Include="MyApp\ViewModel\MainAtp\AtpEditor\Commands.cs" />
@@ -400,9 +401,7 @@
     <Content Include="Resources\MouseKeyboardActivityMonitor.dll" />
     <Content Include="Resources\sapfewse.ocx" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="MyApp\Model\SAPWork\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

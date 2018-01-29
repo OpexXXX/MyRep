@@ -12,14 +12,16 @@ using System.Windows.Controls;
 
 namespace ATPWork.MyApp.ViewModel
 {
-    public class MainAtpVM:ViewModelBase
+    public class MainAtpVM : ViewModelBase
     {
         #region Статус Бар 
         private double _progressBarValue;
         public double ProgressBarValue
         {
             get { return _progressBarValue; }
-            set { _progressBarValue = value;
+            set
+            {
+                _progressBarValue = value;
 
                 OnPropertyChanged("ProgressBarValue");
             }
@@ -42,7 +44,7 @@ namespace ATPWork.MyApp.ViewModel
             set
             {
                 _logText += "\n";
-                _logText += DateTime.Now.ToString("H: mm:ss") +" "+ value;
+                _logText += DateTime.Now.ToString("H: mm:ss") + " " + value;
                 OnPropertyChanged("LogText");
             }
         }
@@ -111,16 +113,15 @@ namespace ATPWork.MyApp.ViewModel
 
                         MessageBox.Show(ex.Message);
                     }
-                    
+
                     OnPropertyChanged("CurrentFilePdf");
                 }
             }
         }
         public MoonPdfPanel PdfViewer;
         #endregion
-
         #region сопроводиловка
-        private  int _mailNumber ;
+        private int _mailNumber;
         public int MailNumber
         {
             get { return _mailNumber; }
@@ -142,18 +143,69 @@ namespace ATPWork.MyApp.ViewModel
         }
         public int UnmailedAkt
         {
-            get {
-                int result=0;
+            get
+            {
+                int result = 0;
                 foreach (AktTehProverki item in AllAkt)
                 {
                     if (item.DateMail == null) result++;
                 }
-                return result; }
-            
+                return result;
+            }
         }
+        public long SizeUnmailedPdf
+        {
+            get
+            {
+                long result = 0;
+                foreach (AktTehProverki item in AllAkt)
+                {
+                    if (item.NumberMail == 0) result += item.SizePDF;
+                }
 
+                return result;
+            }
+
+        }
+        public int CountReadyAkt
+        {
+            get
+            {
+                int result = 0;
+                foreach (AktTehProverki item in AllAktInCurrentWork)
+                {
+                    if (item.checkToComplete()) result++;
+                }
+                return result;
+            }
+        }
+        public long SizeReadyAkt
+        {
+            get
+            {
+
+                long result = 0;
+                foreach (AktTehProverki item in AllAktInCurrentWork)
+                {
+                    if (item.checkToComplete()) result += item.SizePDF;
+                }
+                return result;
+            }
+
+        }
+        private AktTehProverki _selectedAktComplete;
+        public AktTehProverki SelectedAktComplete
+        {
+            get { return _selectedAktComplete; }
+            set
+            {
+                _selectedAktComplete = value;
+                OnPropertyChanged("SelectedAktComplete");
+            }
+        }
         #endregion
         public ListView ListBoxAktInWork { get; internal set; }
+
         private AktTehProverki _selectedAkt;
         public AktTehProverki SelectedAkt
         {
@@ -162,15 +214,19 @@ namespace ATPWork.MyApp.ViewModel
             {
                 if (value == null)
                 {
-                    
+
                 }
-                
-                if ((_selectedAkt != value)&& (value != null))
+
+                if ((_selectedAkt != value) && (value != null))
                 {
                     _selectedAkt = value;
                     CurrentFilePdf = value.NamePdfFile;
                     CurrentPagePdf = value.NumberOfPagesInSoursePdf[0];
                     OnPropertyChanged("SelectedAkt");
+                    OnPropertyChanged("CountReadyAkt");
+                    OnPropertyChanged("SizeReadyAkt");
+
+
                     if (InCurrentWork != (_allAktInCurrentWork.Count > 0) && (SelectedAkt != null)) InCurrentWork = (_allAktInCurrentWork.Count > 0) && (SelectedAkt != null);
                 }
             }
@@ -179,7 +235,9 @@ namespace ATPWork.MyApp.ViewModel
         public ObservableCollection<AktTehProverki> AllAkt
         {
             get { return _allAkt; }
-            set { _allAkt = value;
+            set
+            {
+                _allAkt = value;
 
                 OnPropertyChanged("AllAkt");
             }
@@ -194,35 +252,6 @@ namespace ATPWork.MyApp.ViewModel
                 OnPropertyChanged("AllAktInCurrentWork");
             }
         }
-        public string SizeUnmailedPdf
-            {
-            get {
-                long result = 0;
-                foreach (AktTehProverki item in AllAkt)
-                {
-                    if (item.NumberMail == 0) result += item.SizePDF;
-                }
-
-                return result.ToString(); }
-            
-        }
-
-        internal void CreateMailAllComplete(Progress<string> progress)
-        {
-            MainAtpModel.CreateMailATP(progress, MailNumber,(DateTime) MailDate);
-        }
-
-        private AktTehProverki _selectedAktComplete;
-        public AktTehProverki SelectedAktComplete
-        {
-            get { return _selectedAktComplete; }
-            set
-            {
-                _selectedAktComplete = value;
-                    OnPropertyChanged("SelectedAktComplete");
-            }
-        }
-
         private bool _workinAddAktFromPdf;
         public bool WorkinAddAktFromPdf
         {
@@ -233,16 +262,16 @@ namespace ATPWork.MyApp.ViewModel
                 OnPropertyChanged("WorkinAddAktFromPdf");
             }
         }
-
         private bool _inCurrentWork;
         public bool InCurrentWork
         {
             get { return _inCurrentWork; }
-            set { _inCurrentWork = value;
+            set
+            {
+                _inCurrentWork = value;
                 OnPropertyChanged("InCurrentWork");
             }
         }
-
 
         public MainAtpVM()
         {
@@ -251,41 +280,48 @@ namespace ATPWork.MyApp.ViewModel
             refreshCurrentWorkAktList();
             MainAtpModel.AllAtpRefreshRefresh += refreshAllAktList;
             MainAtpModel.CurrentWorkRefresh += refreshCurrentWorkAktList;
-           
+
         }
+
         public void refreshAllAktList()
         {
+
             AllAkt = new ObservableCollection<AktTehProverki>(MainAtpModel.AllAkt);
         }
         public void refreshCurrentWorkAktList()
         {
             AllAktInCurrentWork = new ObservableCollection<AktTehProverki>(MainAtpModel.AllAktInCurrentWork);
+            OnPropertyChanged("UnmailedAkt");
+            OnPropertyChanged("SizeUnmailedPdf");
+            OnPropertyChanged("CountReadyAkt");
+            OnPropertyChanged("SizeReadyAkt");
         }
-
 
         internal void GoNextAkt()
         {
-            AktTehProverki oldAkt =(AktTehProverki) ListBoxAktInWork.SelectedItem;
+            AktTehProverki oldAkt = (AktTehProverki)ListBoxAktInWork.SelectedItem;
             ListBoxAktInWork.SelectedIndex++;
             AktTehProverki NewAkt = (AktTehProverki)ListBoxAktInWork.SelectedItem;
             if (NewAkt.Number == 0 && oldAkt.Number != 0) NewAkt.Number = oldAkt.Number + 1;
             if (NewAkt.DateWork == null && oldAkt.DateWork != null) NewAkt.DateWork = oldAkt.DateWork;
 
         }
-
         internal void GoPrevousAkt()
         {
             ListBoxAktInWork.SelectedIndex--;
         }
-
         internal void GoFirstPageAkt()
         {
             CurrentPagePdf = SelectedAkt.NumberOfPagesInSoursePdf[0];
         }
-
         internal void GoSecongPageAkt()
         {
             CurrentPagePdf = SelectedAkt.NumberOfPagesInSoursePdf[1];
         }
+        internal void CreateMailAllComplete(Progress<string> progress)
+        {
+            MainAtpModel.CreateMailATP(progress, MailNumber, (DateTime)MailDate);
+        }
+
     }
 }
