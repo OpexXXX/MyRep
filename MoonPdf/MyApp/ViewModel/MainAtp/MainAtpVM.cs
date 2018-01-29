@@ -42,7 +42,7 @@ namespace ATPWork.MyApp.ViewModel
             set
             {
                 _logText += "\n";
-                _logText += DateTime.Now + value;
+                _logText += DateTime.Now.ToString("H: mm:ss") +" "+ value;
                 OnPropertyChanged("LogText");
             }
         }
