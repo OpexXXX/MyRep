@@ -47,6 +47,7 @@ namespace MyApp
         {
             DataBaseWorker.Initial();
             MainAtpModel.InitMainAtpModel();
+            ExcelWorker.InitHeader();
             InitializeComponent();
             MainAtpViemModel = (MainAtpVM)this.Resources["MainAtpVM"];
             MainAtpViemModel.PdfViewer = moonPdfPanel;

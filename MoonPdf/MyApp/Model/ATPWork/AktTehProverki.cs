@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MyApp.Model
 {
-    public class AktTehProverki:INotifyPropertyChanged 
+    public class AktTehProverki:INotifyPropertyChanged ,IComparer<AktTehProverki>
     {
         private int numberMail;
         public int NumberMail
@@ -46,7 +46,7 @@ namespace MyApp.Model
         {
             get {
                 string result;
-                if ((numberMail > 0) && DateMail != "") result = "исх.№91-" + numberMail + " от " + DateMail;
+                if ((numberMail > 0) && DateMail != null) result = "исх.№91-" + numberMail + " от " + DateMail?.ToString("d");
                 else result = "Неотправлено";
                 return result;
             }
@@ -248,8 +248,8 @@ namespace MyApp.Model
                 this.OnPropertyChanged("AktName");
             }
         }
-        private string dateMail;
-        public string DateMail
+        private DateTime? dateMail;
+        public DateTime? DateMail
         {
             get { return this.dateMail; }
             set
@@ -398,6 +398,21 @@ namespace MyApp.Model
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+        }
+
+
+        public int Compare(AktTehProverki x, AktTehProverki y)
+        {
+            if (x.Number > y.Number)
+            {
+                return 1;
+            }
+            else if (x.Number < y.Number)
+            {
+                return -1;
+            }
+
+            return 0;
         }
     }
 }

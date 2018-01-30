@@ -153,6 +153,10 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
       <HintPath>.\Interop.SAPLogonCtrl.dll</HintPath>
     </Reference>
+    <Reference Include="Ionic.Zip, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="itextsharp, Version=5.5.12.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <HintPath>..\packages\iTextSharp.5.5.12\lib\itextsharp.dll</HintPath>
       <Private>True</Private>
@@ -175,7 +179,7 @@
       <HintPath>..\packages\System.Data.SQLite.EF6.1.0.106.0\lib\net451\System.Data.SQLite.EF6.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Data.SQLite.Linq, Version=1.0.106.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+    <Reference Include="System.Data.SQLite.Linq">
       <HintPath>..\packages\System.Data.SQLite.Linq.1.0.106.0\lib\net451\System.Data.SQLite.Linq.dll</HintPath>
       <Private>True</Private>
     </Reference>
@@ -221,6 +225,7 @@
     <Compile Include="MyApp\Model\ATPWork\PriborUcheta.cs" />
     <Compile Include="MyApp\Model\DbWork\DataBaseWorker.cs" />
     <Compile Include="MyApp\Model\ExcelWork\ExcelWorker.cs" />
+    <Compile Include="MyApp\Model\SAPWork\SAPWorker.cs" />
     <Compile Include="MyApp\Model\Zayvki na oplombirovku\Oplobbirovki.cs" />
     <Compile Include="MyApp\ViewModel\MainAtp\AtpEditor\AptEditor.cs" />
     <Compile Include="MyApp\ViewModel\MainAtp\AtpEditor\Commands.cs" />
@@ -389,26 +394,14 @@
     <Resource Include="Resources\icons8-группа-пользователей-40.png" />
     <Resource Include="Resources\icons8-защать-от-магнитного-поля-40 %281%29.png" />
     <Resource Include="Resources\fenix.png" />
-    <None Include="Resources\Interop.SAPFEWSELib.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\Interop.SAPLogonCtrl.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <EmbeddedResource Include="Resources\libmupdf.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <None Include="Resources\MoonPdfLib.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\MouseKeyboardActivityMonitor.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <Content Include="Resources\Interop.SAPFEWSELib.dll" />
+    <Content Include="Resources\Interop.SAPLogonCtrl.dll" />
+    <Content Include="Resources\libmupdf.dll" />
+    <Content Include="Resources\MoonPdfLib.dll" />
+    <Content Include="Resources\MouseKeyboardActivityMonitor.dll" />
     <Content Include="Resources\sapfewse.ocx" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="MyApp\Model\SAPWork\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
