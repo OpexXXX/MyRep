@@ -14,12 +14,9 @@ namespace MyApp.Model
 {
     static class MainAtpModel
     {
-
         #region Коллекции для comboBox's
-
         public delegate void ComboListRefreshHandler();
         public static event ComboListRefreshHandler ComboRefresh;
-
         private static List<PriborUcheta> _newPuList = new List<PriborUcheta>();
         public static List<PriborUcheta> NewPuList
         {
@@ -42,28 +39,17 @@ namespace MyApp.Model
             set { _typePL = value; }
         }
         private static List<string> _placePL = new List<string>();
-
-        internal static void SaveBeforeCloseApp()
-        {
-            DataBaseWorker.DromCompliteTable();
-            DataBaseWorker.InsertCompleteAktAPT(AllAkt);
-            DataBaseWorker.DromInWorkTable();
-            DataBaseWorker.InsertAPTInWork(AllAktInCurrentWork);
-        }
-
         public static List<string> PlacePlomb
         {
             get { return _placePL; }
             set { _placePL = value; }
         }
-
         #endregion
         #region коллекция актов
         public delegate void AllAtpListRefreshHandler();
         public static event AllAtpListRefreshHandler AllAtpRefreshRefresh;
         public delegate void CurrentWorkListRefreshHandler();
         public static event CurrentWorkListRefreshHandler CurrentWorkRefresh;
-
         private static List<AktTehProverki> _allAkt = new List<AktTehProverki>();
         public static List<AktTehProverki> AllAkt
         {
@@ -78,7 +64,8 @@ namespace MyApp.Model
         }
         public static List<AktTehProverki> UnmailedAkt
         {
-            get {
+            get
+            {
                 List<AktTehProverki> result = new List<AktTehProverki>();
                 foreach (AktTehProverki item in _allAkt)
                 {
@@ -87,10 +74,10 @@ namespace MyApp.Model
                         result.Add(item);
                     }
                 }
-                return result; }
+                return result;
+            }
         }
         #endregion
-
         private static string _aktDirektory = Environment.CurrentDirectory;
         public static string AktDirektory
         {
@@ -101,7 +88,6 @@ namespace MyApp.Model
 
             }
         }
-
         private static string _mialDirektory = Environment.CurrentDirectory;
         public static string MailDirektory
         {
@@ -138,13 +124,15 @@ namespace MyApp.Model
             ComboRefresh?.Invoke();
         }
         #endregion
-
-
-
+        /// <summary>
+        /// Добавление актов в работу из  PDF
+        /// </summary>
+        /// <param name="pathOfPdfFile"></param>
+        /// <param name="progress"></param>
         public static void CreateWorkFromPdf(string pathOfPdfFile, IProgress<double> progress)
         {
             FileInfo file = new FileInfo(pathOfPdfFile);
-        
+
             PdfReader iTextPDFReader = new PdfReader(pathOfPdfFile); //Загружаем документ в iTextPdf
             ITextExtractionStrategy strategyOfFinder = new SimpleTextExtractionStrategy();
             List<int> listOfpagesInPDf = new List<int>(); // Временно для хранения массива номеров страниц для каждого акта
@@ -193,7 +181,12 @@ namespace MyApp.Model
             iTextPDFReader.Close();
             CurrentWorkRefresh?.Invoke();
         }
-
+        /// <summary>
+        /// Получение текста страницы PDF (для поиска агентов, типа акта)
+        /// </summary>
+        /// <param name="indexPageForSearch"></param>
+        /// <param name="iTextPDFReader"></param>
+        /// <returns></returns>
         private static string GetTextOfPdfPage(int indexPageForSearch, PdfReader iTextPDFReader)
         {
 
@@ -208,6 +201,10 @@ namespace MyApp.Model
             }
 
         }
+        /// <summary>
+        /// Выдергивает страницы из исходного pdf, сохраняет в AktDirectory, меняет Name PDF File в акте тех проверки (Для обработки заполненных актов) 
+        /// </summary>
+        /// <param name="akt"></param>
         private static void createAktPdf(AktTehProverki akt)
         {
             string FileName = akt.Number.ToString() + " " + akt.DateWork?.ToString("d") + " " + akt.NumberLS + ".pdf";
@@ -243,13 +240,12 @@ namespace MyApp.Model
                 throw;
             }
         }
-
-/// <summary>
-/// Склеить акты из List в Допуски.pdf Проверки.pdf
-/// </summary>
-/// <param name="akts"></param>
-/// <param name="folderPath"></param>
-/// <param name="progress"></param>
+        /// <summary>
+        /// Склеить акты из List в Допуски.pdf Проверки.pdf
+        /// </summary>
+        /// <param name="akts"></param>
+        /// <param name="folderPath"></param>
+        /// <param name="progress"></param>
         private static void blindPdf(List<AktTehProverki> akts, string folderPath, IProgress<string> progress = null)
         {
             List<AktTehProverki> proverki = new List<AktTehProverki>();
@@ -278,7 +274,7 @@ namespace MyApp.Model
                         doc.Open();
                         foreach (var item in dopuski)
                         {
-                            iTextSharp.text.pdf.PdfReader ReaderDoc1 = new iTextSharp.text.pdf.PdfReader(AktDirektory +"\\"+ item.NamePdfFile);
+                            iTextSharp.text.pdf.PdfReader ReaderDoc1 = new iTextSharp.text.pdf.PdfReader(AktDirektory + "\\" + item.NamePdfFile);
                             Writer.AddDocument(ReaderDoc1);
                         }
                         doc.Close();
@@ -306,7 +302,7 @@ namespace MyApp.Model
                         doc.Open();
                         foreach (var item in proverki)
                         {
-                            iTextSharp.text.pdf.PdfReader ReaderDoc1 = new iTextSharp.text.pdf.PdfReader(AktDirektory +"\\"+ item.NamePdfFile);
+                            iTextSharp.text.pdf.PdfReader ReaderDoc1 = new iTextSharp.text.pdf.PdfReader(AktDirektory + "\\" + item.NamePdfFile);
                             Writer.AddDocument(ReaderDoc1);
                         }
                         doc.Close();
@@ -331,7 +327,7 @@ namespace MyApp.Model
             List<AktTehProverki> TempList = new List<AktTehProverki>();
             string mailName = "исх.№91-" + numberMail + " от " + dateMail.ToString("d") + "г. Акты ПР ФЛ";
             string currentMailDirectory = MailDirektory + "\\" + mailName;
-            progress.Report("Создаем папку сопроводительного письма: "+currentMailDirectory);
+            progress.Report("Создаем папку сопроводительного письма: " + currentMailDirectory);
             if (!Directory.Exists(currentMailDirectory)) Directory.CreateDirectory(currentMailDirectory);
             foreach (AktTehProverki item in AllAkt)
             {
@@ -359,11 +355,11 @@ namespace MyApp.Model
                     zip.ProvisionalAlternateEncoding = System.Text.Encoding.GetEncoding("cp866");
 
                     zip.CompressionLevel = Ionic.Zlib.CompressionLevel.BestCompression; // Задаем максимальную степень сжатия 
-                   if(File.Exists(currentMailDirectory + "\\" + "Проверки.pdf")) zip.AddFile(currentMailDirectory + "\\" + "Проверки.pdf","\\"); // Кладем в архив одиночный файл
+                    if (File.Exists(currentMailDirectory + "\\" + "Проверки.pdf")) zip.AddFile(currentMailDirectory + "\\" + "Проверки.pdf", "\\"); // Кладем в архив одиночный файл
                     if (File.Exists(currentMailDirectory + "\\" + "Допуски.pdf")) zip.AddFile(currentMailDirectory + "\\" + "Допуски.pdf", "\\"); // Кладем в архив одиночный файл
                     if (File.Exists(currentMailDirectory + "\\" + "Реестр.xlsx")) zip.AddFile(currentMailDirectory + "\\" + "Реестр.xlsx", "\\"); // Кладем в архив одиночный файл
                     var g = zip.Count;
-                    zip.Save(currentMailDirectory + "\\"+mailName+".zip"); // Создаем архив     
+                    zip.Save(currentMailDirectory + "\\" + mailName + ".zip"); // Создаем архив     
                 }
                 progress.Report("Обновляем состояние актов");
                 foreach (AktTehProverki item in TempList)
@@ -419,7 +415,7 @@ namespace MyApp.Model
         /// <param name="akts"></param>
         /// <param name="logProgress"></param>
         /// <param name="progress"></param>
-        public static void EnterInSapAkts(List<AktTehProverki> akts, IProgress<string> logProgress=null, IProgress<double> progress=null)
+        public static void EnterInSapAkts(List<AktTehProverki> akts, IProgress<string> logProgress = null, IProgress<double> progress = null)
         {
             SAPActive sAP = new SAPActive("ER2");
             try
@@ -468,19 +464,19 @@ namespace MyApp.Model
                 MessageBox.Show(ex.Message);
                 return;
             }
-                if ((File.Exists(AktDirektory + "\\" + akt.NamePdfFile)))
+            if ((File.Exists(AktDirektory + "\\" + akt.NamePdfFile)))
+            {
+                try
                 {
-                    try
-                    {
-                        sAP.enterAktTehProverki(akt, AktDirektory);
-                        DataBaseWorker.DromCompliteTable();
-                        DataBaseWorker.InsertCompleteAktAPT(AllAkt);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                    }
+                    sAP.enterAktTehProverki(akt, AktDirektory);
+                    DataBaseWorker.DromCompliteTable();
+                    DataBaseWorker.InsertCompleteAktAPT(AllAkt);
                 }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
             sAP.CloseApp();
         }
         /// <summary>
@@ -493,18 +489,18 @@ namespace MyApp.Model
         {
             SAPActive sAP = new SAPActive("ER2");
             try
-                {
-                    sAP.login();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                    return;
-                }
+            {
+                sAP.login();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
             int i = 0;
             foreach (var item in AllAkt)
             {
-                if ((item.SapNumberAkt == "") && (File.Exists(AktDirektory +"\\"+ item.NamePdfFile)))
+                if ((item.SapNumberAkt == "") && (File.Exists(AktDirektory + "\\" + item.NamePdfFile)))
                 {
                     try
                     {
@@ -512,11 +508,11 @@ namespace MyApp.Model
 
                         DataBaseWorker.DromCompliteTable();
                         DataBaseWorker.InsertCompleteAktAPT(AllAkt);
-                       
+
                     }
                     catch (Exception ex)
                     {
-                        
+
                         MessageBox.Show(ex.Message);
                     }
                 }
@@ -560,6 +556,16 @@ namespace MyApp.Model
                 CurrentWorkRefresh?.Invoke();
             }
             return i;
+        }
+        /// <summary>
+        /// Сохраняет коллекции актов в SQLite
+        /// </summary>
+        internal static void SaveBeforeCloseApp()
+        {
+            DataBaseWorker.DromCompliteTable();
+            DataBaseWorker.InsertCompleteAktAPT(AllAkt);
+            DataBaseWorker.DromInWorkTable();
+            DataBaseWorker.InsertAPTInWork(AllAktInCurrentWork);
         }
     }
 }
