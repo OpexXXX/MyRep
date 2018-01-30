@@ -144,7 +144,8 @@
                                         <Button Content="{Binding Commands.GoFirstPageAkt.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.GoFirstPageAkt, Source={StaticResource MainAtpVM}}"  Height="25"/>
                                         <Button Content="{Binding Commands.GoSecongPageAkt.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.GoSecongPageAkt, Source={StaticResource MainAtpVM}}"  Height="25"/>
                                         <Button Content="{Binding Commands.GoNextAkt.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.GoNextAkt, Source={StaticResource MainAtpVM}}" Height="25"/>
-                                        <TextBlock Text="{Binding SelectedIndex, ElementName=DatagridInWork}"/>
+                                        <Button Click="Button_Click">pdf</Button>
+                                        <TextBlock Text="{Binding SelectedIndex, ElementName=DatagridInWork}" />
                                     </StackPanel>
                                     <local:AtpEditor   AtpInWorkSourse="{Binding SelectedItem, ElementName=DatagridInWork}"  Margin="5,0" >
                                         <local:AtpEditor.Style>

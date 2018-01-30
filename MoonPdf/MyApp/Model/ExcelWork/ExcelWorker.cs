@@ -9,12 +9,15 @@ using System.IO;
 using OfficeOpenXml.Style;
 using ExcelCOM = Microsoft.Office.Interop.Excel;
 using ExcelDataReader;
+using iTextSharp.text.pdf;
+using iTextSharp.text;
 
 namespace MyApp.Model
 {
     public static class ExcelWorker
     {
         private static List<string[]> HeaderColumn = new List<string[]>();
+
         public enum AktType
         {
             Proverka,
@@ -65,7 +68,7 @@ namespace MyApp.Model
             }
             return Result;
         }
-        private static  DataTable MakeDataTable(List<AktTehProverki> Temp_akti)
+        private static DataTable MakeDataTable(List<AktTehProverki> Temp_akti)
         {
             DataTable table = new DataTable("Reestr");
             DataColumn column;
@@ -116,7 +119,7 @@ namespace MyApp.Model
             }
             return table;
         }
-        private static void  SetDefaultOptions(Dictionary<string, string> options)
+        private static void SetDefaultOptions(Dictionary<string, string> options)
         {
             if (!options.ContainsKey("Worksheet.name")) options["Worksheet.Name"] = "Реестр";
             if (!options.ContainsKey("Worksheet.TabColor")) options["Worksheet.TabColor"] = "Blue";
@@ -184,8 +187,9 @@ namespace MyApp.Model
                 options = new Dictionary<string, string>();
             SetDefaultOptions(options);
             //Создаем фаил
-            
-            using (var file = new FileStream(mailPath+"\\Реестр.xlsx", FileMode.Create))
+
+
+            using (var file = new FileStream(mailPath + "\\Реестр.xlsx", FileMode.Create))
             {
                 int rowIndex = 1;
                 ExcelPackage package = new ExcelPackage(file);
@@ -256,30 +260,30 @@ namespace MyApp.Model
             }
 
             //Открываем экселем сохраняем в пдф
-          /*  ExcelCOM.Application excelapp;
-            ExcelCOM.Workbook wb;
-            ExcelCOM.Workbooks wbs;
-            ExcelCOM.Worksheet wsh;
-            excelapp = new ExcelCOM.Application();
-            excelapp.DisplayAlerts = false;
-            excelapp.Visible = false;
-            wbs = excelapp.Workbooks;
-                        string save = path;
-            wbs.Open(save);
-            wb = excelapp.ActiveWorkbook;
-            wsh = wb.Sheets[1];
-            wsh.PageSetup.Zoom = false;
-            wsh.PageSetup.Orientation = Microsoft.Office.Interop.Excel.XlPageOrientation.xlLandscape;
-            wsh.PageSetup.FitToPagesWide = 1;
-            wsh.PageSetup.FitToPagesTall = 10;
-            save =  path.Replace(".xlsx", ".pdf");
-            wb.ExportAsFixedFormat(ExcelCOM.XlFixedFormatType.xlTypePDF, save, Type.Missing, true, Type.Missing, Type.Missing, Type.Missing, false, Type.Missing);
-            wbs.Close();
-            excelapp.Quit();*/
+            /*  ExcelCOM.Application excelapp;
+              ExcelCOM.Workbook wb;
+              ExcelCOM.Workbooks wbs;
+              ExcelCOM.Worksheet wsh;
+              excelapp = new ExcelCOM.Application();
+              excelapp.DisplayAlerts = false;
+              excelapp.Visible = false;
+              wbs = excelapp.Workbooks;
+                          string save = path;
+              wbs.Open(save);
+              wb = excelapp.ActiveWorkbook;
+              wsh = wb.Sheets[1];
+              wsh.PageSetup.Zoom = false;
+              wsh.PageSetup.Orientation = Microsoft.Office.Interop.Excel.XlPageOrientation.xlLandscape;
+              wsh.PageSetup.FitToPagesWide = 1;
+              wsh.PageSetup.FitToPagesTall = 10;
+              save =  path.Replace(".xlsx", ".pdf");
+              wb.ExportAsFixedFormat(ExcelCOM.XlFixedFormatType.xlTypePDF, save, Type.Missing, true, Type.Missing, Type.Missing, Type.Missing, false, Type.Missing);
+              wbs.Close();
+              excelapp.Quit();*/
 
 
         }
-        
+
 
         public static DataSet makeDataSetForSAPFL(FileStream excelFilePath)
         {
@@ -305,9 +309,82 @@ namespace MyApp.Model
             }
 
         }
- 
 
-       
+
+        internal static void CreatePdfReestr()
+        {
+            string currentMailDirectory = MainAtpModel.MailDirektory;
+            DataSet data_set = MakeDataSet(MainAtpModel.AllAkt);
+            //Объект документа пдф
+            iTextSharp.text.Document doc = new iTextSharp.text.Document();
+            doc.SetPageSize(PageSize.A4.Rotate());
+
+
+            //Создаем объект записи пдф-документа в файл
+            PdfWriter.GetInstance(doc, new FileStream("pdfTables.pdf", FileMode.Create));
+             //Открываем документ
+            doc.Open();
+            //Определение шрифта необходимо для сохранения кириллического текста
+            //Иначе мы не увидим кириллический текст
+            //Если мы работаем только с англоязычными текстами, то шрифт можно не указывать
+            BaseFont baseFont = BaseFont.CreateFont("C:\\Windows\\Fonts\\arial.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            iTextSharp.text.Font font = new iTextSharp.text.Font(baseFont, 10, iTextSharp.text.Font.NORMAL);
+
+            //Обход по всем таблицам датасета (хотя в данном случае мы можем опустить
+            //Так как в нашей бд только одна таблица)
+
+
+            for (int i = 0; i < data_set.Tables.Count; i++)
+            {
+                //Создаем объект таблицы и передаем в нее число столбцов таблицы из нашего датасета
+                PdfPTable table = new PdfPTable(data_set.Tables[i].Columns.Count);
+                table.TotalWidth = 800f;
+                table.LockedWidth = true;
+
+                var colWidthPercentages = new[] { 2f, 4f, 8f, 15f, 10f, 28f, 18f, 8f, 7f };
+                table.SetWidths(colWidthPercentages);
+               
+                //Добавим в таблицу общий заголовок
+                PdfPCell cell = new PdfPCell(new Phrase("БД " + data_set.Tables[i].TableName+ ", таблица №" + (i + 1), font));
+
+                cell.Colspan = data_set.Tables[i].Columns.Count;
+                cell.HorizontalAlignment = 1;
+                //Убираем границу первой ячейки, чтобы балы как заголовок
+                cell.Border = 0;
+                table.AddCell(cell);
+
+                //Сначала добавляем заголовки таблицы
+                for (int j = 0; j < data_set.Tables[i].Columns.Count; j++)
+                {
+                    cell = new PdfPCell(new Phrase(new Phrase(data_set.Tables[i].Columns[j].Caption, font)));
+                    //Фоновый цвет (необязательно, просто сделаем по красивее)
+                    cell.BackgroundColor = iTextSharp.text.BaseColor.LIGHT_GRAY;
+                    table.AddCell(cell);
+                }
+
+                //Добавляем все остальные ячейки
+                for (int j = 0; j < data_set.Tables[i].Rows.Count; j++)
+                {
+                    for (int k = 0; k < data_set.Tables[i].Columns.Count; k++)
+                    {
+                        var value = data_set.Tables[i].Rows[j][k].ToString();
+                        if (k == 0) value = (Int32.Parse(value)+1).ToString();
+
+                        table.AddCell(new Phrase(value, font));
+                    }
+                }
+                //Добавляем таблицу в документ
+                doc.Add(table);
+            }
+            //Закрываем документ
+            doc.Close();
+
+            MessageBox.Show("Pdf-документ сохранен");
+
+        }
+
+
+
     }
 }
 

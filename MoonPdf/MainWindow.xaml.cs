@@ -68,6 +68,11 @@ namespace MyApp
             DataBaseWorker.ClosedApp();
 
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            ExcelWorker.CreatePdfReestr();
+        }
     }
 }
 

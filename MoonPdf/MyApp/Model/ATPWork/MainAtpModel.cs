@@ -348,12 +348,12 @@ namespace MyApp.Model
                 blindPdf(TempList, currentMailDirectory, progress);
                 progress.Report("Создаем Реестр.xlsx");
                 ExcelWorker.DataTableToExcel(TempList, currentMailDirectory);
+               
                 progress.Report("Архивируем для отправки.");
                 using (ZipFile zip = new ZipFile()) // Создаем объект для работы с архивом
                 {
                     zip.UseUnicodeAsNecessary = true;
                     zip.ProvisionalAlternateEncoding = System.Text.Encoding.GetEncoding("cp866");
-
                     zip.CompressionLevel = Ionic.Zlib.CompressionLevel.BestCompression; // Задаем максимальную степень сжатия 
                     if (File.Exists(currentMailDirectory + "\\" + "Проверки.pdf")) zip.AddFile(currentMailDirectory + "\\" + "Проверки.pdf", "\\"); // Кладем в архив одиночный файл
                     if (File.Exists(currentMailDirectory + "\\" + "Допуски.pdf")) zip.AddFile(currentMailDirectory + "\\" + "Допуски.pdf", "\\"); // Кладем в архив одиночный файл
@@ -567,6 +567,9 @@ namespace MyApp.Model
             DataBaseWorker.DromInWorkTable();
             DataBaseWorker.InsertAPTInWork(AllAktInCurrentWork);
         }
+
+
+
     }
 }
 
