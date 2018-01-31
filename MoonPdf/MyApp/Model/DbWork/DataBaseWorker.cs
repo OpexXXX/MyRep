@@ -238,6 +238,41 @@ namespace MyApp.Model
             return result;
         }
         /// <summary>
+        /// Выгрузка абонента для плана работ
+        /// </summary>
+        /// <param name="NumberLS"></param>
+        /// <returns></returns>
+        static public List<Dictionary<String, String>> PlanGetAbonentFromDb(string NumberLS)
+        {
+            List<Dictionary<String, String>> result = new List<Dictionary<string, string>>();
+            SQLiteCommand CommandSQL = new SQLiteCommand(connector);
+            CommandSQL.CommandText = "SELECT FIO, PuType, LsNumber,City,Street,House,Korpus,PuNumber, Kv, Ustanovka, PuKod, Podkluchenie"
+    + " FROM SAPFL WHERE NumberTU LIKE '%" + NumberLS + "%' ";
+            SQLiteDataReader r = CommandSQL.ExecuteReader();
+            string line = String.Empty;
+            int i = 0;
+            while (r.Read())
+            {
+                result.Add(new Dictionary<string, string>());
+                result[i].Add("FIO", r["FIO"].ToString());
+                result[i].Add("PuType", r["PuType"].ToString());
+                result[i].Add("LsNumber", r["LsNumber"].ToString());
+                result[i].Add("City", r["City"].ToString());
+                result[i].Add("Street", r["Street"].ToString());
+                result[i].Add("House", r["House"].ToString());
+                result[i].Add("Korpus", r["Korpus"].ToString());
+                result[i].Add("Kv", r["Kv"].ToString());
+                result[i].Add("PuNumber", r["PuNumber"].ToString());
+                result[i].Add("Ustanovka", r["Ustanovka"].ToString());
+                result[i].Add("EdOborudovania", r["PuKod"].ToString());
+                result[i].Add("Podkluchenie", r["Podkluchenie"].ToString());
+                i++;
+            }
+            r.Close();
+
+            return result;
+        }
+        /// <summary>
         /// Инициализация ласта не отработанных актов при загрузке приложения
         /// </summary>
         /// <returns></returns>
@@ -729,5 +764,31 @@ namespace MyApp.Model
                 return;
             }
         }
+        public static List<string> FindAbonentPlan(DateTime date)
+        {
+            List<string> result = new List<string>();
+            SQLiteCommand CommandSQL = new SQLiteCommand(connector);
+            CommandSQL.CommandText = "SELECT NumberLS  "
+    + " FROM Plan WHERE DateWork LIKE '%" + date.ToString("d")+"%' ";
+            try
+            {
+                SQLiteDataReader r = CommandSQL.ExecuteReader();
+                string line = String.Empty;
+                int i = 0;
+                while (r.Read())
+                {
+                    result.Add(r["NumberLS"].ToString());
+                }
+                r.Close();
+                return result;
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+                return result;
+            }
+           
+        }
+
     }
 }

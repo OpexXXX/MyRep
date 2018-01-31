@@ -11,13 +11,14 @@ using ExcelCOM = Microsoft.Office.Interop.Excel;
 using ExcelDataReader;
 using iTextSharp.text.pdf;
 using iTextSharp.text;
+using ATPWork.MyApp.Model.Plan;
 
 namespace MyApp.Model
 {
     public static class ExcelWorker
     {
         private static List<string[]> HeaderColumn = new List<string[]>();
-
+        private static List<string[]> HeaderColumnPlan = new List<string[]>();
         public enum AktType
         {
             Proverka,
@@ -35,6 +36,20 @@ namespace MyApp.Model
             HeaderColumn.Add(new string[] { "Тип ПУ", "PuType" });
             HeaderColumn.Add(new string[] { "Номер ПУ", "PuNumber" });
             HeaderColumn.Add(new string[] { "Показание", "Pokazanie" });
+
+            HeaderColumnPlan = new List<string[]>(2);
+            HeaderColumnPlan.Add(new string[] { "№ пп", "id" });
+            HeaderColumnPlan.Add(new string[] { "№ Л/С", "NumberLS" });
+            HeaderColumnPlan.Add(new string[] { "Дата проверки", "DateWork" });
+            HeaderColumnPlan.Add(new string[] { "Ф.И.О", "FIO" });
+            HeaderColumnPlan.Add(new string[] { "Адрес", "Adress" });
+            HeaderColumnPlan.Add(new string[] { "Тип ПУ", "PuType" });
+            HeaderColumnPlan.Add(new string[] { "Номер ПУ", "PuNumber" });
+            HeaderColumnPlan.Add(new string[] { "Показание", "Pokazanie" });
+            HeaderColumnPlan.Add(new string[] { "Подключение", "Podkluchenie" });
+            HeaderColumnPlan.Add(new string[] { "Пломбы", "Plombs" });
+            HeaderColumnPlan.Add(new string[] { "Расчет", "Raschet" });
+            HeaderColumnPlan.Add(new string[] { "Заявки внеплан", "Vneplan" });
         }
         private static DataSet MakeDataSet(List<AktTehProverki> akti)
         {
@@ -181,6 +196,70 @@ namespace MyApp.Model
             }
         }
 
+  
+        public static DataTable MakeDataTableForPlan(List<Abonent> Temp_abonents)
+        {
+            DataTable table = new DataTable("Reestr");
+            DataColumn column;
+            DataRow row;
+            List<Abonent> abonents = new List<Abonent>(Temp_abonents);
+
+           // akti.Sort(delegate (AktTehProverki akt1, AktTehProverki akt2)
+           // { return akt1.Number.CompareTo(akt2.Number); });
+
+            column = new DataColumn();
+            column.DataType = System.Type.GetType("System.Int32");
+            column.ColumnName = "id";
+            column.Caption = "№ пп";
+            column.ReadOnly = true;
+            column.AutoIncrement = true;
+            column.Unique = true;
+            table.Columns.Add(column);
+            for (int i = 1; i < HeaderColumnPlan.Count; i++)
+            {
+                column = new DataColumn();
+                column.DataType = System.Type.GetType("System.String");
+                column.ColumnName = HeaderColumnPlan[i][1];
+                column.AutoIncrement = false;
+                column.Caption = HeaderColumnPlan[i][0];
+                column.ReadOnly = false;
+                column.Unique = false;
+                table.Columns.Add(column);
+            }
+
+            DataColumn[] PrimaryKeyColumns = new DataColumn[1];
+
+            PrimaryKeyColumns[0] = table.Columns["id"];
+            table.PrimaryKey = PrimaryKeyColumns;
+            foreach (Abonent item in abonents)
+            {
+                row = table.NewRow();
+
+                row["NumberLS"] = item.NumberLS;
+                row["DateWork"] = item.DateWork.ToString("d");
+                row["FIO"] = item.FIO;
+                row["Adress"] = item.Adress;
+                row["PuType"] = item.PuOldType;
+                row["PuNumber"] = item.PuOldNumber;
+                row["Podkluchenie"] = item.Podkl;  
+                row["Pokazanie"] = "";
+                string plobms="";
+                foreach (Plomba plomb in item.OldPlombs)
+                {
+                    if (plomb.Status=="I")
+                    {
+                        plobms += plomb.Number + " " + plomb.Place + ";\n";
+                    }
+                   
+                }
+                row["Plombs"] = plobms;
+                row["Raschet"] = "";
+                 row["Vneplan"] = "";
+                table.Rows.Add(row);
+            }
+            return table;
+        }
+
         public static void DataTableToExcel(List<AktTehProverki> akti, string mailPath, Dictionary<string, string> options = null)
         {
             if (options == null)
@@ -307,6 +386,83 @@ namespace MyApp.Model
                     return null;
                 }
             }
+
+        }
+
+
+        internal static void CreatePdfReestr(DataTable tableL)
+        {
+            string currentMailDirectory = MainAtpModel.MailDirektory;
+
+          
+            //Объект документа пдф
+            iTextSharp.text.Document doc = new iTextSharp.text.Document();
+            doc.SetPageSize(PageSize.A4.Rotate());
+
+
+            //Создаем объект записи пдф-документа в файл
+            PdfWriter.GetInstance(doc, new FileStream("pdfTables.pdf", FileMode.Create));
+            //Открываем документ
+            doc.Open();
+            //Определение шрифта необходимо для сохранения кириллического текста
+            //Иначе мы не увидим кириллический текст
+            //Если мы работаем только с англоязычными текстами, то шрифт можно не указывать
+            BaseFont baseFont = BaseFont.CreateFont("C:\\Windows\\Fonts\\arial.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            iTextSharp.text.Font font = new iTextSharp.text.Font(baseFont, 8, iTextSharp.text.Font.NORMAL);
+
+            BaseFont smalFont = BaseFont.CreateFont("C:\\Windows\\Fonts\\arial.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            iTextSharp.text.Font smallFont = new iTextSharp.text.Font(baseFont, 6, iTextSharp.text.Font.NORMAL);
+
+            //Обход по всем таблицам датасета (хотя в данном случае мы можем опустить
+            //Так как в нашей бд только одна таблица)
+
+
+
+            //Создаем объект таблицы и передаем в нее число столбцов таблицы из нашего датасета
+            PdfPTable table = new PdfPTable(tableL.Columns.Count);
+                table.TotalWidth = 800f;
+                table.LockedWidth = true;
+
+                var colWidthPercentages = new[] { 2f, 8f, 6f, 11f, 15f, 9f, 7f, 2f, 15f , 21f , 2f, 2f};
+                table.SetWidths(colWidthPercentages);
+
+                //Добавим в таблицу общий заголовок
+                PdfPCell cell = new PdfPCell(new Phrase("БД " + tableL.TableName + ", таблица №" , font));
+
+                cell.Colspan = tableL.Columns.Count;
+                cell.HorizontalAlignment = 1;
+                //Убираем границу первой ячейки, чтобы балы как заголовок
+                cell.Border = 0;
+                table.AddCell(cell);
+
+                //Сначала добавляем заголовки таблицы
+                for (int j = 0; j < tableL.Columns.Count; j++)
+                {
+                    cell = new PdfPCell(new Phrase(new Phrase(tableL.Columns[j].Caption, font)));
+                    //Фоновый цвет (необязательно, просто сделаем по красивее)
+                    cell.BackgroundColor = iTextSharp.text.BaseColor.LIGHT_GRAY;
+                    table.AddCell(cell);
+                }
+
+                //Добавляем все остальные ячейки
+                for (int j = 0; j < tableL.Rows.Count; j++)
+                {
+                    for (int k = 0; k < tableL.Columns.Count; k++)
+                    {
+                        var value = tableL.Rows[j][k].ToString();
+                        if (k == 0) value = (Int32.Parse(value) + 1).ToString();
+
+
+                        table.AddCell(new Phrase(value, (k==8)||(k==9)? smallFont :font));
+                    }
+                }
+                //Добавляем таблицу в документ
+                doc.Add(table);
+            
+            //Закрываем документ
+            doc.Close();
+
+            MessageBox.Show("Pdf-документ сохранен");
 
         }
 

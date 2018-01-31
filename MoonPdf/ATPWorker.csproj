@@ -225,6 +225,8 @@
     <Compile Include="MyApp\Model\ATPWork\PriborUcheta.cs" />
     <Compile Include="MyApp\Model\DbWork\DataBaseWorker.cs" />
     <Compile Include="MyApp\Model\ExcelWork\ExcelWorker.cs" />
+    <Compile Include="MyApp\Model\Plan\Abonent.cs" />
+    <Compile Include="MyApp\Model\Plan\PlanModel.cs" />
     <Compile Include="MyApp\Model\SAPWork\SAPWorker.cs" />
     <Compile Include="MyApp\Model\Zayvki na oplombirovku\Oplobbirovki.cs" />
     <Compile Include="MyApp\ViewModel\MainAtp\AtpEditor\AptEditor.cs" />
@@ -238,6 +240,7 @@
     <Compile Include="MyApp\ViewModel\MainAtp\PlombEditor\Commands.cs" />
     <Compile Include="MyApp\ViewModel\MainAtp\PlombEditor\PlombEditor.cs" />
     <Compile Include="MyApp\ViewModel\MainAtp\PlombEditor\Validators.cs" />
+    <Compile Include="MyApp\ViewModel\PlanViewModel\PlanVM.cs" />
     <Compile Include="MyApp\ViewModel\SettingsVM.cs" />
     <Compile Include="MyApp\ViewModel\ViewModelBase.cs" />
     <Compile Include="MyApp\View\AtpEditor.xaml.cs">

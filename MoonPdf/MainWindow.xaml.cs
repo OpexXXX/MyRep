@@ -31,6 +31,7 @@ using ATPWork.MyApp.ViewModel.PlombEditorVm;
 using System.Windows.Markup;
 using System.Globalization;
 using ATPWork.MyApp.ViewModel;
+using ATPWork.MyApp.Model.Plan;
 
 namespace MyApp
 {
@@ -71,7 +72,11 @@ namespace MyApp
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            ExcelWorker.CreatePdfReestr();
+            /*  ExcelWorker.CreatePdfReestr();*/
+            PlanWorkModel plan = new PlanWorkModel(new DateTime(2018, 2, 2));
+            var gg = ExcelWorker.MakeDataTableForPlan(plan.AbonentList);
+            ExcelWorker.CreatePdfReestr(gg);
+            int rf = 6; 
         }
     }
 }
