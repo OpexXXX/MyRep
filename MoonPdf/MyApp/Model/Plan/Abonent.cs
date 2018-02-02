@@ -7,6 +7,12 @@ using System.Threading.Tasks;
 
 namespace ATPWork.MyApp.Model.Plan
 {
+    public enum Kategorya
+    {
+NoEquipment=1,
+        ElectricStove,
+        Electroboiler
+    }
    public class Abonent
     {
         public Abonent(string numberLS, DateTime dateWork)
@@ -15,6 +21,33 @@ namespace ATPWork.MyApp.Model.Plan
             DateWork = dateWork;
             this.setDataByDb();
         }
+        private int _rooms;
+        public int Rooms
+        {
+            get { return _rooms; }
+            set { _rooms = value; }
+        }
+        private int _peopleCount;
+        public int PeopleCount
+        {
+            get { return _peopleCount; }
+            set { _peopleCount = value; }
+        }
+
+        private int _normativKat;
+        public int NormativKat
+        {
+            get { return _normativKat; }
+            set { _normativKat = value; }
+        }
+
+        private int _normativ;
+        public int Normativ
+        {
+            get { return _normativ; }
+            set { _normativ = value; }
+        }
+
         private string ustanovka;
         public string Ustanovka
         {
@@ -22,6 +55,15 @@ namespace ATPWork.MyApp.Model.Plan
             set
             {
                 this.ustanovka = value;
+            }
+        }
+        private string _vneplan;
+        public string Vneplan
+        {
+            get { return this._vneplan; }
+            set
+            {
+                this._vneplan = value;
             }
         }
         private string edOborudovania;
@@ -42,7 +84,6 @@ namespace ATPWork.MyApp.Model.Plan
                 this.puOldNumber = value;
             }
         }
-
         private string puOldType;
         public string PuOldType
         {
@@ -52,7 +93,6 @@ namespace ATPWork.MyApp.Model.Plan
                 this.puOldType = value;
             }
         }
-
         private string puOldPokaz;
         public string PuOldPokazanie
         {
@@ -62,7 +102,6 @@ namespace ATPWork.MyApp.Model.Plan
                 this.puOldPokaz = value;
             }
         }
-
         private bool puOldMPI;
         public bool PuOldMPI
         {
@@ -149,6 +188,12 @@ namespace ATPWork.MyApp.Model.Plan
                     plomb_DateInstall = item["InstallDate"].ToString();
                     OldPlombs.Add(new Plomba(plomb_Type, plomb_Number, plomb_Place, false, true, plomb_Status, plomb_DateInstall));
                 }
+                Dictionary<string,string> info = DataBaseWorker.GetInfoForNormativ(NumberLS);
+                Rooms = Int32.Parse( info["Rooms"].ToString());
+                PeopleCount = Int32.Parse(info["People"].ToString());
+                NormativKat = Int32.Parse(info["Kategorya"].ToString());
+                Normativ=DataBaseWorker.GetNormativ(PeopleCount, Rooms, NormativKat);
+                Vneplan = PlanWorkModel.GetValueBuNormativ(new DateTime(2017, 12, 19), DateWork, Normativ).ToString();
             }
         }
     }

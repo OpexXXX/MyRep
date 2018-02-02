@@ -292,7 +292,7 @@ namespace MyApp.Model
                 List<int> Page = new List<int>();
                 Page.Add(Int32.Parse(r["Page1"].ToString()));
                 Page.Add(Int32.Parse(r["Page2"].ToString()));
-                result.Add(new AktTehProverki(Int32.Parse(r["ID"].ToString()), Page, r["PathOfPdfFile"].ToString(), long.Parse( r["SizePDF"].ToString())));
+                result.Add(new AktTehProverki(Int32.Parse(r["ID"].ToString()), Page, r["PathOfPdfFile"].ToString(), long.Parse(r["SizePDF"].ToString())));
                 //Ищем агентов по номеру
                 string temp_agent = r["Agent_1"].ToString();
                 if (temp_agent != "")
@@ -337,7 +337,7 @@ namespace MyApp.Model
                 result[i].PuOldType = r["PuOldType"].ToString();
                 result[i].NumberMail = Int32.Parse(r["NumberMail"].ToString());
 
-              
+
 
                 string dtm = r["DateMail"].ToString();
                 if (dtm == "") result[i].DateMail = null;
@@ -387,7 +387,8 @@ namespace MyApp.Model
                 {
                     foreach (Agent item in MainAtpModel.AgentList)
                     {
-                        if (item.SapNumber == temp_agent)                        {
+                        if (item.SapNumber == temp_agent)
+                        {
                             result[i].Agent_2 = new Agent(item.SapNumber, item.Post, item.Surname, item.SearchString);
                             break;
                         }
@@ -399,7 +400,8 @@ namespace MyApp.Model
                 {
                     foreach (PriborUcheta item in MainAtpModel.NewPuList)
                     {
-                        if (item.SapNumberPU == temp_pu)                        {
+                        if (item.SapNumberPU == temp_pu)
+                        {
                             result[i].PuNewType = new PriborUcheta(item.SapNumberPU, item.Nazvanie, item.Poverka, item.Znachnost);
                             break;
                         }
@@ -496,21 +498,21 @@ namespace MyApp.Model
         }
         private static void InsertPlombs(SQLiteCommand cmdd, IEnumerable<Plomba> plombs, string aktName)
         {
-            
+
 
             foreach (Plomba Plomba in plombs)
             {
-                
-               string sql_command = "INSERT INTO `InstallingPlombs` (Akt, Type, Number, Remove, Place, OldPlomb, InstallDate, Status) "
-          + "VALUES ('"
-           + aktName + "', '"
-           + Plomba.Type + "', '"
-            + Plomba.Number + "', '"
-            + ((Plomba.Demontage) ? "1'" : "0'") + ", '"
-            + Plomba.Place + "', '"
-             + ((Plomba.OldPlomb) ? "1'" : "0'") + ", '"
-              + Plomba.InstallDate + "', '"
-            + Plomba.Status + "');";
+
+                string sql_command = "INSERT INTO `InstallingPlombs` (Akt, Type, Number, Remove, Place, OldPlomb, InstallDate, Status) "
+           + "VALUES ('"
+            + aktName + "', '"
+            + Plomba.Type + "', '"
+             + Plomba.Number + "', '"
+             + ((Plomba.Demontage) ? "1'" : "0'") + ", '"
+             + Plomba.Place + "', '"
+              + ((Plomba.OldPlomb) ? "1'" : "0'") + ", '"
+               + Plomba.InstallDate + "', '"
+             + Plomba.Status + "');";
                 cmdd.CommandText = sql_command;
                 cmdd.ExecuteNonQuery();
             }
@@ -769,7 +771,7 @@ namespace MyApp.Model
             List<string> result = new List<string>();
             SQLiteCommand CommandSQL = new SQLiteCommand(connector);
             CommandSQL.CommandText = "SELECT NumberLS  "
-    + " FROM Plan WHERE DateWork LIKE '%" + date.ToString("d")+"%' ";
+    + " FROM Plan WHERE DateWork LIKE '%" + date.ToString("d") + "%' ";
             try
             {
                 SQLiteDataReader r = CommandSQL.ExecuteReader();
@@ -787,8 +789,75 @@ namespace MyApp.Model
                 MessageBox.Show(ex.Message);
                 return result;
             }
-           
+
         }
 
+        public static Dictionary<String, String> GetInfoForNormativ(string numberLs)
+        {
+            Dictionary<String, String> result = new Dictionary<String, String>();
+
+            SQLiteCommand CommandSQL = new SQLiteCommand(connector);
+            CommandSQL.CommandText = "SELECT People, Rooms, Kategorya  "
+    + " FROM SbitNormotiv WHERE NumberLs ='" + numberLs + "' ";
+            try
+            {
+                SQLiteDataReader r = CommandSQL.ExecuteReader();
+                string line = String.Empty;
+                int i = 0;
+                while (r.Read())
+                {
+                    result.Add("People", r["People"].ToString());
+                    result.Add("Rooms", r["Rooms"].ToString());
+                    result.Add("Kategorya", r["Kategorya"].ToString());
+                }
+                r.Close();
+                return result;
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+                return result;
+            }
+
+        }
+        public static int GetNormativ(int people, int rooms, int kategory)
+        {
+
+            int result = 0;
+            string peopleReq, roomReq;
+            if (people == 0)
+                people = 1;
+            if (people >= 5) peopleReq = "More5People";
+            else peopleReq = "People"+people.ToString();
+
+            if (rooms == 0) rooms = 1;
+            if (rooms >= 4) roomReq = "More4";
+            else roomReq = rooms.ToString();
+
+
+
+            SQLiteCommand CommandSQL = new SQLiteCommand(connector);
+            CommandSQL.CommandText = "SELECT " + peopleReq
+            + " FROM Normativ WHERE Kategorya ='" + kategory + "' AND RoomCount =   '" + roomReq+"'";
+
+            try
+            {
+                SQLiteDataReader r = CommandSQL.ExecuteReader();
+                string line = String.Empty;
+                int i = 0;
+                while (r.Read())
+                {
+                    result = int.Parse(r[peopleReq].ToString());
+                }
+
+                r.Close();
+                return result * people;
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+                return result;
+            }
+        }
     }
 }

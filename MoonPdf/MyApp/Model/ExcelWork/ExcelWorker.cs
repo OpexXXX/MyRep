@@ -253,8 +253,8 @@ namespace MyApp.Model
                    
                 }
                 row["Plombs"] = plobms;
-                row["Raschet"] = "";
-                 row["Vneplan"] = "";
+                row["Raschet"] = item.Normativ;
+                 row["Vneplan"] = item.Vneplan;
                 table.Rows.Add(row);
             }
             return table;
@@ -423,7 +423,7 @@ namespace MyApp.Model
                 table.TotalWidth = 800f;
                 table.LockedWidth = true;
 
-                var colWidthPercentages = new[] { 2f, 8f, 6f, 11f, 15f, 9f, 7f, 2f, 15f , 21f , 2f, 2f};
+                var colWidthPercentages = new[] { 2f, 8f, 6f, 11f, 15f, 9f, 7f, 2f, 15f , 21f , 3f, 1f};
                 table.SetWidths(colWidthPercentages);
 
                 //Добавим в таблицу общий заголовок
