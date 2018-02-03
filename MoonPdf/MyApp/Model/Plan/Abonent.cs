@@ -193,6 +193,7 @@ NoEquipment=1,
                 PeopleCount = Int32.Parse(info["People"].ToString());
                 NormativKat = Int32.Parse(info["Kategorya"].ToString());
                 Normativ=DataBaseWorker.GetNormativ(PeopleCount, Rooms, NormativKat);
+
                 Vneplan = PlanWorkModel.GetValueBuNormativ(new DateTime(2017, 12, 19), DateWork, Normativ).ToString();
             }
         }
