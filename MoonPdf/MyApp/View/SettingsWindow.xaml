@@ -1,0 +1,26 @@
+﻿<Window x:Class="MyApp.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MyApp"
+        mc:Ignorable="d"
+        Title="Настройки" Height="355" Width="504">
+    <Grid>
+        <TabControl TabStripPlacement="Left" SelectedIndex="0">
+            <TabItem Header="Папки">
+                <Grid Background="#FFE5E5E5">
+                    <Grid HorizontalAlignment="Left" Height="315" VerticalAlignment="Top" Width="435">
+                        <TextBox Height="23" Margin="10,31,40,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Папка с актами" VerticalAlignment="Top"/>
+                        <Button Content="..." Margin="0,31,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="25" Height="23"/>
+                        <TextBox Height="23" Margin="10,80,40,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="10,59,0,0" TextWrapping="Wrap" Text="Папка для сопроводиловки" VerticalAlignment="Top"/>
+                        <Button Content="..." Margin="0,80,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="25" Height="23"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+        </TabControl>
+    </Grid>
+</Window>

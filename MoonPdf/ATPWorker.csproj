@@ -7,7 +7,7 @@
     <ProjectGuid>{0A2C7E6D-E41B-444E-A74F-C396F7912D9D}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MoonPdf</RootNamespace>
+    <RootNamespace>ATPWork</RootNamespace>
     <AssemblyName>ATPWork</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -17,7 +17,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
-    <PublishUrl>publish\</PublishUrl>
+    <PublishUrl>C:\Users\Opex\Documents\WebSite1\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -27,9 +27,10 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationRevision>2</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -97,7 +98,25 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>martz90-circle-windows-8.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\martz90-circle-windows-8.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>C40807763AE4DBD466A05DC25F2542A47DC5A6B4</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>ATPWorker_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -134,10 +153,17 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
       <HintPath>.\Interop.SAPLogonCtrl.dll</HintPath>
     </Reference>
+    <Reference Include="Ionic.Zip, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="itextsharp, Version=5.5.12.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <HintPath>..\packages\iTextSharp.5.5.12\lib\itextsharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Expression.Drawing, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Expression.Effects, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="MoonPdfLib, Version=0.3.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Downloads\MoonPdfLib-0.3.0-x86\MoonPdfLib-0.3.0-x86\MoonPdfLib.dll</HintPath>
@@ -146,11 +172,28 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.SQLite, Version=1.0.106.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\123\System.Data.SQLite.dll</HintPath>
+      <HintPath>..\packages\System.Data.SQLite.Core.1.0.106.0\lib\net451\System.Data.SQLite.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.SQLite.EF6, Version=1.0.106.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.EF6.1.0.106.0\lib\net451\System.Data.SQLite.EF6.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq">
+      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.106.0\lib\net451\System.Data.SQLite.Linq.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Controls.Input.Toolkit, Version=3.5.40128.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WPFToolkit.3.5.50211.1\lib\System.Windows.Controls.Input.Toolkit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Windows.Controls.Layout.Toolkit, Version=3.5.40128.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WPFToolkit.3.5.50211.1\lib\System.Windows.Controls.Layout.Toolkit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -162,48 +205,96 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WPFTextBoxAutoComplete, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WPFTextBoxAutoComplete.1.0.5\lib\net40\WPFTextBoxAutoComplete.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="WPFToolkit, Version=3.5.40128.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WPFToolkit.3.5.50211.1\lib\WPFToolkit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ExcelWorker.cs" />
-    <Compile Include="Oplobbirovki.cs" />
-    <Compile Include="ResultSearchWindow.xaml.cs">
+    <Compile Include="MyApp\Model\ATPWork\Agent.cs" />
+    <Compile Include="MyApp\Model\ATPWork\MainAtpModel.cs" />
+    <Compile Include="MyApp\Model\ATPWork\Plomba.cs" />
+    <Compile Include="MyApp\Model\ATPWork\PriborUcheta.cs" />
+    <Compile Include="MyApp\Model\DbWork\DataBaseWorker.cs" />
+    <Compile Include="MyApp\Model\ExcelWork\ExcelWorker.cs" />
+    <Compile Include="MyApp\Model\Plan\Abonent.cs" />
+    <Compile Include="MyApp\Model\Plan\PlanModel.cs" />
+    <Compile Include="MyApp\Model\SAPWork\SAPWorker.cs" />
+    <Compile Include="MyApp\Model\Zayvki na oplombirovku\Oplobbirovki.cs" />
+    <Compile Include="MyApp\ViewModel\MainAtp\AtpEditor\AptEditor.cs" />
+    <Compile Include="MyApp\ViewModel\MainAtp\AtpEditor\Commands.cs" />
+    <Compile Include="MyApp\ViewModel\MainAtp\AtpEditor\Validators.cs" />
+    <Compile Include="MyApp\ViewModel\BaseCommand.cs" />
+    <Compile Include="MyApp\ViewModel\DelegateComand.cs" />
+    <Compile Include="MyApp\ViewModel\MainAtp\AtpSettings.cs" />
+    <Compile Include="MyApp\ViewModel\MainAtp\Commands.cs" />
+    <Compile Include="MyApp\ViewModel\MainAtp\MainAtpVM.cs" />
+    <Compile Include="MyApp\ViewModel\MainAtp\PlombEditor\Commands.cs" />
+    <Compile Include="MyApp\ViewModel\MainAtp\PlombEditor\PlombEditor.cs" />
+    <Compile Include="MyApp\ViewModel\MainAtp\PlombEditor\Validators.cs" />
+    <Compile Include="MyApp\ViewModel\PlanViewModel\PlanVM.cs" />
+    <Compile Include="MyApp\ViewModel\SettingsVM.cs" />
+    <Compile Include="MyApp\ViewModel\ViewModelBase.cs" />
+    <Compile Include="MyApp\View\AtpEditor.xaml.cs">
+      <DependentUpon>AtpEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyApp\View\PlombEditor.xaml.cs">
+      <DependentUpon>PlombEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyApp\View\ResultSearchWindow.xaml.cs">
       <DependentUpon>ResultSearchWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SAPWorker.cs" />
-    <Compile Include="SearchWindowOplombirovki.xaml.cs">
+    <Compile Include="MyApp\View\SearchWindowOplombirovki.xaml.cs">
       <DependentUpon>SearchWindowOplombirovki.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SettingsWindow.xaml.cs">
+    <Compile Include="MyApp\View\Settings.xaml.cs">
+      <DependentUpon>Settings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyApp\View\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="aktATP.cs" />
+    <Compile Include="MyApp\Model\ATPWork\AktTehProverki.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ATPMainwork.cs" />
-    <Compile Include="DataBaseWorker.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="ResultSearchWindow.xaml">
+    <Page Include="MyApp\View\AtpEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SearchWindowOplombirovki.xaml">
+    <Page Include="MyApp\View\PlombEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SettingsWindow.xaml">
+    <Page Include="MyApp\View\ResultSearchWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyApp\View\SearchWindowOplombirovki.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyApp\View\Settings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyApp\View\SettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -213,11 +304,13 @@
       <SubType>Code</SubType>
     </Compile>
     <None Include="App.config" />
+    <None Include="ATPWorker_TemporaryKey.pfx" />
     <None Include="headertemplate.json" />
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
     <None Include="Resources\moon.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -241,7 +334,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="martz90-circle-windows-8.ico" />
+    <Resource Include="Resources\martz90-circle-windows-8.ico" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="Microsoft.Office.Core">
@@ -285,12 +378,31 @@
     <Resource Include="Resources\ok.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Interop.SAPFEWSELib.dll" />
-    <Content Include="Interop.SAPLogonCtrl.dll" />
-    <Content Include="libmupdf.dll" />
-    <Content Include="MoonPdfLib.dll" />
-    <Content Include="MouseKeyboardActivityMonitor.dll" />
-    <Content Include="sapfewse.ocx" />
+    <Resource Include="Resources\view-counter.png" />
+    <Resource Include="Resources\icons8Add-50.png" />
+    <Resource Include="Resources\icons8Copy-50.png" />
+    <Resource Include="Resources\icons8Delete-50.png" />
+    <Resource Include="Resources\icons8Find50.png" />
+    <Resource Include="Resources\icons8+1.png" />
+    <Resource Include="Resources\icons8-1.png" />
+    <Resource Include="Resources\icons8-мужчина-пользователь.png" />
+    <Resource Include="Resources\icons8-плюс.png" />
+    <Resource Include="Resources\icons8-создать-новый.png" />
+    <Resource Include="Resources\icons8-счетчик-энергии.png" />
+    <Resource Include="Resources\icons8-счетчик.png" />
+    <Resource Include="Resources\icons8-удалить.png" />
+    <Resource Include="Resources\icons8-поиск-40.png" />
+    <Resource Include="Resources\icons8-документ-40.png" />
+    <Resource Include="Resources\icons8-гость-мужчина-40.png" />
+    <Resource Include="Resources\icons8-группа-пользователей-40.png" />
+    <Resource Include="Resources\icons8-защать-от-магнитного-поля-40 %281%29.png" />
+    <Resource Include="Resources\fenix.png" />
+    <Content Include="Resources\Interop.SAPFEWSELib.dll" />
+    <Content Include="Resources\Interop.SAPLogonCtrl.dll" />
+    <Content Include="Resources\libmupdf.dll" />
+    <Content Include="Resources\MoonPdfLib.dll" />
+    <Content Include="Resources\MouseKeyboardActivityMonitor.dll" />
+    <Content Include="Resources\sapfewse.ocx" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -302,6 +414,13 @@
     <PreBuildEvent>
     </PreBuildEvent>
   </PropertyGroup>
+  <Import Project="..\packages\System.Data.SQLite.Core.1.0.106.0\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.106.0\build\net451\System.Data.SQLite.Core.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Данный проект ссылается на пакеты NuGet, отсутствующие на этом компьютере. Используйте восстановление пакетов NuGet, чтобы скачать их.  Дополнительную информацию см. по адресу: http://go.microsoft.com/fwlink/?LinkID=322105. Отсутствует следующий файл: {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.106.0\build\net451\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.106.0\build\net451\System.Data.SQLite.Core.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

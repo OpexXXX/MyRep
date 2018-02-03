@@ -1,0 +1,277 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ATPWork.MyApp.View"
+             xmlns:viewModel="clr-namespace:ATPWork.MyApp.ViewModel.AtpEditor"
+             xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing" x:Class="ATPWork.MyApp.View.AtpEditor"
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="350"
+              KeyboardNavigation.TabNavigation="Cycle">
+    <UserControl.Resources>
+        <viewModel:AtpEditorVM x:Key="AtpEditorViewModel"/>
+        <Style x:Key="TextBoxStyle" TargetType="{x:Type TextBox}">
+            <Setter Property="Height" Value="26" />
+            <Setter Property="Margin" Value="1,1,1,1" />
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="Validation.ErrorTemplate">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <DockPanel LastChildFill="True">
+                            <TextBlock DockPanel.Dock="Right" Foreground="Red" FontSize="14" FontWeight="Bold"
+                                                       Text="*"/>
+                            <Border BorderBrush="Red" BorderThickness="1">
+                                <AdornedElementPlaceholder x:Name="adornerPlaceholder"/>
+                            </Border>
+                        </DockPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="Background" Value="#FFF5DFDF"/>
+                    <Setter Property="ToolTip" 
+                         Value="{Binding (Validation.Errors)[0].ErrorContent, RelativeSource={RelativeSource Self}}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="Hidden" TargetType="{x:Type TextBlock}">
+            <Setter Property="Height" Value="26" />
+            <Setter Property="Margin" Value="1,1,1,1" />
+            <Setter Property="Control.FontFamily" Value="Segoe UI" />
+            <Setter Property="Control.FontSize" Value="15" />
+            <Style.Triggers>
+                <Trigger Property="Text" Value="">
+                    <Setter Property="Visibility" Value="Collapsed"  />
+                </Trigger>
+
+            </Style.Triggers>
+
+        </Style>
+        <DataTemplate x:Key="comboAgentsDataTemplate">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Surname}" />
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="comboNewPuTypeDataTemplate">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Nazvanie}" />
+            </StackPanel>
+        </DataTemplate>
+    </UserControl.Resources>
+    
+    <StackPanel Background="White">
+
+        <GroupBox  BorderBrush="#FF999999" BorderThickness="2">
+            <GroupBox.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Image Visibility="Collapsed" Source="/ATPWork;component/Resources/icons8-документ-40.png" Height="20" Width="20"/>
+                    <TextBlock Text="Номер акта" FontWeight="Bold" FontSize="14" />
+                </StackPanel>
+            </GroupBox.Header>
+            <StackPanel>
+                <StackPanel  Orientation="Horizontal">
+                    <TextBlock Text="Номер 91/Е-" VerticalAlignment="Center"/>
+                    <TextBox   VerticalAlignment="Center" Style="{StaticResource TextBoxStyle}"   Width="50" MaxLength="5" >
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Up" Command="{Binding Commands.NumberUp, Source={StaticResource AtpEditorViewModel}}" />
+                            <KeyBinding Key="Down" Command="{Binding Commands.NumberDown, Source={StaticResource AtpEditorViewModel}}" />
+                        </TextBox.InputBindings>
+                        
+                        <Binding Source="{StaticResource AtpEditorViewModel}" Path="AktInWork.Number" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
+        UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <viewModel:ValidNumber/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox>
+                    <DatePicker  Margin="5,0,0,0"
+                                        SelectedDate ="{Binding AktInWork.DateWork, Source={StaticResource AtpEditorViewModel}}"
+                                        HorizontalAlignment="Left" 
+                                       VerticalAlignment="Center" Height="25" Width="111" SelectedDateFormat="Short" 
+                            DisplayDateEnd="2025-12-31" 
+                            DisplayDateStart="2017-01-01" 
+                            TextOptions.TextFormattingMode="Display" 
+                            IsManipulationEnabled="True">
+                        <DatePicker.InputBindings>
+                            <KeyBinding Key="Up" Command="{Binding Commands.NumberDown, Source={StaticResource AtpEditorViewModel}}" />
+                            <KeyBinding Key="Down" Command="{Binding Commands.DateDown, Source={StaticResource AtpEditorViewModel}}" />
+                        </DatePicker.InputBindings>
+                    </DatePicker>
+                </StackPanel>
+                <StackPanel  Orientation="Horizontal">
+                    <CheckBox x:Name="chekBoxDopusk" VerticalAlignment="Center" IsChecked="{Binding AktInWork.DopuskFlag, Source={StaticResource AtpEditorViewModel}}" Content="Допуск"      Height="20"/>
+                    <CheckBox x:Name="chekBoxProverka" VerticalAlignment="Center" IsChecked="{Binding AktInWork.ProverkaFlag, Source={StaticResource AtpEditorViewModel}}" Content="Проверка"     Height="20" Margin="5,0,0,0"/>
+
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox  BorderThickness="2" BorderBrush="#FF999999">
+            <GroupBox.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/ATPWork;component/Resources/icons8-гость-мужчина-40.png" Height="20" Width="20" Visibility="Collapsed"/>
+                    <TextBlock Text="Потребитель" FontWeight="Bold" FontSize="14" />
+                </StackPanel>
+            </GroupBox.Header>
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock TextWrapping="Wrap" Text="№Л/С:" VerticalAlignment="Center"  />
+                    <TextBox x:Name="NumberLsWPF" VerticalAlignment="Center"  Style="{StaticResource TextBoxStyle}"
+                           Width="120"  
+                         MaxLength="12">
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Enter" Command="{Binding Commands.GetDataFromDbByNumberLs, Source={StaticResource AtpEditorViewModel}}" />
+                        </TextBox.InputBindings>
+                                <Binding Source="{StaticResource AtpEditorViewModel}" Path="AktInWork.NumberLS" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" NotifyOnValidationError="True"
+      >
+                            <Binding.ValidationRules>
+                                <viewModel:ValidNumberLS/>
+                                <ExceptionValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox>
+
+                    <Button  Focusable="False" Command="{Binding Commands.GetDataFromDbByNumberLs, Source={StaticResource AtpEditorViewModel}}">
+                        <Image  Height="20" Source="/ATPWork;component/Resources/icons8-поиск-40.png" Width="20" />
+                    </Button>
+
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock  TextWrapping="Wrap" Text="{Binding AktInWork.FIO, Source={StaticResource AtpEditorViewModel}}" Style="{StaticResource Hidden}"/>
+                    <TextBlock   Text="{Binding AktInWork.Adress, Source={StaticResource AtpEditorViewModel}}"  Style="{StaticResource Hidden}"  />
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox  BorderBrush="#FF999999" BorderThickness="2">
+            <GroupBox.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/ATPWork;component/Resources/icons8-группа-пользователей-40.png" Height="20" Width="20" Visibility="Collapsed"/>
+                    <TextBlock Text="Агенты" FontWeight="Bold" FontSize="14" />
+                </StackPanel>
+            </GroupBox.Header>
+            <StackPanel Orientation="Vertical">
+                <ComboBox   HorizontalAlignment="Left" Height="25" Width="240" ItemsSource="{Binding AgentList, Source={StaticResource AtpEditorViewModel}}" SelectedItem="{Binding AktInWork.Agent_1, Source={StaticResource AtpEditorViewModel}}" Background="{x:Null}"  BorderThickness="1">
+                </ComboBox>
+                <StackPanel Orientation="Horizontal">
+                <ComboBox  HorizontalAlignment="Left" Height="25" Width="240" ItemsSource="{Binding AgentList, Source={StaticResource AtpEditorViewModel}}" SelectedItem="{Binding AktInWork.Agent_2, Source={StaticResource AtpEditorViewModel}}" Background="{x:Null}" BorderThickness="1">
+                </ComboBox>
+                    <Button  Focusable="False" Command="{Binding Commands.RemoveSecondAgent, Source={StaticResource AtpEditorViewModel}}">
+                        <Image  Height="20" Source="/ATPWork;component/Resources/icons8-удалить.png" Width="20" />
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox BorderBrush="#FF999999" BorderThickness="2" >
+            <GroupBox.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/ATPWork;component/Resources/icons8-счетчик-энергии.png" Height="20" Width="20"/>
+                    <TextBlock Text="Допускаемый прибор учета" FontWeight="Bold" FontSize="14" />
+                </StackPanel>
+            </GroupBox.Header>
+            <GroupBox.Style>
+                <Style TargetType="{x:Type GroupBox}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsChecked, ElementName=chekBoxDopusk}" Value="false">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </GroupBox.Style>
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock  VerticalAlignment="Center"  Text="Тип:" Margin="1,1,1,1"/>
+                    <ComboBox VerticalAlignment="Center" Height="25" ItemsSource="{Binding PuList, Source={StaticResource AtpEditorViewModel}}" SelectedItem="{Binding AktInWork.PuNewType, Source={StaticResource AtpEditorViewModel}}" ItemTemplate="{StaticResource comboNewPuTypeDataTemplate}" Margin="1,1,1,1"/>
+                    <TextBlock VerticalAlignment="Center" Text="Номер:" Margin="1,1,1,1"/>
+
+                    <TextBox VerticalAlignment="Center"  Style="{StaticResource TextBoxStyle}" Width="133" Margin="1" ToolTip="Номер допускаемого прибора учета" Text="{Binding AktInWork.PuNewNumber, Mode=TwoWay, NotifyOnValidationError=True, Source={StaticResource AtpEditorViewModel}, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock  VerticalAlignment="Center"  Text="Показание:" Margin="1,1,1,1"/>
+                    <TextBox VerticalAlignment="Center"  Style="{StaticResource TextBoxStyle}" Width="96" MaxLength="7">
+                        <Binding Source="{StaticResource AtpEditorViewModel}" Path="AktInWork.PuNewPokazanie" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
+        UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <viewModel:ValidPokazanie/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center" Text="Поверка:"  Margin="1,1,1,1"/>
+                    <TextBox VerticalAlignment="Center"  Style="{StaticResource TextBoxStyle}"   Width="44"  MaxLength="4" >
+                        <Binding Source="{StaticResource AtpEditorViewModel}" Path="AktInWork.PuNewPoverkaEar" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
+        UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <viewModel:ValidYearPu/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox>
+                    <TextBlock VerticalAlignment="Center" Text="Квартал:" Margin="1,1,1,1"/>
+                    <TextBox VerticalAlignment="Center"  Style="{StaticResource TextBoxStyle}" Width="20" MaxLength="1" MaxLines="1" >
+                        <Binding Source="{StaticResource AtpEditorViewModel}" Path="AktInWork.PuNewPoverKvartal" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
+        UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <viewModel:ValidKvartal/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox BorderThickness="2" BorderBrush="#FF999999" >
+            <GroupBox.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/ATPWork;component/Resources/icons8-счетчик-энергии.png" Height="20" Width="20" Visibility="Collapsed"/>
+                    <TextBlock Text="Прибор учета" FontWeight="Bold" FontSize="14" />
+                </StackPanel>
+            </GroupBox.Header>
+            <StackPanel  >
+                <StackPanel Orientation="Horizontal"  >
+                    <TextBlock Text="{Binding AktInWork.PuOldType, Source={StaticResource AtpEditorViewModel}}"  Style="{StaticResource Hidden}"  VerticalAlignment="Center" Margin="1,1,1,1"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" >
+                    <TextBlock Text="Номер:" VerticalAlignment="Center" Margin="1,1,1,1"/>
+                    <TextBox   Style="{StaticResource TextBoxStyle}"  MinWidth="120"  VerticalAlignment="Center">
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Enter" Command="{Binding Commands.GetDataFromDbByNumberPu, Source={StaticResource AtpEditorViewModel}}" />
+                        </TextBox.InputBindings>
+                        <Binding Source="{StaticResource AtpEditorViewModel}" Path="AktInWork.PuOldNumber" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
+        UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <viewModel:ValidOldNumberPU/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox>
+                    <Button  Focusable="False" Command="{Binding Commands.GetDataFromDbByNumberPu, Source={StaticResource AtpEditorViewModel}}">
+                        <Image  Height="20" Source="/ATPWork;component/Resources/icons8-поиск-40.png" Width="20" />
+                    </Button>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" >
+                    <TextBlock  VerticalAlignment="Center"  Text="Показание:" Margin="1,1,1,1"/>
+                    <TextBox Style="{StaticResource TextBoxStyle}"  MaxLength="7" MinWidth="70" VerticalAlignment="Center">
+                        <Binding Source="{StaticResource AtpEditorViewModel}" Path="AktInWork.PuOldPokazanie" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
+        UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <viewModel:ValidPokazanie/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox>
+                    <CheckBox Content="Истек МПИ " HorizontalAlignment="Left"    IsChecked="{Binding AktInWork.PuOldMPI, Source={StaticResource AtpEditorViewModel}}"  VerticalAlignment="Center" Margin="1,1,1,1"/>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox   BorderThickness="2" BorderBrush="#FF999999">
+            <GroupBox.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/ATPWork;component/Resources/icons8-защать-от-магнитного-поля-40 (1).png" Height="20" Width="20"/>
+                    <TextBlock Text="Пломбы" FontWeight="Bold" FontSize="14" />
+                </StackPanel>
+            </GroupBox.Header>
+            <StackPanel>
+                <local:PlombEditor OldPlombItemsSource="{Binding AktInWork.OldPlombs, Source={StaticResource AtpEditorViewModel}}" NewPlombItemsSource="{Binding AktInWork.NewPlombs, Source={StaticResource AtpEditorViewModel}}" />
+            </StackPanel>
+        </GroupBox>
+    </StackPanel>
+</UserControl>

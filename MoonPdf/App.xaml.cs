@@ -16,6 +16,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 !*/
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -23,11 +24,27 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 
-namespace MoonPdf
+namespace MyApp
 {
 
 	public partial class App : Application
 	{
-       
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            WalkDictionary(this.Resources);
+
+            base.OnStartup(e);
+        }
+
+
+        private static void WalkDictionary(ResourceDictionary resources)
+        {
+            foreach (DictionaryEntry entry in resources)
+            {
+            }
+
+            foreach (ResourceDictionary rd in resources.MergedDictionaries)
+                WalkDictionary(rd);
+        }
     }
 }
