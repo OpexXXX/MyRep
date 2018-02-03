@@ -67,7 +67,6 @@ namespace MyApp.Model
             TypePlombList.Add("2400_6");
             /* 
              
-
              SQLiteCommand CommandSQL = new SQLiteCommand(connector);
              CommandSQL.CommandText = "SELECT * "
              + " FROM `AgentList`;";
@@ -91,7 +90,6 @@ namespace MyApp.Model
             PlacePlomb.Add("Вводной коммутационный аппарат");
             PlacePlomb.Add("Корпус прибора учета");
             PlacePlomb.Add("Щит учета");
-
             /*
             SQLiteCommand CommandSQL = new SQLiteCommand(connector);
             CommandSQL.CommandText = "SELECT * "
@@ -142,7 +140,6 @@ namespace MyApp.Model
                 while (r.Read())
                 {
                     result.Add(new Dictionary<string, string>());
-
                     result[i].Add("Type", r["Type"].ToString());
                     result[i].Add("Number", r["Number"].ToString());
                     result[i].Add("Place", r["Place"].ToString());
@@ -172,7 +169,6 @@ namespace MyApp.Model
     + " FROM SAPFL WHERE LsNumber LIKE '%" + numberLS + "%' ";
             try
             {
-
                 SQLiteDataReader r = CommandSQL.ExecuteReader();
                 string line = String.Empty;
                 int i = 0;
@@ -234,7 +230,6 @@ namespace MyApp.Model
                 i++;
             }
             r.Close();
-
             return result;
         }
         /// <summary>
@@ -269,7 +264,6 @@ namespace MyApp.Model
                 i++;
             }
             r.Close();
-
             return result;
         }
         /// <summary>
@@ -336,8 +330,6 @@ namespace MyApp.Model
                 result[i].PuOldPokazanie = r["PuOldPokazanie"].ToString();
                 result[i].PuOldType = r["PuOldType"].ToString();
                 result[i].NumberMail = Int32.Parse(r["NumberMail"].ToString());
-
-
 
                 string dtm = r["DateMail"].ToString();
                 if (dtm == "") result[i].DateMail = null;
@@ -439,39 +431,30 @@ namespace MyApp.Model
         }
         public static void DromCompliteTable()
         {
-
             SQLiteCommand cmd = connector.CreateCommand();
             string sql_command = "DELETE  FROM CompleteATPList;";
             cmd.CommandText = sql_command;
             try
             {
                 cmd.ExecuteNonQuery();
-
-
             }
             catch (SQLiteException ex)
             {
-
-
                 MessageBox.Show(ex.Message);
             }
         }
         public static void DromInWorkTable()
         {
-
             SQLiteCommand cmd = connector.CreateCommand();
             string sql_command = "DELETE  FROM ATPInWorkList;";
             cmd.CommandText = sql_command;
             try
             {
                 cmd.ExecuteNonQuery();
-
             }
             catch (SQLiteException ex)
             {
                 MessageBox.Show(ex.Message);
-
-
             }
         }
         private static void loadPlombs(AktTehProverki akt)
@@ -498,21 +481,18 @@ namespace MyApp.Model
         }
         private static void InsertPlombs(SQLiteCommand cmdd, IEnumerable<Plomba> plombs, string aktName)
         {
-
-
             foreach (Plomba Plomba in plombs)
             {
-
                 string sql_command = "INSERT INTO `InstallingPlombs` (Akt, Type, Number, Remove, Place, OldPlomb, InstallDate, Status) "
            + "VALUES ('"
-            + aktName + "', '"
-            + Plomba.Type + "', '"
-             + Plomba.Number + "', '"
-             + ((Plomba.Demontage) ? "1'" : "0'") + ", '"
-             + Plomba.Place + "', '"
-              + ((Plomba.OldPlomb) ? "1'" : "0'") + ", '"
-               + Plomba.InstallDate + "', '"
-             + Plomba.Status + "');";
+           + aktName + "', '"
+           + Plomba.Type + "', '"
+           + Plomba.Number + "', '"
+           + ((Plomba.Demontage) ? "1'" : "0'") + ", '"
+           + Plomba.Place + "', '"
+           + ((Plomba.OldPlomb) ? "1'" : "0'") + ", '"
+           + Plomba.InstallDate + "', '"
+           + Plomba.Status + "');";
                 cmdd.CommandText = sql_command;
                 cmdd.ExecuteNonQuery();
             }
@@ -558,16 +538,12 @@ namespace MyApp.Model
                            + akt.SapNumberAkt + "','"
                              + akt.SizePDF + "','"
                         + akt.EdOborudovania + "');";
-
                         cmdd.CommandText = sql_command;
                         cmdd.ExecuteNonQuery();
-
                         string aktName = akt.ID.ToString() + akt.Number + akt.NumberLS;
-
                         sql_command = "DELETE FROM `InstallingPlombs` WHERE Akt = \"" + aktName + "\";";
                         cmdd.CommandText = sql_command;
                         cmdd.ExecuteNonQuery();
-
                         if (akt.NewPlombs.Count > 0) InsertPlombs(cmdd, akt.NewPlombs, aktName);
                         if (akt.OldPlombs.Count > 0) InsertPlombs(cmdd, akt.OldPlombs, aktName);
 
@@ -589,9 +565,9 @@ namespace MyApp.Model
                     foreach (AktTehProverki akt in akti)
                     {
                         string sql_command = "INSERT INTO ATPInWorkList(  'ID',`PathOfPdfFile`, 'Adress', Agent_1, Agent_2, DateWork, FIO, DopuskFlag, Number,NumberLS,PuNewNumber,PuNewPokazanie,PuNewPoverkaEar,PuNewPoverKvartal,PuNewType,PuOldMPI,PuOldNumber,PuOldPokazanie,PuOldType, Page1, Page2, NumberMail, DateMail,`Ustanovka`,`SapNumberAkt`,`SizePDF`,`EdOborudovania`)"
-                      + "VALUES ('"
-                       + akt.ID.ToString() + "', '"
-                         + akt.NamePdfFile + "', '"
+                        + "VALUES ('"
+                        + akt.ID.ToString() + "', '"
+                        + akt.NamePdfFile + "', '"
                         + akt.Adress + "', '"
                         + (akt.Agent_1 != null ? akt.Agent_1.SapNumber : "") + "', '"
                         + (akt.Agent_2 != null ? akt.Agent_2.SapNumber : "") + "', '"
@@ -610,34 +586,25 @@ namespace MyApp.Model
                         + akt.PuOldPokazanie + "', '"
                         + akt.PuOldType + "','"
                         + akt.NumberOfPagesInSoursePdf[0] + "','"
-                         + akt.NumberOfPagesInSoursePdf[1] + "','"
-                          + akt.NumberMail.ToString() + "','"
-                         + (akt.DateMail != null ? akt.DateMail?.ToString("d") : "") + "','"
-                           + akt.Ustanovka + "','"
-                           + akt.SapNumberAkt + "','"
-                             + akt.SizePDF + "','"
+                        + akt.NumberOfPagesInSoursePdf[1] + "','"
+                        + akt.NumberMail.ToString() + "','"
+                        + (akt.DateMail != null ? akt.DateMail?.ToString("d") : "") + "','"
+                        + akt.Ustanovka + "','"
+                        + akt.SapNumberAkt + "','"
+                        + akt.SizePDF + "','"
                         + akt.EdOborudovania + "');";
-
                         cmdd.CommandText = sql_command;
                         cmdd.ExecuteNonQuery();
-
                         string aktName = akt.ID.ToString() + akt.Number + akt.NumberLS;
-
                         sql_command = "DELETE FROM `InstallingPlombs` WHERE Akt = \"" + aktName + "\";";
                         cmdd.CommandText = sql_command;
                         cmdd.ExecuteNonQuery();
-
                         if (akt.NewPlombs.Count > 0) InsertPlombs(cmdd, akt.NewPlombs, aktName);
                         if (akt.OldPlombs.Count > 0) InsertPlombs(cmdd, akt.OldPlombs, aktName);
-
                     }
                     transaction.Commit();
                 }
             }
-
-
-
-
         }
         /// <summary>
         /// Обновление базы данных физ.  лиц
@@ -752,12 +719,10 @@ namespace MyApp.Model
                             transaction.Commit();
                         }
                     }
-
                     MessageBox.Show("База пломб успешно обновлена");
                 }
                 catch (Exception ex)
                 {
-
                     MessageBox.Show(ex.Message);
                 }
             }
@@ -789,9 +754,7 @@ namespace MyApp.Model
                 MessageBox.Show(ex.Message);
                 return result;
             }
-
         }
-
         public static Dictionary<String, String> GetInfoForNormativ(string numberLs)
         {
             Dictionary<String, String> result = new Dictionary<String, String>();
@@ -828,7 +791,7 @@ namespace MyApp.Model
             if (people == 0)
                 people = 1;
             if (people >= 5) peopleReq = "More5People";
-            else peopleReq = "People"+people.ToString();
+            else peopleReq = "People" + people.ToString();
 
             if (rooms == 0) rooms = 1;
             if (rooms >= 4) roomReq = "More4";
@@ -838,7 +801,7 @@ namespace MyApp.Model
 
             SQLiteCommand CommandSQL = new SQLiteCommand(connector);
             CommandSQL.CommandText = "SELECT " + peopleReq
-            + " FROM Normativ WHERE Kategorya ='" + kategory + "' AND RoomCount =   '" + roomReq+"'";
+            + " FROM Normativ WHERE Kategorya ='" + kategory + "' AND RoomCount =   '" + roomReq + "'";
 
             try
             {

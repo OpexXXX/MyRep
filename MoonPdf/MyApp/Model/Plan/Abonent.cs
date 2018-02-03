@@ -33,21 +33,18 @@ NoEquipment=1,
             get { return _peopleCount; }
             set { _peopleCount = value; }
         }
-
         private int _normativKat;
         public int NormativKat
         {
             get { return _normativKat; }
             set { _normativKat = value; }
         }
-
         private int _normativ;
         public int Normativ
         {
             get { return _normativ; }
             set { _normativ = value; }
         }
-
         private string ustanovka;
         public string Ustanovka
         {
@@ -176,7 +173,6 @@ NoEquipment=1,
                 Ustanovka = dict["Ustanovka"];
                 EdOborudovania = dict["EdOborudovania"];
                 Podkl = dict["Podkluchenie"];
-
                 List<Dictionary<string, string>> plombs = DataBaseWorker.GetPlombsFromEdOb(EdOborudovania);
                 foreach (Dictionary<string, string> item in plombs)
                 {
@@ -193,8 +189,7 @@ NoEquipment=1,
                 PeopleCount = Int32.Parse(info["People"].ToString());
                 NormativKat = Int32.Parse(info["Kategorya"].ToString());
                 Normativ=DataBaseWorker.GetNormativ(PeopleCount, Rooms, NormativKat);
-
-                Vneplan = PlanWorkModel.GetValueBuNormativ(new DateTime(2017, 12, 19), DateWork, Normativ).ToString();
+                Vneplan = PlanWorkModel.GetValueBuNormativ(new DateTime(2017, 12, 12), DateWork, Normativ).ToString();
             }
         }
     }
