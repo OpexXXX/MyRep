@@ -186,6 +186,8 @@ namespace ATPWork.MyApp.Model.Plan
                 EdOborudovania = dict["EdOborudovania"];
              
                 addPlombs();//
+
+                /**Расчеты БУ*********/
                 getNormativ();//
                 getPrevousAkt();//
                getPrevousPlan();//
@@ -236,6 +238,7 @@ namespace ATPWork.MyApp.Model.Plan
                 TimeSpan difDay = DateWork-(DateTime)start;
                 Podkl += (difDay.Days+1)+ " дней к расчету\n";
                 Podkl += "Норматив:"+ Normativ+ "кВт*ч/мес, БУ: " + PlanWorkModel.GetValueBuNormativ((DateTime)start, DateWork, Normativ).ToString()+"кВт*ч";
+                /*********************************************/
             }
         }
 
