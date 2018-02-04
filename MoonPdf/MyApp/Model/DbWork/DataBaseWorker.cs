@@ -156,6 +156,32 @@ namespace MyApp.Model
                 return null;
             }
         }
+
+        internal static List<string[]> GetPrevusAktFenix(string numberLS)
+        {
+            List<string[]> result = new List<string[]>(2);
+            SQLiteCommand CommandSQL = new SQLiteCommand(connector);
+            CommandSQL.CommandText = "SELECT NumberAkt, Date "
+    + " FROM ProverkiFenix WHERE NumbeLS LIKE '%" + numberLS + "%' ";
+            try
+            {
+                SQLiteDataReader r = CommandSQL.ExecuteReader();
+                string line = String.Empty;
+                int i = 0;
+                while (r.Read())
+                {
+                    result.Add(new string[] { r["NumberAkt"].ToString(), r["Date"].ToString()});
+                }
+                r.Close();
+                return result;
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+                return result;
+            }
+        }
+
         /// <summary>
         /// Поиск абонента в базе по номеру лицевого счета
         /// </summary>
@@ -745,6 +771,31 @@ namespace MyApp.Model
                 while (r.Read())
                 {
                     result.Add(r["NumberLS"].ToString());
+                }
+                r.Close();
+                return result;
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+                return result;
+            }
+        }
+        public static List<string> FindAbonentPlan(string numberLS)
+        {
+            List<string> result = new List<string>();
+            SQLiteCommand CommandSQL = new SQLiteCommand(connector);
+            CommandSQL.CommandText = "SELECT DateWork  "
+    + " FROM Plan WHERE NumberLS LIKE '%" + numberLS + "%' ";
+            try
+            {
+                SQLiteDataReader r = CommandSQL.ExecuteReader();
+                string line = String.Empty;
+                int i = 0;
+                while (r.Read())
+                {
+                    string res = r["DateWork"].ToString();
+                    result.Add(res);
                 }
                 r.Close();
                 return result;

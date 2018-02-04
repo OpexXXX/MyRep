@@ -9,15 +9,23 @@ namespace ATPWork.MyApp.Model.Plan
 {
     public class PlanWorkModel
     {
+        /// <summary>
+        /// Расчет объема безучетного потребления
+        /// </summary>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <param name="normativ"></param>
+        /// <returns></returns>
         public static int GetValueBuNormativ(DateTime startDate, DateTime endDate, int normativ)
         {
             TimeSpan difDay;
             int difMounth;
             float result = 0;
             float norm = normativ;
-            difMounth=((endDate.Year - startDate.Year) * 12) - startDate.Month + endDate.Month;
-            if (startDate >= endDate) return 0;
-            if (difMounth == 0 )
+            if (startDate >= endDate) return 0; //Если начальная дата больше конечной
+            if (startDate < endDate.AddMonths(-3)) startDate = endDate.AddMonths(-3); // если между датами более трех месяцев устанавливаем стартовую дату
+            difMounth =((endDate.Year - startDate.Year) * 12) - startDate.Month + endDate.Month; // количество месяцев между датами
+            if (difMounth == 0 ) // Если даты в одном месяце
             {
                 float day = norm / (DateTime.DaysInMonth(startDate.Year, startDate.Month));
                 result += day * startDate.Day;
@@ -56,14 +64,13 @@ namespace ATPWork.MyApp.Model.Plan
             int result1 = (int)Math.Round(result*10);
             return result1;
         }
+
         private List<Abonent> _abonentList;
         public List<Abonent> AbonentList
         {
             get { return _abonentList; }
             set { _abonentList = value; }
         }
-
-
         public PlanWorkModel(DateTime dateWork)
         {
            List<string> Abonents = new List<string>( DataBaseWorker.FindAbonentPlan(dateWork));
@@ -72,7 +79,6 @@ namespace ATPWork.MyApp.Model.Plan
             {
                 AbonentList.Add(new Abonent(item, dateWork));
             }
-
         } 
     }
 }

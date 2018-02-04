@@ -40,16 +40,13 @@ namespace MyApp.Model
             HeaderColumnPlan = new List<string[]>(2);
             HeaderColumnPlan.Add(new string[] { "№ пп", "id" });
             HeaderColumnPlan.Add(new string[] { "№ Л/С", "NumberLS" });
-            HeaderColumnPlan.Add(new string[] { "Дата проверки", "DateWork" });
+            HeaderColumnPlan.Add(new string[] { "Расчет", "Raschet" });
             HeaderColumnPlan.Add(new string[] { "Ф.И.О", "FIO" });
             HeaderColumnPlan.Add(new string[] { "Адрес", "Adress" });
             HeaderColumnPlan.Add(new string[] { "Тип ПУ", "PuType" });
             HeaderColumnPlan.Add(new string[] { "Номер ПУ", "PuNumber" });
-            HeaderColumnPlan.Add(new string[] { "Показание", "Pokazanie" });
             HeaderColumnPlan.Add(new string[] { "Подключение", "Podkluchenie" });
             HeaderColumnPlan.Add(new string[] { "Пломбы", "Plombs" });
-            HeaderColumnPlan.Add(new string[] { "Расчет", "Raschet" });
-            HeaderColumnPlan.Add(new string[] { "Заявки внеплан", "Vneplan" });
         }
         private static DataSet MakeDataSet(List<AktTehProverki> akti)
         {
@@ -200,6 +197,7 @@ namespace MyApp.Model
         public static DataTable MakeDataTableForPlan(List<Abonent> Temp_abonents)
         {
             DataTable table = new DataTable("Reestr");
+
             DataColumn column;
             DataRow row;
             List<Abonent> abonents = new List<Abonent>(Temp_abonents);
@@ -235,14 +233,13 @@ namespace MyApp.Model
             {
                 row = table.NewRow();
 
-                row["NumberLS"] = item.NumberLS;
-                row["DateWork"] = item.DateWork.ToString("d");
+                row["NumberLS"] = item.NumberLS + "\n" + item.DateWork.ToString("d");
+                row["Raschet"] = item.Raschet;
                 row["FIO"] = item.FIO;
                 row["Adress"] = item.Adress;
                 row["PuType"] = item.PuOldType;
                 row["PuNumber"] = item.PuOldNumber;
-                row["Podkluchenie"] = item.Podkl;  
-                row["Pokazanie"] = "";
+                row["Podkluchenie"] = item.Podkl;
                 string plobms="";
                 foreach (Plomba plomb in item.OldPlombs)
                 {
@@ -253,8 +250,6 @@ namespace MyApp.Model
                    
                 }
                 row["Plombs"] = plobms;
-                row["Raschet"] = item.Normativ;
-                 row["Vneplan"] = item.Vneplan;
                 table.Rows.Add(row);
             }
             return table;
@@ -390,7 +385,7 @@ namespace MyApp.Model
         }
 
 
-        internal static void CreatePdfReestr(DataTable tableL)
+        internal static void CreatePdfReestrForPlan(DataTable tableL)
         {
             string currentMailDirectory = MainAtpModel.MailDirektory;
 
@@ -398,7 +393,7 @@ namespace MyApp.Model
             //Объект документа пдф
             iTextSharp.text.Document doc = new iTextSharp.text.Document();
             doc.SetPageSize(PageSize.A4.Rotate());
-
+            doc.SetMargins(10, 10, 10, 10);
 
             //Создаем объект записи пдф-документа в файл
             PdfWriter.GetInstance(doc, new FileStream("pdfTables.pdf", FileMode.Create));
@@ -423,7 +418,7 @@ namespace MyApp.Model
                 table.TotalWidth = 800f;
                 table.LockedWidth = true;
 
-                var colWidthPercentages = new[] { 2f, 8f, 6f, 11f, 15f, 9f, 7f, 2f, 15f , 21f , 3f, 1f};
+                var colWidthPercentages = new[] { 2f, 8f, 14f, 11f, 13f, 9f, 6f, 17f , 20f };
                 table.SetWidths(colWidthPercentages);
 
                 //Добавим в таблицу общий заголовок
@@ -453,7 +448,7 @@ namespace MyApp.Model
                         if (k == 0) value = (Int32.Parse(value) + 1).ToString();
 
 
-                        table.AddCell(new Phrase(value, (k==8)||(k==9)? smallFont :font));
+                        table.AddCell(new Phrase(value, (k==2)||(k==8)||(k==7)? smallFont :font));
                     }
                 }
                 //Добавляем таблицу в документ
