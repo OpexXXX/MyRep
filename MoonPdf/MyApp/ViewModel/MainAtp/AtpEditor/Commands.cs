@@ -62,10 +62,9 @@ namespace ATPWork.MyApp.ViewModel.AtpEditor
                 if(resultSearchAbonent.Count == 1)
                 {
                     string edob = resultSearchAbonent[0]["EdOborudovania"];
-                    List<Dictionary<String, String>> resultSearchPlombs;
-                    resultSearchPlombs = DataBaseWorker.GetPlombsFromEdOb(edob);
+                   
 
-                    AtpEdit.AktInWork.setDataByDb(resultSearchAbonent[0],resultSearchPlombs);
+                    AtpEdit.AktInWork.setDataByDb(resultSearchAbonent[0]);
                 } else if (resultSearchAbonent.Count > 1)
                 {
                     ResultSearchWindow wndResult = new ResultSearchWindow(resultSearchAbonent);
@@ -73,9 +72,7 @@ namespace ATPWork.MyApp.ViewModel.AtpEditor
                     if ((bool)wndResult.DialogResult)
                     {
                         string edob = wndResult.SelectVal["EdOborudovania"];
-                        List<Dictionary<String, String>> resultSearchPlombs;
-                        resultSearchPlombs = DataBaseWorker.GetPlombsFromEdOb(edob);
-                        AtpEdit.AktInWork.setDataByDb(wndResult.SelectVal, resultSearchPlombs);
+                        AtpEdit.AktInWork.setDataByDb(wndResult.SelectVal);
                     }
                 }
              }, findByLs, null);
@@ -87,10 +84,9 @@ namespace ATPWork.MyApp.ViewModel.AtpEditor
                 if (resultSearchAbonent.Count == 1)
                 {
                     string edob = resultSearchAbonent[0]["EdOborudovania"];
-                    List<Dictionary<String, String>> resultSearchPlombs;
-                    resultSearchPlombs = DataBaseWorker.GetPlombsFromEdOb(edob);
+                   
 
-                    AtpEdit.AktInWork.setDataByDb(resultSearchAbonent[0], resultSearchPlombs);
+                    AtpEdit.AktInWork.setDataByDb(resultSearchAbonent[0]);
                 }
                 else if (resultSearchAbonent.Count > 1)
                 {
@@ -99,9 +95,7 @@ namespace ATPWork.MyApp.ViewModel.AtpEditor
                     if ((bool)wndResult.DialogResult)
                     {
                         string edob = wndResult.SelectVal["EdOborudovania"];
-                        List<Dictionary<String, String>> resultSearchPlombs;
-                        resultSearchPlombs = DataBaseWorker.GetPlombsFromEdOb(edob);
-                        AtpEdit.AktInWork.setDataByDb(wndResult.SelectVal, resultSearchPlombs);
+                        AtpEdit.AktInWork.setDataByDb(wndResult.SelectVal);
                     }
                 }
             }, findByPu, null);

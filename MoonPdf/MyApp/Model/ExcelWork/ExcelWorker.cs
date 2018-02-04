@@ -40,16 +40,13 @@ namespace MyApp.Model
             HeaderColumnPlan = new List<string[]>(2);
             HeaderColumnPlan.Add(new string[] { "№ пп", "id" });
             HeaderColumnPlan.Add(new string[] { "№ Л/С", "NumberLS" });
-            HeaderColumnPlan.Add(new string[] { "Дата проверки", "DateWork" });
+            HeaderColumnPlan.Add(new string[] { "Расчет", "Raschet" });
             HeaderColumnPlan.Add(new string[] { "Ф.И.О", "FIO" });
             HeaderColumnPlan.Add(new string[] { "Адрес", "Adress" });
             HeaderColumnPlan.Add(new string[] { "Тип ПУ", "PuType" });
             HeaderColumnPlan.Add(new string[] { "Номер ПУ", "PuNumber" });
-            HeaderColumnPlan.Add(new string[] { "Показание", "Pokazanie" });
             HeaderColumnPlan.Add(new string[] { "Подключение", "Podkluchenie" });
             HeaderColumnPlan.Add(new string[] { "Пломбы", "Plombs" });
-            HeaderColumnPlan.Add(new string[] { "Расчет", "Raschet" });
-            HeaderColumnPlan.Add(new string[] { "Заявки внеплан", "Vneplan" });
         }
         private static DataSet MakeDataSet(List<AktTehProverki> akti)
         {
@@ -95,7 +92,6 @@ namespace MyApp.Model
             }
             akti.Sort(delegate (AktTehProverki akt1, AktTehProverki akt2)
             { return akt1.Number.CompareTo(akt2.Number); });
-
             column = new DataColumn();
             column.DataType = System.Type.GetType("System.Int32");
             column.ColumnName = "id";
@@ -121,7 +117,6 @@ namespace MyApp.Model
             foreach (AktTehProverki item in akti)
             {
                 row = table.NewRow();
-
                 row["Number"] = item.Number;
                 row["DateWork"] = item.DateWork?.ToString("d");
                 row["NumbeLS"] = item.NumberLS;
@@ -165,7 +160,6 @@ namespace MyApp.Model
             range.Style.Font.Size = 12;
             range.Style.ShrinkToFit = false;
             range.Style.WrapText = true;
-
             foreach (var item in range)
             {
                 item.Style.Border.BorderAround(ExcelBorderStyle.Thin);
@@ -180,7 +174,6 @@ namespace MyApp.Model
             range.Style.Font.Size = 14;
             range.Style.ShrinkToFit = false;
             range.Style.WrapText = false;
-
         }
         private static void SetTdStyle(ExcelRange range, Dictionary<string, string> options)
         {
@@ -189,24 +182,27 @@ namespace MyApp.Model
             range.Style.Fill.BackgroundColor.SetColor((Color)typeof(Color).GetProperty(options["Td.Style.Fill.BackgroundColor"]).GetValue(null, null));
             range.Style.Font.Color.SetColor((Color)typeof(Color).GetProperty(options["Td.Style.Fill.Color"]).GetValue(null, null));
             range.Style.ShrinkToFit = false;
-
             foreach (var item in range)
             {
                 item.Style.Border.BorderAround(ExcelBorderStyle.Thin);
             }
         }
-
-  
-        public static DataTable MakeDataTableForPlan(List<Abonent> Temp_abonents)
+        public static DataTable MakeDataTableForPlan(List<PlanAbonent> Temp_abonents)
         {
             DataTable table = new DataTable("Reestr");
             DataColumn column;
             DataRow row;
-            List<Abonent> abonents = new List<Abonent>(Temp_abonents);
-
-           // akti.Sort(delegate (AktTehProverki akt1, AktTehProverki akt2)
-           // { return akt1.Number.CompareTo(akt2.Number); });
-
+            List<PlanAbonent> abonents = new List<PlanAbonent>(Temp_abonents);
+            abonents.Sort(delegate (PlanAbonent akt1, PlanAbonent akt2)
+            {
+                if (akt1.City.CompareTo(akt2.City) == 1) return 1;
+                else if (akt1.City.CompareTo(akt2.City) == -1) return -1;
+                else if (akt1.Street.CompareTo(akt2.Street) == 1) return 1;
+                else if (akt1.Street.CompareTo(akt2.Street) == -1) return -1;
+                else if (akt1.House>akt2.House) return 1;
+                else if (akt1.House < akt2.House) return -1;
+                return 0;
+            });
             column = new DataColumn();
             column.DataType = System.Type.GetType("System.Int32");
             column.ColumnName = "id";
@@ -226,23 +222,19 @@ namespace MyApp.Model
                 column.Unique = false;
                 table.Columns.Add(column);
             }
-
             DataColumn[] PrimaryKeyColumns = new DataColumn[1];
-
             PrimaryKeyColumns[0] = table.Columns["id"];
             table.PrimaryKey = PrimaryKeyColumns;
-            foreach (Abonent item in abonents)
+            foreach (PlanAbonent item in abonents)
             {
                 row = table.NewRow();
-
-                row["NumberLS"] = item.NumberLS;
-                row["DateWork"] = item.DateWork.ToString("d");
+                row["NumberLS"] = item.NumberLS + "\n" + item.DateWork.ToString("d");
+                row["Raschet"] = item.Raschet;
                 row["FIO"] = item.FIO;
                 row["Adress"] = item.Adress;
                 row["PuType"] = item.PuOldType;
                 row["PuNumber"] = item.PuOldNumber;
-                row["Podkluchenie"] = item.Podkl;  
-                row["Pokazanie"] = "";
+                row["Podkluchenie"] = item.Podkl;
                 string plobms="";
                 foreach (Plomba plomb in item.OldPlombs)
                 {
@@ -250,24 +242,18 @@ namespace MyApp.Model
                     {
                         plobms += plomb.Number + " " + plomb.Place + ";\n";
                     }
-                   
                 }
                 row["Plombs"] = plobms;
-                row["Raschet"] = item.Normativ;
-                 row["Vneplan"] = item.Vneplan;
                 table.Rows.Add(row);
             }
             return table;
         }
-
         public static void DataTableToExcel(List<AktTehProverki> akti, string mailPath, Dictionary<string, string> options = null)
         {
             if (options == null)
                 options = new Dictionary<string, string>();
             SetDefaultOptions(options);
             //Создаем фаил
-
-
             using (var file = new FileStream(mailPath + "\\Реестр.xlsx", FileMode.Create))
             {
                 int rowIndex = 1;
@@ -278,10 +264,8 @@ namespace MyApp.Model
                 SetWorkSheetStyles(worksheet, options);
                 //Записываем заголовок
                 DataSet data_set = MakeDataSet(akti);
-
                 foreach (DataTable dt in data_set.Tables)
                 {
-
                     worksheet.Cells[rowIndex, 1].Value = dt.TableName;
                     SetHeaderStyle(worksheet.Cells[rowIndex, 1], options);
                     rowIndex++;
@@ -316,7 +300,6 @@ namespace MyApp.Model
                         }
                         rowIndex++;
                     }
-
                 }
                 // Растягиваем столбцы
                 List<double> width = new List<double>();
@@ -337,7 +320,6 @@ namespace MyApp.Model
                 //Сохраняем фаил
                 package.Save();
             }
-
             //Открываем экселем сохраняем в пдф
             /*  ExcelCOM.Application excelapp;
               ExcelCOM.Workbook wb;
@@ -359,11 +341,7 @@ namespace MyApp.Model
               wb.ExportAsFixedFormat(ExcelCOM.XlFixedFormatType.xlTypePDF, save, Type.Missing, true, Type.Missing, Type.Missing, Type.Missing, false, Type.Missing);
               wbs.Close();
               excelapp.Quit();*/
-
-
         }
-
-
         public static DataSet makeDataSetForSAPFL(FileStream excelFilePath)
         {
             using (IExcelDataReader reader = ExcelReaderFactory.CreateOpenXmlReader(excelFilePath))
@@ -388,20 +366,18 @@ namespace MyApp.Model
             }
 
         }
-
-
-        internal static void CreatePdfReestr(DataTable tableL)
+        internal static string CreatePdfReestrForPlan(DataTable tableL)
         {
-            string currentMailDirectory = MainAtpModel.MailDirektory;
 
-          
+            if (!Directory.Exists("Plan")) Directory.CreateDirectory("Plan");
+            string fileName = System.IO.Path.GetRandomFileName();
+            string filePath = "plan\\" + fileName + ".pdf";
             //Объект документа пдф
             iTextSharp.text.Document doc = new iTextSharp.text.Document();
             doc.SetPageSize(PageSize.A4.Rotate());
-
-
+            doc.SetMargins(10, 10, 10, 10);
             //Создаем объект записи пдф-документа в файл
-            PdfWriter.GetInstance(doc, new FileStream("pdfTables.pdf", FileMode.Create));
+            PdfWriter.GetInstance(doc, new FileStream(filePath, FileMode.Create));
             //Открываем документ
             doc.Open();
             //Определение шрифта необходимо для сохранения кириллического текста
@@ -409,32 +385,24 @@ namespace MyApp.Model
             //Если мы работаем только с англоязычными текстами, то шрифт можно не указывать
             BaseFont baseFont = BaseFont.CreateFont("C:\\Windows\\Fonts\\arial.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             iTextSharp.text.Font font = new iTextSharp.text.Font(baseFont, 8, iTextSharp.text.Font.NORMAL);
-
-            BaseFont smalFont = BaseFont.CreateFont("C:\\Windows\\Fonts\\arial.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            iTextSharp.text.Font headerFont = new iTextSharp.text.Font(baseFont, 12, iTextSharp.text.Font.NORMAL);
             iTextSharp.text.Font smallFont = new iTextSharp.text.Font(baseFont, 6, iTextSharp.text.Font.NORMAL);
-
             //Обход по всем таблицам датасета (хотя в данном случае мы можем опустить
             //Так как в нашей бд только одна таблица)
-
-
-
             //Создаем объект таблицы и передаем в нее число столбцов таблицы из нашего датасета
             PdfPTable table = new PdfPTable(tableL.Columns.Count);
                 table.TotalWidth = 800f;
                 table.LockedWidth = true;
-
-                var colWidthPercentages = new[] { 2f, 8f, 6f, 11f, 15f, 9f, 7f, 2f, 15f , 21f , 3f, 1f};
+            table.HeaderRows = 2;
+                var colWidthPercentages = new[] { 2f, 8f, 14f, 12f, 13f, 9f, 6f, 17f , 19f };
                 table.SetWidths(colWidthPercentages);
-
                 //Добавим в таблицу общий заголовок
-                PdfPCell cell = new PdfPCell(new Phrase("БД " + tableL.TableName + ", таблица №" , font));
-
+                PdfPCell cell = new PdfPCell(new Phrase("Инструментальные проверки" , headerFont));
                 cell.Colspan = tableL.Columns.Count;
                 cell.HorizontalAlignment = 1;
                 //Убираем границу первой ячейки, чтобы балы как заголовок
                 cell.Border = 0;
                 table.AddCell(cell);
-
                 //Сначала добавляем заголовки таблицы
                 for (int j = 0; j < tableL.Columns.Count; j++)
                 {
@@ -453,7 +421,7 @@ namespace MyApp.Model
                         if (k == 0) value = (Int32.Parse(value) + 1).ToString();
 
 
-                        table.AddCell(new Phrase(value, (k==8)||(k==9)? smallFont :font));
+                        table.AddCell(new Phrase(value, (k==2)||(k==8)||(k==7)? smallFont :font));
                     }
                 }
                 //Добавляем таблицу в документ
@@ -461,12 +429,9 @@ namespace MyApp.Model
             
             //Закрываем документ
             doc.Close();
-
-            MessageBox.Show("Pdf-документ сохранен");
+            return filePath;
 
         }
-
-
         internal static void CreatePdfReestr()
         {
             string currentMailDirectory = MainAtpModel.MailDirektory;
@@ -538,9 +503,6 @@ namespace MyApp.Model
             MessageBox.Show("Pdf-документ сохранен");
 
         }
-
-
-
     }
 }
 

@@ -219,6 +219,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="MyApp\Model\Abonent.cs" />
     <Compile Include="MyApp\Model\ATPWork\Agent.cs" />
     <Compile Include="MyApp\Model\ATPWork\MainAtpModel.cs" />
     <Compile Include="MyApp\Model\ATPWork\Plomba.cs" />
@@ -228,7 +229,7 @@
     <Compile Include="MyApp\Model\Plan\Abonent.cs" />
     <Compile Include="MyApp\Model\Plan\PlanModel.cs" />
     <Compile Include="MyApp\Model\SAPWork\SAPWorker.cs" />
-    <Compile Include="MyApp\Model\Zayvki na oplombirovku\Oplobbirovki.cs" />
+    <Compile Include="MyApp\Model\VnePlan\VnePlanModel.cs" />
     <Compile Include="MyApp\ViewModel\MainAtp\AtpEditor\AptEditor.cs" />
     <Compile Include="MyApp\ViewModel\MainAtp\AtpEditor\Commands.cs" />
     <Compile Include="MyApp\ViewModel\MainAtp\AtpEditor\Validators.cs" />
@@ -240,9 +241,13 @@
     <Compile Include="MyApp\ViewModel\MainAtp\PlombEditor\Commands.cs" />
     <Compile Include="MyApp\ViewModel\MainAtp\PlombEditor\PlombEditor.cs" />
     <Compile Include="MyApp\ViewModel\MainAtp\PlombEditor\Validators.cs" />
+    <Compile Include="MyApp\ViewModel\PlanViewModel\Commands.cs" />
     <Compile Include="MyApp\ViewModel\PlanViewModel\PlanVM.cs" />
     <Compile Include="MyApp\ViewModel\SettingsVM.cs" />
     <Compile Include="MyApp\ViewModel\ViewModelBase.cs" />
+    <Compile Include="MyApp\ViewModel\VnePlanViewModel\Commands.cs" />
+    <Compile Include="MyApp\ViewModel\VnePlanViewModel\Validators.cs" />
+    <Compile Include="MyApp\ViewModel\VnePlanViewModel\VnePlanVM.cs" />
     <Compile Include="MyApp\View\AtpEditor.xaml.cs">
       <DependentUpon>AtpEditor.xaml</DependentUpon>
     </Compile>
