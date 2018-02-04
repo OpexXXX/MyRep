@@ -1,14 +1,19 @@
 ﻿using MyApp.Model;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ATPWork.MyApp.Model.Plan
 {
-    public class PlanWorkModel
+    public static class PlanWorkModel
     {
+        public delegate void AbonentsRefreshHandler();
+        public static event AbonentsRefreshHandler AbonentsRefresh;
+
+
         /// <summary>
         /// Расчет объема безучетного потребления
         /// </summary>
@@ -65,20 +70,30 @@ namespace ATPWork.MyApp.Model.Plan
             return result1;
         }
 
-        private List<Abonent> _abonentList;
-        public List<Abonent> AbonentList
+        internal static void CreatePDF(DateTime selectedDate)
+        {
+            var gg = ExcelWorker.MakeDataTableForPlan(AbonentList);
+            Process.Start(ExcelWorker.CreatePdfReestrForPlan(gg));
+        }
+
+        private static List<Abonent> _abonentList = new List<Abonent>();
+        public static List<Abonent> AbonentList
         {
             get { return _abonentList; }
             set { _abonentList = value; }
         }
-        public PlanWorkModel(DateTime dateWork)
+
+        public static void refreshAbonentList(DateTime dateWork)
         {
-           List<string> Abonents = new List<string>( DataBaseWorker.FindAbonentPlan(dateWork));
+            List<string> Abonents = new List<string>(DataBaseWorker.FindAbonentPlan(dateWork));
             AbonentList = new List<Abonent>();
             foreach (var item in Abonents)
             {
                 AbonentList.Add(new Abonent(item, dateWork));
             }
-        } 
+            AbonentsRefresh?.Invoke();
+        }
+
+
     }
 }

@@ -5,7 +5,7 @@
         xmlns:mpd="clr-namespace:ATPWork.MyApp.View"
         xmlns:System="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:ATPWork.MyApp.View"
-     
+        xmlns:vmPlan="clr-namespace:ATPWork.MyApp.ViewModel.PlanViewModel"
         xmlns:viewModel="clr-namespace:ATPWork.MyApp.ViewModel"
         xmlns:behaviors="clr-namespace:WPFTextBoxAutoComplete;assembly=WPFTextBoxAutoComplete"
         xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing" xmlns:ee="http://schemas.microsoft.com/expression/2010/effects" xmlns:Custom="http://schemas.microsoft.com/wpf/2008/toolkit" x:Class="MyApp.MainWindow"
@@ -14,12 +14,25 @@
 
 
         <viewModel:MainAtpVM x:Key="MainAtpVM"/>
+        <vmPlan:PlanVM x:Key="PlanVM"/>
+
+        <CollectionViewSource x:Key="AbonentsForPlan" Source="{Binding AllAbonent, Source={StaticResource PlanVM}}">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="City"/>
+                <PropertyGroupDescription PropertyName="Street"/>
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
 
         <CollectionViewSource x:Key="AllAktSourse" Source="{Binding AllAkt, Source={StaticResource MainAtpVM}}">
             <CollectionViewSource.GroupDescriptions>
                 <PropertyGroupDescription PropertyName="MailName"/>
             </CollectionViewSource.GroupDescriptions>
         </CollectionViewSource>
+        
+        <Style TargetType="{x:Type TextBlock}" x:Key="DataGridCellTextWrap">
+            <Setter Property="TextBlock.TextWrapping" Value="Wrap"></Setter>
+        </Style>
+
 
         <CollectionViewSource x:Key="AktInWorkSourse" Source="{Binding  Path=AllAktInCurrentWork, Source={StaticResource MainAtpVM}}">
             <CollectionViewSource.GroupDescriptions>
@@ -144,7 +157,7 @@
                                         <Button Content="{Binding Commands.GoFirstPageAkt.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.GoFirstPageAkt, Source={StaticResource MainAtpVM}}"  Height="25"/>
                                         <Button Content="{Binding Commands.GoSecongPageAkt.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.GoSecongPageAkt, Source={StaticResource MainAtpVM}}"  Height="25"/>
                                         <Button Content="{Binding Commands.GoNextAkt.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.GoNextAkt, Source={StaticResource MainAtpVM}}" Height="25"/>
-                                        <Button Click="Button_Click">pdf</Button>
+                                       
                                         <TextBlock Text="{Binding SelectedIndex, ElementName=DatagridInWork}" />
                                     </StackPanel>
                                     <local:AtpEditor   AtpInWorkSourse="{Binding SelectedItem, ElementName=DatagridInWork}"  Margin="5,0" >
@@ -212,27 +225,36 @@
                         <TabItem Header="Заполненные акты" FontSize="14">
                             <StackPanel>
                                 <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="исх.№" VerticalAlignment="Top"/>
-                                <TextBox Name ="numberMailTextBlock" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding MailNumber, Source={StaticResource MainAtpVM}}" VerticalAlignment="Top" Width="64"/>
-                                <TextBlock HorizontalAlignment="Left"  TextWrapping="Wrap" Text="от" VerticalAlignment="Top"/>
-                                <DatePicker SelectedDate="{Binding MailDate, Source={StaticResource MainAtpVM}}" x:Name ="dateMail" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                                    </StackPanel>
+                                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="исх.№" VerticalAlignment="Top"/>
+                                    <TextBox Name ="numberMailTextBlock" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding MailNumber, Source={StaticResource MainAtpVM}}" VerticalAlignment="Top" Width="64"/>
+                                    <TextBlock HorizontalAlignment="Left"  TextWrapping="Wrap" Text="от" VerticalAlignment="Top"/>
+                                    <DatePicker SelectedDate="{Binding MailDate, Source={StaticResource MainAtpVM}}" x:Name ="dateMail" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                </StackPanel>
                                 <StackPanel>
-                                <DataGrid DockPanel.Dock="Left" IsReadOnly="True" ItemsSource="{Binding Source={StaticResource AllAktSourse}}"
+                                    <DataGrid DockPanel.Dock="Left" IsReadOnly="True" ItemsSource="{Binding Source={StaticResource AllAktSourse}}"
           CanUserAddRows="False"
                                           SelectedItem=""
-                                        AutoGenerateColumns="True">
-                                    <DataGrid.GroupStyle>
-                                        <!-- Style for groups at top level. -->
-                                        <GroupStyle>
-                                            <GroupStyle.ContainerStyle>
-                                                <Style TargetType="{x:Type GroupItem}">
-                                                    <Setter Property="Template">
-                                                        <Setter.Value>
-                                                            <ControlTemplate TargetType="{x:Type GroupItem}">
-                                                                <Expander IsExpanded="False" >
-                                                                    <Expander.Header>
-                                                                        <DockPanel>
+                                        AutoGenerateColumns="False">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Binding="{Binding Number}" ClipboardContentBinding="{x:Null}" Header="№Акта"/>
+                                            <DataGridTextColumn Binding="{Binding DateWork}" ClipboardContentBinding="{x:Null}" Header="Дата"/>
+                                            <DataGridTextColumn Binding="{Binding NumberLS}" ClipboardContentBinding="{x:Null}" Header="№ЛС"/>
+                                            <DataGridTextColumn Binding="{Binding FIO}" ClipboardContentBinding="{x:Null}" Header="ФИО"/>
+                                            <DataGridTextColumn Binding="{Binding Adress}" ClipboardContentBinding="{x:Null}" Header="Адрес"/>
+                                            <DataGridTextColumn Binding="{Binding PuOldType}" ClipboardContentBinding="{x:Null}" Header="№ПУ"/>
+                                            <DataGridTextColumn Binding="{Binding PuOldPokazanie}" ClipboardContentBinding="{x:Null}" Header="Показание"/>
+                                        </DataGrid.Columns>
+                                        <DataGrid.GroupStyle>
+                                            <!-- Style for groups at top level. -->
+                                            <GroupStyle>
+                                                <GroupStyle.ContainerStyle>
+                                                    <Style TargetType="{x:Type GroupItem}">
+                                                        <Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="{x:Type GroupItem}">
+                                                                    <Expander IsExpanded="False" >
+                                                                        <Expander.Header>
+                                                                            <DockPanel>
                                                                                 <DockPanel.ContextMenu>
                                                                                     <ContextMenu>
                                                                                         <MenuItem Header="{Binding Commands.OpenFolderMail.Name, Source={StaticResource MainAtpVM}}" 
@@ -241,12 +263,12 @@
                                                                                                   />
                                                                                     </ContextMenu>
                                                                                 </DockPanel.ContextMenu>
-                                                                            <TextBlock FontWeight="Bold" Text="{Binding Path=Name}" Margin="5,0,0,0">
-                                                                            </TextBlock>
-                                                                            <TextBlock Text=" " >
-                                                                            </TextBlock>
-                                                                            <TextBlock Text="{Binding Path=Items.Count }"/>
-                                                                            <TextBlock Text="шт. "></TextBlock>
+                                                                                <TextBlock FontWeight="Bold" Text="{Binding Path=Name}" Margin="5,0,0,0">
+                                                                                </TextBlock>
+                                                                                <TextBlock Text=" " >
+                                                                                </TextBlock>
+                                                                                <TextBlock Text="{Binding Path=Items.Count }"/>
+                                                                                <TextBlock Text="шт. "></TextBlock>
                                                                                 <StackPanel Orientation="Horizontal" >
                                                                                     <StackPanel.Style>
                                                                                         <Style TargetType="StackPanel">
@@ -256,41 +278,41 @@
                                                                                                 </DataTrigger>
                                                                                             </Style.Triggers>
                                                                                         </Style>
-                                                                                    </StackPanel.Style> 
-                                                                            <TextBlock Text=" ~" >
-                                                                                
-                                                                            </TextBlock>
-                                                                            <TextBlock  Text="{Binding  Path=SizeUnmailedPdf, Source={StaticResource MainAtpVM}}">
-                                                                            </TextBlock>
-                                                                            <TextBlock Text=" КБ">
-                                                                            </TextBlock>
+                                                                                    </StackPanel.Style>
+                                                                                    <TextBlock Text=" ~" >
+
+                                                                                    </TextBlock>
+                                                                                    <TextBlock  Text="{Binding  Path=SizeUnmailedPdf, Source={StaticResource MainAtpVM}}">
+                                                                                    </TextBlock>
+                                                                                    <TextBlock Text=" КБ">
+                                                                                    </TextBlock>
                                                                                 </StackPanel>
-                                                                        </DockPanel>
-                                                                    </Expander.Header>
-                                                                    <Expander.Content>
-                                                                        <ItemsPresenter />
-                                                                    </Expander.Content>
-                                                                </Expander>
-                                                            </ControlTemplate>
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </Style>
-                                            </GroupStyle.ContainerStyle>
-                                        </GroupStyle>
-                                        <!-- Style for groups under the top level. -->
-                                        <GroupStyle>
-                                            <GroupStyle.HeaderTemplate>
-                                                <DataTemplate>
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <TextBlock Text="{Binding Path=Name }" HorizontalAlignment="Left" Margin="30,0,0,0" Width="100"/>
-                                                        <TextBlock Text="{Binding Path=Items.Count }" HorizontalAlignment="Left" Margin="30,0,0,0" Width="100"/>
-                                                    </StackPanel>
-                                                </DataTemplate>
-                                            </GroupStyle.HeaderTemplate>
-                                        </GroupStyle>
-                                    </DataGrid.GroupStyle>
-                                </DataGrid>
-                                   
+                                                                            </DockPanel>
+                                                                        </Expander.Header>
+                                                                        <Expander.Content>
+                                                                            <ItemsPresenter />
+                                                                        </Expander.Content>
+                                                                    </Expander>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </GroupStyle.ContainerStyle>
+                                            </GroupStyle>
+                                            <!-- Style for groups under the top level. -->
+                                            <GroupStyle>
+                                                <GroupStyle.HeaderTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock Text="{Binding Path=Name }" HorizontalAlignment="Left" Margin="30,0,0,0" Width="100"/>
+                                                            <TextBlock Text="{Binding Path=Items.Count }" HorizontalAlignment="Left" Margin="30,0,0,0" Width="100"/>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </GroupStyle.HeaderTemplate>
+                                            </GroupStyle>
+                                        </DataGrid.GroupStyle>
+                                    </DataGrid>
+
                                 </StackPanel>
                             </StackPanel>
                         </TabItem>
@@ -314,7 +336,99 @@
                     </TabControl>
                 </Grid>
             </TabItem>
+            <TabItem Header="Планы проверок" FontSize="14">
+                <DockPanel>
+                    <StackPanel Orientation="Vertical">
+                        <Calendar DockPanel.Dock="Left" SelectedDate="{Binding SelectedDate, Source={StaticResource PlanVM}}" HorizontalAlignment="Left"  VerticalAlignment="Top"/>
+                        <Button DockPanel.Dock="Left" Content="{Binding Commands.CreatePdf.Name, Source={StaticResource PlanVM}}" Command="{Binding Commands.CreatePdf, Source={StaticResource PlanVM}}"/>
+                    </StackPanel>
+                    <DataGrid DockPanel.Dock="Left" IsReadOnly="True" ItemsSource="{Binding Source={StaticResource AbonentsForPlan}}"
+          CanUserAddRows="False"
+                                          SelectedItem=""
+                                        AutoGenerateColumns="False">
+                        <DataGrid.GroupStyle>
+                            <!-- Style for groups at top level. -->
+                            <GroupStyle>
+                                <GroupStyle.ContainerStyle>
+                                    <Style TargetType="{x:Type GroupItem}">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type GroupItem}">
+                                                    <Expander IsExpanded="False" >
+                                                        <Expander.Header>
+                                                            <DockPanel>
+                                                                <DockPanel.ContextMenu>
+                                                                    <ContextMenu>
+                                                                        <MenuItem Header="{Binding Commands.OpenFolderMail.Name, Source={StaticResource MainAtpVM}}" 
+                                                                                                  Command="{Binding Commands.OpenFolderMail, Source={StaticResource MainAtpVM}}" 
+                                                                                                  CommandParameter="{Binding Path=Name}"
+                                                                                                  />
+                                                                    </ContextMenu>
+                                                                </DockPanel.ContextMenu>
+                                                                <TextBlock FontWeight="Bold" Text="{Binding Path=Name}" Margin="5,0,0,0">
+                                                                </TextBlock>
+                                                                <TextBlock Text=" " >
+                                                                </TextBlock>
+                                                                <TextBlock Text="{Binding AllAbonent.Count, Source={StaticResource PlanVM}}"/>
+                                                                <TextBlock Text="шт. "></TextBlock>
+                                                                <StackPanel Orientation="Horizontal" >
+                                                                    <StackPanel.Style>
+                                                                        <Style TargetType="StackPanel">
+                                                                            <Style.Triggers>
+                                                                                <DataTrigger Binding="{Binding Path=Name}" Value="Неотправлено">
+                                                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                                                </DataTrigger>
+                                                                            </Style.Triggers>
+                                                                        </Style>
+                                                                    </StackPanel.Style>
+                                                                    <TextBlock Text=" ~" >
 
+                                                                    </TextBlock>
+                                                                    <TextBlock  Text="{Binding  Path=SizeUnmailedPdf, Source={StaticResource MainAtpVM}}">
+                                                                    </TextBlock>
+                                                                    <TextBlock Text=" КБ">
+                                                                    </TextBlock>
+                                                                </StackPanel>
+                                                            </DockPanel>
+                                                        </Expander.Header>
+                                                        <Expander.Content>
+                                                            <ItemsPresenter />
+                                                        </Expander.Content>
+                                                    </Expander>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </GroupStyle.ContainerStyle>
+                            </GroupStyle>
+                            <!-- Style for groups under the top level. -->
+                            <GroupStyle>
+                                <GroupStyle.HeaderTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Path=Name }" HorizontalAlignment="Left" Margin="30,0,0,0" Width="100"/>
+                                            <TextBlock Text="{Binding Path=Items.Count }" HorizontalAlignment="Left" Margin="30,0,0,0" Width="100"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GroupStyle.HeaderTemplate>
+                            </GroupStyle>
+                        </DataGrid.GroupStyle>
+                        <DataGrid.Columns>
+
+                            <DataGridTextColumn   Width="120" Binding="{Binding NumberLS}" ClipboardContentBinding="{x:Null}" Header="№ЛС"  >
+                                
+                                    
+                                
+                            </DataGridTextColumn>
+
+                            <DataGridTextColumn Binding="{Binding FIO}" ClipboardContentBinding="{x:Null}" Header="ФИО"/>
+                            <DataGridTextColumn Binding="{Binding Adress, Mode=OneWay}" ClipboardContentBinding="{x:Null}" Header="Адрес" SortDirection="Ascending"/>
+                            <DataGridTextColumn Binding="{Binding PuOldType}" ClipboardContentBinding="{x:Null}" Header="ПУ"/>
+                            <DataGridTextColumn Width="120" Binding="{Binding Podkl}" ClipboardContentBinding="{x:Null}" Header="Подключение" FontSize="8" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </TabItem>
         </TabControl>
 
 

@@ -202,8 +202,17 @@ namespace MyApp.Model
             DataRow row;
             List<Abonent> abonents = new List<Abonent>(Temp_abonents);
 
-           // akti.Sort(delegate (AktTehProverki akt1, AktTehProverki akt2)
-           // { return akt1.Number.CompareTo(akt2.Number); });
+            abonents.Sort(delegate (Abonent akt1, Abonent akt2)
+            {
+                if (akt1.City.CompareTo(akt2.City) == 1) return 1;
+                else if (akt1.City.CompareTo(akt2.City) == -1) return -1;
+                else if (akt1.Street.CompareTo(akt2.Street) == 1) return 1;
+                else if (akt1.Street.CompareTo(akt2.Street) == -1) return -1;
+                else if (akt1.House>akt2.House) return 1;
+                else if (akt1.House < akt2.House) return -1;
+                return 0;
+
+            });
 
             column = new DataColumn();
             column.DataType = System.Type.GetType("System.Int32");
@@ -247,7 +256,6 @@ namespace MyApp.Model
                     {
                         plobms += plomb.Number + " " + plomb.Place + ";\n";
                     }
-                   
                 }
                 row["Plombs"] = plobms;
                 table.Rows.Add(row);
@@ -385,18 +393,21 @@ namespace MyApp.Model
         }
 
 
-        internal static void CreatePdfReestrForPlan(DataTable tableL)
+        internal static string CreatePdfReestrForPlan(DataTable tableL)
         {
-            string currentMailDirectory = MainAtpModel.MailDirektory;
 
-          
+
+            if (!Directory.Exists("Plan")) Directory.CreateDirectory("Plan");
+            string fileName = System.IO.Path.GetRandomFileName();
+            string filePath = "plan\\" + fileName + ".pdf";
+
             //Объект документа пдф
             iTextSharp.text.Document doc = new iTextSharp.text.Document();
             doc.SetPageSize(PageSize.A4.Rotate());
             doc.SetMargins(10, 10, 10, 10);
-
             //Создаем объект записи пдф-документа в файл
-            PdfWriter.GetInstance(doc, new FileStream("pdfTables.pdf", FileMode.Create));
+
+            PdfWriter.GetInstance(doc, new FileStream(filePath, FileMode.Create));
             //Открываем документ
             doc.Open();
             //Определение шрифта необходимо для сохранения кириллического текста
@@ -404,8 +415,7 @@ namespace MyApp.Model
             //Если мы работаем только с англоязычными текстами, то шрифт можно не указывать
             BaseFont baseFont = BaseFont.CreateFont("C:\\Windows\\Fonts\\arial.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             iTextSharp.text.Font font = new iTextSharp.text.Font(baseFont, 8, iTextSharp.text.Font.NORMAL);
-
-            BaseFont smalFont = BaseFont.CreateFont("C:\\Windows\\Fonts\\arial.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            iTextSharp.text.Font headerFont = new iTextSharp.text.Font(baseFont, 12, iTextSharp.text.Font.NORMAL);
             iTextSharp.text.Font smallFont = new iTextSharp.text.Font(baseFont, 6, iTextSharp.text.Font.NORMAL);
 
             //Обход по всем таблицам датасета (хотя в данном случае мы можем опустить
@@ -417,12 +427,12 @@ namespace MyApp.Model
             PdfPTable table = new PdfPTable(tableL.Columns.Count);
                 table.TotalWidth = 800f;
                 table.LockedWidth = true;
-
-                var colWidthPercentages = new[] { 2f, 8f, 14f, 11f, 13f, 9f, 6f, 17f , 20f };
+            table.HeaderRows = 2;
+                var colWidthPercentages = new[] { 2f, 8f, 14f, 12f, 13f, 9f, 6f, 17f , 19f };
                 table.SetWidths(colWidthPercentages);
 
                 //Добавим в таблицу общий заголовок
-                PdfPCell cell = new PdfPCell(new Phrase("БД " + tableL.TableName + ", таблица №" , font));
+                PdfPCell cell = new PdfPCell(new Phrase("Инструментальные проверки" , headerFont));
 
                 cell.Colspan = tableL.Columns.Count;
                 cell.HorizontalAlignment = 1;
@@ -456,8 +466,7 @@ namespace MyApp.Model
             
             //Закрываем документ
             doc.Close();
-
-            MessageBox.Show("Pdf-документ сохранен");
+            return filePath;
 
         }
 

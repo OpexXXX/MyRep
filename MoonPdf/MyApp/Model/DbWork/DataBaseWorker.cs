@@ -818,7 +818,7 @@ namespace MyApp.Model
                 SQLiteDataReader r = CommandSQL.ExecuteReader();
                 string line = String.Empty;
                 int i = 0;
-                while (r.Read())
+                if (r.Read())
                 {
                     result.Add("People", r["People"].ToString());
                     result.Add("Rooms", r["Rooms"].ToString());
