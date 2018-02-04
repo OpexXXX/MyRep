@@ -1,6 +1,7 @@
 ﻿using MyApp.Model;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -72,7 +73,7 @@ namespace ATPWork.MyApp.Model.Plan
         internal static void CreatePDF(DateTime selectedDate)
         {
             var gg = ExcelWorker.MakeDataTableForPlan(AbonentList);
-            ExcelWorker.CreatePdfReestrForPlan(gg);
+            Process.Start(ExcelWorker.CreatePdfReestrForPlan(gg));
         }
 
         private static List<Abonent> _abonentList = new List<Abonent>();

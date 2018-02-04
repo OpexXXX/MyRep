@@ -210,14 +210,20 @@ namespace ATPWork.MyApp.Model.Plan
             get { return _kvartira; }
             set { _kvartira = value; }
         }
-        private string adress;
+       
         public string Adress
         {
-            get { return this.adress; }
-            set
-            {
-                this.adress = value;
-            }
+            get {
+                string result = "";
+                result += City;
+                result += ", " + Street;
+                result += ", д." + House;
+                if(Korpus!="") result += Korpus;
+                if (Kvartira != 0) result += ", кв." +Kvartira;
+
+
+                return result; }
+           
         }
         private string _podkl;
         public string Podkl
@@ -269,18 +275,11 @@ namespace ATPWork.MyApp.Model.Plan
                 PuOldType = dict["PuType"];
                 PuOldNumber = dict["PuNumber"];
                 FIO = dict["FIO"];
-                string tmpadress = "";
                 City = dict["City"];
                 Street = dict["Street"];
                 House = int.Parse( dict["House"]);
                 if (dict.ContainsKey("Korpus")&& dict["Korpus"].ToString()!="") Korpus= dict["Korpus"];
                 if (dict.ContainsKey("Kv") && dict["Kv"].ToString() != "") Kvartira= int.Parse(dict["Kv"]);
-
-                tmpadress = dict["City"] + ", " + dict["Street"] + ", д. " + dict["House"];
-
-                if (dict.ContainsKey("Korpus")) tmpadress += dict["Korpus"];
-                if (dict.ContainsKey("Kv")) tmpadress += ", кв." + dict["Kv"];
-                Adress = tmpadress;
                 Ustanovka = dict["Ustanovka"];
                 EdOborudovania = dict["EdOborudovania"];
                 Podkl = dict["Podkluchenie"];

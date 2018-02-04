@@ -326,7 +326,10 @@
             </TabItem>
             <TabItem Header="Планы проверок" FontSize="14">
                 <DockPanel>
-                    <Calendar SelectedDate="{Binding SelectedDate, Source={StaticResource PlanVM}}" HorizontalAlignment="Left"  VerticalAlignment="Top"/>
+                    <StackPanel Orientation="Vertical">
+                    <Calendar DockPanel.Dock="Left" SelectedDate="{Binding SelectedDate, Source={StaticResource PlanVM}}" HorizontalAlignment="Left"  VerticalAlignment="Top"/>
+                        <Button DockPanel.Dock="Left" Content="{Binding Commands.CreatePdf.Name, Source={StaticResource PlanVM}}" Command="{Binding Commands.CreatePdf, Source={StaticResource PlanVM}}"/>
+                    </StackPanel>
                     <DataGrid DockPanel.Dock="Left" IsReadOnly="True" ItemsSource="{Binding Source={StaticResource AbonentsForPlan}}"
           CanUserAddRows="False"
                                           SelectedItem=""
@@ -399,7 +402,6 @@
                             </GroupStyle>
                         </DataGrid.GroupStyle>
                     </DataGrid>
-
                 </DockPanel>
             </TabItem>
         </TabControl>

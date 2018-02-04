@@ -202,8 +202,17 @@ namespace MyApp.Model
             DataRow row;
             List<Abonent> abonents = new List<Abonent>(Temp_abonents);
 
-           // akti.Sort(delegate (AktTehProverki akt1, AktTehProverki akt2)
-           // { return akt1.Number.CompareTo(akt2.Number); });
+            abonents.Sort(delegate (Abonent akt1, Abonent akt2)
+            {
+                if (akt1.City.CompareTo(akt2.City) == 1) return 1;
+                else if (akt1.City.CompareTo(akt2.City) == -1) return -1;
+                else if (akt1.Street.CompareTo(akt2.Street) == 1) return 1;
+                else if (akt1.Street.CompareTo(akt2.Street) == -1) return -1;
+                else if (akt1.House>akt2.House) return 1;
+                else if (akt1.House < akt2.House) return -1;
+                return 0;
+
+            });
 
             column = new DataColumn();
             column.DataType = System.Type.GetType("System.Int32");
@@ -385,18 +394,21 @@ namespace MyApp.Model
         }
 
 
-        internal static void CreatePdfReestrForPlan(DataTable tableL)
+        internal static string CreatePdfReestrForPlan(DataTable tableL)
         {
-            string currentMailDirectory = MainAtpModel.MailDirektory;
 
-          
+
+            if (!Directory.Exists("Plan")) Directory.CreateDirectory("Plan");
+            string fileName = System.IO.Path.GetRandomFileName();
+            string filePath = "plan\\" + fileName + ".pdf";
+
             //Объект документа пдф
             iTextSharp.text.Document doc = new iTextSharp.text.Document();
             doc.SetPageSize(PageSize.A4.Rotate());
             doc.SetMargins(10, 10, 10, 10);
-
             //Создаем объект записи пдф-документа в файл
-            PdfWriter.GetInstance(doc, new FileStream("pdfTables.pdf", FileMode.Create));
+
+            PdfWriter.GetInstance(doc, new FileStream(filePath, FileMode.Create));
             //Открываем документ
             doc.Open();
             //Определение шрифта необходимо для сохранения кириллического текста
@@ -456,8 +468,7 @@ namespace MyApp.Model
             
             //Закрываем документ
             doc.Close();
-
-            MessageBox.Show("Pdf-документ сохранен");
+            return filePath;
 
         }
 
