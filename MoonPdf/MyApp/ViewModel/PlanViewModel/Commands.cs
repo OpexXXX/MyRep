@@ -20,7 +20,7 @@ namespace ATPWork.MyApp.ViewModel.PlanViewModel
         {
             this.planVM = planVM;
             Predicate<object> isCreatePDF = f => CanCreateMail();
-            this.CreatePdf = new DelegateCommand("Создать PDF", f =>
+            this.CreatePdf = new DelegateCommand("Открыть в PDF", f =>
            {
                planVM.CreatePdf();
            }, isCreatePDF, null);

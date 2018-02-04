@@ -28,7 +28,10 @@
                 <PropertyGroupDescription PropertyName="MailName"/>
             </CollectionViewSource.GroupDescriptions>
         </CollectionViewSource>
-
+        
+        <Style TargetType="{x:Type TextBlock}" x:Key="DataGridCellTextWrap">
+            <Setter Property="TextBlock.TextWrapping" Value="Wrap"></Setter>
+        </Style>
 
 
         <CollectionViewSource x:Key="AktInWorkSourse" Source="{Binding  Path=AllAktInCurrentWork, Source={StaticResource MainAtpVM}}">
@@ -154,7 +157,7 @@
                                         <Button Content="{Binding Commands.GoFirstPageAkt.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.GoFirstPageAkt, Source={StaticResource MainAtpVM}}"  Height="25"/>
                                         <Button Content="{Binding Commands.GoSecongPageAkt.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.GoSecongPageAkt, Source={StaticResource MainAtpVM}}"  Height="25"/>
                                         <Button Content="{Binding Commands.GoNextAkt.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.GoNextAkt, Source={StaticResource MainAtpVM}}" Height="25"/>
-                                        <Button Click="Button_Click">pdf</Button>
+                                       
                                         <TextBlock Text="{Binding SelectedIndex, ElementName=DatagridInWork}" />
                                     </StackPanel>
                                     <local:AtpEditor   AtpInWorkSourse="{Binding SelectedItem, ElementName=DatagridInWork}"  Margin="5,0" >
@@ -231,7 +234,16 @@
                                     <DataGrid DockPanel.Dock="Left" IsReadOnly="True" ItemsSource="{Binding Source={StaticResource AllAktSourse}}"
           CanUserAddRows="False"
                                           SelectedItem=""
-                                        AutoGenerateColumns="True">
+                                        AutoGenerateColumns="False">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Binding="{Binding Number}" ClipboardContentBinding="{x:Null}" Header="№Акта"/>
+                                            <DataGridTextColumn Binding="{Binding DateWork}" ClipboardContentBinding="{x:Null}" Header="Дата"/>
+                                            <DataGridTextColumn Binding="{Binding NumberLS}" ClipboardContentBinding="{x:Null}" Header="№ЛС"/>
+                                            <DataGridTextColumn Binding="{Binding FIO}" ClipboardContentBinding="{x:Null}" Header="ФИО"/>
+                                            <DataGridTextColumn Binding="{Binding Adress}" ClipboardContentBinding="{x:Null}" Header="Адрес"/>
+                                            <DataGridTextColumn Binding="{Binding PuOldType}" ClipboardContentBinding="{x:Null}" Header="№ПУ"/>
+                                            <DataGridTextColumn Binding="{Binding PuOldPokazanie}" ClipboardContentBinding="{x:Null}" Header="Показание"/>
+                                        </DataGrid.Columns>
                                         <DataGrid.GroupStyle>
                                             <!-- Style for groups at top level. -->
                                             <GroupStyle>
@@ -402,11 +414,17 @@
                             </GroupStyle>
                         </DataGrid.GroupStyle>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding NumberLS}" ClipboardContentBinding="{x:Null}" Header="№ЛС"/>
+
+                            <DataGridTextColumn   Width="120" Binding="{Binding NumberLS}" ClipboardContentBinding="{x:Null}" Header="№ЛС"  >
+                                
+                                    
+                                
+                            </DataGridTextColumn>
+
                             <DataGridTextColumn Binding="{Binding FIO}" ClipboardContentBinding="{x:Null}" Header="ФИО"/>
-                            <DataGridTextColumn Binding="{Binding Adress, Mode=OneWay}" ClipboardContentBinding="{x:Null}" Header="Адрес"/>
+                            <DataGridTextColumn Binding="{Binding Adress, Mode=OneWay}" ClipboardContentBinding="{x:Null}" Header="Адрес" SortDirection="Ascending"/>
                             <DataGridTextColumn Binding="{Binding PuOldType}" ClipboardContentBinding="{x:Null}" Header="ПУ"/>
-                            <DataGridTextColumn Binding="{Binding Podkl}" ClipboardContentBinding="{x:Null}" Header="Подключение" FontSize="8" />
+                            <DataGridTextColumn Width="120" Binding="{Binding Podkl}" ClipboardContentBinding="{x:Null}" Header="Подключение" FontSize="8" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </DockPanel>

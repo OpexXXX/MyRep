@@ -70,13 +70,7 @@ namespace MyApp
 
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            /*  ExcelWorker.CreatePdfReestr();*/
-           
-           
-            int rf = 6; 
-        }
+       
     }
 }
 

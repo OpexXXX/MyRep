@@ -415,8 +415,7 @@ namespace MyApp.Model
             //Если мы работаем только с англоязычными текстами, то шрифт можно не указывать
             BaseFont baseFont = BaseFont.CreateFont("C:\\Windows\\Fonts\\arial.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             iTextSharp.text.Font font = new iTextSharp.text.Font(baseFont, 8, iTextSharp.text.Font.NORMAL);
-
-            BaseFont smalFont = BaseFont.CreateFont("C:\\Windows\\Fonts\\arial.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            iTextSharp.text.Font headerFont = new iTextSharp.text.Font(baseFont, 12, iTextSharp.text.Font.NORMAL);
             iTextSharp.text.Font smallFont = new iTextSharp.text.Font(baseFont, 6, iTextSharp.text.Font.NORMAL);
 
             //Обход по всем таблицам датасета (хотя в данном случае мы можем опустить
@@ -428,12 +427,12 @@ namespace MyApp.Model
             PdfPTable table = new PdfPTable(tableL.Columns.Count);
                 table.TotalWidth = 800f;
                 table.LockedWidth = true;
-
-                var colWidthPercentages = new[] { 2f, 8f, 14f, 11f, 13f, 9f, 6f, 17f , 20f };
+            table.HeaderRows = 2;
+                var colWidthPercentages = new[] { 2f, 8f, 14f, 12f, 13f, 9f, 6f, 17f , 19f };
                 table.SetWidths(colWidthPercentages);
 
                 //Добавим в таблицу общий заголовок
-                PdfPCell cell = new PdfPCell(new Phrase("БД " + tableL.TableName + ", таблица №" , font));
+                PdfPCell cell = new PdfPCell(new Phrase("Инструментальные проверки" , headerFont));
 
                 cell.Colspan = tableL.Columns.Count;
                 cell.HorizontalAlignment = 1;
