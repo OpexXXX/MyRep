@@ -256,7 +256,6 @@ namespace MyApp.Model
                     {
                         plobms += plomb.Number + " " + plomb.Place + ";\n";
                     }
-                   
                 }
                 row["Plombs"] = plobms;
                 table.Rows.Add(row);
