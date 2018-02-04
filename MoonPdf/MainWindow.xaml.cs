@@ -32,6 +32,7 @@ using System.Windows.Markup;
 using System.Globalization;
 using ATPWork.MyApp.ViewModel;
 using ATPWork.MyApp.Model.Plan;
+using ATPWork.MyApp.Model.VnePlan;
 
 namespace MyApp
 {
@@ -53,8 +54,7 @@ namespace MyApp
             MainAtpViemModel = (MainAtpVM)this.Resources["MainAtpVM"];
             MainAtpViemModel.PdfViewer = moonPdfPanel;
             MainAtpViemModel.ListBoxAktInWork = DatagridInWork;
-                
-
+            VnePlanModel.refreshZayavki();
             this.Loaded += MainWindow_Loaded;
             
         }
@@ -66,11 +66,25 @@ namespace MyApp
         private void Window_Closing(object sender, CancelEventArgs e)
         {
             MainAtpModel.SaveBeforeCloseApp();
+            VnePlanModel.SaveBeforeCloseApp();
             DataBaseWorker.ClosedApp();
 
         }
 
-       
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (VnePlanZayavka item in VnePlanModel.Zayavki)
+            {
+                if (item.NumberLS != "")
+                {
+                    var d = DataBaseWorker.GetAbonentFromLS(item.NumberLS);
+                    if (d.Count == 1) item.setDataByDb(d[0]);
+                    else if (d.Count > 1) MessageBox.Show("Болеше 1");
+                    else MessageBox.Show(item.NumberLS + " " + item.FIO + " не найдено в базе");
+                }
+            }
+            
+        }
     }
 }
 

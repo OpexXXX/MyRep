@@ -1,4 +1,5 @@
-﻿using ExcelDataReader;
+﻿using ATPWork.MyApp.Model.VnePlan;
+using ExcelDataReader;
 using MyApp.Model;
 using System;
 using System.Collections.Generic;
@@ -41,6 +42,22 @@ namespace MyApp.Model
             connector.Close();
             connectorOplombirovki.Close();
         }
+
+        internal static void DropFromVnePlanZayvki()
+        {
+            SQLiteCommand cmd = connector.CreateCommand();
+            string sql_command = "DELETE  FROM Oplombirovki;";
+            cmd.CommandText = sql_command;
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
         public static List<PriborUcheta> PUListInit()
         {
             List<PriborUcheta> spisokPU = new List<PriborUcheta>();
@@ -267,6 +284,80 @@ namespace MyApp.Model
         /// Инициализация ласта не отработанных актов при загрузке приложения
         /// </summary>
         /// <returns></returns>
+        public static List<VnePlanZayavka> LoadZayavki()
+        {
+            //Открываем соединение
+            // Загрузка листа проверок
+            List<VnePlanZayavka> result = new List<VnePlanZayavka>();
+            SQLiteCommand CommandSQL = new SQLiteCommand(connector);
+            CommandSQL.CommandText = "SELECT * "
+            + " FROM `Oplombirovki`;";
+            SQLiteDataReader r = CommandSQL.ExecuteReader();
+            string line = String.Empty;
+            int i = 0;
+            while (r.Read())
+            {
+                result.Add(new VnePlanZayavka());
+                result[i].City = r["City"].ToString();
+                if (r["RegNumber"].ToString() != "") result[i].RegNumber = int.Parse(r["RegNumber"].ToString());
+                if (r["DateRegister"].ToString() != "") result[i].DateReg =  DateTime.Parse(r["DateRegister"].ToString());
+                result[i].NumberLS = r["LsNumber"].ToString();
+                result[i].FIO = r["FIO"].ToString();
+                result[i].City = r["City"].ToString();
+                result[i].Street = r["Street"].ToString();
+                result[i].House = r["House"].ToString() != "" ? int.Parse(r["House"].ToString()) : 0;
+                if (r["Korpus"].ToString() != "") result[i].Korpus = r["Korpus"].ToString();
+                if (r["Kv"].ToString() != "") result[i].Kvartira = int.Parse(r["Kv"].ToString());
+                result[i].Prichina = r["Prichina"].ToString();
+                result[i].NumberAktTehProverki = r["NumberAkt"].ToString();
+                result[i].PhoneNumbers.Add(r["PhoneNumber"].ToString());
+                result[i].Primechanie = r["Primechanie"].ToString();
+                i++;
+            }
+            r.Close();
+            return result;
+        }
+        /// <summary>
+        /// Запись в базу данных завершенных актов
+        /// </summary>
+        /// <param name="akti">Лист с актами тех. проверок</param>
+        public static void InsertZayavki(List<VnePlanZayavka> akti)
+        {
+            using (var cmdd = new SQLiteCommand(connector))
+            {
+                using (var transaction = connector.BeginTransaction())
+                {
+                    foreach (VnePlanZayavka akt in akti)
+                    {
+                        string sql_command = "INSERT INTO Oplombirovki( 'City', 'Street', 'House', 'Korpus', 'Kv', DateRegister, FIO, RegNumber, LsNumber, Prichina,NumberAkt,PhoneNumber,Primechanie)"
+                      + "VALUES ('"
+                       + akt.City + "', '"
+                       + akt.Street + "', '"
+                       + akt.House + "', '"
+                       + akt.Korpus + "', '"
+                       + akt.Kvartira + "', '"
+                        + akt.DateReg.ToString("d") + "', '"
+                        + akt.FIO + "', '"
+                        + akt.RegNumber + "', '"
+                        + akt.NumberLS + "', '"
+                        + akt.Prichina + "', '"
+                        + akt.NumberAktTehProverki + "', '"
+                        + ((akt.PhoneNumbers.Count>0)?(akt.PhoneNumbers[0]):("")) + "', '"
+                        + akt.Primechanie + "');";
+                        cmdd.CommandText = sql_command;
+                        cmdd.ExecuteNonQuery();
+                    }
+                    transaction.Commit();
+                }
+        }
+            }
+
+
+
+        /// <summary>
+        /// Инициализация ласта не отработанных актов при загрузке приложения
+        /// </summary>
+        /// <returns></returns>
         public static List<AktTehProverki> LoadATPInWork()
         {
             //Открываем соединение
@@ -347,6 +438,8 @@ namespace MyApp.Model
             r.Close();
             return result;
         }
+
+
         /// <summary>
         /// Инициализация листа актов из базы при загрузке приложения
         /// </summary>

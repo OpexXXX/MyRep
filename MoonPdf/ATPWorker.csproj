@@ -230,6 +230,7 @@
     <Compile Include="MyApp\Model\Plan\PlanModel.cs" />
     <Compile Include="MyApp\Model\SAPWork\SAPWorker.cs" />
     <Compile Include="MyApp\Model\VnePlan\VnePlanModel.cs" />
+    <Compile Include="MyApp\Model\VnePlan\VnePlanZayavka.cs" />
     <Compile Include="MyApp\ViewModel\MainAtp\AtpEditor\AptEditor.cs" />
     <Compile Include="MyApp\ViewModel\MainAtp\AtpEditor\Commands.cs" />
     <Compile Include="MyApp\ViewModel\MainAtp\AtpEditor\Validators.cs" />
