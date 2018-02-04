@@ -75,7 +75,7 @@ namespace MyApp
             /*  ExcelWorker.CreatePdfReestr();*/
             PlanWorkModel plan = new PlanWorkModel(new DateTime(2018, 2, 6));
             var gg = ExcelWorker.MakeDataTableForPlan(plan.AbonentList);
-            ExcelWorker.CreatePdfReestr(gg);
+            ExcelWorker.CreatePdfReestrForPlan(gg);
             int rf = 6; 
         }
     }
