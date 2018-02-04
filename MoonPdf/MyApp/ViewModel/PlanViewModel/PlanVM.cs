@@ -37,8 +37,8 @@ namespace ATPWork.MyApp.ViewModel.PlanViewModel
                 }
             }
         }
-        private Abonent _selectedAbonent;
-        public Abonent SelectedAbonent
+        private PlanAbonent _selectedAbonent;
+        public PlanAbonent SelectedAbonent
         {
             get { return _selectedAbonent; }
             set
@@ -50,8 +50,8 @@ namespace ATPWork.MyApp.ViewModel.PlanViewModel
                 }
             }
         }
-        private ObservableCollection<Abonent> _allAbonent;
-        public ObservableCollection<Abonent> AllAbonent
+        private ObservableCollection<PlanAbonent> _allAbonent;
+        public ObservableCollection<PlanAbonent> AllAbonent
         {
             get { return _allAbonent; }
             set
@@ -71,7 +71,7 @@ namespace ATPWork.MyApp.ViewModel.PlanViewModel
 
         public void refreshAbonentList()
         {
-            AllAbonent = new ObservableCollection<Abonent>(PlanWorkModel.AbonentList);
+            AllAbonent = new ObservableCollection<PlanAbonent>(PlanWorkModel.AbonentList);
         }
 
 

@@ -13,13 +13,21 @@ namespace ATPWork.MyApp.Model.Plan
         ElectricStove,
         Electroboiler
     }
-    public class Abonent
+    public class PlanAbonent:Abonent
     {
-        public Abonent(string numberLS, DateTime dateWork)
+        public PlanAbonent(string numberLS, DateTime dateWork)
         {
             NumberLS = numberLS;
             DateWork = dateWork;
-            this.setDataByDb();
+            List<Dictionary<string, string>> searchResult = DataBaseWorker.GetAbonentFromLS(NumberLS);
+            if (searchResult.Count == 1)
+            {
+                Dictionary<string, string> dict = searchResult[0];
+                setDataByDb(dict);
+                getNormativ();//
+                getPrevousAkt();//
+                getPrevousPlan();//
+            }
         }
         private int _rooms;
         public int Rooms
@@ -45,7 +53,6 @@ namespace ATPWork.MyApp.Model.Plan
             get { return _normativ; }
             set { _normativ = value; }
         }
-
         public string Raschet
         {
             get {
@@ -108,15 +115,6 @@ namespace ATPWork.MyApp.Model.Plan
             get { return _prevProverki; }
             set { _prevProverki = value; }
         }
-        private string ustanovka;
-        public string Ustanovka
-        {
-            get { return this.ustanovka; }
-            set
-            {
-                this.ustanovka = value;
-            }
-        }
         private string _vneplan;
         public string Vneplan
         {
@@ -124,114 +122,6 @@ namespace ATPWork.MyApp.Model.Plan
             set
             {
                 this._vneplan = value;
-            }
-        }
-        private string edOborudovania;
-        public string EdOborudovania
-        {
-            get { return this.edOborudovania; }
-            set
-            {
-                this.edOborudovania = value;
-            }
-        }
-        private string puOldNumber;
-        public string PuOldNumber
-        {
-            get { return this.puOldNumber; }
-            set
-            {
-                this.puOldNumber = value;
-            }
-        }
-        private string puOldType;
-        public string PuOldType
-        {
-            get { return this.puOldType; }
-            set
-            {
-                this.puOldType = value;
-            }
-        }
-        private string puOldPokaz;
-        public string PuOldPokazanie
-        {
-            get { return this.puOldPokaz; }
-            set
-            {
-                this.puOldPokaz = value;
-            }
-        }
-        private bool puOldMPI;
-        public bool PuOldMPI
-        {
-            get { return this.puOldMPI; }
-            set
-            {
-                this.puOldMPI = value;
-            }
-        }
-        private string _city;
-        public string City
-        {
-            get { return this._city; }
-            set
-            {
-                this._city = value;
-            }
-        }
-        private string _street;
-        public string Street
-        {
-            get { return this._street; }
-            set
-            {
-                this._street = value;
-            }
-        }
-        private int _house;
-        public int House
-        {
-            get { return _house; }
-            set { _house = value; }
-        }
-        private string _korpus;
-        public string Korpus
-        {
-            get { return this._korpus; }
-            set
-            {
-                this._korpus = value;
-            }
-        }
-        private int _kvartira;
-        public int Kvartira
-        {
-            get { return _kvartira; }
-            set { _kvartira = value; }
-        }
-       
-        public string Adress
-        {
-            get {
-                string result = "";
-                result += City;
-                result += ", " + Street;
-                result += ", д." + House;
-                if(Korpus!="") result += Korpus;
-                if (Kvartira != 0) result += ", кв." +Kvartira;
-
-
-                return result; }
-           
-        }
-        private string _podkl;
-        public string Podkl
-        {
-            get { return this._podkl; }
-            set
-            {
-                this._podkl = value;
             }
         }
         private DateTime dateWork;
@@ -243,58 +133,7 @@ namespace ATPWork.MyApp.Model.Plan
                 this.dateWork = value;
             }
         }
-        private string fIO;
-        public string FIO
-        {
-            get { return this.fIO; }
-            set { this.fIO = value; }
-        }
-        private List<Plomba> _oldPlombs = new List<Plomba>();
-        public List<Plomba> OldPlombs
-        {
-            get { return _oldPlombs; }
-            set
-            {
-                this._oldPlombs = value;
-            }
-        }
-        private string numberLS;
-        public string NumberLS
-        {
-            get { return this.numberLS; }
-            set { this.numberLS = value; }
-        }
 
-        public void setDataByDb()
-        {
-
-            List<Dictionary<string, string>> searchResult = DataBaseWorker.PlanGetAbonentFromDb(numberLS);
-            if (searchResult.Count == 1)
-            {
-                Dictionary<string, string> dict = searchResult[0];
-                PuOldType = dict["PuType"];
-                PuOldNumber = dict["PuNumber"];
-                FIO = dict["FIO"];
-                City = dict["City"];
-                Street = dict["Street"];
-                House = int.Parse( dict["House"]);
-                if (dict.ContainsKey("Korpus")&& dict["Korpus"].ToString()!="") Korpus= dict["Korpus"];
-                if (dict.ContainsKey("Kv") && dict["Kv"].ToString() != "") Kvartira= int.Parse(dict["Kv"]);
-                Ustanovka = dict["Ustanovka"];
-                EdOborudovania = dict["EdOborudovania"];
-                Podkl = dict["Podkluchenie"];
-                addPlombs();//
-                /**Расчеты БУ*********/
-                getNormativ();//
-                getPrevousAkt();//
-                getPrevousPlan();//
-
-                float buVal = 0, mounthInRaschet, tarifNapokupku;
-                float rK, sN, sV;
-                             /*********************************************/
-
-            }
-        }
         private void getPrevousPlan()
         {
           var dat =   DataBaseWorker.FindAbonentPlan(NumberLS);

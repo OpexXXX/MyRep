@@ -156,7 +156,11 @@ namespace MyApp.Model
                 return null;
             }
         }
-
+/// <summary>
+/// Получение листа проверок, где [0] = Номер акта, [1] = дата
+/// </summary>
+/// <param name="numberLS"></param>
+/// <returns></returns>
         internal static List<string[]> GetPrevusAktFenix(string numberLS)
         {
             List<string[]> result = new List<string[]>(2);
@@ -181,7 +185,6 @@ namespace MyApp.Model
                 return result;
             }
         }
-
         /// <summary>
         /// Поиск абонента в базе по номеру лицевого счета
         /// </summary>
@@ -191,8 +194,8 @@ namespace MyApp.Model
         {
             List<Dictionary<String, String>> result = new List<Dictionary<string, string>>();
             SQLiteCommand CommandSQL = new SQLiteCommand(connector);
-            CommandSQL.CommandText = "SELECT FIO, PuType, LsNumber,City,Street,House,Korpus,PuNumber,Kv, Ustanovka,PuKod "
-    + " FROM SAPFL WHERE LsNumber LIKE '%" + numberLS + "%' ";
+            CommandSQL.CommandText = "SELECT FIO, PuType, LsNumber,City,Street,House,Korpus,PuNumber,Kv, Ustanovka,PuKod, Podkluchenie "
+    + " FROM SAPFL WHERE NumberTU LIKE '%" + numberLS + "%' ";
             try
             {
                 SQLiteDataReader r = CommandSQL.ExecuteReader();
@@ -213,6 +216,7 @@ namespace MyApp.Model
                     result[i].Add("PuNumber", r["PuNumber"].ToString());
                     result[i].Add("Ustanovka", r["Ustanovka"].ToString());
                     result[i].Add("EdOborudovania", r["PuKod"].ToString());
+                    result[i].Add("Podkluchenie", r["Podkluchenie"].ToString());
                     i++;
                 }
                 r.Close();
@@ -258,40 +262,7 @@ namespace MyApp.Model
             r.Close();
             return result;
         }
-        /// <summary>
-        /// Выгрузка абонента для плана работ
-        /// </summary>
-        /// <param name="NumberLS"></param>
-        /// <returns></returns>
-        static public List<Dictionary<String, String>> PlanGetAbonentFromDb(string NumberLS)
-        {
-            List<Dictionary<String, String>> result = new List<Dictionary<string, string>>();
-            SQLiteCommand CommandSQL = new SQLiteCommand(connector);
-            CommandSQL.CommandText = "SELECT FIO, PuType, LsNumber,City,Street,House,Korpus,PuNumber, Kv, Ustanovka, PuKod, Podkluchenie"
-    + " FROM SAPFL WHERE NumberTU LIKE '%" + NumberLS + "%' ";
-            SQLiteDataReader r = CommandSQL.ExecuteReader();
-            string line = String.Empty;
-            int i = 0;
-            while (r.Read())
-            {
-                result.Add(new Dictionary<string, string>());
-                result[i].Add("FIO", r["FIO"].ToString());
-                result[i].Add("PuType", r["PuType"].ToString());
-                result[i].Add("LsNumber", r["LsNumber"].ToString());
-                result[i].Add("City", r["City"].ToString());
-                result[i].Add("Street", r["Street"].ToString());
-                result[i].Add("House", r["House"].ToString());
-                result[i].Add("Korpus", r["Korpus"].ToString());
-                result[i].Add("Kv", r["Kv"].ToString());
-                result[i].Add("PuNumber", r["PuNumber"].ToString());
-                result[i].Add("Ustanovka", r["Ustanovka"].ToString());
-                result[i].Add("EdOborudovania", r["PuKod"].ToString());
-                result[i].Add("Podkluchenie", r["Podkluchenie"].ToString());
-                i++;
-            }
-            r.Close();
-            return result;
-        }
+
         /// <summary>
         /// Инициализация ласта не отработанных актов при загрузке приложения
         /// </summary>
@@ -341,7 +312,13 @@ namespace MyApp.Model
                 }
                 result[i].PuOldMPI = Int32.Parse(r["PuOldMPI"].ToString()) == 0 ? false : true;
                 result[i].DopuskFlag = Int32.Parse(r["DopuskFlag"].ToString()) == 0 ? false : true;
-                result[i].Adress = r["Adress"].ToString();
+
+              
+                result[i].City = r["City"].ToString();
+                result[i].Street = r["Street"].ToString();
+                result[i].House = r["House"].ToString() != "" ? int.Parse(r["House"].ToString()) : 0;
+                if (r["Korpus"].ToString() != "") result[i].Korpus = r["Korpus"].ToString();
+                if (r["Kvartira"].ToString() != "") result[i].Kvartira = int.Parse(r["Kvartira"].ToString());
                 string dt = r["DateWork"].ToString();
                 if (dt == "") result[i].DateWork = null;
                 else result[i].DateWork = DateTime.Parse(dt);
@@ -427,7 +404,12 @@ namespace MyApp.Model
                 }
                 result[i].PuOldMPI = Int32.Parse(r["PuOldMPI"].ToString()) == 0 ? false : true;
                 result[i].DopuskFlag = Int32.Parse(r["DopuskFlag"].ToString()) == 0 ? false : true;
-                result[i].Adress = r["Adress"].ToString();
+             
+                result[i].City = r["City"].ToString();
+                result[i].Street = r["Street"].ToString();
+                result[i].House = r["House"].ToString()!=""?int.Parse(r["House"].ToString()):0;
+                if ( r["Korpus"].ToString() != "") result[i].Korpus = r["Korpus"].ToString();
+                if ( r["Kvartira"].ToString() != "") result[i].Kvartira = int.Parse(r["Kvartira"].ToString());
                 DateTime date1 = DateTime.Parse(r["DateWork"].ToString());
                 result[i].DateWork = date1;
                 result[i].FIO = r["FIO"].ToString();
@@ -535,8 +517,13 @@ namespace MyApp.Model
                 {
                     foreach (AktTehProverki akt in akti)
                     {
-                        string sql_command = "INSERT INTO CompleteATPList(  'ID',`PathOfPdfFile`, 'Adress', Agent_1, Agent_2, DateWork, FIO, DopuskFlag, Number,NumberLS,PuNewNumber,PuNewPokazanie,PuNewPoverkaEar,PuNewPoverKvartal,PuNewType,PuOldMPI,PuOldNumber,PuOldPokazanie,PuOldType, Page1, Page2, NumberMail, DateMail,`Ustanovka`,`SapNumberAkt`,`SizePDF`,`EdOborudovania`)"
+                        string sql_command = "INSERT INTO CompleteATPList( 'City', 'Street', 'House', 'Korpus', 'Kvartira', 'ID',`PathOfPdfFile`, 'Adress', Agent_1, Agent_2, DateWork, FIO, DopuskFlag, Number,NumberLS,PuNewNumber,PuNewPokazanie,PuNewPoverkaEar,PuNewPoverKvartal,PuNewType,PuOldMPI,PuOldNumber,PuOldPokazanie,PuOldType, Page1, Page2, NumberMail, DateMail,`Ustanovka`,`SapNumberAkt`,`SizePDF`,`EdOborudovania`)"
                       + "VALUES ('"
+                       + akt.City + "', '"
+                       + akt.Street + "', '"
+                       + akt.House + "', '"
+                       + akt.Korpus + "', '"
+                       + akt.Kvartira + "', '"
                        + akt.ID.ToString() + "', '"
                          + akt.NamePdfFile + "', '"
                         + akt.Adress + "', '"
@@ -590,8 +577,13 @@ namespace MyApp.Model
                 {
                     foreach (AktTehProverki akt in akti)
                     {
-                        string sql_command = "INSERT INTO ATPInWorkList(  'ID',`PathOfPdfFile`, 'Adress', Agent_1, Agent_2, DateWork, FIO, DopuskFlag, Number,NumberLS,PuNewNumber,PuNewPokazanie,PuNewPoverkaEar,PuNewPoverKvartal,PuNewType,PuOldMPI,PuOldNumber,PuOldPokazanie,PuOldType, Page1, Page2, NumberMail, DateMail,`Ustanovka`,`SapNumberAkt`,`SizePDF`,`EdOborudovania`)"
+                        string sql_command = "INSERT INTO ATPInWorkList( 'City', 'Street', 'House', 'Korpus', 'Kvartira', 'ID',`PathOfPdfFile`, 'Adress', Agent_1, Agent_2, DateWork, FIO, DopuskFlag, Number,NumberLS,PuNewNumber,PuNewPokazanie,PuNewPoverkaEar,PuNewPoverKvartal,PuNewType,PuOldMPI,PuOldNumber,PuOldPokazanie,PuOldType, Page1, Page2, NumberMail, DateMail,`Ustanovka`,`SapNumberAkt`,`SizePDF`,`EdOborudovania`)"
                         + "VALUES ('"
+                       + akt.City + "', '"
+                       + akt.Street + "', '"
+                       + akt.House + "', '"
+                       + akt.Korpus + "', '"
+                       + akt.Kvartira + "', '"
                         + akt.ID.ToString() + "', '"
                         + akt.NamePdfFile + "', '"
                         + akt.Adress + "', '"
@@ -703,6 +695,10 @@ namespace MyApp.Model
                 return;
             }
         }
+        /// <summary>
+        /// Обновление базы установленных пломб из xlsx
+        /// </summary>
+        /// <param name="dataSetSAPFL"></param>
         public static void RefreshSAPPlomb(DataSet dataSetSAPFL)
         {
             if (dataSetSAPFL != null)
@@ -757,6 +753,11 @@ namespace MyApp.Model
                 return;
             }
         }
+        /// <summary>
+        /// Возвращает список абонентов в плане на дату
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
         public static List<string> FindAbonentPlan(DateTime date)
         {
             List<string> result = new List<string>();
@@ -781,6 +782,11 @@ namespace MyApp.Model
                 return result;
             }
         }
+        /// <summary>
+        /// Возвращает даты включения в план для абонента
+        /// </summary>
+        /// <param name="numberLS"></param>
+        /// <returns></returns>
         public static List<string> FindAbonentPlan(string numberLS)
         {
             List<string> result = new List<string>();
@@ -806,6 +812,11 @@ namespace MyApp.Model
                 return result;
             }
         }
+        /// <summary>
+        /// Возвращает колво комнат, прописанных, наличие электроотопления
+        /// </summary>
+        /// <param name="numberLs"></param>
+        /// <returns></returns>
         public static Dictionary<String, String> GetInfoForNormativ(string numberLs)
         {
             Dictionary<String, String> result = new Dictionary<String, String>();
@@ -834,6 +845,13 @@ namespace MyApp.Model
             }
 
         }
+        /// <summary>
+        /// Возвращает норматив 
+        /// </summary>
+        /// <param name="people"></param>
+        /// <param name="rooms"></param>
+        /// <param name="kategory"></param>
+        /// <returns></returns>
         public static int GetNormativ(int people, int rooms, int kategory)
         {
 

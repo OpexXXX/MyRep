@@ -76,8 +76,8 @@ namespace ATPWork.MyApp.Model.Plan
             Process.Start(ExcelWorker.CreatePdfReestrForPlan(gg));
         }
 
-        private static List<Abonent> _abonentList = new List<Abonent>();
-        public static List<Abonent> AbonentList
+        private static List<PlanAbonent> _abonentList = new List<PlanAbonent>();
+        public static List<PlanAbonent> AbonentList
         {
             get { return _abonentList; }
             set { _abonentList = value; }
@@ -86,10 +86,10 @@ namespace ATPWork.MyApp.Model.Plan
         public static void refreshAbonentList(DateTime dateWork)
         {
             List<string> Abonents = new List<string>(DataBaseWorker.FindAbonentPlan(dateWork));
-            AbonentList = new List<Abonent>();
+            AbonentList = new List<PlanAbonent>();
             foreach (var item in Abonents)
             {
-                AbonentList.Add(new Abonent(item, dateWork));
+                AbonentList.Add(new PlanAbonent(item, dateWork));
             }
             AbonentsRefresh?.Invoke();
         }
