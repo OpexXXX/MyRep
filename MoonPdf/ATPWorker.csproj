@@ -240,6 +240,7 @@
     <Compile Include="MyApp\ViewModel\MainAtp\PlombEditor\Commands.cs" />
     <Compile Include="MyApp\ViewModel\MainAtp\PlombEditor\PlombEditor.cs" />
     <Compile Include="MyApp\ViewModel\MainAtp\PlombEditor\Validators.cs" />
+    <Compile Include="MyApp\ViewModel\PlanViewModel\Commands.cs" />
     <Compile Include="MyApp\ViewModel\PlanViewModel\PlanVM.cs" />
     <Compile Include="MyApp\ViewModel\SettingsVM.cs" />
     <Compile Include="MyApp\ViewModel\ViewModelBase.cs" />

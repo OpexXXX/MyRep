@@ -171,6 +171,45 @@ namespace ATPWork.MyApp.Model.Plan
                 this.puOldMPI = value;
             }
         }
+        private string _city;
+        public string City
+        {
+            get { return this._city; }
+            set
+            {
+                this._city = value;
+            }
+        }
+        private string _street;
+        public string Street
+        {
+            get { return this._street; }
+            set
+            {
+                this._street = value;
+            }
+        }
+        private int _house;
+        public int House
+        {
+            get { return _house; }
+            set { _house = value; }
+        }
+        private string _korpus;
+        public string Korpus
+        {
+            get { return this._korpus; }
+            set
+            {
+                this._korpus = value;
+            }
+        }
+        private int _kvartira;
+        public int Kvartira
+        {
+            get { return _kvartira; }
+            set { _kvartira = value; }
+        }
         private string adress;
         public string Adress
         {
@@ -222,6 +261,7 @@ namespace ATPWork.MyApp.Model.Plan
 
         public void setDataByDb()
         {
+
             List<Dictionary<string, string>> searchResult = DataBaseWorker.PlanGetAbonentFromDb(numberLS);
             if (searchResult.Count == 1)
             {
@@ -230,7 +270,14 @@ namespace ATPWork.MyApp.Model.Plan
                 PuOldNumber = dict["PuNumber"];
                 FIO = dict["FIO"];
                 string tmpadress = "";
+                City = dict["City"];
+                Street = dict["Street"];
+                House = int.Parse( dict["House"]);
+                if (dict.ContainsKey("Korpus")&& dict["Korpus"].ToString()!="") Korpus= dict["Korpus"];
+                if (dict.ContainsKey("Kv") && dict["Kv"].ToString() != "") Kvartira= int.Parse(dict["Kv"]);
+
                 tmpadress = dict["City"] + ", " + dict["Street"] + ", д. " + dict["House"];
+
                 if (dict.ContainsKey("Korpus")) tmpadress += dict["Korpus"];
                 if (dict.ContainsKey("Kv")) tmpadress += ", кв." + dict["Kv"];
                 Adress = tmpadress;
@@ -241,10 +288,12 @@ namespace ATPWork.MyApp.Model.Plan
                 /**Расчеты БУ*********/
                 getNormativ();//
                 getPrevousAkt();//
-               getPrevousPlan();//
+                getPrevousPlan();//
+
                 float buVal = 0, mounthInRaschet, tarifNapokupku;
                 float rK, sN, sV;
                              /*********************************************/
+
             }
         }
         private void getPrevousPlan()
