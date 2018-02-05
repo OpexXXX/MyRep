@@ -57,6 +57,7 @@ namespace ATPWork.MyApp.Model.Plan
         {
             get {
                 string result = "";
+                int BuValue = PlanWorkModel.GetValueBuNormativ((DateTime)start, DateWork, Normativ);
                 List<DateTime> startDate = new List<DateTime>();
                 if (PrevProverki.Count > 0)
                 {
@@ -98,7 +99,8 @@ namespace ATPWork.MyApp.Model.Plan
                 }
                 TimeSpan difDay = DateWork - (DateTime)start;
                 result +="\n"+ (difDay.Days + 1) + " дней к расчету, ";
-                result += "норматив:" + Normativ + "кВт*ч/мес. БУ: " + PlanWorkModel.GetValueBuNormativ((DateTime)start, DateWork, Normativ).ToString() + "кВт*ч";
+                result += " " + PlanWorkModel.CalculationPremiumActBu(BuValue) + "р.";
+                result += "норматив:" + Normativ + "кВт*ч/мес. БУ: " + BuValue + "кВт*ч";
                 return result;
             }
            
