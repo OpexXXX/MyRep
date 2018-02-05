@@ -72,7 +72,7 @@ namespace ATPWork.MyApp.Model.Plan
 
         public static int CalculationPremiumActBu(double buValue)
         {
-            double tarif = 1.01616;
+            double tarif = 1.70303;
             double ecoEffect = 0,premialFond;
             double ecoValue = tarif * buValue / 1000;
             double RK = 30, SN = 30, SV = 30.4;
@@ -91,8 +91,6 @@ namespace ATPWork.MyApp.Model.Plan
             if ((1000 < ecoValue) && (ecoValue <= 2000)) ecoEffect = 69 + (ecoValue - 1000) * 0.03;
             if ((2000 < ecoValue)) ecoEffect = 99 + (ecoValue - 2000) * 0.02;
             premialFond = ecoEffect / ((1 + RK / 100 + SN / 100) * (1 + SV / 100));
-
-
             int result = (int)Math.Round(premialFond * 1000); 
             return result;
         }

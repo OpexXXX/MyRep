@@ -434,8 +434,10 @@
                 <DockPanel>
                     <StackPanel Orientation="Vertical">
                         <Calendar DockPanel.Dock="Left" SelectedDate="{Binding SelectedDate, Source={StaticResource PlanVM}}" HorizontalAlignment="Left"  VerticalAlignment="Top"/>
+                        <TextBox x:Name="BuValue"></TextBox>
+                        <TextBlock x:Name="TextBU"></TextBlock>
+                        <Button Click="Button_Click">!</Button>
                         <Button DockPanel.Dock="Left" Content="{Binding Commands.CreatePdf.Name, Source={StaticResource PlanVM}}" Command="{Binding Commands.CreatePdf, Source={StaticResource PlanVM}}"/>
-                        <Button Content="Расчитать " Click="Button_Click_1"></Button>
                     </StackPanel>
                     <DataGrid DockPanel.Dock="Left" IsReadOnly="True" ItemsSource="{Binding Source={StaticResource AbonentsForPlan}}"
           CanUserAddRows="False"
