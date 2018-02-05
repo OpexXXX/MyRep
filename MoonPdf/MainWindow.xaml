@@ -25,7 +25,7 @@
                 <PropertyGroupDescription PropertyName="Street"/>
             </CollectionViewSource.GroupDescriptions>
         </CollectionViewSource>
-        
+
         <CollectionViewSource x:Key="AbonentsForPlan" Source="{Binding AllAbonent, Source={StaticResource PlanVM}}">
             <CollectionViewSource.GroupDescriptions>
                 <PropertyGroupDescription PropertyName="City"/>
@@ -38,7 +38,7 @@
                 <PropertyGroupDescription PropertyName="MailName"/>
             </CollectionViewSource.GroupDescriptions>
         </CollectionViewSource>
-        
+
         <Style TargetType="{x:Type TextBlock}" x:Key="DataGridCellTextWrap">
             <Setter Property="TextBlock.TextWrapping" Value="Wrap"></Setter>
         </Style>
@@ -167,7 +167,7 @@
                                         <Button Content="{Binding Commands.GoFirstPageAkt.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.GoFirstPageAkt, Source={StaticResource MainAtpVM}}"  Height="25"/>
                                         <Button Content="{Binding Commands.GoSecongPageAkt.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.GoSecongPageAkt, Source={StaticResource MainAtpVM}}"  Height="25"/>
                                         <Button Content="{Binding Commands.GoNextAkt.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.GoNextAkt, Source={StaticResource MainAtpVM}}" Height="25"/>
-                                       
+
                                         <TextBlock Text="{Binding SelectedIndex, ElementName=DatagridInWork}" />
                                     </StackPanel>
                                     <local:AtpEditor   AtpInWorkSourse="{Binding SelectedItem, ElementName=DatagridInWork}"  Margin="5,0" >
@@ -337,13 +337,15 @@
                                           SelectedItem=""
                                         AutoGenerateColumns="False">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Number}" ClipboardContentBinding="{x:Null}" Header="№Акта"/>
-                            <DataGridTextColumn Binding="{Binding DateWork}" ClipboardContentBinding="{x:Null}" Header="Дата"/>
+                            <DataGridTextColumn Binding="{Binding RegNumber}" ClipboardContentBinding="{x:Null}" Header="№Акта"/>
+                            <DataGridTextColumn Binding="{Binding DateReg}" ClipboardContentBinding="{x:Null}" Header="Дата"/>
                             <DataGridTextColumn Binding="{Binding NumberLS}" ClipboardContentBinding="{x:Null}" Header="№ЛС"/>
                             <DataGridTextColumn Binding="{Binding FIO}" ClipboardContentBinding="{x:Null}" Header="ФИО"/>
-                            <DataGridTextColumn Binding="{Binding Adress}" ClipboardContentBinding="{x:Null}" Header="Адрес"/>
-                            <DataGridTextColumn Binding="{Binding PuOldType}" ClipboardContentBinding="{x:Null}" Header="№ПУ"/>
-                            <DataGridTextColumn Binding="{Binding PuOldPokazanie}" ClipboardContentBinding="{x:Null}" Header="Показание"/>
+                            <DataGridTextColumn Binding="{Binding Adress, Mode=OneWay}" ClipboardContentBinding="{x:Null}" Header="Адрес"/>
+                            <DataGridTextColumn Binding="{Binding PuOldNumber}" ClipboardContentBinding="{x:Null}" Header="№ПУ"/>
+                            <DataGridTextColumn Binding="{Binding PuOldType}" ClipboardContentBinding="{x:Null}" Header="Тип ПУ"/>
+                            <DataGridTextColumn Binding="{Binding Primechanie}" ClipboardContentBinding="{x:Null}" Header="Примечание"/>
+                            <DataGridTextColumn Binding="{Binding Prichina}" ClipboardContentBinding="{x:Null}" Header="Причина"/>
                         </DataGrid.Columns>
                         <DataGrid.GroupStyle>
                             <!-- Style for groups at top level. -->
@@ -508,9 +510,9 @@
                         <DataGrid.Columns>
 
                             <DataGridTextColumn   Width="120" Binding="{Binding NumberLS}" ClipboardContentBinding="{x:Null}" Header="№ЛС"  >
-                                
-                                    
-                                
+
+
+
                             </DataGridTextColumn>
 
                             <DataGridTextColumn Binding="{Binding FIO}" ClipboardContentBinding="{x:Null}" Header="ФИО"/>
