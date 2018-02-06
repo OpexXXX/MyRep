@@ -44,7 +44,7 @@ namespace MyApp.Model
             HeaderColumnPlan.Add(new string[] { "Ф.И.О", "FIO" });
             HeaderColumnPlan.Add(new string[] { "Адрес", "Adress" });
             HeaderColumnPlan.Add(new string[] { "Тип ПУ", "PuType" });
-            HeaderColumnPlan.Add(new string[] { "Номер ПУ", "PuNumber" });
+          //HeaderColumnPlan.Add(new string[] { "Номер ПУ", "PuNumber" });
             HeaderColumnPlan.Add(new string[] { "Подключение", "Podkluchenie" });
             HeaderColumnPlan.Add(new string[] { "Пломбы", "Plombs" });
         }
@@ -232,8 +232,8 @@ namespace MyApp.Model
                 row["Raschet"] = item.Raschet;
                 row["FIO"] = item.FIO;
                 row["Adress"] = item.Adress;
-                row["PuType"] = item.PuOldType;
-                row["PuNumber"] = item.PuOldNumber;
+                row["PuType"] = item.PuOldType + " №" + item.PuOldNumber;
+               // row["PuNumber"] ="";
                 row["Podkluchenie"] = item.Podkl;
                 string plobms="";
                 foreach (Plomba plomb in item.OldPlombs)
@@ -394,7 +394,7 @@ namespace MyApp.Model
                 table.TotalWidth = 800f;
                 table.LockedWidth = true;
             table.HeaderRows = 2;
-                var colWidthPercentages = new[] { 2f, 8f, 14f, 12f, 13f, 9f, 6f, 17f , 19f };
+                var colWidthPercentages = new[] { 2f, 8f, 17f, 12f, 13f, 12f, 17f , 19f };
                 table.SetWidths(colWidthPercentages);
                 //Добавим в таблицу общий заголовок
                 PdfPCell cell = new PdfPCell(new Phrase("Инструментальные проверки" , headerFont));
@@ -421,7 +421,7 @@ namespace MyApp.Model
                         if (k == 0) value = (Int32.Parse(value) + 1).ToString();
 
 
-                        table.AddCell(new Phrase(value, (k==2)||(k==8)||(k==7)? smallFont :font));
+                        table.AddCell(new Phrase(value, (k==2)||(k==7)||(k==6)? smallFont :font));
                     }
                 }
                 //Добавляем таблицу в документ

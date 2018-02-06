@@ -12,7 +12,30 @@ namespace ATPWork.MyApp.Model.Plan
     {
         public delegate void AbonentsRefreshHandler();
         public static event AbonentsRefreshHandler AbonentsRefresh;
+        public static int GetAvveragePO(string ear,string numberLS)
+        {
+            int result = 0;
+            var ls = DataBaseWorker.GetAbonentPO(ear, numberLS);
+            if (ls.Count > 0)
+            {
+                int summ = 0;
+                foreach (var item in ls)
+                {
+                    int i = 0;
+                    bool flag = int.TryParse(item, out i);
+                    if (flag)
+                    {
+                        summ += i;
+                    }
+                }
 
+                result = summ / ls.Count;
+               
+            }
+            return result;
+        }
+
+       
 
         /// <summary>
         /// Расчет объема безучетного потребления
