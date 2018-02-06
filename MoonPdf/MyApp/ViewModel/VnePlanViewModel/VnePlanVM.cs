@@ -2,9 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 
 namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
 {
@@ -22,9 +24,6 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
             }
         }
         #endregion
-
-
-
         private ObservableCollection<VnePlanZayavka> _allZayvki;
         public ObservableCollection<VnePlanZayavka> AllZayvki
         {
@@ -35,15 +34,27 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
                 OnPropertyChanged("AllZayvki");
             }
         }
+        private ICollectionView _abonentsForVnePlan ;
 
-        private VnePlanZayavka _zayvkaInwork = new VnePlanZayavka();
-        public VnePlanZayavka ZayavkaInWork
+        public ICollectionView AbonentsForVnePlan
         {
-            get { return _zayvkaInwork; }
+            get { return _abonentsForVnePlan; }
+            set { _abonentsForVnePlan = value;
+                OnPropertyChanged("AbonentsForVnePlan");
+            }
+        }
+
+
+        
+
+        private VnePlanZayavka _zayvkaToAdd = new VnePlanZayavka();
+        public VnePlanZayavka ZayavkaToAdd
+        {
+            get { return _zayvkaToAdd; }
             set
             {
-                _zayvkaInwork = value;
-                OnPropertyChanged("ZayavkaInWork");
+                _zayvkaToAdd = value;
+                OnPropertyChanged("ZayavkaToAdd");
             }
         }
 
@@ -54,7 +65,8 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
             get { return _searchString; }
             set
             {
-                _searchString = value;
+               
+                   _searchString = value;
                 OnPropertyChanged("SearchString");
             }
         }
@@ -65,14 +77,26 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
             Commands = new Commands(this);
             refreshAbonentList();
             VnePlanModel.AbonentsRefresh += refreshAbonentList;
-
+            AbonentsForVnePlan = CollectionViewSource.GetDefaultView(AllZayvki);
+            AbonentsForVnePlan.Refresh();
+        }
+        public int GetLastRegNumber()
+        { 
+            int result = VnePlanModel.GetLastNumber(); 
+            return result;
         }
 
         public void refreshAbonentList()
         {
             AllZayvki = new ObservableCollection<VnePlanZayavka>(VnePlanModel.Zayavki);
-        }
+            AbonentsForVnePlan = CollectionViewSource.GetDefaultView(AllZayvki);
+            AbonentsForVnePlan.GroupDescriptions.Clear();
+            AbonentsForVnePlan.GroupDescriptions.Add(new PropertyGroupDescription("City"));
+          
+            // AbonentsForVnePlan.Filter = str => ((str as VnePlanZayavka).NumberAktTehProverki=="");
 
+
+        }
 
         /*internal void CreatePdf()
         {
