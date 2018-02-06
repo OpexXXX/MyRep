@@ -24,7 +24,16 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
             }
         }
         #endregion
-
+        private ObservableCollection<VnePlanZayavka> _allZayvki;
+        public ObservableCollection<VnePlanZayavka> AllZayvki
+        {
+            get { return _allZayvki; }
+            set
+            {
+                _allZayvki = value;
+                OnPropertyChanged("AllZayvki");
+            }
+        }
         private ICollectionView _abonentsForVnePlan ;
 
         public ICollectionView AbonentsForVnePlan
@@ -45,7 +54,7 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
             set
             {
                 _zayvkaToAdd = value;
-                OnPropertyChanged("ZayavkaInWork");
+                OnPropertyChanged("ZayavkaToAdd");
             }
         }
 
@@ -68,10 +77,8 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
             Commands = new Commands(this);
             refreshAbonentList();
             VnePlanModel.AbonentsRefresh += refreshAbonentList;
-           
-           
-            
-            refreshAbonentList();
+            AbonentsForVnePlan = CollectionViewSource.GetDefaultView(AllZayvki);
+            AbonentsForVnePlan.Refresh();
         }
         public int GetLastRegNumber()
         { 
@@ -81,9 +88,14 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
 
         public void refreshAbonentList()
         {
-            AbonentsForVnePlan  = CollectionViewSource.GetDefaultView(VnePlanModel.Zayavki);
+            AllZayvki = new ObservableCollection<VnePlanZayavka>(VnePlanModel.Zayavki);
+            AbonentsForVnePlan = CollectionViewSource.GetDefaultView(AllZayvki);
+            AbonentsForVnePlan.GroupDescriptions.Clear();
             AbonentsForVnePlan.GroupDescriptions.Add(new PropertyGroupDescription("City"));
-            AbonentsForVnePlan.Filter = str => ((str as VnePlanZayavka).NumberAktTehProverki=="");
+          
+            // AbonentsForVnePlan.Filter = str => ((str as VnePlanZayavka).NumberAktTehProverki=="");
+
+
         }
 
         /*internal void CreatePdf()

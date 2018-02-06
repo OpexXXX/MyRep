@@ -1,4 +1,5 @@
-﻿using MyApp;
+﻿using ATPWork.MyApp.Model.VnePlan;
+using MyApp;
 using MyApp.Model;
 using System;
 using System.Collections.Generic;
@@ -107,7 +108,9 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
             }, canSearch, null);
             this.AddZayavka = new DelegateCommand("Дабавить заявку", f =>
             {
-
+                vnePlanVM.AllZayvki.Add(vnePlanVM.ZayavkaToAdd);
+                VnePlanModel.AddZayvka(vnePlanVM.ZayavkaToAdd);
+                vnePlanVM.ZayavkaToAdd = new VnePlanZayavka();
             }, canAddZayavka, null);
         }
 
