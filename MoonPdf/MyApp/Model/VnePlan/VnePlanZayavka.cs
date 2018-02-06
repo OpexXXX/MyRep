@@ -17,6 +17,35 @@ namespace ATPWork.MyApp.Model.VnePlan
                 this._tempFio = value;
             }
         }
+        private bool _provFlag;
+        public bool ProvFlag
+        {
+            get { return this._provFlag; }
+            set
+            {
+                this._provFlag = value;
+            }
+        }
+        private bool _dopuskFlag;
+        public bool DopuskFlag
+        {
+            get { return this._dopuskFlag; }
+            set
+            {
+                this._dopuskFlag = value;
+            }
+        }
+        private bool _demontageFlag;
+        public bool DemontageFlag
+        {
+            get { return this._demontageFlag; }
+            set
+            {
+                this._demontageFlag = value;
+            }
+        }
+
+
 
         private string _primechanie;
         public string Primechanie
@@ -36,7 +65,7 @@ namespace ATPWork.MyApp.Model.VnePlan
                 this._regNumber = value;
             }
         }
-        private DateTime _dateReg;
+        private DateTime _dateReg = DateTime.Now;
         public DateTime DateReg
         {
             get { return this._dateReg; }
@@ -54,10 +83,7 @@ namespace ATPWork.MyApp.Model.VnePlan
                 this._prichina = value;
             }
         }
-        public bool Complete {
-            get {
-                return true;
-            } }
+      
         private string _numberAktTehProverki;
         public string NumberAktTehProverki
         {

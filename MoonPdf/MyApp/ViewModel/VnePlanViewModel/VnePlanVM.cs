@@ -36,13 +36,13 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
             }
         }
 
-        private VnePlanZayavka _zayvkaInwork = new VnePlanZayavka();
-        public VnePlanZayavka ZayavkaInWork
+        private VnePlanZayavka _zayvkaToAdd = new VnePlanZayavka();
+        public VnePlanZayavka ZayavkaToAdd
         {
-            get { return _zayvkaInwork; }
+            get { return _zayvkaToAdd; }
             set
             {
-                _zayvkaInwork = value;
+                _zayvkaToAdd = value;
                 OnPropertyChanged("ZayavkaInWork");
             }
         }

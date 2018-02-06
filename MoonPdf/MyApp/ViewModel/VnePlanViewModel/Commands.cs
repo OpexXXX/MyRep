@@ -26,7 +26,7 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
                 if (resultSearchAbonent.Count == 1)
                 {
                     string edob = resultSearchAbonent[0]["EdOborudovania"];
-                    planVM.ZayavkaInWork.setDataByDb(resultSearchAbonent[0]);
+                    planVM.ZayavkaToAdd.setDataByDb(resultSearchAbonent[0]);
                 }
                 else if (resultSearchAbonent.Count > 1)
                 {
@@ -35,7 +35,7 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
                     if ((bool)wndResult.DialogResult)
                     {
                         string edob = wndResult.SelectVal["EdOborudovania"];
-                        planVM.ZayavkaInWork.setDataByDb(wndResult.SelectVal);
+                        planVM.ZayavkaToAdd.setDataByDb(wndResult.SelectVal);
                     }
                 }
                 else
@@ -44,7 +44,7 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
                     if (resultSearchAbonent.Count == 1)
                     {
                         string edob = resultSearchAbonent[0]["EdOborudovania"];
-                        planVM.ZayavkaInWork.setDataByDb(resultSearchAbonent[0]);
+                        planVM.ZayavkaToAdd.setDataByDb(resultSearchAbonent[0]);
                     }
                     else if (resultSearchAbonent.Count > 1)
                     {
@@ -53,7 +53,7 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
                         if ((bool)wndResult.DialogResult)
                         {
                             string edob = wndResult.SelectVal["EdOborudovania"];
-                            planVM.ZayavkaInWork.setDataByDb(wndResult.SelectVal);
+                            planVM.ZayavkaToAdd.setDataByDb(wndResult.SelectVal);
                         }
                     }
                     else
@@ -62,7 +62,7 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
                         if (resultSearchAbonent.Count == 1)
                         {
                             string edob = resultSearchAbonent[0]["EdOborudovania"];
-                            planVM.ZayavkaInWork.setDataByDb(resultSearchAbonent[0]);
+                            planVM.ZayavkaToAdd.setDataByDb(resultSearchAbonent[0]);
                         }
                         else if (resultSearchAbonent.Count > 1)
                         {
@@ -71,7 +71,7 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
                             if ((bool)wndResult.DialogResult)
                             {
                                 string edob = wndResult.SelectVal["EdOborudovania"];
-                                planVM.ZayavkaInWork.setDataByDb(wndResult.SelectVal);
+                                planVM.ZayavkaToAdd.setDataByDb(wndResult.SelectVal);
                             }
                         }
                     }
