@@ -259,7 +259,7 @@ namespace MyApp.Model
         {
             List<Dictionary<String, String>> result = new List<Dictionary<string, string>>();
             SQLiteCommand CommandSQL = new SQLiteCommand(connector);
-            CommandSQL.CommandText = "SELECT FIO, PuType, LsNumber,City,Street,House,Korpus,PuNumber, Kv, Ustanovka,PuKod "
+            CommandSQL.CommandText = "SELECT FIO, PuType, LsNumber,City,Street,House,Korpus,PuNumber, Kv, Ustanovka,PuKod , Podkluchenie "
     + " FROM SAPFL WHERE PuNumber LIKE '%" + numberPU + "%' ";
             SQLiteDataReader r = CommandSQL.ExecuteReader();
             string line = String.Empty;
@@ -278,6 +278,7 @@ namespace MyApp.Model
                 result[i].Add("PuNumber", r["PuNumber"].ToString());
                 result[i].Add("Ustanovka", r["Ustanovka"].ToString());
                 result[i].Add("EdOborudovania", r["PuKod"].ToString());
+                result[i].Add("Podkluchenie", r["Podkluchenie"].ToString());
                 i++;
             }
             r.Close();
