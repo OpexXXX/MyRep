@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
 {
-     public class VnePlanVM:ViewModelBase
+    public class VnePlanVM : ViewModelBase
     {
         #region Команды
         private Commands _commands;
@@ -23,8 +23,8 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
         }
         #endregion
 
-       
-       
+
+
         private ObservableCollection<VnePlanZayavka> _allZayvki;
         public ObservableCollection<VnePlanZayavka> AllZayvki
         {
@@ -35,6 +35,30 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
                 OnPropertyChanged("AllZayvki");
             }
         }
+
+        private VnePlanZayavka _zayvkaInwork = new VnePlanZayavka();
+        public VnePlanZayavka ZayavkaInWork
+        {
+            get { return _zayvkaInwork; }
+            set
+            {
+                _zayvkaInwork = value;
+                OnPropertyChanged("ZayavkaInWork");
+            }
+        }
+
+        private string _searchString;
+
+        public string SearchString
+        {
+            get { return _searchString; }
+            set
+            {
+                _searchString = value;
+                OnPropertyChanged("SearchString");
+            }
+        }
+
 
         public VnePlanVM()
         {
