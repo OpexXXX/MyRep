@@ -2,9 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 
 namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
 {
@@ -23,18 +25,18 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
         }
         #endregion
 
+        private ICollectionView _abonentsForVnePlan ;
 
-
-        private ObservableCollection<VnePlanZayavka> _allZayvki;
-        public ObservableCollection<VnePlanZayavka> AllZayvki
+        public ICollectionView AbonentsForVnePlan
         {
-            get { return _allZayvki; }
-            set
-            {
-                _allZayvki = value;
-                OnPropertyChanged("AllZayvki");
+            get { return _abonentsForVnePlan; }
+            set { _abonentsForVnePlan = value;
+                OnPropertyChanged("AbonentsForVnePlan");
             }
         }
+
+
+        
 
         private VnePlanZayavka _zayvkaToAdd = new VnePlanZayavka();
         public VnePlanZayavka ZayavkaToAdd
@@ -54,7 +56,8 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
             get { return _searchString; }
             set
             {
-                _searchString = value;
+               
+                   _searchString = value;
                 OnPropertyChanged("SearchString");
             }
         }
@@ -65,23 +68,23 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
             Commands = new Commands(this);
             refreshAbonentList();
             VnePlanModel.AbonentsRefresh += refreshAbonentList;
-
+           
+           
+            
+            refreshAbonentList();
         }
         public int GetLastRegNumber()
-        {
-            int result = 0;
-            foreach (var item in AllZayvki)
-            {
-                if (item.RegNumber > result) result = item.RegNumber;
-            }
-            return result + 1;
+        { 
+            int result = VnePlanModel.GetLastNumber(); 
+            return result;
         }
 
         public void refreshAbonentList()
         {
-            AllZayvki = new ObservableCollection<VnePlanZayavka>(VnePlanModel.Zayavki);
+            AbonentsForVnePlan  = CollectionViewSource.GetDefaultView(VnePlanModel.Zayavki);
+            AbonentsForVnePlan.GroupDescriptions.Add(new PropertyGroupDescription("City"));
+            AbonentsForVnePlan.Filter = str => ((str as VnePlanZayavka).NumberAktTehProverki=="");
         }
-
 
         /*internal void CreatePdf()
         {

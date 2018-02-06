@@ -24,15 +24,7 @@ namespace ATPWork.MyApp.Model
         }
        
 
-        public string BriefInformation
-        {
-            get {
-
-                string result = "";
-                result += FIO + "\n " + Adress+ "\n " + NumberLS;
-                return result; }
-          
-        }
+       
         private string edOborudovania;
         public string EdOborudovania
         {

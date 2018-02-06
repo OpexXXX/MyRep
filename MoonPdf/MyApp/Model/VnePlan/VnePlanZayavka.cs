@@ -8,6 +8,16 @@ namespace ATPWork.MyApp.Model.VnePlan
 {
     public class VnePlanZayavka:Abonent
     {
+        public string BriefInformation
+        {
+            get
+            {
+                string result = "";
+                if(FIO=="") result += base.FIO + "\n " +base.Adress + "\n " + base.NumberLS;
+                return result;
+            }
+
+        }
         private string _tempFio;
         public string TempFIO
         {
@@ -116,7 +126,9 @@ namespace ATPWork.MyApp.Model.VnePlan
             bool result = true;
             if (DateReg == null) result = false;
             if (FIO == null || FIO == "") result = false;
+            if (ProvFlag || DopuskFlag || DemontageFlag) result = true;
             return result;
+
         }
     }
 }

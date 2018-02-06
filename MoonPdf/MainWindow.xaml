@@ -24,6 +24,7 @@
                 <PropertyGroupDescription PropertyName="City"/>
                 <PropertyGroupDescription PropertyName="Street"/>
             </CollectionViewSource.GroupDescriptions>
+            
         </CollectionViewSource>
 
         <CollectionViewSource x:Key="AbonentsForPlan" Source="{Binding AllAbonent, Source={StaticResource PlanVM}}">
@@ -346,7 +347,10 @@
                                         <Image  Height="20" Source="/ATPWork;component/Resources/icons8-поиск-40.png" Width="20" />
                                     </Button>
                                 </StackPanel>
-                                <TextBlock TextWrapping="WrapWithOverflow" Text="{Binding ZayavkaToAdd.BriefInformation, Source={StaticResource VnePlanVM}}" Width="157" ></TextBlock>
+                                <TextBlock TextWrapping="WrapWithOverflow" Text="{Binding ZayavkaToAdd.FIO, Source={StaticResource VnePlanVM}}" Width="157" ></TextBlock>
+                                <TextBlock TextWrapping="WrapWithOverflow" Text="{Binding ZayavkaToAdd.Adress, Source={StaticResource VnePlanVM}}" Width="157" ></TextBlock>
+                                <TextBlock TextWrapping="WrapWithOverflow" Text="{Binding ZayavkaToAdd.NumberLS, Source={StaticResource VnePlanVM}}" Width="157" ></TextBlock>
+
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock>№</TextBlock>
                                     <TextBox Text="{Binding ZayavkaToAdd.RegNumber, Source={StaticResource VnePlanVM}, UpdateSourceTrigger=PropertyChanged}" Width="40"  >
@@ -374,7 +378,7 @@
                             </StackPanel>
                         </GroupBox>
                     </StackPanel>
-                    <DataGrid DockPanel.Dock="Left" IsReadOnly="True" ItemsSource="{Binding Source={StaticResource AbonentsForVnePlan}}"
+                    <DataGrid DockPanel.Dock="Left"  ItemsSource="{Binding AbonentsForVnePlan, Source={StaticResource VnePlanVM}}"
           CanUserAddRows="False"
                                           SelectedItem=""
                                         AutoGenerateColumns="False">

@@ -79,6 +79,25 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
                                 planVM.ZayavkaToAdd.setDataByDb(wndResult.SelectVal);
                             }
                         }
+                        else
+                        {
+                            resultSearchAbonent = DataBaseWorker.GetAbonentFromStreet(number);
+                            if (resultSearchAbonent.Count == 1)
+                            {
+                                string edob = resultSearchAbonent[0]["EdOborudovania"];
+                                planVM.ZayavkaToAdd.setDataByDb(resultSearchAbonent[0]);
+                            }
+                            else if (resultSearchAbonent.Count > 1)
+                            {
+                                ResultSearchWindow wndResult = new ResultSearchWindow(resultSearchAbonent);
+                                wndResult.ShowDialog();
+                                if ((bool)wndResult.DialogResult)
+                                {
+                                    string edob = wndResult.SelectVal["EdOborudovania"];
+                                    planVM.ZayavkaToAdd.setDataByDb(wndResult.SelectVal);
+                                }
+                            }
+                        }
                     }
                 }
 
