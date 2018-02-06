@@ -23,7 +23,7 @@ namespace MyApp.Model
         /// <summary>
         /// Коннектор к рабочей базе данных
         /// </summary>
-        static SQLiteConnection connector = new SQLiteConnection("Data Source=filename.db; Version=3;");
+        static SQLiteConnection connector = new SQLiteConnection("Data Source=filename.db; Version=3;PRAGMA synchronous = OFF");
         /// <summary>
         /// Коннектор к базе данных заявок
         /// </summary>
@@ -34,7 +34,11 @@ namespace MyApp.Model
         /// <param name="spisokPU">ссылка на список ПУ</param>
         public static void Initial()
         {
+
             connector.Open();
+            SQLiteCommand cmd = connector.CreateCommand();
+            cmd.CommandText = "PRAGMA synchronous = OFF";
+            cmd.ExecuteNonQuery();
             connectorOplombirovki.Open();
         }
         public static void ClosedApp()
