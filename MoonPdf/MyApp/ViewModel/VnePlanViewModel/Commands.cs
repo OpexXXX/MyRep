@@ -11,15 +11,20 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
      public class Commands
     {
         public DelegateCommand GetDataFromDb { get; private set; }
+        public DelegateCommand AddZayavka { get; private set; }
         private VnePlanVM vnePlanVM;
+
         public Commands(VnePlanVM planVM)
         {
             this.vnePlanVM = planVM;
-            Predicate<object> isCreatePDF = f => CanCreateMail();
+            Predicate<object> canSearch = f => CanSearch();
+            Predicate<object> canAddZayavka = f => CanAddZayavka();
+
             this.GetDataFromDb = new DelegateCommand("Поиск в базе", f =>
             {
                 string number = planVM.SearchString;
 
+                planVM.ZayavkaToAdd.RegNumber = planVM.GetLastRegNumber();
                 List<Dictionary<String, String>> resultSearchAbonent;
                 resultSearchAbonent = DataBaseWorker.GetAbonentFromLS(number);
 
@@ -80,12 +85,21 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
 
 
 
-            }, null, null);
+            }, canSearch, null);
+            this.AddZayavka = new DelegateCommand("Дабавить заявку", f =>
+            {
+
+            }, canAddZayavka, null);
         }
 
-        private bool CanCreateMail()
+        private bool CanAddZayavka()
         {
-            return true;
+            return vnePlanVM.ZayavkaToAdd.CanAdd();
+        }
+
+        private bool CanSearch()
+        {
+            return vnePlanVM.SearchString?.Length > 3;
         }
     }
 }

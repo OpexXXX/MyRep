@@ -24,6 +24,7 @@ namespace ATPWork.MyApp.Model.VnePlan
             set
             {
                 this._provFlag = value;
+                this.OnPropertyChanged("ProvFlag");
             }
         }
         private bool _dopuskFlag;
@@ -33,6 +34,7 @@ namespace ATPWork.MyApp.Model.VnePlan
             set
             {
                 this._dopuskFlag = value;
+                this.OnPropertyChanged("DopuskFlag");
             }
         }
         private bool _demontageFlag;
@@ -42,6 +44,7 @@ namespace ATPWork.MyApp.Model.VnePlan
             set
             {
                 this._demontageFlag = value;
+                this.OnPropertyChanged("DemontageFlag");
             }
         }
 
@@ -54,6 +57,7 @@ namespace ATPWork.MyApp.Model.VnePlan
             set
             {
                 this._primechanie = value;
+                this.OnPropertyChanged("Primechanie");
             }
         }
         private int _regNumber;
@@ -63,6 +67,7 @@ namespace ATPWork.MyApp.Model.VnePlan
             set
             {
                 this._regNumber = value;
+                this.OnPropertyChanged("RegNumber");
             }
         }
         private DateTime _dateReg = DateTime.Now;
@@ -72,6 +77,7 @@ namespace ATPWork.MyApp.Model.VnePlan
             set
             {
                 this._dateReg = value;
+                this.OnPropertyChanged("DateReg");
             }
         }
         private string _prichina;
@@ -81,6 +87,7 @@ namespace ATPWork.MyApp.Model.VnePlan
             set
             {
                 this._prichina = value;
+                this.OnPropertyChanged("Prichina");
             }
         }
       
@@ -91,6 +98,7 @@ namespace ATPWork.MyApp.Model.VnePlan
             set
             {
                 this._numberAktTehProverki = value;
+                this.OnPropertyChanged("NumberAktTehProverki");
             }
         }
         private List< string> _phoneNumbers = new List<string>();
@@ -101,6 +109,14 @@ namespace ATPWork.MyApp.Model.VnePlan
             {
                 this._phoneNumbers = value;
             }
+        }
+
+        internal bool CanAdd()
+        {
+            bool result = true;
+            if (DateReg == null) result = false;
+            if (FIO == null || FIO == "") result = false;
+            return result;
         }
     }
 }

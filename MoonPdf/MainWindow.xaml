@@ -337,7 +337,7 @@
                             <StackPanel>
 
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBox Text="{Binding SearchString, Source={StaticResource VnePlanVM}}" Width="131">
+                                    <TextBox Text="{Binding SearchString, Source={StaticResource VnePlanVM}, UpdateSourceTrigger=PropertyChanged}" ToolTip="Поиск по номеру ПУ, лицевому счету, ФИО" Width="131">
                                         <TextBox.InputBindings>
                                             <KeyBinding Key="Enter" Command="{Binding Commands.GetDataFromDb, Source={StaticResource VnePlanVM}}" />
                                         </TextBox.InputBindings>
@@ -346,34 +346,26 @@
                                         <Image  Height="20" Source="/ATPWork;component/Resources/icons8-поиск-40.png" Width="20" />
                                     </Button>
                                 </StackPanel>
-                                <TextBlock Text="{Binding ZayavkaToAdd.BriefInformation, Source={StaticResource VnePlanVM}}" Width="157" ></TextBlock>
+                                <TextBlock TextWrapping="WrapWithOverflow" Text="{Binding ZayavkaToAdd.BriefInformation, Source={StaticResource VnePlanVM}}" Width="157" ></TextBlock>
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock>№</TextBlock>
-                                    <TextBox Text="{Binding SearchString, Source={StaticResource VnePlanVM}, UpdateSourceTrigger=PropertyChanged}" Width="40"  >
-                                        <TextBox.InputBindings>
-                                            <KeyBinding Key="Enter" Command="{Binding Commands.GetDataFromDb, Source={StaticResource VnePlanVM}}" />
-                                        </TextBox.InputBindings>
+                                    <TextBox Text="{Binding ZayavkaToAdd.RegNumber, Source={StaticResource VnePlanVM}, UpdateSourceTrigger=PropertyChanged}" Width="40"  >
                                     </TextBox>
                                     <DatePicker SelectedDate="{Binding ZayavkaToAdd.DateReg, Source={StaticResource VnePlanVM}}" Width="101" ></DatePicker>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock>Тел:</TextBlock>
-                                <TextBox Text="{Binding SearchString, Source={StaticResource VnePlanVM}, UpdateSourceTrigger=PropertyChanged}" Width="132"  >
-                                    <TextBox.InputBindings>
-                                        <KeyBinding Key="Enter" Command="{Binding Commands.GetDataFromDb, Source={StaticResource VnePlanVM}}" />
-                                    </TextBox.InputBindings>
+                                    <TextBox Text="{Binding ZayavkaToAdd.PhoneNumbers, Source={StaticResource VnePlanVM}, UpdateSourceTrigger=PropertyChanged}" Width="132"  >
                                 </TextBox>
                                 </StackPanel>
                                 <TextBlock>Причина обращения:</TextBlock>
-                                <TextBox Text="{Binding SearchString, Source={StaticResource VnePlanVM}, UpdateSourceTrigger=PropertyChanged}" Width="156" Height="70"   >
-                                    <TextBox.InputBindings>
-                                        <KeyBinding Key="Enter" Command="{Binding Commands.GetDataFromDb, Source={StaticResource VnePlanVM}}" />
-                                    </TextBox.InputBindings>
+                                <TextBox Text="{Binding ZayavkaToAdd.Prichina, Source={StaticResource VnePlanVM}, UpdateSourceTrigger=PropertyChanged}" Width="156" Height="70"   >
+
                                 </TextBox>
                                 <CheckBox IsChecked="{Binding ZayavkaToAdd.ProvFlag, Source={StaticResource VnePlanVM}}">Проверка</CheckBox>
                                 <CheckBox IsChecked="{Binding ZayavkaToAdd.DopuskFlag, Source={StaticResource VnePlanVM}}">Допуск</CheckBox>
                                 <CheckBox IsChecked="{Binding ZayavkaToAdd.DemontageFlag, Source={StaticResource VnePlanVM}}">Демонтаж</CheckBox>
-                                <Button  Focusable="False"  ToolTip="{Binding Commands.GetDataFromDb.Name, Source={StaticResource VnePlanVM}}" Command="{Binding Commands.GetDataFromDb, Source={StaticResource VnePlanVM}}">
+                                <Button  Focusable="False"  ToolTip="{Binding Commands.AddZayavka.Name, Source={StaticResource VnePlanVM}}" Command="{Binding Commands.AddZayavka, Source={StaticResource VnePlanVM}}">
                                     <StackPanel Orientation="Horizontal">
                                     <Image  Height="20" Source="Resources/icons8Add-50.png" Width="20" />
                                     <TextBlock>Добавить</TextBlock>

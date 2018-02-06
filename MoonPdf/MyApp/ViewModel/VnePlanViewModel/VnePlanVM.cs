@@ -67,6 +67,15 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
             VnePlanModel.AbonentsRefresh += refreshAbonentList;
 
         }
+        public int GetLastRegNumber()
+        {
+            int result = 0;
+            foreach (var item in AllZayvki)
+            {
+                if (item.RegNumber > result) result = item.RegNumber;
+            }
+            return result + 1;
+        }
 
         public void refreshAbonentList()
         {
