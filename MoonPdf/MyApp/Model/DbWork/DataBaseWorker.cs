@@ -847,6 +847,35 @@ namespace MyApp.Model
         /// </summary>
         /// <param name="date"></param>
         /// <returns></returns>
+        public static List<string> GetAbonentPO(string mounthEar, string numberLS)
+        {
+            List<string> result = new List<string>();
+            SQLiteCommand CommandSQL = new SQLiteCommand(connector);
+            CommandSQL.CommandText = "SELECT  Value  "
+    + " FROM PoSbit WHERE NumberTu LIKE '%" + numberLS + "%' AND Date LIKE '%" + mounthEar + "%'  ";
+            try
+            {
+                SQLiteDataReader r = CommandSQL.ExecuteReader();
+                string line = String.Empty;
+                int i = 0;
+                while (r.Read())
+                {
+                    result.Add(r["Value"].ToString());
+                }
+                r.Close();
+                return result;
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+                return result;
+            }
+        }
+        /// <summary>
+        /// Возвращает список абонентов в плане на дату
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
         public static List<string> FindAbonentPlan(DateTime date)
         {
             List<string> result = new List<string>();
