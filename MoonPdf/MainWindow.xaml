@@ -331,7 +331,11 @@
             </TabItem>
             <TabItem Header="Внеплан" FontSize="14">
                 <DockPanel>
-                    <Button Content="2332" Click="Button_Click"></Button>
+                    <StackPanel>
+                        <TextBox Text="{Binding SearchString, Source={StaticResource VnePlanVM}}"></TextBox>
+                        <Button  Content="{Binding Commands.GetDataFromDb.Name, Source={StaticResource VnePlanVM}}" Command="{Binding Commands.GetDataFromDb, Source={StaticResource VnePlanVM}}"/>
+                        
+                    </StackPanel>
                     <DataGrid DockPanel.Dock="Left" IsReadOnly="True" ItemsSource="{Binding Source={StaticResource AbonentsForVnePlan}}"
           CanUserAddRows="False"
                                           SelectedItem=""

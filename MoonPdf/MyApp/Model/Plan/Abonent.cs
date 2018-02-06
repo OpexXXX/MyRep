@@ -27,17 +27,8 @@ namespace ATPWork.MyApp.Model.Plan
                 getNormativ();//
                 getPrevousAkt();//
                 getPrevousPlan();//
-                getAvveragePO();
             }
         }
-
-        private void getAvveragePO()
-        {
-        AvveragePO=    PlanWorkModel.GetAvveragePO("2017", NumberLS);
-            AvverageP = PlanWorkModel.GetAvveragePO("2016", NumberLS);
-
-        }
-
         private int _rooms;
         public int Rooms
         {
@@ -62,18 +53,6 @@ namespace ATPWork.MyApp.Model.Plan
             get { return _normativ; }
             set { _normativ = value; }
         }
-        private int _avveragePO;
-        public int AvveragePO
-        {
-            get { return _avveragePO; }
-            set { _avveragePO = value; }
-        }
-        private int _avverageP;
-        public int AvverageP
-        {
-            get { return _avverageP; }
-            set { _avverageP = value; }
-        }
         public string Raschet
         {
             get {
@@ -90,7 +69,7 @@ namespace ATPWork.MyApp.Model.Plan
                 }
                 else
                 {
-                    result += "Нет данных о последней проверке. ";
+                    result += "Нет данных о последней проверке.";
                 }
                 if (PrevPlan.Count > 0)
                 {
@@ -118,8 +97,7 @@ namespace ATPWork.MyApp.Model.Plan
                     start = DateWork.AddMonths(-3);
                 }
                 TimeSpan difDay = DateWork - (DateTime)start;
-                result += " Ср. за 2017г. " + AvveragePO + "кВт*ч/мес; 2016г. " + AvverageP+ "кВт*ч/мес; ";
-                result +=(difDay.Days + 1) + " дней к расчету, ";
+                result +="\n"+ (difDay.Days + 1) + " дней к расчету, ";
                 result += "норматив:" + Normativ + "кВт*ч/мес. БУ: " + PlanWorkModel.GetValueBuNormativ((DateTime)start, DateWork, Normativ).ToString() + "кВт*ч";
                 return result;
             }
@@ -137,7 +115,6 @@ namespace ATPWork.MyApp.Model.Plan
             get { return _prevProverki; }
             set { _prevProverki = value; }
         }
-
         private string _vneplan;
         public string Vneplan
         {
@@ -147,7 +124,6 @@ namespace ATPWork.MyApp.Model.Plan
                 this._vneplan = value;
             }
         }
-
         private DateTime dateWork;
         public DateTime DateWork
         {
@@ -164,13 +140,14 @@ namespace ATPWork.MyApp.Model.Plan
             if (dat.Count > 0)
             {
                 if (dat.Contains(DateWork.ToString("d"))) dat.Remove(DateWork.ToString("d"));
+
                 foreach (string item in dat)
                 {
                     PrevPlan.Add(DateTime.Parse(item));
                 }
+               
             }
         }
-
         private void getPrevousAkt()
         {
             List<string[]> result= DataBaseWorker.GetPrevusAktFenix(NumberLS);
