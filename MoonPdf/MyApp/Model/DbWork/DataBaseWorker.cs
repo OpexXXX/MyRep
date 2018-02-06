@@ -460,7 +460,6 @@ namespace MyApp.Model
                 Page.Add(Int32.Parse(r["Page1"].ToString()));
                 Page.Add(Int32.Parse(r["Page2"].ToString()));
                 result.Add(new AktTehProverki(Int32.Parse(r["ID"].ToString()), Page, r["PathOfPdfFile"].ToString(), long.Parse(r["SizePDF"].ToString())));
-
                 //Ищем агентов по номеру
                 string temp_agent = r["Agent_1"].ToString();
                 if (temp_agent != "")
@@ -497,7 +496,6 @@ namespace MyApp.Model
                 }
                 result[i].PuOldMPI = Int32.Parse(r["PuOldMPI"].ToString()) == 0 ? false : true;
                 result[i].DopuskFlag = Int32.Parse(r["DopuskFlag"].ToString()) == 0 ? false : true;
-             
                 result[i].City = r["City"].ToString();
                 result[i].Street = r["Street"].ToString();
                 result[i].House = r["House"].ToString()!=""?int.Parse(r["House"].ToString()):0;
@@ -516,11 +514,9 @@ namespace MyApp.Model
                 result[i].PuOldPokazanie = r["PuOldPokazanie"].ToString();
                 result[i].PuOldType = r["PuOldType"].ToString();
                 result[i].NumberMail = Int32.Parse(r["NumberMail"].ToString());
-
                 string dtm = r["DateMail"].ToString();
                 if (dtm == "") result[i].DateMail = null;
                 else result[i].DateMail = DateTime.Parse(dtm);
-
                 result[i].Ustanovka = r["Ustanovka"].ToString();
                 result[i].SapNumberAkt = r["SapNumberAkt"].ToString();
                 result[i].EdOborudovania = r["EdOborudovania"].ToString();
