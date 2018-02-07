@@ -13,6 +13,7 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
     {
         public DelegateCommand GetDataFromDb { get; private set; }
         public DelegateCommand AddZayavka { get; private set; }
+        public DelegateCommand CheckToComplete { get; private set; }
         private VnePlanVM vnePlanVM;
 
         public Commands(VnePlanVM planVM)
@@ -112,6 +113,10 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
                 VnePlanModel.AddZayvka(vnePlanVM.ZayavkaToAdd);
                 vnePlanVM.ZayavkaToAdd = new VnePlanZayavka();
             }, canAddZayavka, null);
+            this.CheckToComplete = new DelegateCommand("Проверить выполнение заявок", f =>
+            {
+                VnePlanModel.chekCompleteZayavki();
+            }, null, null);
         }
 
         private bool CanAddZayavka()

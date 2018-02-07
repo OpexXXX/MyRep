@@ -51,6 +51,20 @@ namespace MyApp.Model
         public delegate void CurrentWorkListRefreshHandler();
         public static event CurrentWorkListRefreshHandler CurrentWorkRefresh;
         private static List<AktTehProverki> _allAkt = new List<AktTehProverki>();
+
+        internal static List<string[]> GetAktsForVneplan(string numberLS)
+        {
+            List<string[]> akts = new List<string[]>();
+            foreach (var item in AllAkt)
+            {
+                if(item.NumberLS == numberLS)
+                {
+                    akts.Add(new string[] { item.Number.ToString(), item.DateWork?.ToString("d") });
+                }
+            }
+            return akts;
+        }
+
         public static List<AktTehProverki> AllAkt
         {
             get { return _allAkt; }

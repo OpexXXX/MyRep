@@ -111,8 +111,8 @@ namespace ATPWork.MyApp.Model.VnePlan
                 this.OnPropertyChanged("NumberAktTehProverki");
             }
         }
-        private List< string> _phoneNumbers = new List<string>();
-        public List<string> PhoneNumbers
+        private  string _phoneNumbers;
+        public string PhoneNumbers
         {
             get { return this._phoneNumbers; }
             set
@@ -126,7 +126,7 @@ namespace ATPWork.MyApp.Model.VnePlan
             bool result = true;
             if (DateReg == null) result = false;
             if (FIO == null || FIO == "") result = false;
-            if (ProvFlag || DopuskFlag || DemontageFlag) result = true;
+            if (!(ProvFlag || DopuskFlag || DemontageFlag)) result = false;
             return result;
 
         }

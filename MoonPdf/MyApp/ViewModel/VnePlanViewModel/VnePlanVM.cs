@@ -70,8 +70,6 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
                 OnPropertyChanged("SearchString");
             }
         }
-
-
         public VnePlanVM()
         {
             Commands = new Commands(this);
@@ -92,12 +90,8 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
             AbonentsForVnePlan = CollectionViewSource.GetDefaultView(AllZayvki);
             AbonentsForVnePlan.GroupDescriptions.Clear();
             AbonentsForVnePlan.GroupDescriptions.Add(new PropertyGroupDescription("City"));
-          
-            // AbonentsForVnePlan.Filter = str => ((str as VnePlanZayavka).NumberAktTehProverki=="");
-
-
+            AbonentsForVnePlan.Filter = str => ((str as VnePlanZayavka).NumberAktTehProverki=="");
         }
-
         /*internal void CreatePdf()
         {
             PlanWorkModel.CreatePDF(SelectedDate);
