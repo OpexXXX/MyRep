@@ -207,6 +207,50 @@ namespace MyApp.Model
         /// </summary>
         /// <param name="numberLS">Номер лицевого счета</param>
         /// <returns>Лист словарей с данными если успешно, null если не найден</returns>
+        static public List<Dictionary<String, String>> GetAbonentFromStreet(string numberLS)
+        {
+            List<Dictionary<String, String>> result = new List<Dictionary<string, string>>();
+            SQLiteCommand CommandSQL = new SQLiteCommand(connector);
+            CommandSQL.CommandText = "SELECT FIO, PuType, LsNumber,City,Street,House,Korpus,PuNumber,Kv, Ustanovka,PuKod, Podkluchenie "
+    + " FROM SAPFL WHERE Street LIKE '%" + numberLS + "%' ";
+            try
+            {
+                SQLiteDataReader r = CommandSQL.ExecuteReader();
+                string line = String.Empty;
+                int i = 0;
+                while (r.Read())
+                {
+                    result.Add(new Dictionary<string, string>());
+
+                    result[i].Add("FIO", r["FIO"].ToString());
+                    result[i].Add("PuType", r["PuType"].ToString());
+                    result[i].Add("LsNumber", r["LsNumber"].ToString());
+                    result[i].Add("City", r["City"].ToString());
+                    result[i].Add("Street", r["Street"].ToString());
+                    result[i].Add("House", r["House"].ToString());
+                    result[i].Add("Korpus", r["Korpus"].ToString());
+                    result[i].Add("Kv", r["Kv"].ToString());
+                    result[i].Add("PuNumber", r["PuNumber"].ToString());
+                    result[i].Add("Ustanovka", r["Ustanovka"].ToString());
+                    result[i].Add("EdOborudovania", r["PuKod"].ToString());
+                    result[i].Add("Podkluchenie", r["Podkluchenie"].ToString());
+                    i++;
+                }
+                r.Close();
+
+                return result;
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+                return null;
+            }
+        }
+        /// <summary>
+        /// Поиск абонента в базе по номеру лицевого счета
+        /// </summary>
+        /// <param name="numberLS">Номер лицевого счета</param>
+        /// <returns>Лист словарей с данными если успешно, null если не найден</returns>
         static public List<Dictionary<String, String>> GetAbonentFromLS(string numberLS)
         {
             List<Dictionary<String, String>> result = new List<Dictionary<string, string>>();
@@ -247,6 +291,40 @@ namespace MyApp.Model
             }
         }
         /// <summary>
+        /// Поиск абонента в базе по фио
+        /// </summary>
+        /// <param name="name">Номер ПУ</param>
+        /// <returns>Лист словарей с данными если успешно, null если не найден</returns>
+        static public List<Dictionary<String, String>> GetAbonentFromDbByName(string name)
+        {
+            List<Dictionary<String, String>> result = new List<Dictionary<string, string>>();
+            SQLiteCommand CommandSQL = new SQLiteCommand(connector);
+            CommandSQL.CommandText = "SELECT FIO, PuType, LsNumber,City,Street,House,Korpus,PuNumber, Kv, Ustanovka,PuKod , Podkluchenie"
+    + " FROM SAPFL WHERE FIO LIKE '%" + name + "%' ";
+            SQLiteDataReader r = CommandSQL.ExecuteReader();
+            string line = String.Empty;
+            int i = 0;
+            while (r.Read())
+            {
+                result.Add(new Dictionary<string, string>());
+                result[i].Add("FIO", r["FIO"].ToString());
+                result[i].Add("PuType", r["PuType"].ToString());
+                result[i].Add("LsNumber", r["LsNumber"].ToString());
+                result[i].Add("City", r["City"].ToString());
+                result[i].Add("Street", r["Street"].ToString());
+                result[i].Add("House", r["House"].ToString());
+                result[i].Add("Korpus", r["Korpus"].ToString());
+                result[i].Add("Kv", r["Kv"].ToString());
+                result[i].Add("PuNumber", r["PuNumber"].ToString());
+                result[i].Add("Ustanovka", r["Ustanovka"].ToString());
+                result[i].Add("EdOborudovania", r["PuKod"].ToString());
+                result[i].Add("Podkluchenie", r["Podkluchenie"].ToString());
+                i++;
+            }
+            r.Close();
+            return result;
+        }
+        /// <summary>
         /// Поиск абонента в базе по номеру ПУ
         /// </summary>
         /// <param name="numberPU">Номер ПУ</param>
@@ -255,7 +333,7 @@ namespace MyApp.Model
         {
             List<Dictionary<String, String>> result = new List<Dictionary<string, string>>();
             SQLiteCommand CommandSQL = new SQLiteCommand(connector);
-            CommandSQL.CommandText = "SELECT FIO, PuType, LsNumber,City,Street,House,Korpus,PuNumber, Kv, Ustanovka,PuKod "
+            CommandSQL.CommandText = "SELECT FIO, PuType, LsNumber,City,Street,House,Korpus,PuNumber, Kv, Ustanovka,PuKod, Podkluchenie "
     + " FROM SAPFL WHERE PuNumber LIKE '%" + numberPU + "%' ";
             SQLiteDataReader r = CommandSQL.ExecuteReader();
             string line = String.Empty;
@@ -274,6 +352,7 @@ namespace MyApp.Model
                 result[i].Add("PuNumber", r["PuNumber"].ToString());
                 result[i].Add("Ustanovka", r["Ustanovka"].ToString());
                 result[i].Add("EdOborudovania", r["PuKod"].ToString());
+                result[i].Add("Podkluchenie", r["Podkluchenie"].ToString());
                 i++;
             }
             r.Close();
@@ -844,35 +923,6 @@ namespace MyApp.Model
             else
             {
                 return;
-            }
-        }
-        /// <summary>
-        /// Возвращает список абонентов в плане на дату
-        /// </summary>
-        /// <param name="date"></param>
-        /// <returns></returns>
-        public static List<string> GetAbonentPO(string mounthEar, string numberLS)
-        {
-            List<string> result = new List<string>();
-            SQLiteCommand CommandSQL = new SQLiteCommand(connector);
-            CommandSQL.CommandText = "SELECT  Value  "
-    + " FROM PoSbit WHERE NumberTu LIKE '%" + numberLS + "%' AND Date LIKE '%" + mounthEar + "%'  ";
-            try
-            {
-                SQLiteDataReader r = CommandSQL.ExecuteReader();
-                string line = String.Empty;
-                int i = 0;
-                while (r.Read())
-                {
-                    result.Add(r["Value"].ToString());
-                }
-                r.Close();
-                return result;
-            }
-            catch (SQLiteException ex)
-            {
-                MessageBox.Show(ex.Message);
-                return result;
             }
         }
         /// <summary>

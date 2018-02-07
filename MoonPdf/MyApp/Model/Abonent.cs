@@ -22,6 +22,9 @@ namespace ATPWork.MyApp.Model
                 this.OnPropertyChanged("Ustanovka");
             }
         }
+       
+
+       
         private string edOborudovania;
         public string EdOborudovania
         {
@@ -178,6 +181,7 @@ namespace ATPWork.MyApp.Model
                 plomb_DateInstall = item["InstallDate"].ToString();
                 OldPlombs.Add(new Plomba(plomb_Type, plomb_Number, plomb_Place, false, true, plomb_Status, plomb_DateInstall));
             }
+            this.OnPropertyChanged("BriefInformation");
         }
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")

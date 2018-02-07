@@ -34,6 +34,11 @@ namespace ATPWork.MyApp.Model.VnePlan
             set { _zayvki = value; }
         }
 
+        public static void AddZayvka(VnePlanZayavka z)
+        {
+            Zayavki.Add(z);
+           
+        }
 
         public static void refreshZayavki()
         {
@@ -45,6 +50,17 @@ namespace ATPWork.MyApp.Model.VnePlan
         {
             DataBaseWorker.DropFromVnePlanZayvki();
             DataBaseWorker.InsertZayavki(Zayavki);
+        }
+
+
+        internal static int GetLastNumber()
+        {
+            int result = 0;
+            foreach (var item in Zayavki)
+            {
+                if (item.RegNumber > result) result = item.RegNumber;
+            }
+            return result + 1;
         }
     }
 }
