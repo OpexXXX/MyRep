@@ -42,7 +42,6 @@ namespace MyApp.Model
             connector.Close();
             connectorOplombirovki.Close();
         }
-
         internal static void DropFromVnePlanZayvki()
         {
             SQLiteCommand cmd = connector.CreateCommand();
@@ -57,7 +56,6 @@ namespace MyApp.Model
                 MessageBox.Show(ex.Message);
             }
         }
-
         public static List<PriborUcheta> PUListInit()
         {
             List<PriborUcheta> spisokPU = new List<PriborUcheta>();
@@ -203,9 +201,9 @@ namespace MyApp.Model
             }
         }
         /// <summary>
-        /// Поиск абонента в базе по номеру лицевого счета
+        /// Поиск абонента в базе по Улице
         /// </summary>
-        /// <param name="numberLS">Номер лицевого счета</param>
+        /// <param name="numberLS">Улица</param>
         /// <returns>Лист словарей с данными если успешно, null если не найден</returns>
         static public List<Dictionary<String, String>> GetAbonentFromStreet(string numberLS)
         {
@@ -234,6 +232,7 @@ namespace MyApp.Model
                     result[i].Add("Ustanovka", r["Ustanovka"].ToString());
                     result[i].Add("EdOborudovania", r["PuKod"].ToString());
                     result[i].Add("Podkluchenie", r["Podkluchenie"].ToString());
+
                     i++;
                 }
                 r.Close();
@@ -358,7 +357,6 @@ namespace MyApp.Model
             r.Close();
             return result;
         }
-
         /// <summary>
         /// Инициализация ласта не отработанных актов при загрузке приложения
         /// </summary>
@@ -389,8 +387,12 @@ namespace MyApp.Model
                 if (r["Kv"].ToString() != "") result[i].Kvartira = int.Parse(r["Kv"].ToString());
                 result[i].Prichina = r["Prichina"].ToString();
                 result[i].NumberAktTehProverki = r["NumberAkt"].ToString();
-                result[i].PhoneNumbers.Add(r["PhoneNumber"].ToString());
+                result[i].PhoneNumbers=r["PhoneNumber"].ToString();
                 result[i].Primechanie = r["Primechanie"].ToString();
+                int res = 0;
+                result[i].ProvFlag = Int32.TryParse(r["Proverka"].ToString(),out res) ? res == 1 : false;
+                result[i].DopuskFlag = Int32.TryParse(r["Dopusk"].ToString(), out res) ? res == 1 : false;
+                result[i].DemontageFlag = Int32.TryParse(r["Demontage"].ToString(), out res) ? res == 1 : false;
                 i++;
             }
             r.Close();
@@ -408,7 +410,7 @@ namespace MyApp.Model
                 {
                     foreach (VnePlanZayavka akt in akti)
                     {
-                        string sql_command = "INSERT INTO Oplombirovki( 'City', 'Street', 'House', 'Korpus', 'Kv', DateRegister, FIO, RegNumber, LsNumber, Prichina,NumberAkt,PhoneNumber,Primechanie)"
+                        string sql_command = "INSERT INTO Oplombirovki( 'City', 'Street', 'House', 'Korpus', 'Kv', DateRegister, FIO, RegNumber, LsNumber, Prichina,NumberAkt,PhoneNumber,Primechanie,Dopusk,Proverka,Demontage)"
                       + "VALUES ('"
                        + akt.City + "', '"
                        + akt.Street + "', '"
@@ -421,8 +423,11 @@ namespace MyApp.Model
                         + akt.NumberLS + "', '"
                         + akt.Prichina + "', '"
                         + akt.NumberAktTehProverki + "', '"
-                        + ((akt.PhoneNumbers.Count>0)?(akt.PhoneNumbers[0]):("")) + "', '"
-                        + akt.Primechanie + "');";
+                        + akt.PhoneNumbers + "', '"
+                        + akt.Primechanie + "', '"
+                        + (akt.DopuskFlag ? "1" : "0") + "', '"
+                        + (akt.ProvFlag ? "1" : "0") + "', '"
+                        + (akt.DemontageFlag ? "1" : "0")  + "');";
                         cmdd.CommandText = sql_command;
                         cmdd.ExecuteNonQuery();
                     }
@@ -430,9 +435,6 @@ namespace MyApp.Model
                 }
         }
             }
-
-
-
         /// <summary>
         /// Инициализация ласта не отработанных актов при загрузке приложения
         /// </summary>
@@ -517,8 +519,6 @@ namespace MyApp.Model
             r.Close();
             return result;
         }
-
-
         /// <summary>
         /// Инициализация листа актов из базы при загрузке приложения
         /// </summary>
