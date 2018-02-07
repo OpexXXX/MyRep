@@ -852,12 +852,12 @@ namespace MyApp.Model
         /// </summary>
         /// <param name="date"></param>
         /// <returns></returns>
-        public static List<string> GetAbonentPO(string mounthEar, string numberLS)
+        public static List<string> GetAbonentPO(string ear, string numberLS)
         {
             List<string> result = new List<string>();
             SQLiteCommand CommandSQL = new SQLiteCommand(connector);
             CommandSQL.CommandText = "SELECT  Value  "
-    + " FROM PoSbit WHERE NumberTu LIKE '%" + numberLS + "%' AND Date LIKE '%" + mounthEar + "%'  ";
+    + " FROM PoSbit WHERE NumberTu = '" + numberLS + "' AND Ear = '" + ear + "'  ";
             try
             {
                 SQLiteDataReader r = CommandSQL.ExecuteReader();
