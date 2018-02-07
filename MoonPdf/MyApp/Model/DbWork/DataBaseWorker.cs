@@ -46,7 +46,6 @@ namespace MyApp.Model
             connector.Close();
             connectorOplombirovki.Close();
         }
-
         internal static void DropFromVnePlanZayvki()
         {
             SQLiteCommand cmd = connector.CreateCommand();
@@ -61,7 +60,6 @@ namespace MyApp.Model
                 MessageBox.Show(ex.Message);
             }
         }
-
         public static List<PriborUcheta> PUListInit()
         {
             List<PriborUcheta> spisokPU = new List<PriborUcheta>();
@@ -207,6 +205,51 @@ namespace MyApp.Model
             }
         }
         /// <summary>
+        /// Поиск абонента в базе по Улице
+        /// </summary>
+        /// <param name="numberLS">Улица</param>
+        /// <returns>Лист словарей с данными если успешно, null если не найден</returns>
+        static public List<Dictionary<String, String>> GetAbonentFromStreet(string numberLS)
+        {
+            List<Dictionary<String, String>> result = new List<Dictionary<string, string>>();
+            SQLiteCommand CommandSQL = new SQLiteCommand(connector);
+            CommandSQL.CommandText = "SELECT FIO, PuType, LsNumber,City,Street,House,Korpus,PuNumber,Kv, Ustanovka,PuKod, Podkluchenie "
+    + " FROM SAPFL WHERE Street LIKE '%" + numberLS + "%' ";
+            try
+            {
+                SQLiteDataReader r = CommandSQL.ExecuteReader();
+                string line = String.Empty;
+                int i = 0;
+                while (r.Read())
+                {
+                    result.Add(new Dictionary<string, string>());
+
+                    result[i].Add("FIO", r["FIO"].ToString());
+                    result[i].Add("PuType", r["PuType"].ToString());
+                    result[i].Add("LsNumber", r["LsNumber"].ToString());
+                    result[i].Add("City", r["City"].ToString());
+                    result[i].Add("Street", r["Street"].ToString());
+                    result[i].Add("House", r["House"].ToString());
+                    result[i].Add("Korpus", r["Korpus"].ToString());
+                    result[i].Add("Kv", r["Kv"].ToString());
+                    result[i].Add("PuNumber", r["PuNumber"].ToString());
+                    result[i].Add("Ustanovka", r["Ustanovka"].ToString());
+                    result[i].Add("EdOborudovania", r["PuKod"].ToString());
+                    result[i].Add("Podkluchenie", r["Podkluchenie"].ToString());
+
+                    i++;
+                }
+                r.Close();
+
+                return result;
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+                return null;
+            }
+        }
+        /// <summary>
         /// Поиск абонента в базе по номеру лицевого счета
         /// </summary>
         /// <param name="numberLS">Номер лицевого счета</param>
@@ -251,6 +294,40 @@ namespace MyApp.Model
             }
         }
         /// <summary>
+        /// Поиск абонента в базе по фио
+        /// </summary>
+        /// <param name="name">Номер ПУ</param>
+        /// <returns>Лист словарей с данными если успешно, null если не найден</returns>
+        static public List<Dictionary<String, String>> GetAbonentFromDbByName(string name)
+        {
+            List<Dictionary<String, String>> result = new List<Dictionary<string, string>>();
+            SQLiteCommand CommandSQL = new SQLiteCommand(connector);
+            CommandSQL.CommandText = "SELECT FIO, PuType, LsNumber,City,Street,House,Korpus,PuNumber, Kv, Ustanovka,PuKod , Podkluchenie"
+    + " FROM SAPFL WHERE FIO LIKE '%" + name + "%' ";
+            SQLiteDataReader r = CommandSQL.ExecuteReader();
+            string line = String.Empty;
+            int i = 0;
+            while (r.Read())
+            {
+                result.Add(new Dictionary<string, string>());
+                result[i].Add("FIO", r["FIO"].ToString());
+                result[i].Add("PuType", r["PuType"].ToString());
+                result[i].Add("LsNumber", r["LsNumber"].ToString());
+                result[i].Add("City", r["City"].ToString());
+                result[i].Add("Street", r["Street"].ToString());
+                result[i].Add("House", r["House"].ToString());
+                result[i].Add("Korpus", r["Korpus"].ToString());
+                result[i].Add("Kv", r["Kv"].ToString());
+                result[i].Add("PuNumber", r["PuNumber"].ToString());
+                result[i].Add("Ustanovka", r["Ustanovka"].ToString());
+                result[i].Add("EdOborudovania", r["PuKod"].ToString());
+                result[i].Add("Podkluchenie", r["Podkluchenie"].ToString());
+                i++;
+            }
+            r.Close();
+            return result;
+        }
+        /// <summary>
         /// Поиск абонента в базе по номеру ПУ
         /// </summary>
         /// <param name="numberPU">Номер ПУ</param>
@@ -284,7 +361,6 @@ namespace MyApp.Model
             r.Close();
             return result;
         }
-
         /// <summary>
         /// Инициализация ласта не отработанных актов при загрузке приложения
         /// </summary>
@@ -315,8 +391,12 @@ namespace MyApp.Model
                 if (r["Kv"].ToString() != "") result[i].Kvartira = int.Parse(r["Kv"].ToString());
                 result[i].Prichina = r["Prichina"].ToString();
                 result[i].NumberAktTehProverki = r["NumberAkt"].ToString();
-                result[i].PhoneNumbers.Add(r["PhoneNumber"].ToString());
+                result[i].PhoneNumbers=r["PhoneNumber"].ToString();
                 result[i].Primechanie = r["Primechanie"].ToString();
+                int res = 0;
+                result[i].ProvFlag = Int32.TryParse(r["Proverka"].ToString(),out res) ? res == 1 : false;
+                result[i].DopuskFlag = Int32.TryParse(r["Dopusk"].ToString(), out res) ? res == 1 : false;
+                result[i].DemontageFlag = Int32.TryParse(r["Demontage"].ToString(), out res) ? res == 1 : false;
                 i++;
             }
             r.Close();
@@ -334,7 +414,7 @@ namespace MyApp.Model
                 {
                     foreach (VnePlanZayavka akt in akti)
                     {
-                        string sql_command = "INSERT INTO Oplombirovki( 'City', 'Street', 'House', 'Korpus', 'Kv', DateRegister, FIO, RegNumber, LsNumber, Prichina,NumberAkt,PhoneNumber,Primechanie)"
+                        string sql_command = "INSERT INTO Oplombirovki( 'City', 'Street', 'House', 'Korpus', 'Kv', DateRegister, FIO, RegNumber, LsNumber, Prichina,NumberAkt,PhoneNumber,Primechanie,Dopusk,Proverka,Demontage)"
                       + "VALUES ('"
                        + akt.City + "', '"
                        + akt.Street + "', '"
@@ -347,8 +427,11 @@ namespace MyApp.Model
                         + akt.NumberLS + "', '"
                         + akt.Prichina + "', '"
                         + akt.NumberAktTehProverki + "', '"
-                        + ((akt.PhoneNumbers.Count>0)?(akt.PhoneNumbers[0]):("")) + "', '"
-                        + akt.Primechanie + "');";
+                        + akt.PhoneNumbers + "', '"
+                        + akt.Primechanie + "', '"
+                        + (akt.DopuskFlag ? "1" : "0") + "', '"
+                        + (akt.ProvFlag ? "1" : "0") + "', '"
+                        + (akt.DemontageFlag ? "1" : "0")  + "');";
                         cmdd.CommandText = sql_command;
                         cmdd.ExecuteNonQuery();
                     }
@@ -356,9 +439,6 @@ namespace MyApp.Model
                 }
         }
             }
-
-
-
         /// <summary>
         /// Инициализация ласта не отработанных актов при загрузке приложения
         /// </summary>
@@ -443,8 +523,6 @@ namespace MyApp.Model
             r.Close();
             return result;
         }
-
-
         /// <summary>
         /// Инициализация листа актов из базы при загрузке приложения
         /// </summary>
@@ -852,12 +930,12 @@ namespace MyApp.Model
         /// </summary>
         /// <param name="date"></param>
         /// <returns></returns>
-        public static List<string> GetAbonentPO(string ear, string numberLS)
+        public static List<string> GetAbonentPO(string mounthEar, string numberLS)
         {
             List<string> result = new List<string>();
             SQLiteCommand CommandSQL = new SQLiteCommand(connector);
             CommandSQL.CommandText = "SELECT  Value  "
-    + " FROM PoSbit WHERE NumberTu = '" + numberLS + "' AND Ear = '" + ear + "'  ";
+    + " FROM PoSbit WHERE NumberTu LIKE '%" + numberLS + "%' AND Date LIKE '%" + mounthEar + "%'  ";
             try
             {
                 SQLiteDataReader r = CommandSQL.ExecuteReader();
