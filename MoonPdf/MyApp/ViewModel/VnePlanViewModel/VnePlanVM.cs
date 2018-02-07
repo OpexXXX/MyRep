@@ -22,9 +22,6 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
             }
         }
         #endregion
-
-       
-       
         private ObservableCollection<VnePlanZayavka> _allZayvki;
         public ObservableCollection<VnePlanZayavka> AllZayvki
         {
@@ -35,13 +32,11 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
                 OnPropertyChanged("AllZayvki");
             }
         }
-
         public VnePlanVM()
         {
             Commands = new Commands(this);
             refreshAbonentList();
             VnePlanModel.AbonentsRefresh += refreshAbonentList;
-
         }
 
         public void refreshAbonentList()
