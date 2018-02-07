@@ -3,9 +3,11 @@ using MyApp;
 using MyApp.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 
 namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
 {
@@ -109,9 +111,13 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
             }, canSearch, null);
             this.AddZayavka = new DelegateCommand("Дабавить заявку", f =>
             {
-                vnePlanVM.AllZayvki.Add(vnePlanVM.ZayavkaToAdd);
                 VnePlanModel.AddZayvka(vnePlanVM.ZayavkaToAdd);
+                vnePlanVM.AllZayvki.Add(vnePlanVM.ZayavkaToAdd);
+                //   vnePlanVM.AllZayvki = new ObservableCollection<VnePlanZayavka>(VnePlanModel.Zayavki);
+                // vnePlanVM.AbonentsForVnePlan = CollectionViewSource.GetDefaultView(vnePlanVM.AllZayvki);
+               // (vnePlanVM.AbonentsForVnePlan as CollectionViewSource).View.Refresh();
                 vnePlanVM.ZayavkaToAdd = new VnePlanZayavka();
+              
             }, canAddZayavka, null);
             this.CheckToComplete = new DelegateCommand("Проверить выполнение заявок", f =>
             {
