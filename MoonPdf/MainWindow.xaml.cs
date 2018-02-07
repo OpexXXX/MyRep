@@ -68,22 +68,24 @@ namespace MyApp
             MainAtpModel.SaveBeforeCloseApp();
             VnePlanModel.SaveBeforeCloseApp();
             DataBaseWorker.ClosedApp();
-
         }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            foreach (VnePlanZayavka item in VnePlanModel.Zayavki)
-            {
-                if (item.NumberLS != "")
+            double temp;
+            if(double.TryParse(BuValue.Text, out temp)) TextBU.Text = PlanWorkModel.CalculationPremiumActBu(temp).ToString();
+           
+                //Pass the filepath and filename to the StreamWriter Constructor
+                StreamWriter sw = new StreamWriter("Test.txt");
+                for (int i = 1; i < 50000; i+=500)
                 {
-                    var d = DataBaseWorker.GetAbonentFromLS(item.NumberLS);
-                    if (d.Count == 1) item.setDataByDb(d[0]);
-                    else if (d.Count > 1) MessageBox.Show("Болеше 1");
-                    else MessageBox.Show(item.NumberLS + " " + item.FIO + " не найдено в базе");
-                }
+                sw.WriteLine(i +"\t"+PlanWorkModel.CalculationPremiumActBu(i) );
             }
-            
+                //Write a line of text
+              
+                //Close the file
+                sw.Close();
+           
+           
         }
     }
 }

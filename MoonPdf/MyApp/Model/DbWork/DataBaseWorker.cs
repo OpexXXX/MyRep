@@ -23,7 +23,7 @@ namespace MyApp.Model
         /// <summary>
         /// Коннектор к рабочей базе данных
         /// </summary>
-        static SQLiteConnection connector = new SQLiteConnection("Data Source=filename.db; Version=3;");
+        static SQLiteConnection connector = new SQLiteConnection("Data Source=filename.db; Version=3;PRAGMA synchronous = OFF");
         /// <summary>
         /// Коннектор к базе данных заявок
         /// </summary>
@@ -34,7 +34,11 @@ namespace MyApp.Model
         /// <param name="spisokPU">ссылка на список ПУ</param>
         public static void Initial()
         {
+
             connector.Open();
+            SQLiteCommand cmd = connector.CreateCommand();
+            cmd.CommandText = "PRAGMA synchronous = OFF";
+            cmd.ExecuteNonQuery();
             connectorOplombirovki.Open();
         }
         public static void ClosedApp()
@@ -332,7 +336,7 @@ namespace MyApp.Model
         {
             List<Dictionary<String, String>> result = new List<Dictionary<string, string>>();
             SQLiteCommand CommandSQL = new SQLiteCommand(connector);
-            CommandSQL.CommandText = "SELECT FIO, PuType, LsNumber,City,Street,House,Korpus,PuNumber, Kv, Ustanovka,PuKod, Podkluchenie "
+            CommandSQL.CommandText = "SELECT FIO, PuType, LsNumber,City,Street,House,Korpus,PuNumber, Kv, Ustanovka,PuKod , Podkluchenie "
     + " FROM SAPFL WHERE PuNumber LIKE '%" + numberPU + "%' ";
             SQLiteDataReader r = CommandSQL.ExecuteReader();
             string line = String.Empty;
@@ -539,7 +543,6 @@ namespace MyApp.Model
                 Page.Add(Int32.Parse(r["Page1"].ToString()));
                 Page.Add(Int32.Parse(r["Page2"].ToString()));
                 result.Add(new AktTehProverki(Int32.Parse(r["ID"].ToString()), Page, r["PathOfPdfFile"].ToString(), long.Parse(r["SizePDF"].ToString())));
-
                 //Ищем агентов по номеру
                 string temp_agent = r["Agent_1"].ToString();
                 if (temp_agent != "")
@@ -576,7 +579,6 @@ namespace MyApp.Model
                 }
                 result[i].PuOldMPI = Int32.Parse(r["PuOldMPI"].ToString()) == 0 ? false : true;
                 result[i].DopuskFlag = Int32.Parse(r["DopuskFlag"].ToString()) == 0 ? false : true;
-             
                 result[i].City = r["City"].ToString();
                 result[i].Street = r["Street"].ToString();
                 result[i].House = r["House"].ToString()!=""?int.Parse(r["House"].ToString()):0;
@@ -595,11 +597,9 @@ namespace MyApp.Model
                 result[i].PuOldPokazanie = r["PuOldPokazanie"].ToString();
                 result[i].PuOldType = r["PuOldType"].ToString();
                 result[i].NumberMail = Int32.Parse(r["NumberMail"].ToString());
-
                 string dtm = r["DateMail"].ToString();
                 if (dtm == "") result[i].DateMail = null;
                 else result[i].DateMail = DateTime.Parse(dtm);
-
                 result[i].Ustanovka = r["Ustanovka"].ToString();
                 result[i].SapNumberAkt = r["SapNumberAkt"].ToString();
                 result[i].EdOborudovania = r["EdOborudovania"].ToString();
@@ -923,6 +923,35 @@ namespace MyApp.Model
             else
             {
                 return;
+            }
+        }
+        /// <summary>
+        /// Возвращает список абонентов в плане на дату
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        public static List<string> GetAbonentPO(string mounthEar, string numberLS)
+        {
+            List<string> result = new List<string>();
+            SQLiteCommand CommandSQL = new SQLiteCommand(connector);
+            CommandSQL.CommandText = "SELECT  Value  "
+    + " FROM PoSbit WHERE NumberTu LIKE '%" + numberLS + "%' AND Date LIKE '%" + mounthEar + "%'  ";
+            try
+            {
+                SQLiteDataReader r = CommandSQL.ExecuteReader();
+                string line = String.Empty;
+                int i = 0;
+                while (r.Read())
+                {
+                    result.Add(r["Value"].ToString());
+                }
+                r.Close();
+                return result;
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show(ex.Message);
+                return result;
             }
         }
         /// <summary>
