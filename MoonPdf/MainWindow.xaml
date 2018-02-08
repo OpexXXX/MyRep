@@ -30,7 +30,7 @@
         <CollectionViewSource x:Key="AbonentsForPlan" Source="{Binding AllAbonent, Source={StaticResource PlanVM}}">
             <CollectionViewSource.GroupDescriptions>
                 <PropertyGroupDescription PropertyName="City"/>
-                <PropertyGroupDescription PropertyName="Street"/>
+             
             </CollectionViewSource.GroupDescriptions>
         </CollectionViewSource>
 
@@ -498,10 +498,11 @@
                                                             <DockPanel>
                                                                 <DockPanel.ContextMenu>
                                                                     <ContextMenu>
-                                                                        <MenuItem Header="{Binding Commands.OpenFolderMail.Name, Source={StaticResource MainAtpVM}}" 
-                                                                                                  Command="{Binding Commands.OpenFolderMail, Source={StaticResource MainAtpVM}}" 
-                                                                                                  CommandParameter="{Binding Path=Name}"
+                                                                        <MenuItem Header="{Binding Commands.CreatePdfFromGroup.Name, Source={StaticResource PlanVM}}" 
+                                                                                                  Command="{Binding Commands.CreatePdfFromGroup, Source={StaticResource PlanVM}}" 
+                                                                                                  CommandParameter="{Binding}"
                                                                                                   />
+                                                                       
                                                                     </ContextMenu>
                                                                 </DockPanel.ContextMenu>
                                                                 <TextBlock FontWeight="Bold" Text="{Binding Path=Name}" Margin="5,0,0,0">
@@ -510,24 +511,7 @@
                                                                 </TextBlock>
                                                                 <TextBlock Text="{Binding AllAbonent.Count, Source={StaticResource PlanVM}}"/>
                                                                 <TextBlock Text="шт. "></TextBlock>
-                                                                <StackPanel Orientation="Horizontal" >
-                                                                    <StackPanel.Style>
-                                                                        <Style TargetType="StackPanel">
-                                                                            <Style.Triggers>
-                                                                                <DataTrigger Binding="{Binding Path=Name}" Value="Неотправлено">
-                                                                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                                                                </DataTrigger>
-                                                                            </Style.Triggers>
-                                                                        </Style>
-                                                                    </StackPanel.Style>
-                                                                    <TextBlock Text=" ~" >
-
-                                                                    </TextBlock>
-                                                                    <TextBlock  Text="{Binding  Path=SizeUnmailedPdf, Source={StaticResource MainAtpVM}}">
-                                                                    </TextBlock>
-                                                                    <TextBlock Text=" КБ">
-                                                                    </TextBlock>
-                                                                </StackPanel>
+                                                              
                                                             </DockPanel>
                                                         </Expander.Header>
                                                         <Expander.Content>
