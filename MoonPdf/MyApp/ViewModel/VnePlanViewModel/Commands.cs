@@ -3,9 +3,11 @@ using MyApp;
 using MyApp.Model;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 
 namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
 {
@@ -14,6 +16,7 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
         public DelegateCommand GetDataFromDb { get; private set; }
         public DelegateCommand AddZayavka { get; private set; }
         public DelegateCommand CheckToComplete { get; private set; }
+        public DelegateCommand CreateReestr { get; private set; }
         private VnePlanVM vnePlanVM;
 
         public Commands(VnePlanVM planVM)
@@ -117,6 +120,22 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
             {
                 VnePlanModel.chekCompleteZayavki();
             }, null, null);
+            this.CreateReestr = new DelegateCommand("Открыть в PDF", createPdf, null, null);
+        }
+
+        private void createPdf(object obj)
+        {
+            var gg = (CollectionViewGroup)obj;
+            List<VnePlanZayavka> ggg = new List<VnePlanZayavka>();
+            foreach (VnePlanZayavka item in gg.Items)
+            {
+                ggg.Add(item);
+            }
+            if (ggg.Count > 0)
+            {
+                Process.Start(VnePlanModel.CreatePDF(ggg));
+
+            }
         }
 
         private bool CanAddZayavka()
