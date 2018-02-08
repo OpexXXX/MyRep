@@ -495,9 +495,9 @@
                                                             <DockPanel>
                                                                 <DockPanel.ContextMenu>
                                                                     <ContextMenu>
-                                                                        <MenuItem Header="{Binding Commands.OpenFolderMail.Name, Source={StaticResource MainAtpVM}}" 
-                                                                                                  Command="{Binding Commands.OpenFolderMail, Source={StaticResource MainAtpVM}}" 
-                                                                                                  CommandParameter="{Binding Path=Name}"
+                                                                        <MenuItem Header="{Binding Commands.CreatePdfFromGroup.Name, Source={StaticResource PlanVM}}" 
+                                                                                                  Command="{Binding Commands.CreatePdfFromGroup, Source={StaticResource PlanVM}}" 
+                                                                                                  CommandParameter="{Binding Path=Items}"
                                                                                                   />
                                                                     </ContextMenu>
                                                                 </DockPanel.ContextMenu>

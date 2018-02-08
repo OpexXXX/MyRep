@@ -57,7 +57,6 @@ namespace ATPWork.MyApp.ViewModel.PlanViewModel
             set
             {
                 _allAbonent = value;
-
                 OnPropertyChanged("AllAbonent");
             }
         }
@@ -77,7 +76,7 @@ namespace ATPWork.MyApp.ViewModel.PlanViewModel
 
         internal void CreatePdf()
         {
-            PlanWorkModel.CreatePDF(SelectedDate);
+            
         }
     }
 }
