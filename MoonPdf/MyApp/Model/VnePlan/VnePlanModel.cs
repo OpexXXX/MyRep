@@ -104,6 +104,17 @@ namespace ATPWork.MyApp.Model.VnePlan
 
         }
 
+        internal static string CreatePDF(List<string> city)
+        {
+            List<VnePlanZayavka> list = new List<VnePlanZayavka>();
+            foreach (var item in Zayavki)
+            {
+                if (city.Contains(item.City)&&item.NumberAktTehProverki=="")list.Add(item);
+            }
+            if (list.Count > 0) return CreatePDF(list);
+            else return "";
+        }
+
         public static void refreshZayavki()
         {
             Zayavki = DataBaseWorker.LoadZayavki();

@@ -1,4 +1,5 @@
-﻿using MyApp.Model;
+﻿using ATPWork.MyApp.Model.VnePlan;
+using MyApp.Model;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -68,6 +69,17 @@ namespace ATPWork.MyApp.Model.Plan
             }
             int result1 = (int)Math.Round(result * 10);
             return result1;
+        }
+
+        internal static string CreatePDFforVneplan()
+        {
+            List<string> city = new List<string>();
+            foreach (var item in AbonentList)
+            {
+                if (!city.Contains(item.City)) city.Add(item.City);
+            }
+
+            return VnePlanModel.CreatePDF(city);
         }
 
         public static int CalculationPremiumActBu(double buValue)

@@ -210,8 +210,8 @@
                                                                         <DockPanel>
                                                                             <DockPanel.ContextMenu>
                                                                                 <ContextMenu>
-                                                                                    <MenuItem Header="do it"
-    Command="{Binding Commands.ShowAktPage, Source={StaticResource MainAtpVM}}"
+                                                                                    <MenuItem Header="{Binding Commands.DeleteGroup.Name, Source={StaticResource MainAtpVM}}"
+    Command="{Binding Commands.DeleteGroup, Source={StaticResource MainAtpVM}}"
     CommandParameter="{Binding}"/>
                                                                                 </ContextMenu>
                                                                             </DockPanel.ContextMenu>
@@ -481,6 +481,8 @@
                         <TextBlock x:Name="TextBU"></TextBlock>
                         <Button Click="Button_Click">!</Button>
                         <Button DockPanel.Dock="Left" Content="{Binding Commands.CreatePdf.Name, Source={StaticResource PlanVM}}" Command="{Binding Commands.CreatePdf, Source={StaticResource PlanVM}}"/>
+                        <Button DockPanel.Dock="Left" Content="{Binding Commands.CreatePdfForVnePlan.Name, Source={StaticResource PlanVM}}" Command="{Binding Commands.CreatePdfForVnePlan, Source={StaticResource PlanVM}}"/>
+
                     </StackPanel>
                     <DataGrid DockPanel.Dock="Left" IsReadOnly="True" ItemsSource="{Binding Source={StaticResource AbonentsForPlan}}"
           CanUserAddRows="False"

@@ -17,6 +17,8 @@ namespace ATPWork.MyApp.ViewModel.PlanViewModel
     public class Commands
     {
         public DelegateCommand CreatePdf { get; private set; }
+        public DelegateCommand CreatePdfForVnePlan { get; private set; }
+        
         public DelegateCommand CreatePdfFromGroup { get; private set; }
         private PlanVM planVM;
         public Commands(PlanVM planVM)
@@ -29,8 +31,15 @@ namespace ATPWork.MyApp.ViewModel.PlanViewModel
                Process.Start(path);
            }, isCreatePDF, null);
             this.CreatePdfFromGroup = new DelegateCommand("Открыть в PDF", createPdf, isCreatePDF, null);
-
+            this.CreatePdfForVnePlan = new DelegateCommand("Открыть внеплан в PDF", createPdfForVneplan, isCreatePDF, null);
         }
+
+        private void createPdfForVneplan(object obj)
+        {
+            string path = PlanWorkModel.CreatePDFforVneplan();
+            if(path!="") Process.Start(path);
+        }
+
         private bool CanCreateMail()
         {
             return planVM.AllAbonent.Count > 0;
