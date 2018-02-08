@@ -173,7 +173,7 @@ namespace ATPWork.MyApp.Model.VnePlan
             int result = 0;
             foreach (var item in Zayavki)
             {
-                if (item.RegNumber > result) result = item.RegNumber;
+                if (item.RegNumber > result && item.DateReg.Year == DateTime.Now.Year) result = item.RegNumber;
             }
             return result + 1;
         }

@@ -70,18 +70,6 @@ namespace ATPWork.MyApp.Model.Plan
             int result1 = (int)Math.Round(result * 10);
             return result1;
         }
-
-        internal static string CreatePDFforVneplan()
-        {
-            List<string> city = new List<string>();
-            foreach (var item in AbonentList)
-            {
-                if (!city.Contains(item.City)) city.Add(item.City);
-            }
-
-            return VnePlanModel.CreatePDF(city);
-        }
-
         public static int CalculationPremiumActBu(double buValue)
         {
             double tarif = 1.70303;
@@ -128,6 +116,15 @@ namespace ATPWork.MyApp.Model.Plan
             }
             return result;
         }
+        internal static string CreatePDFforVneplan()
+        {
+            List<string> city = new List<string>();
+            foreach (var item in AbonentList)
+            {
+                if (!city.Contains(item.City)) city.Add(item.City);
+            }
+            return VnePlanModel.CreatePDF(city);
+        }
         internal static string CreatePDF()
         {
             var gg = ExcelWorker.MakeDataTableForPlan(AbonentList);
@@ -140,15 +137,12 @@ namespace ATPWork.MyApp.Model.Plan
            string result =  ExcelWorker.CreatePdfReestrForPlan(gg);
             return result;
         }
-
-
         private static List<PlanAbonent> _abonentList = new List<PlanAbonent>();
         public static List<PlanAbonent> AbonentList
         {
             get { return _abonentList; }
             set { _abonentList = value; }
         }
-
         public static void refreshAbonentList(DateTime dateWork)
         {
             List<string> Abonents = new List<string>(DataBaseWorker.FindAbonentPlan(dateWork));

@@ -24,13 +24,13 @@
                 <PropertyGroupDescription PropertyName="City"/>
                 <PropertyGroupDescription PropertyName="Street"/>
             </CollectionViewSource.GroupDescriptions>
-            
+
         </CollectionViewSource>
 
         <CollectionViewSource x:Key="AbonentsForPlan" Source="{Binding AllAbonent, Source={StaticResource PlanVM}}">
             <CollectionViewSource.GroupDescriptions>
                 <PropertyGroupDescription PropertyName="City"/>
-             
+
             </CollectionViewSource.GroupDescriptions>
         </CollectionViewSource>
 
@@ -142,14 +142,14 @@
                 <Separator  Margin="1" />
                 <MenuItem Header="Выход" />
             </MenuItem>
-            <MenuItem Header="База" >
-                <MenuItem Header="{Binding Commands.RefreshSapPlombTable.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.RefreshSapPlombTable, Source={StaticResource MainAtpVM}}" InputGestureText="{Binding Commands.RefreshSapPlombTable.GestureText, Source={StaticResource MainAtpVM}}" />
-                <MenuItem Header="{Binding Commands.RefreshSapFlTable.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.RefreshSapFlTable, Source={StaticResource MainAtpVM}}" InputGestureText="{Binding Commands.RefreshSapFlTable.GestureText, Source={StaticResource MainAtpVM}}" />
-            </MenuItem>
             <MenuItem Header="Внеплан" >
                 <MenuItem Header="{Binding Commands.CheckToComplete.Name, Source={StaticResource VnePlanVM}}" Command="{Binding Commands.CheckToComplete, Source={StaticResource VnePlanVM}}" InputGestureText="{Binding Commands.RefreshSapPlombTable.GestureText, Source={StaticResource MainAtpVM}}" />
                 <MenuItem Header="{Binding Commands.CheckToComplete.Name, Source={StaticResource VnePlanVM}}" Command="{Binding Commands.CheckToComplete, Source={StaticResource VnePlanVM}}" InputGestureText="{Binding Commands.RefreshSapPlombTable.GestureText, Source={StaticResource MainAtpVM}}" />
 
+            </MenuItem>
+            <MenuItem Header="База" >
+                <MenuItem Header="{Binding Commands.RefreshSapPlombTable.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.RefreshSapPlombTable, Source={StaticResource MainAtpVM}}" InputGestureText="{Binding Commands.RefreshSapPlombTable.GestureText, Source={StaticResource MainAtpVM}}" />
+                <MenuItem Header="{Binding Commands.RefreshSapFlTable.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.RefreshSapFlTable, Source={StaticResource MainAtpVM}}" InputGestureText="{Binding Commands.RefreshSapFlTable.GestureText, Source={StaticResource MainAtpVM}}" />
             </MenuItem>
         </Menu>
         <TabControl DockPanel.Dock="Left">
@@ -339,24 +339,23 @@
                 <DockPanel>
 
                     <StackPanel>
-                        <GroupBox Header="Добавть заявку">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox Text="{Binding SearchString, Source={StaticResource VnePlanVM}, UpdateSourceTrigger=PropertyChanged}" ToolTip="Поиск по номеру ПУ, лицевому счету, ФИО" Width="197">
+                                <TextBox.InputBindings>
+                                    <KeyBinding Key="Enter" Command="{Binding Commands.GetDataFromDb, Source={StaticResource VnePlanVM}}" />
+                                </TextBox.InputBindings>
+                            </TextBox>
+                            <Button  Focusable="False"  ToolTip="{Binding Commands.GetDataFromDb.Name, Source={StaticResource VnePlanVM}}" Command="{Binding Commands.GetDataFromDb, Source={StaticResource VnePlanVM}}">
+                                <Image  Height="20" Source="/ATPWork;component/Resources/icons8-поиск-40.png" Width="20" />
+                            </Button>
+                        </StackPanel>
+                        <GroupBox Header="Добавть заявку" Width="236">
                             <StackPanel>
 
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBox Text="{Binding SearchString, Source={StaticResource VnePlanVM}, UpdateSourceTrigger=PropertyChanged}" ToolTip="Поиск по номеру ПУ, лицевому счету, ФИО" Width="131">
-                                        <TextBox.InputBindings>
-                                            <KeyBinding Key="Enter" Command="{Binding Commands.GetDataFromDb, Source={StaticResource VnePlanVM}}" />
-                                        </TextBox.InputBindings>
-                                    </TextBox>
-                                    <Button  Focusable="False"  ToolTip="{Binding Commands.GetDataFromDb.Name, Source={StaticResource VnePlanVM}}" Command="{Binding Commands.GetDataFromDb, Source={StaticResource VnePlanVM}}">
-                                        <Image  Height="20" Source="/ATPWork;component/Resources/icons8-поиск-40.png" Width="20" />
-                                    </Button>
-                                </StackPanel>
-                                <TextBox TextWrapping="WrapWithOverflow" Text="{Binding ZayavkaToAdd.FIO, Source={StaticResource VnePlanVM}}"  ></TextBox>
-                                <TextBox TextWrapping="WrapWithOverflow" Text="{Binding ZayavkaToAdd.Adress, Source={StaticResource VnePlanVM},Mode=OneWay}"  ></TextBox>
-
-                                <TextBox TextWrapping="WrapWithOverflow" Text="{Binding ZayavkaToAdd.NumberLS, Source={StaticResource VnePlanVM}}"  ></TextBox>
-
+                                <TextBox TextWrapping="WrapWithOverflow" Text="{Binding ZayavkaToAdd.FIO, Source={StaticResource VnePlanVM}}" BorderBrush="{x:Null}"  ></TextBox>
+                                <TextBox TextWrapping="WrapWithOverflow" Text="{Binding ZayavkaToAdd.Adress, Source={StaticResource VnePlanVM},Mode=OneWay}" BorderBrush="{x:Null}"></TextBox>
+                                <TextBox TextWrapping="WrapWithOverflow" Text="{Binding ZayavkaToAdd.NumberLS, Source={StaticResource VnePlanVM}}" BorderBrush="{x:Null}"  ></TextBox>
+                                
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock>№</TextBlock>
                                     <TextBox Text="{Binding ZayavkaToAdd.RegNumber, Source={StaticResource VnePlanVM}, UpdateSourceTrigger=PropertyChanged}" Width="40"  >
@@ -366,10 +365,10 @@
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock>Тел:</TextBlock>
                                     <TextBox Text="{Binding ZayavkaToAdd.PhoneNumbers, Source={StaticResource VnePlanVM}, UpdateSourceTrigger=PropertyChanged}" Width="132"  >
-                                </TextBox>
+                                    </TextBox>
                                 </StackPanel>
                                 <TextBlock>Причина обращения:</TextBlock>
-                                <TextBox Text="{Binding ZayavkaToAdd.Prichina, Source={StaticResource VnePlanVM}, UpdateSourceTrigger=PropertyChanged}" Width="156" Height="70" HorizontalAlignment="Left"   >
+                                <TextBox Text="{Binding ZayavkaToAdd.Prichina, Source={StaticResource VnePlanVM}, UpdateSourceTrigger=PropertyChanged}" TextWrapping="WrapWithOverflow" Width="224"  HorizontalAlignment="Left"   >
 
                                 </TextBox>
                                 <CheckBox IsChecked="{Binding ZayavkaToAdd.ProvFlag, Source={StaticResource VnePlanVM}}">Проверка</CheckBox>
@@ -377,8 +376,8 @@
                                 <CheckBox IsChecked="{Binding ZayavkaToAdd.DemontageFlag, Source={StaticResource VnePlanVM}}">Демонтаж</CheckBox>
                                 <Button  Focusable="False"  ToolTip="{Binding Commands.AddZayavka.Name, Source={StaticResource VnePlanVM}}" Command="{Binding Commands.AddZayavka, Source={StaticResource VnePlanVM}}">
                                     <StackPanel Orientation="Horizontal">
-                                    <Image  Height="20" Source="Resources/icons8Add-50.png" Width="20" />
-                                    <TextBlock>Добавить</TextBlock>
+                                        <Image  Height="20" Source="Resources/icons8Add-50.png" Width="20" />
+                                        <TextBlock>Добавить</TextBlock>
                                     </StackPanel>
                                 </Button>
                                 <Button Click="Button_Click_1"></Button>
@@ -414,9 +413,9 @@
                                             <TextBox VerticalAlignment="Top" TextWrapping="WrapWithOverflow" FontSize="11" Text="{Binding Path=PhoneNumbers}"/>
                                         </StackPanel>
                                     </Border>
-                                            <TextBox VerticalAlignment="Top" Text="{Binding Path=NumberAktTehProverki}"/>
+                                    <TextBox VerticalAlignment="Top" Text="{Binding Path=NumberAktTehProverki}"/>
                                 </StackPanel>
-                                
+
                             </DataTemplate>
                         </ListView.ItemTemplate>
                         <ListView.GroupStyle>
@@ -464,8 +463,8 @@
                 <Grid Margin="0,0,0,0">
                     <TabControl x:Name="tabControlBU" Margin="0,0,0,0" >
                         <TabItem Header="Занесение" FontSize="14">
-                              
-                            
+
+
                         </TabItem>
                         <TabItem Header="Реестр" FontSize="14">
                             <Grid Margin="0,0,0,0"/>
@@ -505,7 +504,7 @@
                                                                                                   Command="{Binding Commands.CreatePdfFromGroup, Source={StaticResource PlanVM}}" 
                                                                                                   CommandParameter="{Binding}"
                                                                                                   />
-                                                                       
+
                                                                     </ContextMenu>
                                                                 </DockPanel.ContextMenu>
                                                                 <TextBlock FontWeight="Bold" Text="{Binding Path=Name}" Margin="5,0,0,0">
@@ -514,7 +513,7 @@
                                                                 </TextBlock>
                                                                 <TextBlock Text="{Binding AllAbonent.Count, Source={StaticResource PlanVM}}"/>
                                                                 <TextBlock Text="шт. "></TextBlock>
-                                                              
+
                                                             </DockPanel>
                                                         </Expander.Header>
                                                         <Expander.Content>
