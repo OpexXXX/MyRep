@@ -401,7 +401,16 @@
                             </StackPanel>
                         </GroupBox>
                     </StackPanel>
-
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                        <TextBox Text="{Binding SearchStringView, Source={StaticResource VnePlanVM}, UpdateSourceTrigger=PropertyChanged}" ToolTip="Поиск по заявкам" Width="204" >
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Enter" Command="{Binding Commands.GetDataFromDb, Source={StaticResource VnePlanVM}}" />
+                            </TextBox.InputBindings>
+                        </TextBox>
+                        <Button  Focusable="False"  ToolTip="{Binding Commands.GetDataFromDb.Name, Source={StaticResource VnePlanVM}}" Command="{Binding Commands.GetDataFromDb, Source={StaticResource VnePlanVM}}">
+                            <Image  Height="20" Source="/ATPWork;component/Resources/icons8-поиск-40.png" Width="20" />
+                        </Button>
+                    </StackPanel>
                     <ListView     VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling"  ItemsSource="{Binding AbonentsForVnePlan,  Source={StaticResource VnePlanVM}, UpdateSourceTrigger=PropertyChanged}" >
                         <ListView.ItemTemplate>
                             <DataTemplate>
@@ -443,7 +452,7 @@
                                         <Setter Property="Template">
                                             <Setter.Value>
                                                 <ControlTemplate TargetType="{x:Type GroupItem}">
-                                                    <Expander IsExpanded="False"  BorderThickness="1,1,1,1" ToolTip="{Binding Path=Name}">
+                                                    <Expander IsExpanded="{Binding ExpanderOpen, Source={StaticResource VnePlanVM}}"  BorderThickness="1,1,1,1" ToolTip="{Binding Path=Name}">
                                                         <Expander.Header>
                                                             <DockPanel>
                                                                 <DockPanel.ContextMenu>

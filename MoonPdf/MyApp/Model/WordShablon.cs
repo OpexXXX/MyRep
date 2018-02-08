@@ -27,12 +27,9 @@ namespace ATPWork.MyApp.Model
     new FieldContent("DopuskFlag", zayav.DopuskFlag ? "V" : ""),
     new FieldContent("ProverkaFlag", zayav.ProvFlag ? "V" : ""),
     new FieldContent("DemontageFlag", zayav.DemontageFlag ? "V" : ""),
-
     new FieldContent("Prichina", zayav.Prichina != null ? zayav.Prichina : ""),
-
     new FieldContent("PuType", zayav.DopuskFlag ? "" : zayav.PuOldType != null ? zayav.PuOldType : ""),
     new FieldContent("PuNumber", zayav.DopuskFlag ? "" : zayav.PuOldNumber != null ? zayav.PuOldNumber : "")
-
 );
             using (var outputDocument = new TemplateProcessor(filePath)
                 .SetRemoveContentControls(true))
