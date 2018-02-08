@@ -57,9 +57,55 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
                 OnPropertyChanged("ZayavkaToAdd");
             }
         }
+        private bool _expanderOpen = false;
+        public bool ExpanderOpen
+        {
+            get { return _expanderOpen; }
+            set
+            {
+                _expanderOpen = value;
+                OnPropertyChanged("ExpanderOpen");
+            }
+        }
+        private string _searchStringView;
+        public string SearchStringView
+        {
+            get { return _searchStringView; }
+            set
+            {
+                _searchStringView = value;
+                if (value.Length == 0)
+                {
+                    AbonentsForVnePlan.Filter = str => ((str as VnePlanZayavka).NumberAktTehProverki == "");
+                    ExpanderOpen = false;
+                }
+                else if(value.Length>2)
+                {
+                    AbonentsForVnePlan.Filter = filterZayvki;
+                  ExpanderOpen = true;
+                }
 
+                OnPropertyChanged("SearchStringView");
+            }
+        }
+        
+                    private bool filterZayvki(object obj)
+        {
+            VnePlanZayavka d = (VnePlanZayavka)obj;
+
+            bool a = (d.FIO != null)? (d.FIO.Contains(_searchStringView)) : false;
+               bool b = d.Adress != null ? d.Adress.Contains(_searchStringView) : false;
+               bool c = d.NumberLS != null ? d.NumberLS.Contains(_searchStringView) : false;
+                bool g = d.PuOldNumber != null ? d.PuOldNumber.Contains(_searchStringView) : false;
+               bool e = d.RegNumber != null ? d.RegNumber.ToString().Contains(_searchStringView) : false;
+                bool f = d.DateReg != null ? d.DateReg.ToString("d").Contains(_searchStringView) : false;
+
+            return a || b || c || g || e || f;
+                    
+        }
+
+       
         private string _searchString;
-
         public string SearchString
         {
             get { return _searchString; }
