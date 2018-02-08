@@ -2,6 +2,7 @@
 using MyApp.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -38,9 +39,9 @@ namespace ATPWork.MyApp.ViewModel.PlanViewModel
 
         private void createPdf(object obj)
         {
-            var gg = (CollectionViewGroup)obj;
+            var gg = (ReadOnlyObservableCollection<PlanAbonent>) obj;
             List<PlanAbonent> ggg = new List<PlanAbonent>();
-            foreach (PlanAbonent item in gg.Items)
+           /* foreach (PlanAbonent item in gg)
             {
                 ggg.Add(item);
             }
@@ -49,7 +50,7 @@ namespace ATPWork.MyApp.ViewModel.PlanViewModel
                string path = PlanWorkModel.CreatePDF(ggg);
                 Process.Start(path);
 
-            }
+            }*/
         }
     }
 }
