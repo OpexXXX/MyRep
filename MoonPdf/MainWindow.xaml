@@ -380,7 +380,14 @@
                                         <TextBlock>Добавить</TextBlock>
                                     </StackPanel>
                                 </Button>
-                                <Button Click="Button_Click_1"></Button>
+
+                                <Button  Focusable="False"  ToolTip="{Binding Commands.CreateWordDoc.Name, Source={StaticResource VnePlanVM}}" Command="{Binding Commands.CreateWordDoc, Source={StaticResource VnePlanVM}}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image  Height="20" Source="Resources/icons8Add-50.png" Width="20" />
+                                        <TextBlock Text="{Binding Commands.CreateWordDoc.Name, Source={StaticResource VnePlanVM}}"/>
+                                    </StackPanel>
+                                </Button>
+                                
                             </StackPanel>
                         </GroupBox>
                     </StackPanel>
@@ -390,7 +397,7 @@
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" Margin="1,1,1,1">
                                     <Border CornerRadius="2" BorderThickness="1" BorderBrush="#FF8C9595">
-                                        <StackPanel Orientation="Vertical" Margin="1,0,1,0" Width="80">
+                                        <StackPanel Orientation="Horizontal" Margin="1,0,1,0" Width="80">
                                             <TextBox VerticalAlignment="Top" Text="{Binding Path=DateReg,StringFormat=dd.MM.yyy}"/>
                                             <TextBox VerticalAlignment="Top" FontSize="16" FontWeight="Bold" Text="{Binding Path=RegNumber}"/>
                                         </StackPanel >
@@ -436,7 +443,7 @@
     CommandParameter="{Binding}"/>
                                                                     </ContextMenu>
                                                                 </DockPanel.ContextMenu>
-                                                                <TextBlock DockPanel.Dock="Top" TextWrapping="WrapWithOverflow" FontWeight="Bold" Text="{Binding Path=Name, Converter={local:FileName}}"  Margin="0,0,0,0"/>
+                                                                <TextBlock DockPanel.Dock="Left" TextWrapping="WrapWithOverflow" FontWeight="Bold" Text="{Binding Path=Name, Converter={local:FileName}}"  Margin="0,0,0,0"/>
                                                                 <TextBlock DockPanel.Dock="Left"  Text="{Binding Path=Items.Count }"/>
                                                                 <TextBlock DockPanel.Dock="Left" Text=" шт."/>
                                                             </DockPanel>

@@ -1,4 +1,5 @@
-﻿using ATPWork.MyApp.Model.VnePlan;
+﻿using ATPWork.MyApp.Model;
+using ATPWork.MyApp.Model.VnePlan;
 using MyApp;
 using MyApp.Model;
 using System;
@@ -17,6 +18,8 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
         public DelegateCommand AddZayavka { get; private set; }
         public DelegateCommand CheckToComplete { get; private set; }
         public DelegateCommand CreateReestr { get; private set; }
+        public DelegateCommand CreateWordDoc { get; private set; }
+
         private VnePlanVM vnePlanVM;
 
         public Commands(VnePlanVM planVM)
@@ -125,8 +128,18 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
                 VnePlanModel.chekCompleteZayavki();
             }, null, null);
             this.CreateReestr = new DelegateCommand("Открыть в PDF", createPdf, null, null);
+            this.CreateWordDoc = new DelegateCommand("Открыть в Word", createWord, null, null);
+            
         }
+
+
         #region Методы контекстного меню группы
+
+        private void createWord(object obj)
+        {
+            Process.Start(WordShablon.CreateVnePlanZayvka(vnePlanVM.ZayavkaToAdd)); 
+        }
+
         private void createPdf(object obj)
         {
             var gg = (CollectionViewGroup)obj;
