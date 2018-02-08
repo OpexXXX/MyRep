@@ -28,7 +28,7 @@ namespace ATPWork.MyApp.ViewModel.MainAtp
 
         public DelegateCommand CreateMailAllPossibleAkt { get; private set; }
 
-        public DelegateCommand ShowAktPage { get; private set; }
+        public DelegateCommand DeleteGroup { get; private set; }
 
         public DelegateCommand OpenFolderMail { get; private set; }
 
@@ -196,7 +196,7 @@ namespace ATPWork.MyApp.ViewModel.MainAtp
             {
                 mainAtpVm.GoSecongPageAkt();
             }, isGoPage, null);
-            this.ShowAktPage = new DelegateCommand("Показать страницы", showAkt, null, null);
+            this.DeleteGroup = new DelegateCommand("Показать страницы", deleteGroup, null, null);
         }
 
         private void OpenFolderWhisMail(object obj)
@@ -206,16 +206,23 @@ namespace ATPWork.MyApp.ViewModel.MainAtp
             System.Diagnostics.Process.Start("explorer", path);
         }
 
-        private void showAkt(object obj)
+        private void deleteGroup(object obj)
         {
-            var gg = (CollectionViewGroup)obj;
-            string result = "";
-
-            foreach (AktTehProverki item in gg.Items)
-            {
-                result += item.NumberOfPagesInSoursePdf[0];
-            }
-            MessageBox.Show(result);
+            var res = MessageBox.Show("Удалить задание?", "Удаление задания", MessageBoxButton.YesNo);
+            if(res == MessageBoxResult.Yes)
+                {
+                    var gg = (CollectionViewGroup)obj;
+                    List<AktTehProverki> tempList = new List<AktTehProverki>();
+                    foreach (AktTehProverki item in gg.Items)
+                    {
+                        tempList.Add(item);
+                    }
+                    foreach (AktTehProverki item in tempList)
+                    {
+                        MainAtpModel.AllAktInCurrentWork.Remove(item);
+                        mainAtpVm.AllAktInCurrentWork.Remove(item);
+                    } 
+                }
         }
         private bool CanGoPrevousAkt()
         {

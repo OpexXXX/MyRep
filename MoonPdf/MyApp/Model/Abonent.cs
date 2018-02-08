@@ -114,11 +114,14 @@ namespace ATPWork.MyApp.Model
             get
             {
                 string result = "";
-                result += City;
-                result += ", " + Street;
-                result += ", д." + House;
-                if (Korpus != "") result += Korpus;
-                if (Kvartira != 0) result += ", кв." + Kvartira;
+                if (City?.Length>0)
+                {
+                    result += City;
+                    result += ", " + Street;
+                    result += ", д." + House;
+                    if (Korpus != "") result += Korpus;
+                    if (Kvartira != 0) result += ", кв." + Kvartira;
+                }
                 return result;
             }
 

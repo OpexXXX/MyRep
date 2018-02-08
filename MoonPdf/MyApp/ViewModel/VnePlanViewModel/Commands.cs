@@ -1,11 +1,14 @@
-﻿using ATPWork.MyApp.Model.VnePlan;
+﻿using ATPWork.MyApp.Model;
+using ATPWork.MyApp.Model.VnePlan;
 using MyApp;
 using MyApp.Model;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 
 namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
 {
@@ -14,6 +17,9 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
         public DelegateCommand GetDataFromDb { get; private set; }
         public DelegateCommand AddZayavka { get; private set; }
         public DelegateCommand CheckToComplete { get; private set; }
+        public DelegateCommand CreateReestr { get; private set; }
+        public DelegateCommand CreateWordDoc { get; private set; }
+
         private VnePlanVM vnePlanVM;
 
         public Commands(VnePlanVM planVM)
@@ -109,16 +115,46 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
             }, canSearch, null);
             this.AddZayavka = new DelegateCommand("Дабавить заявку", f =>
             {
-                vnePlanVM.AllZayvki.Add(vnePlanVM.ZayavkaToAdd);
                 VnePlanModel.AddZayvka(vnePlanVM.ZayavkaToAdd);
+                vnePlanVM.AllZayvki.Add(vnePlanVM.ZayavkaToAdd);
+                //   vnePlanVM.AllZayvki = new ObservableCollection<VnePlanZayavka>(VnePlanModel.Zayavki);
+                // vnePlanVM.AbonentsForVnePlan = CollectionViewSource.GetDefaultView(vnePlanVM.AllZayvki);
+               // (vnePlanVM.AbonentsForVnePlan as CollectionViewSource).View.Refresh();
                 vnePlanVM.ZayavkaToAdd = new VnePlanZayavka();
+              
             }, canAddZayavka, null);
             this.CheckToComplete = new DelegateCommand("Проверить выполнение заявок", f =>
             {
                 VnePlanModel.chekCompleteZayavki();
             }, null, null);
+            this.CreateReestr = new DelegateCommand("Открыть в PDF", createPdf, null, null);
+            this.CreateWordDoc = new DelegateCommand("Открыть в Word", createWord, null, null);
+            
         }
 
+
+        #region Методы контекстного меню группы
+
+        private void createWord(object obj)
+        {
+            Process.Start(WordShablon.CreateVnePlanZayvka(vnePlanVM.ZayavkaToAdd)); 
+        }
+
+        private void createPdf(object obj)
+        {
+            var gg = (CollectionViewGroup)obj;
+            List<VnePlanZayavka> ggg = new List<VnePlanZayavka>();
+            foreach (VnePlanZayavka item in gg.Items)
+            {
+                ggg.Add(item);
+            }
+            if (ggg.Count > 0)
+            {
+                Process.Start(VnePlanModel.CreatePDF(ggg));
+            }
+        }
+        #endregion
+        #region Методы CanExec
         private bool CanAddZayavka()
         {
             return vnePlanVM.ZayavkaToAdd.CanAdd();
@@ -128,5 +164,6 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
         {
             return vnePlanVM.SearchString?.Length > 3;
         }
+        #endregion
     }
 }

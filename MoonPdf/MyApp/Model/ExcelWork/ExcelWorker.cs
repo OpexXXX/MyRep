@@ -12,6 +12,7 @@ using ExcelDataReader;
 using iTextSharp.text.pdf;
 using iTextSharp.text;
 using ATPWork.MyApp.Model.Plan;
+using ATPWork.MyApp.Model.VnePlan;
 
 namespace MyApp.Model
 {
@@ -19,6 +20,7 @@ namespace MyApp.Model
     {
         private static List<string[]> HeaderColumn = new List<string[]>();
         private static List<string[]> HeaderColumnPlan = new List<string[]>();
+        private static List<string[]> HeaderColumnVnePlan = new List<string[]>();
         public enum AktType
         {
             Proverka,
@@ -47,6 +49,16 @@ namespace MyApp.Model
             HeaderColumnPlan.Add(new string[] { "Номер ПУ", "PuNumber" });
             HeaderColumnPlan.Add(new string[] { "Подключение", "Podkluchenie" });
             HeaderColumnPlan.Add(new string[] { "Пломбы", "Plombs" });
+
+            HeaderColumnVnePlan = new List<string[]>(2);
+            HeaderColumnVnePlan.Add(new string[] { "№ пп", "id" });
+            HeaderColumnVnePlan.Add(new string[] { "№ Л/С", "NumberLS" });
+            HeaderColumnVnePlan.Add(new string[] { "Ф.И.О", "FIO" });
+            HeaderColumnVnePlan.Add(new string[] { "Адрес", "Adress" });
+            HeaderColumnVnePlan.Add(new string[] { "ПУ на расчетах", "PuType" });
+            HeaderColumnVnePlan.Add(new string[] { "Примечание", "Primechanie" });
+
+
         }
         private static DataSet MakeDataSet(List<AktTehProverki> akti)
         {
@@ -187,67 +199,6 @@ namespace MyApp.Model
                 item.Style.Border.BorderAround(ExcelBorderStyle.Thin);
             }
         }
-        public static DataTable MakeDataTableForPlan(List<PlanAbonent> Temp_abonents)
-        {
-            DataTable table = new DataTable("Reestr");
-            DataColumn column;
-            DataRow row;
-            List<PlanAbonent> abonents = new List<PlanAbonent>(Temp_abonents);
-            abonents.Sort(delegate (PlanAbonent akt1, PlanAbonent akt2)
-            {
-                if (akt1.City.CompareTo(akt2.City) == 1) return 1;
-                else if (akt1.City.CompareTo(akt2.City) == -1) return -1;
-                else if (akt1.Street.CompareTo(akt2.Street) == 1) return 1;
-                else if (akt1.Street.CompareTo(akt2.Street) == -1) return -1;
-                else if (akt1.House>akt2.House) return 1;
-                else if (akt1.House < akt2.House) return -1;
-                return 0;
-            });
-            column = new DataColumn();
-            column.DataType = System.Type.GetType("System.Int32");
-            column.ColumnName = "id";
-            column.Caption = "№ пп";
-            column.ReadOnly = true;
-            column.AutoIncrement = true;
-            column.Unique = true;
-            table.Columns.Add(column);
-            for (int i = 1; i < HeaderColumnPlan.Count; i++)
-            {
-                column = new DataColumn();
-                column.DataType = System.Type.GetType("System.String");
-                column.ColumnName = HeaderColumnPlan[i][1];
-                column.AutoIncrement = false;
-                column.Caption = HeaderColumnPlan[i][0];
-                column.ReadOnly = false;
-                column.Unique = false;
-                table.Columns.Add(column);
-            }
-            DataColumn[] PrimaryKeyColumns = new DataColumn[1];
-            PrimaryKeyColumns[0] = table.Columns["id"];
-            table.PrimaryKey = PrimaryKeyColumns;
-            foreach (PlanAbonent item in abonents)
-            {
-                row = table.NewRow();
-                row["NumberLS"] = item.NumberLS + "\n" + item.DateWork.ToString("d");
-                row["Raschet"] = item.Raschet;
-                row["FIO"] = item.FIO;
-                row["Adress"] = item.Adress;
-                row["PuType"] = item.PuOldType;
-                row["PuNumber"] = item.PuOldNumber;
-                row["Podkluchenie"] = item.Podkl;
-                string plobms="";
-                foreach (Plomba plomb in item.OldPlombs)
-                {
-                    if (plomb.Status=="I")
-                    {
-                        plobms += plomb.Number + " " + plomb.Place + ";\n";
-                    }
-                }
-                row["Plombs"] = plobms;
-                table.Rows.Add(row);
-            }
-            return table;
-        }
         public static void DataTableToExcel(List<AktTehProverki> akti, string mailPath, Dictionary<string, string> options = null)
         {
             if (options == null)
@@ -366,6 +317,68 @@ namespace MyApp.Model
             }
 
         }
+
+        public static DataTable MakeDataTableForPlan(List<PlanAbonent> Temp_abonents)
+        {
+            DataTable table = new DataTable("Reestr");
+            DataColumn column;
+            DataRow row;
+            List<PlanAbonent> abonents = new List<PlanAbonent>(Temp_abonents);
+            abonents.Sort(delegate (PlanAbonent akt1, PlanAbonent akt2)
+            {
+                if (akt1.City.CompareTo(akt2.City) == 1) return 1;
+                else if (akt1.City.CompareTo(akt2.City) == -1) return -1;
+                else if (akt1.Street.CompareTo(akt2.Street) == 1) return 1;
+                else if (akt1.Street.CompareTo(akt2.Street) == -1) return -1;
+                else if (akt1.House>akt2.House) return 1;
+                else if (akt1.House < akt2.House) return -1;
+                return 0;
+            });
+            column = new DataColumn();
+            column.DataType = System.Type.GetType("System.Int32");
+            column.ColumnName = "id";
+            column.Caption = "№ пп";
+            column.ReadOnly = true;
+            column.AutoIncrement = true;
+            column.Unique = true;
+            table.Columns.Add(column);
+            for (int i = 1; i < HeaderColumnPlan.Count; i++)
+            {
+                column = new DataColumn();
+                column.DataType = System.Type.GetType("System.String");
+                column.ColumnName = HeaderColumnPlan[i][1];
+                column.AutoIncrement = false;
+                column.Caption = HeaderColumnPlan[i][0];
+                column.ReadOnly = false;
+                column.Unique = false;
+                table.Columns.Add(column);
+            }
+            DataColumn[] PrimaryKeyColumns = new DataColumn[1];
+            PrimaryKeyColumns[0] = table.Columns["id"];
+            table.PrimaryKey = PrimaryKeyColumns;
+            foreach (PlanAbonent item in abonents)
+            {
+                row = table.NewRow();
+                row["NumberLS"] = item.NumberLS + "\n" + item.DateWork.ToString("d");
+                row["Raschet"] = item.Raschet;
+                row["FIO"] = item.FIO;
+                row["Adress"] = item.Adress;
+                row["PuType"] = item.PuOldType;
+                row["PuNumber"] = item.PuOldNumber;
+                row["Podkluchenie"] = item.Podkl;
+                string plobms="";
+                foreach (Plomba plomb in item.OldPlombs)
+                {
+                    if (plomb.Status=="I")
+                    {
+                        plobms += plomb.Number + " " + plomb.Place + ";\n";
+                    }
+                }
+                row["Plombs"] = plobms;
+                table.Rows.Add(row);
+            }
+            return table;
+        }
         internal static string CreatePdfReestrForPlan(DataTable tableL)
         {
 
@@ -427,6 +440,130 @@ namespace MyApp.Model
                 //Добавляем таблицу в документ
                 doc.Add(table);
             
+            //Закрываем документ
+            doc.Close();
+            return filePath;
+
+        }
+        public static DataTable MakeDataTableForVnePlan(List<VnePlanZayavka> Temp_abonents)
+        {
+            DataTable table = new DataTable("Reestr");
+            DataColumn column;
+            DataRow row;
+            List<VnePlanZayavka> abonents = new List<VnePlanZayavka>(Temp_abonents);
+            abonents.Sort(delegate (VnePlanZayavka akt1, VnePlanZayavka akt2)
+            {
+                if (akt1.City.CompareTo(akt2.City) == 1) return 1;
+                else if (akt1.City.CompareTo(akt2.City) == -1) return -1;
+                else if (akt1.Street.CompareTo(akt2.Street) == 1) return 1;
+                else if (akt1.Street.CompareTo(akt2.Street) == -1) return -1;
+                else if (akt1.House > akt2.House) return 1;
+                else if (akt1.House < akt2.House) return -1;
+                return 0;
+            });
+            column = new DataColumn();
+            column.DataType = System.Type.GetType("System.Int32");
+            column.ColumnName = "id";
+            column.Caption = "№ пп";
+            column.ReadOnly = true;
+            column.AutoIncrement = true;
+            column.Unique = true;
+            table.Columns.Add(column);
+            for (int i = 1; i < HeaderColumnVnePlan.Count; i++)
+            {
+                column = new DataColumn();
+                column.DataType = System.Type.GetType("System.String");
+                column.ColumnName = HeaderColumnVnePlan[i][1];
+                column.AutoIncrement = false;
+                column.Caption = HeaderColumnVnePlan[i][0];
+                column.ReadOnly = false;
+                column.Unique = false;
+                table.Columns.Add(column);
+            }
+            DataColumn[] PrimaryKeyColumns = new DataColumn[1];
+            PrimaryKeyColumns[0] = table.Columns["id"];
+            table.PrimaryKey = PrimaryKeyColumns;
+            foreach (VnePlanZayavka item in abonents)
+            {
+                row = table.NewRow();
+                row["NumberLS"] = item.NumberLS + "\n№" + item.RegNumber+" от " + item.DateReg.ToString("d");
+                row["FIO"] = item.FIO + "\n тел." + item.PhoneNumbers;
+                row["Adress"] = item.Adress;
+                row["Primechanie"] = item.Primechanie;
+                string plobms = "";
+                foreach (Plomba plomb in item.OldPlombs)
+                {
+                    if (plomb.Status == "I")
+                    {
+                        plobms += plomb.Number + " " + plomb.Place + ";";
+                    }
+                }
+                row["PuType"] = item.PuOldType +" №"+ item.PuOldNumber + ";" + plobms;
+                table.Rows.Add(row);
+            }
+            return table;
+        }
+        internal static string CreatePdfReestrForVnePlan(DataTable tableL)
+        {
+
+            if (!Directory.Exists("vnePlan")) Directory.CreateDirectory("vnePlan");
+            string fileName = System.IO.Path.GetRandomFileName();
+            string filePath = "vnePlan\\" + fileName + ".pdf";
+            //Объект документа пдф
+            iTextSharp.text.Document doc = new iTextSharp.text.Document();
+            doc.SetPageSize(PageSize.A4.Rotate());
+            doc.SetMargins(10, 10, 10, 10);
+            //Создаем объект записи пдф-документа в файл
+            PdfWriter.GetInstance(doc, new FileStream(filePath, FileMode.Create));
+            //Открываем документ
+            doc.Open();
+            //Определение шрифта необходимо для сохранения кириллического текста
+            //Иначе мы не увидим кириллический текст
+            //Если мы работаем только с англоязычными текстами, то шрифт можно не указывать
+            BaseFont baseFont = BaseFont.CreateFont("C:\\Windows\\Fonts\\arial.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            iTextSharp.text.Font font = new iTextSharp.text.Font(baseFont, 10, iTextSharp.text.Font.NORMAL);
+            iTextSharp.text.Font headerFont = new iTextSharp.text.Font(baseFont, 12, iTextSharp.text.Font.NORMAL);
+            iTextSharp.text.Font smallFont = new iTextSharp.text.Font(baseFont, 6, iTextSharp.text.Font.NORMAL);
+            //Обход по всем таблицам датасета (хотя в данном случае мы можем опустить
+            //Так как в нашей бд только одна таблица)
+            //Создаем объект таблицы и передаем в нее число столбцов таблицы из нашего датасета
+            PdfPTable table = new PdfPTable(tableL.Columns.Count);
+            table.TotalWidth = 800f;
+            table.LockedWidth = true;
+            table.HeaderRows = 2;
+            var colWidthPercentages = new[] { 3f, 13f, 20f, 20f, 24f, 20f  };
+            table.SetWidths(colWidthPercentages);
+            //Добавим в таблицу общий заголовок
+            PdfPCell cell = new PdfPCell(new Phrase("Внеплановые заявки", headerFont));
+            cell.Colspan = tableL.Columns.Count;
+            cell.HorizontalAlignment = 1;
+            //Убираем границу первой ячейки, чтобы балы как заголовок
+            cell.Border = 0;
+            table.AddCell(cell);
+            //Сначала добавляем заголовки таблицы
+            for (int j = 0; j < tableL.Columns.Count; j++)
+            {
+                cell = new PdfPCell(new Phrase(new Phrase(tableL.Columns[j].Caption, font)));
+                //Фоновый цвет (необязательно, просто сделаем по красивее)
+                cell.BackgroundColor = iTextSharp.text.BaseColor.LIGHT_GRAY;
+                table.AddCell(cell);
+            }
+
+            //Добавляем все остальные ячейки
+            for (int j = 0; j < tableL.Rows.Count; j++)
+            {
+                for (int k = 0; k < tableL.Columns.Count; k++)
+                {
+                    var value = tableL.Rows[j][k].ToString();
+                    if (k == 0) value = (Int32.Parse(value) + 1).ToString();
+
+                    table.AddCell(new Phrase(value,(k == 4) ? smallFont : font));
+                 
+                }
+            }
+            //Добавляем таблицу в документ
+            doc.Add(table);
+
             //Закрываем документ
             doc.Close();
             return filePath;

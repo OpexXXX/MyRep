@@ -27,7 +27,26 @@ namespace ATPWork.MyApp.Model.Plan
                 getNormativ();//
                 getPrevousAkt();//
                 getPrevousPlan();//
+                getAvveragePO();
             }
+        }
+        private void getAvveragePO()
+        {
+            AvveragePO = PlanWorkModel.GetAvveragePO("2017", NumberLS);
+            AvverageP = PlanWorkModel.GetAvveragePO("2016", NumberLS);
+
+        }
+        private int _avveragePO;
+        public int AvveragePO
+        {
+            get { return _avveragePO; }
+            set { _avveragePO = value; }
+        }
+        private int _avverageP;
+        public int AvverageP
+        {
+            get { return _avverageP; }
+            set { _avverageP = value; }
         }
         private int _rooms;
         public int Rooms
@@ -97,7 +116,9 @@ namespace ATPWork.MyApp.Model.Plan
                     start = DateWork.AddMonths(-3);
                 }
                 TimeSpan difDay = DateWork - (DateTime)start;
-                result +="\n"+ (difDay.Days + 1) + " дней к расчету, ";
+               
+                result += " Ср. за 2017г. " + AvveragePO + "кВт*ч/мес; 2016г. " + AvverageP + "кВт*ч/мес; ";
+                result += (difDay.Days + 1) + " дней к расчету, ";
                 result += "норматив:" + Normativ + "кВт*ч/мес. БУ: " + PlanWorkModel.GetValueBuNormativ((DateTime)start, DateWork, Normativ).ToString() + "кВт*ч";
                 return result;
             }

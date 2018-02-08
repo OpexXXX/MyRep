@@ -1,4 +1,5 @@
-﻿using MyApp.Model;
+﻿using ATPWork.MyApp.Model.VnePlan;
+using MyApp.Model;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -69,7 +70,6 @@ namespace ATPWork.MyApp.Model.Plan
             int result1 = (int)Math.Round(result * 10);
             return result1;
         }
-
         public static int CalculationPremiumActBu(double buValue)
         {
             double tarif = 1.70303;
@@ -94,20 +94,55 @@ namespace ATPWork.MyApp.Model.Plan
             int result = (int)Math.Round(premialFond * 1000); 
             return result;
         }
+        public static int GetAvveragePO(string ear, string numberLS)
+        {
+            int result = 0;
+            var ls = DataBaseWorker.GetAbonentPO(ear, numberLS);
+            if (ls.Count > 0)
+            {
+                int summ = 0;
+                foreach (var item in ls)
+                {
+                    int i = 0;
+                    bool flag = int.TryParse(item, out i);
+                    if (flag)
+                    {
+                        summ += i;
+                    }
+                }
 
-        internal static void CreatePDF(DateTime selectedDate)
+                result = summ / ls.Count;
+
+            }
+            return result;
+        }
+        internal static string CreatePDFforVneplan()
+        {
+            List<string> city = new List<string>();
+            foreach (var item in AbonentList)
+            {
+                if (!city.Contains(item.City)) city.Add(item.City);
+            }
+            return VnePlanModel.CreatePDF(city);
+        }
+        internal static string CreatePDF()
         {
             var gg = ExcelWorker.MakeDataTableForPlan(AbonentList);
-            Process.Start(ExcelWorker.CreatePdfReestrForPlan(gg));
+            string result = ExcelWorker.CreatePdfReestrForPlan(gg);
+            return result;
         }
-
+        internal static string CreatePDF(List<PlanAbonent> planList)
+        {
+            var gg = ExcelWorker.MakeDataTableForPlan(planList);
+           string result =  ExcelWorker.CreatePdfReestrForPlan(gg);
+            return result;
+        }
         private static List<PlanAbonent> _abonentList = new List<PlanAbonent>();
         public static List<PlanAbonent> AbonentList
         {
             get { return _abonentList; }
             set { _abonentList = value; }
         }
-
         public static void refreshAbonentList(DateTime dateWork)
         {
             List<string> Abonents = new List<string>(DataBaseWorker.FindAbonentPlan(dateWork));

@@ -34,11 +34,27 @@ namespace ATPWork.MyApp.Model.VnePlan
             get { return _zayvki;}
             set { _zayvki = value;}
         }
+        public static List<VnePlanZayavka> UnCompleteZayavki
+        {
+            get {
+
+                List<VnePlanZayavka> tempList = new List<VnePlanZayavka>();
+                foreach (var item in Zayavki)
+                {
+                    if (item.NumberAktTehProverki == "")
+                        tempList.Add(item);
+                }    
+                   
+
+                return tempList; }
+            
+        }
+
 
         public static void AddZayvka(VnePlanZayavka z)
         {
             Zayavki.Add(z);
-           
+            AbonentsRefresh?.Invoke();
         }
 
         public static void chekCompleteZayavki()
@@ -88,6 +104,17 @@ namespace ATPWork.MyApp.Model.VnePlan
 
         }
 
+        internal static string CreatePDF(List<string> city)
+        {
+            List<VnePlanZayavka> list = new List<VnePlanZayavka>();
+            foreach (var item in Zayavki)
+            {
+                if (city.Contains(item.City)&&item.NumberAktTehProverki=="")list.Add(item);
+            }
+            if (list.Count > 0) return CreatePDF(list);
+            else return "";
+        }
+
         public static void refreshZayavki()
         {
             Zayavki = DataBaseWorker.LoadZayavki();
@@ -100,13 +127,53 @@ namespace ATPWork.MyApp.Model.VnePlan
             DataBaseWorker.InsertZayavki(Zayavki);
         }
 
+        public static string CreatePDF()
+        {
+            foreach (var item in UnCompleteZayavki)
+            {
+                if (item.NumberLS.Length ==12)
+                {
+                    List<Dictionary<String, String>> resultSearchAbonent;
+                    resultSearchAbonent = DataBaseWorker.GetAbonentFromLS(item.NumberLS);
+
+                    if (resultSearchAbonent.Count > 0)
+                    {
+                        item.setDataByDb(resultSearchAbonent[0]);
+                    }
+                }
+            }
+            var d = ExcelWorker.MakeDataTableForVnePlan(VnePlanModel.UnCompleteZayavki);
+
+         return   ExcelWorker.CreatePdfReestrForVnePlan(d);
+        }
+
+        public static string CreatePDF(List<VnePlanZayavka> zayavki)
+        {
+            
+            foreach (var item in zayavki)
+            {
+                if (item.NumberLS.Length == 12)
+                {
+                    List<Dictionary<String, String>> resultSearchAbonent;
+                    resultSearchAbonent = DataBaseWorker.GetAbonentFromLS(item.NumberLS);
+
+                    if (resultSearchAbonent.Count > 0)
+                    {
+                        item.setDataByDb(resultSearchAbonent[0]);
+                    }
+                }
+            }
+            var d = ExcelWorker.MakeDataTableForVnePlan(zayavki);
+            return ExcelWorker.CreatePdfReestrForVnePlan(d);
+        }
+
 
         internal static int GetLastNumber()
         {
             int result = 0;
             foreach (var item in Zayavki)
             {
-                if (item.RegNumber > result) result = item.RegNumber;
+                if (item.RegNumber > result && item.DateReg.Year == DateTime.Now.Year) result = item.RegNumber;
             }
             return result + 1;
         }
