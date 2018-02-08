@@ -378,6 +378,7 @@
                                     <TextBlock>Добавить</TextBlock>
                                     </StackPanel>
                                 </Button>
+                                <Button Click="Button_Click_1"></Button>
                             </StackPanel>
                         </GroupBox>
                     </StackPanel>

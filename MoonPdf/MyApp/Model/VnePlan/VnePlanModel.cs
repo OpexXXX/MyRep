@@ -34,6 +34,22 @@ namespace ATPWork.MyApp.Model.VnePlan
             get { return _zayvki;}
             set { _zayvki = value;}
         }
+        public static List<VnePlanZayavka> UnCompleteZayavki
+        {
+            get {
+
+                List<VnePlanZayavka> tempList = new List<VnePlanZayavka>();
+                foreach (var item in Zayavki)
+                {
+                    if (item.NumberAktTehProverki == "")
+                        tempList.Add(item);
+                }    
+                   
+
+                return tempList; }
+            
+        }
+
 
         public static void AddZayvka(VnePlanZayavka z)
         {
@@ -98,6 +114,46 @@ namespace ATPWork.MyApp.Model.VnePlan
         {
             DataBaseWorker.DropFromVnePlanZayvki();
             DataBaseWorker.InsertZayavki(Zayavki);
+        }
+
+        public static string CreatePDF()
+        {
+            foreach (var item in UnCompleteZayavki)
+            {
+                if (item.NumberLS.Length ==12)
+                {
+                    List<Dictionary<String, String>> resultSearchAbonent;
+                    resultSearchAbonent = DataBaseWorker.GetAbonentFromLS(item.NumberLS);
+
+                    if (resultSearchAbonent.Count > 0)
+                    {
+                        item.setDataByDb(resultSearchAbonent[0]);
+                    }
+                }
+            }
+            var d = ExcelWorker.MakeDataTableForVnePlan(VnePlanModel.UnCompleteZayavki);
+
+         return   ExcelWorker.CreatePdfReestrForVnePlan(d);
+        }
+
+        public static string CreatePDF(List<VnePlanZayavka> zayavki)
+        {
+            
+            foreach (var item in zayavki)
+            {
+                if (item.NumberLS.Length == 12)
+                {
+                    List<Dictionary<String, String>> resultSearchAbonent;
+                    resultSearchAbonent = DataBaseWorker.GetAbonentFromLS(item.NumberLS);
+
+                    if (resultSearchAbonent.Count > 0)
+                    {
+                        item.setDataByDb(resultSearchAbonent[0]);
+                    }
+                }
+            }
+            var d = ExcelWorker.MakeDataTableForVnePlan(zayavki);
+            return ExcelWorker.CreatePdfReestrForVnePlan(d);
         }
 
 
