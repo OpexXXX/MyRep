@@ -76,7 +76,6 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
             refreshAbonentList();
             VnePlanModel.AbonentsRefresh += refreshAbonentList;
             AbonentsForVnePlan = CollectionViewSource.GetDefaultView(AllZayvki);
-            AbonentsForVnePlan.Refresh();
         }
         public int GetLastRegNumber()
         { 
@@ -87,10 +86,20 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
         public void refreshAbonentList()
         {
             AllZayvki = new ObservableCollection<VnePlanZayavka>(VnePlanModel.Zayavki);
-            AbonentsForVnePlan = CollectionViewSource.GetDefaultView(AllZayvki);
+            AbonentsForVnePlan = CollectionViewSource.GetDefaultView(VnePlanModel.Zayavki);
             AbonentsForVnePlan.GroupDescriptions.Clear();
             AbonentsForVnePlan.GroupDescriptions.Add(new PropertyGroupDescription("City"));
             AbonentsForVnePlan.Filter = str => ((str as VnePlanZayavka).NumberAktTehProverki=="");
+            AbonentsForVnePlan.SortDescriptions.Clear();
+            AbonentsForVnePlan.SortDescriptions.Add(new SortDescription("Group", ListSortDirection.Ascending));
+            AbonentsForVnePlan.SortDescriptions.Add(new SortDescription("City", ListSortDirection.Ascending));
+            AbonentsForVnePlan.SortDescriptions.Add(new SortDescription("Street", ListSortDirection.Ascending));
+            AbonentsForVnePlan.SortDescriptions.Add(new SortDescription("House", ListSortDirection.Ascending));
+            AbonentsForVnePlan.SortDescriptions.Add(new SortDescription("Kvartira", ListSortDirection.Ascending)); 
+            AbonentsForVnePlan.SortDescriptions.Add(new SortDescription("DateReg", ListSortDirection.Ascending));
+            AbonentsForVnePlan.SortDescriptions.Add(new SortDescription("RegNumber", ListSortDirection.Ascending));
+
+
         }
         /*internal void CreatePdf()
         {

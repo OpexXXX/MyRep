@@ -54,7 +54,7 @@ namespace ATPWork.MyApp.Model.VnePlan
         public static void AddZayvka(VnePlanZayavka z)
         {
             Zayavki.Add(z);
-           
+            AbonentsRefresh?.Invoke();
         }
 
         public static void chekCompleteZayavki()

@@ -352,9 +352,10 @@
                                         <Image  Height="20" Source="/ATPWork;component/Resources/icons8-поиск-40.png" Width="20" />
                                     </Button>
                                 </StackPanel>
-                                <TextBlock TextWrapping="WrapWithOverflow" Text="{Binding ZayavkaToAdd.FIO, Source={StaticResource VnePlanVM}}" Width="157" ></TextBlock>
-                                <TextBlock TextWrapping="WrapWithOverflow" Text="{Binding ZayavkaToAdd.Adress, Source={StaticResource VnePlanVM}}" Width="157" ></TextBlock>
-                                <TextBlock TextWrapping="WrapWithOverflow" Text="{Binding ZayavkaToAdd.NumberLS, Source={StaticResource VnePlanVM}}" Width="157" ></TextBlock>
+                                <TextBox TextWrapping="WrapWithOverflow" Text="{Binding ZayavkaToAdd.FIO, Source={StaticResource VnePlanVM}}"  ></TextBox>
+                                <TextBox TextWrapping="WrapWithOverflow" Text="{Binding ZayavkaToAdd.Adress, Source={StaticResource VnePlanVM},Mode=OneWay}"  ></TextBox>
+
+                                <TextBox TextWrapping="WrapWithOverflow" Text="{Binding ZayavkaToAdd.NumberLS, Source={StaticResource VnePlanVM}}"  ></TextBox>
 
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock>№</TextBlock>
@@ -385,18 +386,18 @@
                         </GroupBox>
                     </StackPanel>
 
-                    <ListView     VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling"  ItemsSource="{Binding AbonentsForVnePlan,  Source={StaticResource VnePlanVM}}" >
+                    <ListView     VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling"  ItemsSource="{Binding AbonentsForVnePlan,  Source={StaticResource VnePlanVM}, UpdateSourceTrigger=PropertyChanged}" >
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" Margin="1,1,1,1">
                                     <Border CornerRadius="2" BorderThickness="1" BorderBrush="#FF8C9595">
-                                        <StackPanel Orientation="Vertical" Margin="1,0,1,0" Width="100">
+                                        <StackPanel Orientation="Vertical" Margin="1,0,1,0" Width="80">
                                             <TextBox VerticalAlignment="Top" Text="{Binding Path=DateReg,StringFormat=dd.MM.yyy}"/>
                                             <TextBox VerticalAlignment="Top" FontSize="16" FontWeight="Bold" Text="{Binding Path=RegNumber}"/>
                                         </StackPanel >
                                     </Border>
                                     <Border CornerRadius="2" BorderThickness="1" BorderBrush="#FF8C9595">
-                                        <StackPanel Margin="1,0,1,0" Width="170">
+                                        <StackPanel Margin="1,0,1,0" Width="280">
                                             <TextBox VerticalAlignment="Top" TextWrapping="WrapWithOverflow" Text="{Binding Path=FIO}"/>
                                             <TextBox VerticalAlignment="Top" FontSize="12" Text="{Binding Path=NumberLS}"/>
                                         </StackPanel>
@@ -411,9 +412,9 @@
                                         <StackPanel Margin="1,1,1,1">
                                             <TextBox VerticalAlignment="Top" Text="{Binding Path=DopuskFlag}"/>
                                             <TextBox VerticalAlignment="Top" TextWrapping="WrapWithOverflow" FontSize="11" Text="{Binding Path=PhoneNumbers}"/>
-                                            <TextBox VerticalAlignment="Top" Text="{Binding Path=NumberAktTehProverki}"/>
                                         </StackPanel>
                                     </Border>
+                                            <TextBox VerticalAlignment="Top" Text="{Binding Path=NumberAktTehProverki}"/>
                                 </StackPanel>
                                 
                             </DataTemplate>
