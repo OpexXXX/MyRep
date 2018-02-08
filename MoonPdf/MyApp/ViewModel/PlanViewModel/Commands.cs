@@ -39,9 +39,9 @@ namespace ATPWork.MyApp.ViewModel.PlanViewModel
 
         private void createPdf(object obj)
         {
-            var gg = (ReadOnlyObservableCollection<PlanAbonent>) obj;
+            var gg = (CollectionViewGroup) obj;
             List<PlanAbonent> ggg = new List<PlanAbonent>();
-           /* foreach (PlanAbonent item in gg)
+            foreach (PlanAbonent item in gg.Items)
             {
                 ggg.Add(item);
             }
@@ -50,7 +50,7 @@ namespace ATPWork.MyApp.ViewModel.PlanViewModel
                string path = PlanWorkModel.CreatePDF(ggg);
                 Process.Start(path);
 
-            }*/
+            }
         }
     }
 }
