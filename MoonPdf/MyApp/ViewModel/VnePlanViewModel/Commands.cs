@@ -126,7 +126,7 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
             }, null, null);
             this.CreateReestr = new DelegateCommand("Открыть в PDF", createPdf, null, null);
         }
-
+        #region Методы контекстного меню группы
         private void createPdf(object obj)
         {
             var gg = (CollectionViewGroup)obj;
@@ -138,10 +138,10 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
             if (ggg.Count > 0)
             {
                 Process.Start(VnePlanModel.CreatePDF(ggg));
-
             }
         }
-
+        #endregion
+        #region Методы CanExec
         private bool CanAddZayavka()
         {
             return vnePlanVM.ZayavkaToAdd.CanAdd();
@@ -151,5 +151,6 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
         {
             return vnePlanVM.SearchString?.Length > 3;
         }
+        #endregion
     }
 }
