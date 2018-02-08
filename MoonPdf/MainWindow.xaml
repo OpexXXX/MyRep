@@ -351,15 +351,25 @@
                         </StackPanel>
                         <GroupBox Header="Добавть заявку" Width="236">
                             <StackPanel>
-
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock VerticalAlignment="Center">ФИО:</TextBlock>
                                 <TextBox TextWrapping="WrapWithOverflow" Text="{Binding ZayavkaToAdd.FIO, Source={StaticResource VnePlanVM}}" BorderBrush="{x:Null}"  ></TextBox>
-                                <TextBox TextWrapping="WrapWithOverflow" Text="{Binding ZayavkaToAdd.Adress, Source={StaticResource VnePlanVM},Mode=OneWay}" BorderBrush="{x:Null}"></TextBox>
-                                <TextBox TextWrapping="WrapWithOverflow" Text="{Binding ZayavkaToAdd.NumberLS, Source={StaticResource VnePlanVM}}" BorderBrush="{x:Null}"  ></TextBox>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock VerticalAlignment="Center">Адрес: </TextBlock>
+                                    <TextBox TextWrapping="WrapWithOverflow" Text="{Binding ZayavkaToAdd.Adress, Source={StaticResource VnePlanVM},Mode=OneWay}" BorderBrush="{x:Null}"></TextBox>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock VerticalAlignment="Center">№Л/С:</TextBlock>
+                                    <TextBox TextWrapping="WrapWithOverflow" Text="{Binding ZayavkaToAdd.NumberLS, Source={StaticResource VnePlanVM}}" BorderBrush="{x:Null}"  ></TextBox>
+                                </StackPanel>
+                                    
                                 
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock>№</TextBlock>
+                                    <TextBlock VerticalAlignment="Center">вх №</TextBlock>
                                     <TextBox Text="{Binding ZayavkaToAdd.RegNumber, Source={StaticResource VnePlanVM}, UpdateSourceTrigger=PropertyChanged}" Width="40"  >
                                     </TextBox>
+                                    <TextBlock VerticalAlignment="Center">от</TextBlock>
                                     <DatePicker SelectedDate="{Binding ZayavkaToAdd.DateReg, Source={StaticResource VnePlanVM}}" Width="101" ></DatePicker>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal">
@@ -368,12 +378,12 @@
                                     </TextBox>
                                 </StackPanel>
                                 <TextBlock>Причина обращения:</TextBlock>
-                                <TextBox Text="{Binding ZayavkaToAdd.Prichina, Source={StaticResource VnePlanVM}, UpdateSourceTrigger=PropertyChanged}" TextWrapping="WrapWithOverflow" Width="224"  HorizontalAlignment="Left"   >
-
-                                </TextBox>
                                 <CheckBox IsChecked="{Binding ZayavkaToAdd.ProvFlag, Source={StaticResource VnePlanVM}}">Проверка</CheckBox>
                                 <CheckBox IsChecked="{Binding ZayavkaToAdd.DopuskFlag, Source={StaticResource VnePlanVM}}">Допуск</CheckBox>
                                 <CheckBox IsChecked="{Binding ZayavkaToAdd.DemontageFlag, Source={StaticResource VnePlanVM}}">Демонтаж</CheckBox>
+                                <TextBox Text="{Binding ZayavkaToAdd.Prichina, Source={StaticResource VnePlanVM}, UpdateSourceTrigger=PropertyChanged}" TextWrapping="WrapWithOverflow" Width="224"  HorizontalAlignment="Left"   >
+
+                                </TextBox>
                                 <Button  Focusable="False"  ToolTip="{Binding Commands.AddZayavka.Name, Source={StaticResource VnePlanVM}}" Command="{Binding Commands.AddZayavka, Source={StaticResource VnePlanVM}}">
                                     <StackPanel Orientation="Horizontal">
                                         <Image  Height="20" Source="Resources/icons8Add-50.png" Width="20" />

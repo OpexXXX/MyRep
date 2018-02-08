@@ -18,25 +18,20 @@ namespace ATPWork.MyApp.Model
             string filePath = "vnePlan\\" + fileName + ".docx";
             File.Copy("Zayavka.docx", filePath);
             var valuesToFill = new Content(
-
     new FieldContent("RegNumber", zayav.RegNumber.ToString()),
     new FieldContent("DateReg", zayav.DateReg.ToString("d")),
-    new FieldContent("Adress",zayav.Adress),
+    new FieldContent("Adress", zayav.Adress),
     new FieldContent("FIO", zayav.FIO != null ? zayav.FIO : ""),
-     new FieldContent("PhoneNumber", zayav.PhoneNumbers!=null? zayav.PhoneNumbers:""),
-    new FieldContent("NumberLS", zayav.NumberLS.ToString()),
-
-    new FieldContent("DopuskFlag", zayav.DopuskFlag?"V":""),
+     new FieldContent("PhoneNumber", zayav.PhoneNumbers != null ? zayav.PhoneNumbers : ""),
+    new FieldContent("NumberLS", zayav.NumberLS != null ? zayav.NumberLS.ToString() : ""),
+    new FieldContent("DopuskFlag", zayav.DopuskFlag ? "V" : ""),
     new FieldContent("ProverkaFlag", zayav.ProvFlag ? "V" : ""),
     new FieldContent("DemontageFlag", zayav.DemontageFlag ? "V" : ""),
 
     new FieldContent("Prichina", zayav.Prichina != null ? zayav.Prichina : ""),
 
-    new FieldContent("PuType", zayav.DopuskFlag ? "":zayav.PuOldType != null ? zayav.PuOldType : ""),
+    new FieldContent("PuType", zayav.DopuskFlag ? "" : zayav.PuOldType != null ? zayav.PuOldType : ""),
     new FieldContent("PuNumber", zayav.DopuskFlag ? "" : zayav.PuOldNumber != null ? zayav.PuOldNumber : "")
-    
-
-
 
 );
             using (var outputDocument = new TemplateProcessor(filePath)
@@ -44,10 +39,8 @@ namespace ATPWork.MyApp.Model
             {
                 outputDocument.FillContent(valuesToFill);
                 outputDocument.SaveChanges();
-
             }
             return filePath;
-
         }
     }
 }
