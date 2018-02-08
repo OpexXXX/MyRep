@@ -148,6 +148,8 @@
             </MenuItem>
             <MenuItem Header="Внеплан" >
                 <MenuItem Header="{Binding Commands.CheckToComplete.Name, Source={StaticResource VnePlanVM}}" Command="{Binding Commands.CheckToComplete, Source={StaticResource VnePlanVM}}" InputGestureText="{Binding Commands.RefreshSapPlombTable.GestureText, Source={StaticResource MainAtpVM}}" />
+                <MenuItem Header="{Binding Commands.CheckToComplete.Name, Source={StaticResource VnePlanVM}}" Command="{Binding Commands.CheckToComplete, Source={StaticResource VnePlanVM}}" InputGestureText="{Binding Commands.RefreshSapPlombTable.GestureText, Source={StaticResource MainAtpVM}}" />
+
             </MenuItem>
         </Menu>
         <TabControl DockPanel.Dock="Left">
@@ -379,6 +381,7 @@
                                     <TextBlock>Добавить</TextBlock>
                                     </StackPanel>
                                 </Button>
+                                <Button Click="Button_Click_1"></Button>
                             </StackPanel>
                         </GroupBox>
                     </StackPanel>
@@ -429,8 +432,8 @@
                                                             <DockPanel>
                                                                 <DockPanel.ContextMenu>
                                                                     <ContextMenu>
-                                                                        <MenuItem Header="do it"
-    Command="{Binding Commands.ShowAktPage, Source={StaticResource MainAtpVM}}"
+                                                                        <MenuItem Header= "{Binding Commands.CreateReestr.Name, Source={StaticResource VnePlanVM}}"
+    Command="{Binding Commands.CreateReestr, Source={StaticResource VnePlanVM}}"
     CommandParameter="{Binding}"/>
                                                                     </ContextMenu>
                                                                 </DockPanel.ContextMenu>
