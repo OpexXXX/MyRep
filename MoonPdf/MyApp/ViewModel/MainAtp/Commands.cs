@@ -196,7 +196,7 @@ namespace ATPWork.MyApp.ViewModel.MainAtp
             {
                 mainAtpVm.GoSecongPageAkt();
             }, isGoPage, null);
-            this.DeleteGroup = new DelegateCommand("Показать страницы", deleteGroup, null, null);
+            this.DeleteGroup = new DelegateCommand("Удалить задание", deleteGroup, null, null);
         }
 
         private void OpenFolderWhisMail(object obj)
@@ -208,8 +208,11 @@ namespace ATPWork.MyApp.ViewModel.MainAtp
 
         private void deleteGroup(object obj)
         {
+
             var res = MessageBox.Show("Удалить задание?", "Удаление задания", MessageBoxButton.YesNo);
-            if(res == MessageBoxResult.Yes)
+            if (obj is CollectionViewGroup)
+            {
+                if (res == MessageBoxResult.Yes)
                 {
                     var gg = (CollectionViewGroup)obj;
                     List<AktTehProverki> tempList = new List<AktTehProverki>();
@@ -221,8 +224,19 @@ namespace ATPWork.MyApp.ViewModel.MainAtp
                     {
                         MainAtpModel.AllAktInCurrentWork.Remove(item);
                         mainAtpVm.AllAktInCurrentWork.Remove(item);
-                    } 
+                    }
                 }
+            }
+            if (obj is AktTehProverki)
+            {
+ 
+                        MainAtpModel.AllAktInCurrentWork.Remove((AktTehProverki)obj);
+                        mainAtpVm.AllAktInCurrentWork.Remove((AktTehProverki)obj);
+                 
+            }
+
+
+
         }
         private bool CanGoPrevousAkt()
         {
@@ -244,7 +258,6 @@ namespace ATPWork.MyApp.ViewModel.MainAtp
             bool unmailedAkts = mainAtpVm.UnmailedAkt > 0;
             bool number = mainAtpVm.MailNumber != 0;
             bool date = mainAtpVm.MailDate != null;
-
             return unmailedAkts && number && date;
         }
 

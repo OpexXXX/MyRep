@@ -192,7 +192,13 @@
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Path=AktName}">
-
+ <TextBlock.ContextMenu>
+                                                                                <ContextMenu>
+                                                                                    <MenuItem Header="{Binding Commands.DeleteGroup.Name, Source={StaticResource MainAtpVM}}"
+    Command="{Binding Commands.DeleteGroup, Source={StaticResource MainAtpVM}}"
+    CommandParameter="{Binding}"/>
+                                                                                </ContextMenu>
+                                                                            </TextBlock.ContextMenu>
                                             </TextBlock>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
@@ -412,34 +418,52 @@
                         </Button>
                     </StackPanel>
                     <ListView     VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling"  ItemsSource="{Binding AbonentsForVnePlan,  Source={StaticResource VnePlanVM}, UpdateSourceTrigger=PropertyChanged}" >
+                        
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" Margin="1,1,1,1">
+                                    
+                                    <StackPanel.Style>
+                                        <Style TargetType="{x:Type StackPanel}">
+                                            <Style.Setters>
+                                                <!-- Background when value is not null -->
+                                                <Setter Property="Background" Value="#FF9CFF86" />
+                                            </Style.Setters>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Path=NumberAktTehProverki}" Value="">
+                                                    <Setter Property="Background" Value="White" />
+                                                </DataTrigger>
+                                                
+                                            </Style.Triggers>
+                                        </Style>
+                                    </StackPanel.Style>
                                     <Border CornerRadius="2" BorderThickness="1" BorderBrush="#FF8C9595">
-                                        <StackPanel Orientation="Horizontal" Margin="1,0,1,0" Width="80">
-                                            <TextBox VerticalAlignment="Top" Text="{Binding Path=DateReg,StringFormat=dd.MM.yyy}"/>
-                                            <TextBox VerticalAlignment="Top" FontSize="16" FontWeight="Bold" Text="{Binding Path=RegNumber}"/>
+                                        <StackPanel Orientation="Vertical" Margin="1,0,1,0" Width="80">
+                                            <TextBox VerticalAlignment="Top" Text="{Binding Path=DateReg,StringFormat=dd.MM.yyy}" Background="{x:Null}" BorderBrush="{x:Null}" FontSize="10.667"/>
+                                            <TextBox VerticalAlignment="Top" FontSize="13.333" FontWeight="Bold" Text="{Binding Path=RegNumber}" Background="{x:Null}" BorderBrush="{x:Null}"/>
                                         </StackPanel >
                                     </Border>
                                     <Border CornerRadius="2" BorderThickness="1" BorderBrush="#FF8C9595">
                                         <StackPanel Margin="1,0,1,0" Width="280">
-                                            <TextBox VerticalAlignment="Top" TextWrapping="WrapWithOverflow" Text="{Binding Path=FIO}"/>
-                                            <TextBox VerticalAlignment="Top" FontSize="12" Text="{Binding Path=NumberLS}"/>
+                                            <TextBox VerticalAlignment="Top" TextWrapping="WrapWithOverflow" Text="{Binding Path=FIO}" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                                            <TextBox VerticalAlignment="Top" FontSize="10.667" Text="{Binding Path=NumberLS}" Background="{x:Null}" BorderBrush="{x:Null}"/>
                                         </StackPanel>
                                     </Border>
                                     <Border CornerRadius="2" BorderThickness="1" BorderBrush="#FF8C9595">
                                         <StackPanel Margin="1,0,1,0">
-                                            <TextBox VerticalAlignment="Top" TextWrapping="WrapWithOverflow" Text="{Binding Path=Adress, Mode=OneWay}"/>
-                                            <TextBox VerticalAlignment="Top" TextWrapping="WrapWithOverflow" Text="{Binding Path=Primechanie}"/>
+                                            <TextBox VerticalAlignment="Top" TextWrapping="WrapWithOverflow" Text="{Binding Path=Adress, Mode=OneWay}" BorderBrush="{x:Null}" Background="{x:Null}"/>
+                                            <TextBox VerticalAlignment="Top" TextWrapping="WrapWithOverflow" Text="{Binding Path=Primechanie}" Background="{x:Null}" BorderBrush="{x:Null}" FontSize="10.667"/>
                                         </StackPanel>
                                     </Border>
                                     <Border CornerRadius="2" BorderThickness="1" BorderBrush="#FF8C9595">
                                         <StackPanel Margin="1,1,1,1">
-                                            <TextBox VerticalAlignment="Top" Text="{Binding Path=DopuskFlag}"/>
-                                            <TextBox VerticalAlignment="Top" TextWrapping="WrapWithOverflow" FontSize="11" Text="{Binding Path=PhoneNumbers}"/>
+                                            <TextBox VerticalAlignment="Top" Text="{Binding Path=DopuskFlag}" Background="{x:Null}" BorderBrush="{x:Null}"/>
+                                            <TextBox VerticalAlignment="Top" TextWrapping="WrapWithOverflow" FontSize="11" Text="{Binding Path=PhoneNumbers}" Background="{x:Null}" BorderBrush="{x:Null}"/>
                                         </StackPanel>
                                     </Border>
-                                    <TextBox VerticalAlignment="Top" Text="{Binding Path=NumberAktTehProverki}"/>
+                                
+                                    <TextBox MinWidth="20" VerticalAlignment="Top" Text="{Binding Path=NumberAktTehProverki}" Background="{x:Null}"/>
+                                    
                                 </StackPanel>
 
                             </DataTemplate>

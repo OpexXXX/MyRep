@@ -129,7 +129,7 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
             AbonentsForVnePlan.GroupDescriptions.Add(new PropertyGroupDescription("City"));
             AbonentsForVnePlan.Filter = str => ((str as VnePlanZayavka).NumberAktTehProverki=="");
             AbonentsForVnePlan.SortDescriptions.Clear();
-            AbonentsForVnePlan.SortDescriptions.Add(new SortDescription("Group", ListSortDirection.Ascending));
+            
             AbonentsForVnePlan.SortDescriptions.Add(new SortDescription("City", ListSortDirection.Ascending));
             AbonentsForVnePlan.SortDescriptions.Add(new SortDescription("Street", ListSortDirection.Ascending));
             AbonentsForVnePlan.SortDescriptions.Add(new SortDescription("House", ListSortDirection.Ascending));
