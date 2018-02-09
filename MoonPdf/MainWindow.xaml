@@ -452,7 +452,7 @@
                                         <Setter Property="Template">
                                             <Setter.Value>
                                                 <ControlTemplate TargetType="{x:Type GroupItem}">
-                                                    <Expander IsExpanded="{Binding ExpanderOpen, Source={StaticResource VnePlanVM}}"  BorderThickness="1,1,1,1" ToolTip="{Binding Path=Name}">
+                                                    <Expander IsExpanded="{Binding ExpanderOpen, Source={StaticResource VnePlanVM}, Mode=OneWay}"  BorderThickness="1,1,1,1" ToolTip="{Binding Path=Name}">
                                                         <Expander.Header>
                                                             <DockPanel>
                                                                 <DockPanel.ContextMenu>
