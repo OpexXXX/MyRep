@@ -326,6 +326,39 @@
     <None Include="ATPWorker_TemporaryKey.pfx" />
     <None Include="headertemplate.json" />
     <AppDesigner Include="Properties\" />
+    <Content Include="Shabloni\BU\CalcNoPower.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shabloni\BU\CalcNormativVmishatelstvo.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shabloni\BU\CalcPower.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shabloni\BU\Content.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shabloni\BU\mail_62.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shabloni\BU\mail_62NoPower.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shabloni\BU\mail_81-11.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shabloni\BU\Obesneniya.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shabloni\BU\Police.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shabloni\Dopusk.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shabloni\Proverka.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -416,11 +449,21 @@
     <Resource Include="Resources\icons8-группа-пользователей-40.png" />
     <Resource Include="Resources\icons8-защать-от-магнитного-поля-40 %281%29.png" />
     <Resource Include="Resources\fenix.png" />
-    <Content Include="Resources\Interop.SAPFEWSELib.dll" />
-    <Content Include="Resources\Interop.SAPLogonCtrl.dll" />
-    <Content Include="Resources\libmupdf.dll" />
-    <Content Include="Resources\MoonPdfLib.dll" />
-    <Content Include="Resources\MouseKeyboardActivityMonitor.dll" />
+    <Content Include="Resources\Interop.SAPFEWSELib.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Interop.SAPLogonCtrl.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\libmupdf.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\MoonPdfLib.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\MouseKeyboardActivityMonitor.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\sapfewse.ocx" />
   </ItemGroup>
   <ItemGroup />
