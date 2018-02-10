@@ -151,6 +151,7 @@
                 <MenuItem Header="{Binding Commands.RefreshSapPlombTable.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.RefreshSapPlombTable, Source={StaticResource MainAtpVM}}" InputGestureText="{Binding Commands.RefreshSapPlombTable.GestureText, Source={StaticResource MainAtpVM}}" />
                 <MenuItem Header="{Binding Commands.RefreshSapFlTable.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.RefreshSapFlTable, Source={StaticResource MainAtpVM}}" InputGestureText="{Binding Commands.RefreshSapFlTable.GestureText, Source={StaticResource MainAtpVM}}" />
             </MenuItem>
+            <MenuItem Header="Настройки" Click="MenuItem_Click" />
         </Menu>
         <TabControl DockPanel.Dock="Left">
             <TabItem Header="Тех. проверки" FontSize="14">

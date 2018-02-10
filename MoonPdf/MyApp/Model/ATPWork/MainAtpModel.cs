@@ -113,8 +113,15 @@ namespace MyApp.Model
             }
         }
         #region Инициализация 
+        public static void LoadSettings()
+        {
+            var setT = new ATPWork.Properties.Settings();
+            AktDirektory = setT.DirAktTehPDF;
+            MailDirektory = setT.DirAktTehMail;
+        }
         public static void InitMainAtpModel()
         {
+            LoadSettings();
             InitListsForCombos();
             InitCompleteAktCollection();
             InitAktInWorkCollection();
@@ -222,7 +229,9 @@ namespace MyApp.Model
         private static void createAktPdf(AktTehProverki akt)
         {
             string FileName = akt.Number.ToString() + " " + akt.DateWork?.ToString("d") + " " + akt.NumberLS + ".pdf";
-            string FilePath = AktDirektory + "\\" + FileName;
+
+            string FilePath = System.IO.Path.Combine(AktDirektory , FileName);
+
             try
             {
                 using (FileStream FStream = new System.IO.FileStream(FilePath, System.IO.FileMode.Create))
@@ -581,9 +590,6 @@ namespace MyApp.Model
             DataBaseWorker.DromInWorkTable();
             DataBaseWorker.InsertAPTInWork(AllAktInCurrentWork);
         }
-
-
-
     }
 }
 
