@@ -29,6 +29,13 @@ namespace MyApp
 
 	public partial class App : Application
 	{
+        private static ATPWork.Properties.Settings _globalSett = new ATPWork.Properties.Settings();
+        public static ATPWork.Properties.Settings GlobalSett
+        {
+            get { return _globalSett; }
+            set { _globalSett = value; }
+        }
+
         protected override void OnStartup(StartupEventArgs e)
         {
             WalkDictionary(this.Resources);

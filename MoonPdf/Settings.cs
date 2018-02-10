@@ -1,4 +1,6 @@
-﻿using MyApp.Model;
+﻿using System;
+using System.Configuration;
+using MyApp.Model;
 
 namespace ATPWork.Properties {
     
@@ -16,16 +18,23 @@ namespace ATPWork.Properties {
             // this.SettingChanging += this.SettingChangingEventHandler;
             //
              this.SettingsSaving += this.SettingsSavingEventHandler;
+            this.SettingsLoaded += SettingsLoadEventHandler;
             //
         }
-        
+
+        private void SettingsLoadEventHandler(object sender, SettingsLoadedEventArgs e)
+        {
+            MainAtpModel.LoadSettings(this);
+        }
+
         private void SettingChangingEventHandler(object sender, System.Configuration.SettingChangingEventArgs e) {
             // Добавьте здесь код для обработки события SettingChangingEvent.
         }
         
-        private void SettingsSavingEventHandler(object sender, System.ComponentModel.CancelEventArgs e) {
+        private void SettingsSavingEventHandler(object sender, System.ComponentModel.CancelEventArgs e)
+        {
 
-           
+            MainAtpModel.LoadSettings(this);
         }
     }
 }

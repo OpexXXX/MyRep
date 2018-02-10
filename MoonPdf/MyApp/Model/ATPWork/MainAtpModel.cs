@@ -8,6 +8,7 @@ using System.Windows;
 using Ionic.Zip;
 using System.Text;
 using MoonPdf;
+using ATPWork.Properties;
 
 namespace MyApp.Model
 
@@ -44,6 +45,8 @@ namespace MyApp.Model
             get { return _placePL; }
             set { _placePL = value; }
         }
+
+        
         #endregion
         #region коллекция актов
         public delegate void AllAtpListRefreshHandler();
@@ -113,15 +116,14 @@ namespace MyApp.Model
             }
         }
         #region Инициализация 
-        public static void LoadSettings()
+        internal static void LoadSettings(Settings settings)
         {
-            var setT = new ATPWork.Properties.Settings();
-            AktDirektory = setT.DirAktTehPDF;
-            MailDirektory = setT.DirAktTehMail;
+            AktDirektory = settings.DirAktTehPDF;
+            MailDirektory = settings.DirAktTehMail;
         }
+       
         public static void InitMainAtpModel()
         {
-            LoadSettings();
             InitListsForCombos();
             InitCompleteAktCollection();
             InitAktInWorkCollection();
@@ -283,7 +285,7 @@ namespace MyApp.Model
             {
                 progress.Report("Допуски.pdf");
                 FileName = "Допуски.pdf";
-                FilePath = folderPath + "\\" + FileName;
+                FilePath = System.IO.Path.Combine(folderPath , FileName);
                 try
                 {
                     using (FileStream FStream = new System.IO.FileStream(FilePath, System.IO.FileMode.Create))
@@ -297,7 +299,7 @@ namespace MyApp.Model
                         doc.Open();
                         foreach (var item in dopuski)
                         {
-                            iTextSharp.text.pdf.PdfReader ReaderDoc1 = new iTextSharp.text.pdf.PdfReader(AktDirektory + "\\" + item.NamePdfFile);
+                            iTextSharp.text.pdf.PdfReader ReaderDoc1 = new iTextSharp.text.pdf.PdfReader(System.IO.Path.Combine(AktDirektory, item.NamePdfFile));
                             Writer.AddDocument(ReaderDoc1);
                         }
                         doc.Close();
@@ -312,7 +314,7 @@ namespace MyApp.Model
             {
                 progress.Report("Проверки.pdf");
                 FileName = "Проверки.pdf";
-                FilePath = folderPath + "\\" + FileName;
+                FilePath = System.IO.Path.Combine(folderPath, FileName);
                 try
                 {
                     using (FileStream FStream = new System.IO.FileStream(FilePath, System.IO.FileMode.Create))
@@ -325,7 +327,7 @@ namespace MyApp.Model
                         doc.Open();
                         foreach (var item in proverki)
                         {
-                            iTextSharp.text.pdf.PdfReader ReaderDoc1 = new iTextSharp.text.pdf.PdfReader(AktDirektory + "\\" + item.NamePdfFile);
+                            iTextSharp.text.pdf.PdfReader ReaderDoc1 = new iTextSharp.text.pdf.PdfReader(System.IO.Path.Combine(AktDirektory, item.NamePdfFile));
                             Writer.AddDocument(ReaderDoc1);
                         }
                         doc.Close();
@@ -349,7 +351,7 @@ namespace MyApp.Model
             progress.Report(">=======================================<");
             List<AktTehProverki> TempList = new List<AktTehProverki>();
             string mailName = "исх.№91-" + numberMail + " от " + dateMail.ToString("d") + "г. Акты ПР ФЛ";
-            string currentMailDirectory = MailDirektory + "\\" + mailName;
+            string currentMailDirectory = System.IO.Path.Combine(MailDirektory , mailName);
             progress.Report("Создаем папку сопроводительного письма: " + currentMailDirectory);
             if (!Directory.Exists(currentMailDirectory)) Directory.CreateDirectory(currentMailDirectory);
             foreach (AktTehProverki item in AllAkt)
@@ -358,7 +360,7 @@ namespace MyApp.Model
                 bool mailed = item.DateMail == null;
                 if (mailed)
                 {
-                    string filePath = AktDirektory + "\\" + item.NamePdfFile;
+                    string filePath = System.IO.Path.Combine(AktDirektory, item.NamePdfFile);
                     bool PdfExist = File.Exists(filePath);
                     if (PdfExist) TempList.Add(item);
                     else progress.Report("Не найден pdf фаил " + item.NamePdfFile);
@@ -410,12 +412,12 @@ namespace MyApp.Model
         {
             List<AktTehProverki> TempList = new List<AktTehProverki>();
             string mailName = "исх.№91-" + numberMail + " от " + dateMail.ToString("d") + "г. Акты ПР ФЛ";
-            string currentMailDirectory = MailDirektory + "\\" + mailName;
+            string currentMailDirectory = System.IO.Path.Combine(MailDirektory, mailName);
             if (!Directory.Exists(currentMailDirectory)) Directory.CreateDirectory(currentMailDirectory);
             foreach (AktTehProverki item in akts)
             {
                 item.checkToComplete();
-                string filePath = AktDirektory + "\\" + item.NamePdfFile;
+                string filePath = System.IO.Path.Combine(AktDirektory, item.NamePdfFile);
                 bool PdfExist = File.Exists(filePath);
                 if (PdfExist) TempList.Add(item);
             }
@@ -453,7 +455,7 @@ namespace MyApp.Model
             int i = 0;
             foreach (var item in akts)
             {
-                if ((File.Exists(AktDirektory + "\\" + item.NamePdfFile)))
+                if ((File.Exists(System.IO.Path.Combine(AktDirektory, item.NamePdfFile))))
                 {
                     try
                     {
@@ -487,7 +489,7 @@ namespace MyApp.Model
                 MessageBox.Show(ex.Message);
                 return;
             }
-            if ((File.Exists(AktDirektory + "\\" + akt.NamePdfFile)))
+            if ((File.Exists(System.IO.Path.Combine(AktDirektory, akt.NamePdfFile))))
             {
                 try
                 {
@@ -523,7 +525,7 @@ namespace MyApp.Model
             int i = 0;
             foreach (var item in AllAkt)
             {
-                if ((item.SapNumberAkt == "") && (File.Exists(AktDirektory + "\\" + item.NamePdfFile)))
+                if ((item.SapNumberAkt == "") && (File.Exists(System.IO.Path.Combine(AktDirektory, item.NamePdfFile))))
                 {
                     try
                     {

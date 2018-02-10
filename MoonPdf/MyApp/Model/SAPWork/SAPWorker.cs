@@ -309,7 +309,7 @@ namespace MoonPdf
             GuiButton okFileBtn = (GuiButton)SapSession.ActiveWindow.FindByName("btn[0]", "GuiButton"); //btn[0] КнопкаОК
             typeFile.Text = "PDF";
             primechanieFile.Text = "";
-            pathFile.Text = pdfDirectory +"\\" + akt.NamePdfFile;
+            pathFile.Text = System.IO.Path.Combine(pdfDirectory, akt.NamePdfFile);
             okFileBtn.Press();
             try
             {

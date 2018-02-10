@@ -18,7 +18,7 @@
                         <StackPanel>
                             <Grid Height="55">
                                 <TextBlock   Height="18" Margin="0,3,0,0" VerticalAlignment="Top"  >Папка с актами в PDF</TextBlock>
-                                <TextBox Text="{Binding DirAktTehPDF, Source={StaticResource Sett}, UpdateSourceTrigger=PropertyChanged}" Height="27" Margin="5,21,38,0" VerticalAlignment="Top" />
+                                <TextBox x:Name="DirAktTehPDF"  Text="{Binding DirAktTehPDF, Source={StaticResource Sett}, UpdateSourceTrigger=PropertyChanged}" Height="27" Margin="5,21,38,0" VerticalAlignment="Top" />
                                 <Button Click="SelectDirAktPDF"  Content="..." Margin="0,21,5,0" Height="27" VerticalAlignment="Top" HorizontalAlignment="Right" Width="28"/>
                             </Grid>
                             <Grid Height="55">
@@ -52,7 +52,8 @@
 
         </TabControl>
         <StackPanel  Height="30" Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right">
-            <Button Content="Сохранить" Height="24" Width="67" Click="Button_Click" />
+            <Button Content="Ок" Height="24" Width="67" Click="Button_Click_2" Margin="5,0,5,0"/>
+            <Button Content="Применить" Height="24" Width="67" Click="Button_Click" />
             <Button Content="Отмена" Height="24" Width="53" Margin="5,0,5,0" Click="Button_Click_1" />
         </StackPanel>
     </DockPanel>

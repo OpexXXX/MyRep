@@ -70,7 +70,8 @@ namespace MyApp
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             var g = new Settings();
-            g.Show();
+            g.Owner = this;
+            g.ShowDialog();
         }
     }
 }

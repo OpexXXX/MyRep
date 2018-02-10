@@ -1,4 +1,5 @@
-﻿using MyApp.Model;
+﻿using MyApp;
+using MyApp.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace ATPWork.MyApp.View
     /// </summary>
     public partial class Settings : Window
     {
-        private ATPWork.Properties.Settings _sett;
+        private ATPWork.Properties.Settings _sett = App.GlobalSett;
         public ATPWork.Properties.Settings Sett
         {
             get { return _sett; }
@@ -30,13 +31,12 @@ namespace ATPWork.MyApp.View
         public Settings()
         {
             InitializeComponent();
-            Sett = (ATPWork.Properties.Settings)this.Resources["Sett"];
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Sett.Save();
-            MainAtpModel.LoadSettings();
+
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
@@ -50,6 +50,8 @@ namespace ATPWork.MyApp.View
             {
                 System.Windows.Forms.DialogResult result = dialog.ShowDialog();
                 if (result == System.Windows.Forms.DialogResult.OK) Sett.DirAktTehPDF = dialog.SelectedPath;
+               BindingExpression be = DirAktTehPDF.GetBindingExpression(TextBox.TextProperty);
+                be.UpdateTarget();
             }
         }
 
@@ -59,7 +61,16 @@ namespace ATPWork.MyApp.View
             {
                 System.Windows.Forms.DialogResult result = dialog.ShowDialog();
                 if (result == System.Windows.Forms.DialogResult.OK) Sett.DirAktTehMail = dialog.SelectedPath;
+                BindingExpression be = DirAktTehPDF.GetBindingExpression(TextBox.TextProperty);
+                be.UpdateSource();
             }
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            Sett.Save();
+            
+            this.Close();
         }
     }
 }
