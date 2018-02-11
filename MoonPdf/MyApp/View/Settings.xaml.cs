@@ -21,7 +21,7 @@ namespace ATPWork.MyApp.View
     /// </summary>
     public partial class Settings : Window
     {
-        private ATPWork.Properties.Settings _sett = App.GlobalSett;
+        private ATPWork.Properties.Settings _sett  =  Properties.Settings.Default;
         public ATPWork.Properties.Settings Sett
         {
             get { return _sett; }
@@ -50,8 +50,7 @@ namespace ATPWork.MyApp.View
             {
                 System.Windows.Forms.DialogResult result = dialog.ShowDialog();
                 if (result == System.Windows.Forms.DialogResult.OK) Sett.DirAktTehPDF = dialog.SelectedPath;
-               BindingExpression be = DirAktTehPDF.GetBindingExpression(TextBox.TextProperty);
-                be.UpdateTarget();
+              
             }
         }
 
@@ -61,8 +60,7 @@ namespace ATPWork.MyApp.View
             {
                 System.Windows.Forms.DialogResult result = dialog.ShowDialog();
                 if (result == System.Windows.Forms.DialogResult.OK) Sett.DirAktTehMail = dialog.SelectedPath;
-                BindingExpression be = DirAktTehPDF.GetBindingExpression(TextBox.TextProperty);
-                be.UpdateSource();
+              
             }
         }
 

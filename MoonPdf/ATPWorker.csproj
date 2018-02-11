@@ -232,6 +232,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="MyApp\Model\Abonent.cs" />
+    <Compile Include="MyApp\Model\AktBuWork\AktBu.cs" />
+    <Compile Include="MyApp\Model\AktBuWork\AktsBuModel.cs" />
     <Compile Include="MyApp\Model\ATPWork\Agent.cs" />
     <Compile Include="MyApp\Model\ATPWork\MainAtpModel.cs" />
     <Compile Include="MyApp\Model\ATPWork\Plomba.cs" />
@@ -244,12 +246,16 @@
     <Compile Include="MyApp\Model\VnePlan\VnePlanModel.cs" />
     <Compile Include="MyApp\Model\VnePlan\VnePlanZayavka.cs" />
     <Compile Include="MyApp\Model\WordShablon.cs" />
+    <Compile Include="MyApp\ViewModel\MainAktBu\AktsBuViewModel.cs" />
+    <Compile Include="MyApp\ViewModel\MainAktBu\BuEditor\BuEditorViewModel.cs" />
+    <Compile Include="MyApp\ViewModel\MainAktBu\BuEditor\Commands.cs" />
+    <Compile Include="MyApp\ViewModel\MainAktBu\BuEditor\Validators.cs" />
+    <Compile Include="MyApp\ViewModel\MainAktBu\Commands.cs" />
     <Compile Include="MyApp\ViewModel\MainAtp\AtpEditor\AptEditor.cs" />
     <Compile Include="MyApp\ViewModel\MainAtp\AtpEditor\Commands.cs" />
     <Compile Include="MyApp\ViewModel\MainAtp\AtpEditor\Validators.cs" />
     <Compile Include="MyApp\ViewModel\BaseCommand.cs" />
     <Compile Include="MyApp\ViewModel\DelegateComand.cs" />
-    <Compile Include="MyApp\ViewModel\MainAtp\AtpSettings.cs" />
     <Compile Include="MyApp\ViewModel\MainAtp\Commands.cs" />
     <Compile Include="MyApp\ViewModel\MainAtp\MainAtpVM.cs" />
     <Compile Include="MyApp\ViewModel\MainAtp\PlombEditor\Commands.cs" />
@@ -257,11 +263,13 @@
     <Compile Include="MyApp\ViewModel\MainAtp\PlombEditor\Validators.cs" />
     <Compile Include="MyApp\ViewModel\PlanViewModel\Commands.cs" />
     <Compile Include="MyApp\ViewModel\PlanViewModel\PlanVM.cs" />
-    <Compile Include="MyApp\ViewModel\SettingsVM.cs" />
     <Compile Include="MyApp\ViewModel\ViewModelBase.cs" />
     <Compile Include="MyApp\ViewModel\VnePlanViewModel\Commands.cs" />
     <Compile Include="MyApp\ViewModel\VnePlanViewModel\Validators.cs" />
     <Compile Include="MyApp\ViewModel\VnePlanViewModel\VnePlanVM.cs" />
+    <Compile Include="MyApp\View\AktBuEditor.xaml.cs">
+      <DependentUpon>AktBuEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MyApp\View\AtpEditor.xaml.cs">
       <DependentUpon>AtpEditor.xaml</DependentUpon>
     </Compile>
@@ -293,6 +301,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="MyApp\View\AktBuEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MyApp\View\AtpEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
