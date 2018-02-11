@@ -151,6 +151,7 @@
                 <MenuItem Header="{Binding Commands.RefreshSapPlombTable.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.RefreshSapPlombTable, Source={StaticResource MainAtpVM}}" InputGestureText="{Binding Commands.RefreshSapPlombTable.GestureText, Source={StaticResource MainAtpVM}}" />
                 <MenuItem Header="{Binding Commands.RefreshSapFlTable.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.RefreshSapFlTable, Source={StaticResource MainAtpVM}}" InputGestureText="{Binding Commands.RefreshSapFlTable.GestureText, Source={StaticResource MainAtpVM}}" />
             </MenuItem>
+            <MenuItem Header="Настройки" Click="MenuItem_Click" />
         </Menu>
         <TabControl DockPanel.Dock="Left">
             <TabItem Header="Тех. проверки" FontSize="14">
@@ -192,13 +193,13 @@
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Path=AktName}">
- <TextBlock.ContextMenu>
-                                                                                <ContextMenu>
-                                                                                    <MenuItem Header="{Binding Commands.DeleteGroup.Name, Source={StaticResource MainAtpVM}}"
+                                                <TextBlock.ContextMenu>
+                                                    <ContextMenu>
+                                                        <MenuItem Header="{Binding Commands.DeleteGroup.Name, Source={StaticResource MainAtpVM}}"
     Command="{Binding Commands.DeleteGroup, Source={StaticResource MainAtpVM}}"
     CommandParameter="{Binding}"/>
-                                                                                </ContextMenu>
-                                                                            </TextBlock.ContextMenu>
+                                                    </ContextMenu>
+                                                </TextBlock.ContextMenu>
                                             </TextBlock>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
@@ -359,18 +360,18 @@
                             <StackPanel>
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock VerticalAlignment="Center">ФИО:</TextBlock>
-                                <TextBox TextWrapping="WrapWithOverflow" Text="{Binding ZayavkaToAdd.FIO, Source={StaticResource VnePlanVM}}" BorderBrush="{x:Null}"  ></TextBox>
+                                    <TextBox TextWrapping="WrapWithOverflow" Text="{Binding ZayavkaToAdd.FIO, Source={StaticResource VnePlanVM}}" BorderBrush="{x:Null}"  ></TextBox>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock VerticalAlignment="Center">Адрес: </TextBlock>
+                                    <TextBlock VerticalAlignment="Center">Адрес:</TextBlock>
                                     <TextBox TextWrapping="WrapWithOverflow" Text="{Binding ZayavkaToAdd.Adress, Source={StaticResource VnePlanVM},Mode=OneWay}" BorderBrush="{x:Null}"></TextBox>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock VerticalAlignment="Center">№Л/С:</TextBlock>
                                     <TextBox TextWrapping="WrapWithOverflow" Text="{Binding ZayavkaToAdd.NumberLS, Source={StaticResource VnePlanVM}}" BorderBrush="{x:Null}"  ></TextBox>
                                 </StackPanel>
-                                    
-                                
+
+
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock VerticalAlignment="Center">вх №</TextBlock>
                                     <TextBox Text="{Binding ZayavkaToAdd.RegNumber, Source={StaticResource VnePlanVM}, UpdateSourceTrigger=PropertyChanged}" Width="40"  >
@@ -403,7 +404,7 @@
                                         <TextBlock Text="{Binding Commands.CreateWordDoc.Name, Source={StaticResource VnePlanVM}}"/>
                                     </StackPanel>
                                 </Button>
-                                
+
                             </StackPanel>
                         </GroupBox>
                     </StackPanel>
@@ -418,11 +419,11 @@
                         </Button>
                     </StackPanel>
                     <ListView     VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling"  ItemsSource="{Binding AbonentsForVnePlan,  Source={StaticResource VnePlanVM}, UpdateSourceTrigger=PropertyChanged}" >
-                        
+
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" Margin="1,1,1,1">
-                                    
+
                                     <StackPanel.Style>
                                         <Style TargetType="{x:Type StackPanel}">
                                             <Style.Setters>
@@ -433,7 +434,7 @@
                                                 <DataTrigger Binding="{Binding Path=NumberAktTehProverki}" Value="">
                                                     <Setter Property="Background" Value="White" />
                                                 </DataTrigger>
-                                                
+
                                             </Style.Triggers>
                                         </Style>
                                     </StackPanel.Style>
@@ -461,9 +462,9 @@
                                             <TextBox VerticalAlignment="Top" TextWrapping="WrapWithOverflow" FontSize="11" Text="{Binding Path=PhoneNumbers}" Background="{x:Null}" BorderBrush="{x:Null}"/>
                                         </StackPanel>
                                     </Border>
-                                
+
                                     <TextBox MinWidth="20" VerticalAlignment="Top" Text="{Binding Path=NumberAktTehProverki}" Background="{x:Null}"/>
-                                    
+
                                 </StackPanel>
 
                             </DataTemplate>
@@ -513,7 +514,67 @@
                 <Grid Margin="0,0,0,0">
                     <TabControl x:Name="tabControlBU" Margin="0,0,0,0" >
                         <TabItem Header="Занесение" FontSize="14">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="263*"/>
+                                    <ColumnDefinition Width="478*"/>
+                                    <ColumnDefinition Width="364*"/>
+                                </Grid.ColumnDefinitions>
+                                <mpp:MoonPdfPanel Background="LightGray" PageRowDisplay="ContinuousPageRows" x:Name="PdfPanelBu" x:FieldModifier="private"  AllowDrop="False" />
+                                <ListView  ScrollViewer.HorizontalScrollBarVisibility="Disabled"   Name="AktBuInWork" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling"  ItemsSource="{Binding Source={StaticResource AktInWorkSourse}}" SelectedItem="{Binding  Path=SelectedAkt, Source={StaticResource MainAtpVM}}" Grid.Column="2" >
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=AktName}">
+                                                <TextBlock.ContextMenu>
+                                                    <ContextMenu>
+                                                        <MenuItem Header="{Binding Commands.DeleteGroup.Name, Source={StaticResource MainAtpVM}}"
+    Command="{Binding Commands.DeleteGroup, Source={StaticResource MainAtpVM}}"
+    CommandParameter="{Binding}"/>
+                                                    </ContextMenu>
+                                                </TextBlock.ContextMenu>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                    <ListView.GroupStyle>
+                                        <GroupStyle>
+                                            <GroupStyle.ContainerStyle>
+                                                <Style TargetType="{x:Type GroupItem}">
+                                                    <Setter Property="Margin" Value="0,0,0,5"/>
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="{x:Type GroupItem}">
+                                                                <Expander IsExpanded="False"  BorderThickness="1,1,1,5" ToolTip="{Binding Path=Name}">
 
+                                                                    <Expander.Header>
+                                                                        <DockPanel>
+                                                                            <DockPanel.ContextMenu>
+                                                                                <ContextMenu>
+                                                                                    <MenuItem Header="{Binding Commands.DeleteGroup.Name, Source={StaticResource MainAtpVM}}"
+    Command="{Binding Commands.DeleteGroup, Source={StaticResource MainAtpVM}}"
+    CommandParameter="{Binding}"/>
+                                                                                </ContextMenu>
+                                                                            </DockPanel.ContextMenu>
+                                                                            <TextBlock DockPanel.Dock="Top" TextWrapping="WrapWithOverflow" FontWeight="Bold" Text="{Binding Path=Name, Converter={local:FileName}}"  Margin="5,0,0,0"/>
+                                                                            <TextBlock DockPanel.Dock="Left"  Text="{Binding Path=Items.Count }"/>
+                                                                            <TextBlock DockPanel.Dock="Left" Text=" шт."/>
+                                                                        </DockPanel>
+                                                                    </Expander.Header>
+                                                                    <Expander.Content>
+                                                                        <ItemsPresenter />
+                                                                    </Expander.Content>
+                                                                </Expander>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </GroupStyle.ContainerStyle>
+                                        </GroupStyle>
+                                        <!-- Style for groups under the top level. -->
+                                    </ListView.GroupStyle>
+                                    <ListView.Items>
+                                    </ListView.Items>
+                                </ListView>
+                            </Grid>
 
                         </TabItem>
                         <TabItem Header="Реестр" FontSize="14">

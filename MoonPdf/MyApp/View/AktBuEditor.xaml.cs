@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MyApp
+namespace ATPWork.MyApp.View
 {
     /// <summary>
-    /// Логика взаимодействия для SearchWindowOplombirovki.xaml
+    /// Логика взаимодействия для AktBuEditor.xaml
     /// </summary>
-    public partial class SearchWindowOplombirovki : Window
+    public partial class AktBuEditor : UserControl
     {
-        public SearchWindowOplombirovki()
+        public AktBuEditor()
         {
             InitializeComponent();
         }
