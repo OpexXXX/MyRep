@@ -152,13 +152,10 @@
                         <Button>...</Button>
                     </StackPanel>
                 </StackPanel>
-
             </GroupBox>
             <GroupBox  BorderBrush="#FF999999" BorderThickness="2" Width="240">
-                
                 <GroupBox.Header>
                     <StackPanel Orientation="Horizontal">
-                        
                         <TextBlock Text="Акт проверки" FontWeight="Bold" FontSize="14" />
                         <Button>
                             <Button.Content>
@@ -177,7 +174,6 @@
                                 <KeyBinding Key="Up" Command="{Binding Commands.NumberUp, Source={StaticResource BuEditorViewModel}}" />
                                 <KeyBinding Key="Down" Command="{Binding Commands.NumberDown, Source={StaticResource BuEditorViewModel}}" />
                             </TextBox.InputBindings>
-
                             <Binding Source="{StaticResource BuEditorViewModel}" Path="AktInWork.Number" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
         UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
@@ -369,13 +365,17 @@
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Image Width="70"  Source="/ATPWork;component/Resources/fenix.png" >
-                            </Image>
+                            <Border BorderBrush="Black" BorderThickness="1" CornerRadius="2">
+                                <Image Width="70" Margin="2,2,2,2" Source="d:\Desktop\06.02.2018 фото\DCIM\100NIKON\DSCN2280.JPG" >
+                                </Image>
+                            </Border>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                     <ListBoxItem>
-                        <Image Width="70" Source="/ATPWork;component/Resources/fenix.png" >
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="2">
+                        <Image Width="70" Margin="2,2,2,2" Source="d:\Desktop\06.02.2018 фото\DCIM\100NIKON\DSCN2280.JPG" >
                         </Image>
+                        </Border>
                     </ListBoxItem>
                    
                 </ListBox>
