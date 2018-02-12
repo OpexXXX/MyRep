@@ -6,8 +6,8 @@
              xmlns:local="clr-namespace:ATPWork.MyApp.View"
              xmlns:viewModel="clr-namespace:ATPWork.MyApp.ViewModel.MainAktBu.BuEditor"
              xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing" 
-             mc:Ignorable="d" d:DesignWidth="300"
-              KeyboardNavigation.TabNavigation="Cycle" Height="671.218">
+             mc:Ignorable="d" 
+              KeyboardNavigation.TabNavigation="Cycle" d:DesignWidth="500" >
     <UserControl.Resources>
         <viewModel:BuEditorViewModel x:Key="BuEditorViewModel"/>
         <Style x:Key="TextBoxStyle" TargetType="{x:Type TextBox}">
@@ -60,9 +60,8 @@
             </StackPanel>
         </DataTemplate>
     </UserControl.Resources>
-    <StackPanel Background="White">
-
-        <GroupBox  BorderThickness="2" BorderBrush="#FF999999">
+    <StackPanel >
+        <GroupBox HorizontalAlignment="Left" BorderThickness="2" BorderBrush="#FF999999" Width="500">
             <GroupBox.Header>
                 <StackPanel Orientation="Horizontal">
                     <Image Source="/ATPWork;component/Resources/icons8-гость-мужчина-40.png" Height="20" Width="20" Visibility="Collapsed"/>
@@ -90,37 +89,190 @@
                     <Button  Focusable="False" Command="{Binding Commands.GetDataFromDbByNumberLs, Source={StaticResource BuEditorViewModel}}">
                         <Image  Height="20" Source="/ATPWork;component/Resources/icons8-поиск-40.png" Width="20" />
                     </Button>
-
+                    <TextBlock  TextWrapping="Wrap" Text="{Binding AktInWork.FIO, Source={StaticResource BuEditorViewModel}}" Style="{StaticResource Hidden}"/>
                 </StackPanel>
                 <StackPanel>
-                    <TextBlock  TextWrapping="Wrap" Text="{Binding AktInWork.FIO, Source={StaticResource BuEditorViewModel}}" Style="{StaticResource Hidden}"/>
                     <TextBlock   Text="{Binding AktInWork.Adress, Source={StaticResource BuEditorViewModel}}"  Style="{StaticResource Hidden}"  />
                 </StackPanel>
             </StackPanel>
         </GroupBox>
-        <GroupBox  BorderBrush="#FF999999" BorderThickness="2">
+        <StackPanel  HorizontalAlignment="Left" Orientation="Horizontal">
+
+            <GroupBox  BorderBrush="#FF999999" BorderThickness="2" Width="260">
+                <GroupBox.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Visibility="Collapsed" Source="/ATPWork;component/Resources/icons8-документ-40.png" Height="20" Width="20"/>
+                        <TextBlock Text="Акт БУ" FontWeight="Bold" FontSize="14" />
+                    </StackPanel>
+                </GroupBox.Header>
+                <StackPanel>
+                    <StackPanel  Orientation="Horizontal">
+                        <TextBlock Text="Номер" VerticalAlignment="Center"/>
+                        <TextBox   VerticalAlignment="Center" Style="{StaticResource TextBoxStyle}"   Width="93" MaxLength="5" >
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Up" Command="{Binding Commands.NumberUp, Source={StaticResource BuEditorViewModel}}" />
+                                <KeyBinding Key="Down" Command="{Binding Commands.NumberDown, Source={StaticResource BuEditorViewModel}}" />
+                            </TextBox.InputBindings>
+
+                            <Binding Source="{StaticResource BuEditorViewModel}" Path="AktInWork.Number" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
+        UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <viewModel:ValidNumber/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox>
+                        <DatePicker  Margin="5,0,0,0"
+                                        SelectedDate ="{Binding AktInWork.DateWork, Source={StaticResource BuEditorViewModel}}"
+                                        HorizontalAlignment="Left" 
+                                       VerticalAlignment="Center" Height="25" Width="111" SelectedDateFormat="Short" 
+                            DisplayDateEnd="2025-12-31" 
+                            DisplayDateStart="2017-01-01" 
+                            TextOptions.TextFormattingMode="Display" 
+                            IsManipulationEnabled="True">
+                            <DatePicker.InputBindings>
+                                <KeyBinding Key="Up" Command="{Binding Commands.NumberDown, Source={StaticResource BuEditorViewModel}}" />
+                                <KeyBinding Key="Down" Command="{Binding Commands.DateDown, Source={StaticResource BuEditorViewModel}}" />
+                            </DatePicker.InputBindings>
+                        </DatePicker>
+                    </StackPanel>
+                    <StackPanel  Orientation="Horizontal">
+                        <TextBlock>PDF:</TextBlock>
+                        <TextBox   VerticalAlignment="Center" Style="{StaticResource TextBoxStyle}"   Width="199"  >
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Up" Command="{Binding Commands.NumberUp, Source={StaticResource BuEditorViewModel}}" />
+                                <KeyBinding Key="Down" Command="{Binding Commands.NumberDown, Source={StaticResource BuEditorViewModel}}" />
+                            </TextBox.InputBindings>
+                            <Binding Source="{StaticResource BuEditorViewModel}" Path="AktInWork.Number" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
+        UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <viewModel:ValidNumber/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox>
+                        <Button>...</Button>
+                    </StackPanel>
+                </StackPanel>
+
+            </GroupBox>
+            <GroupBox  BorderBrush="#FF999999" BorderThickness="2" Width="240">
+                
+                <GroupBox.Header>
+                    <StackPanel Orientation="Horizontal">
+                        
+                        <TextBlock Text="Акт проверки" FontWeight="Bold" FontSize="14" />
+                        <Button>
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/ATPWork;component/Resources/icons8-поиск-40.png"  Height="18"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+                </GroupBox.Header>
+                <StackPanel>
+                    <StackPanel  Orientation="Horizontal">
+                        <TextBlock Text="Номер 91/Е-" VerticalAlignment="Center"/>
+                        <TextBox   VerticalAlignment="Center" Style="{StaticResource TextBoxStyle}"   Width="61" MaxLength="5" >
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Up" Command="{Binding Commands.NumberUp, Source={StaticResource BuEditorViewModel}}" />
+                                <KeyBinding Key="Down" Command="{Binding Commands.NumberDown, Source={StaticResource BuEditorViewModel}}" />
+                            </TextBox.InputBindings>
+
+                            <Binding Source="{StaticResource BuEditorViewModel}" Path="AktInWork.Number" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
+        UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <viewModel:ValidNumber/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox>
+                    </StackPanel>
+                    <StackPanel  Orientation="Horizontal">
+                        <TextBlock>PDF:</TextBlock>
+                        <TextBox   VerticalAlignment="Center" Style="{StaticResource TextBoxStyle}"   Width="180" >
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Up" Command="{Binding Commands.NumberUp, Source={StaticResource BuEditorViewModel}}" />
+                                <KeyBinding Key="Down" Command="{Binding Commands.NumberDown, Source={StaticResource BuEditorViewModel}}" />
+                            </TextBox.InputBindings>
+                            <Binding Source="{StaticResource BuEditorViewModel}" Path="AktInWork.Number" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
+        UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <viewModel:ValidNumber/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox>
+                        <Button>...</Button>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+        <StackPanel  HorizontalAlignment="Left" Orientation="Horizontal">
+
+            <GroupBox  BorderBrush="#FF999999" BorderThickness="2">
+                <GroupBox.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/ATPWork;component/Resources/icons8-группа-пользователей-40.png" Height="20" Width="20" Visibility="Collapsed"/>
+                        <TextBlock Text="Агенты" FontWeight="Bold" FontSize="14" />
+                    </StackPanel>
+                </GroupBox.Header>
+                <StackPanel Orientation="Vertical">
+                    <ComboBox   HorizontalAlignment="Left" Height="25" Width="240" ItemsSource="{Binding AgentList, Source={StaticResource BuEditorViewModel}}" SelectedItem="{Binding AktInWork.Agent_1, Source={StaticResource BuEditorViewModel}}" Background="{x:Null}"  BorderThickness="1">
+                    </ComboBox>
+                    <StackPanel Orientation="Horizontal">
+                        <ComboBox  HorizontalAlignment="Left" Height="25" Width="240" ItemsSource="{Binding AgentList, Source={StaticResource BuEditorViewModel}}" SelectedItem="{Binding AktInWork.Agent_2, Source={StaticResource BuEditorViewModel}}" Background="{x:Null}" BorderThickness="1">
+                        </ComboBox>
+                        <Button  Focusable="False" Command="{Binding Commands.RemoveSecondAgent, Source={StaticResource BuEditorViewModel}}">
+                            <Image  Height="20" Source="/ATPWork;component/Resources/icons8-удалить.png" Width="20" />
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox  BorderBrush="#FF999999" BorderThickness="2" Width="221">
+                <GroupBox.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Visibility="Collapsed" Source="/ATPWork;component/Resources/icons8-документ-40.png" Height="20" Width="20"/>
+                        <TextBlock Text="Извещение" FontWeight="Bold" FontSize="14" />
+                    </StackPanel>
+                </GroupBox.Header>
+                <StackPanel>
+
+                    <StackPanel  Orientation="Horizontal">
+                        <TextBlock>PDF:</TextBlock>
+                        <TextBox   VerticalAlignment="Center" Style="{StaticResource TextBoxStyle}"   Width="162" >
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Up" Command="{Binding Commands.NumberUp, Source={StaticResource BuEditorViewModel}}" />
+                                <KeyBinding Key="Down" Command="{Binding Commands.NumberDown, Source={StaticResource BuEditorViewModel}}" />
+                            </TextBox.InputBindings>
+                            <Binding Source="{StaticResource BuEditorViewModel}" Path="AktInWork.Number" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
+        UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <viewModel:ValidNumber/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox>
+                        <Button>...</Button>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+        <GroupBox  HorizontalAlignment="Left" BorderThickness="2" BorderBrush="#FF999999" Width="500" >
             <GroupBox.Header>
                 <StackPanel Orientation="Horizontal">
-                    <Image Visibility="Collapsed" Source="/ATPWork;component/Resources/icons8-документ-40.png" Height="20" Width="20"/>
-                    <TextBlock Text="Акт БУ" FontWeight="Bold" FontSize="14" />
+                    <Image Source="/ATPWork;component/Resources/icons8-счетчик-энергии.png" Height="20" Width="20" Visibility="Collapsed"/>
+                    <TextBlock Text="Расчет" FontWeight="Bold" FontSize="14" />
+               
+                    <Button>
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/ATPWork;component/Resources/ok.png" Width="20" Height="20"/>
+                                </StackPanel>
+                            </Button.Content>
+                    </Button>
+                
                 </StackPanel>
             </GroupBox.Header>
             <StackPanel>
-                <StackPanel  Orientation="Horizontal">
-                    <TextBlock Text="Номер 91/Е-" VerticalAlignment="Center"/>
-                    <TextBox   VerticalAlignment="Center" Style="{StaticResource TextBoxStyle}"   Width="50" MaxLength="5" >
-                        <TextBox.InputBindings>
-                            <KeyBinding Key="Up" Command="{Binding Commands.NumberUp, Source={StaticResource BuEditorViewModel}}" />
-                            <KeyBinding Key="Down" Command="{Binding Commands.NumberDown, Source={StaticResource BuEditorViewModel}}" />
-                        </TextBox.InputBindings>
-
-                        <Binding Source="{StaticResource BuEditorViewModel}" Path="AktInWork.Number" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
-        UpdateSourceTrigger="PropertyChanged">
-                            <Binding.ValidationRules>
-                                <viewModel:ValidNumber/>
-                            </Binding.ValidationRules>
-                        </Binding>
-                    </TextBox>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center">с</TextBlock>
                     <DatePicker  Margin="5,0,0,0"
                                         SelectedDate ="{Binding AktInWork.DateWork, Source={StaticResource BuEditorViewModel}}"
                                         HorizontalAlignment="Left" 
@@ -134,81 +286,99 @@
                             <KeyBinding Key="Down" Command="{Binding Commands.DateDown, Source={StaticResource BuEditorViewModel}}" />
                         </DatePicker.InputBindings>
                     </DatePicker>
+                    <TextBlock VerticalAlignment="Center">по</TextBlock>
+                    <DatePicker  Margin="5,0,0,0"
+                                        SelectedDate ="{Binding AktInWork.DateWork, Source={StaticResource BuEditorViewModel}}"
+                                        HorizontalAlignment="Left" 
+                                       VerticalAlignment="Center" Height="25" Width="111" SelectedDateFormat="Short" 
+                            DisplayDateEnd="2025-12-31" 
+                            DisplayDateStart="2017-01-01" 
+                            TextOptions.TextFormattingMode="Display" 
+                            IsManipulationEnabled="True">
+                        <DatePicker.InputBindings>
+                            <KeyBinding Key="Up" Command="{Binding Commands.NumberDown, Source={StaticResource BuEditorViewModel}}" />
+                            <KeyBinding Key="Down" Command="{Binding Commands.DateDown, Source={StaticResource BuEditorViewModel}}" />
+                        </DatePicker.InputBindings>
+                    </DatePicker>
+                    <TextBox VerticalAlignment="Center"></TextBox>
+                    <TextBlock VerticalAlignment="Center">дней</TextBlock>
                 </StackPanel>
-            </StackPanel>
-        </GroupBox>
-        <GroupBox  BorderBrush="#FF999999" BorderThickness="2">
-            <GroupBox.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock>Вид нарушения:</TextBlock>
+                        <ComboBox  Name="Narushenie" HorizontalAlignment="Left" Height="25" Background="{x:Null}"  BorderThickness="1" Width="134">
+                            <ComboBoxItem>Врезка</ComboBoxItem>
+                            <ComboBoxItem>Вмешательство</ComboBoxItem>
+                            <ComboBoxItem>Врезка без мощности</ComboBoxItem>
+                        </ComboBox>
                 <StackPanel Orientation="Horizontal">
-                    <Image Visibility="Collapsed" Source="/ATPWork;component/Resources/icons8-документ-40.png" Height="20" Width="20"/>
-                    <TextBlock Text="Акт проверки" FontWeight="Bold" FontSize="14" />
+                    <TextBlock>Мощность:</TextBlock>
+                    <TextBox></TextBox>
+                    <TextBlock>кВт</TextBlock>
                 </StackPanel>
-            </GroupBox.Header>
-            <StackPanel>
-                <StackPanel  Orientation="Horizontal">
-                    <TextBlock Text="Номер 91/Е-" VerticalAlignment="Center"/>
-                    <TextBox   VerticalAlignment="Center" Style="{StaticResource TextBoxStyle}"   Width="50" MaxLength="5" >
-                        <TextBox.InputBindings>
-                            <KeyBinding Key="Up" Command="{Binding Commands.NumberUp, Source={StaticResource BuEditorViewModel}}" />
-                            <KeyBinding Key="Down" Command="{Binding Commands.NumberDown, Source={StaticResource BuEditorViewModel}}" />
-                        </TextBox.InputBindings>
-
-                        <Binding Source="{StaticResource BuEditorViewModel}" Path="AktInWork.Number" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
-        UpdateSourceTrigger="PropertyChanged">
-                            <Binding.ValidationRules>
-                                <viewModel:ValidNumber/>
-                            </Binding.ValidationRules>
-                        </Binding>
-                    </TextBox>
-                </StackPanel>
-            </StackPanel>
-        </GroupBox>
-        <GroupBox  BorderBrush="#FF999999" BorderThickness="2">
-            <GroupBox.Header>
+                    </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="/ATPWork;component/Resources/icons8-группа-пользователей-40.png" Height="20" Width="20" Visibility="Collapsed"/>
-                    <TextBlock Text="Агенты" FontWeight="Bold" FontSize="14" />
-                </StackPanel>
-            </GroupBox.Header>
-            <StackPanel Orientation="Vertical">
-                <ComboBox   HorizontalAlignment="Left" Height="25" Width="240" ItemsSource="{Binding AgentList, Source={StaticResource BuEditorViewModel}}" SelectedItem="{Binding AktInWork.Agent_1, Source={StaticResource BuEditorViewModel}}" Background="{x:Null}"  BorderThickness="1">
-                </ComboBox>
-                <StackPanel Orientation="Horizontal">
-                    <ComboBox  HorizontalAlignment="Left" Height="25" Width="240" ItemsSource="{Binding AgentList, Source={StaticResource BuEditorViewModel}}" SelectedItem="{Binding AktInWork.Agent_2, Source={StaticResource BuEditorViewModel}}" Background="{x:Null}" BorderThickness="1">
+                    <TextBlock>Чел.</TextBlock>
+                    <TextBox></TextBox>
+                    <TextBlock>Комнат</TextBlock>
+                    <TextBox></TextBox>
+                    <TextBlock>Категория</TextBlock>
+                    <ComboBox  HorizontalAlignment="Left" Height="25" ItemsSource="{Binding AgentList, Source={StaticResource BuEditorViewModel}}" SelectedItem="{Binding AktInWork.Agent_2, Source={StaticResource BuEditorViewModel}}" Background="{x:Null}" BorderThickness="1">
                     </ComboBox>
-                    <Button  Focusable="False" Command="{Binding Commands.RemoveSecondAgent, Source={StaticResource BuEditorViewModel}}">
-                        <Image  Height="20" Source="/ATPWork;component/Resources/icons8-удалить.png" Width="20" />
-                    </Button>
+                    <TextBlock>Норматив</TextBlock>
+                    <TextBox></TextBox>
                 </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Объем:</TextBlock>
+                    <TextBox></TextBox>
+                    <TextBlock>кВт*ч</TextBlock>
+                </StackPanel>
+                <TextBlock>Console</TextBlock>
             </StackPanel>
         </GroupBox>
-        <GroupBox BorderThickness="2" BorderBrush="#FF999999" >
+        <GroupBox  HorizontalAlignment="Left"  BorderThickness="2" BorderBrush="#FF999999" Width="500">
             <GroupBox.Header>
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="/ATPWork;component/Resources/icons8-счетчик-энергии.png" Height="20" Width="20" Visibility="Collapsed"/>
-                    <TextBlock Text="Расчет" FontWeight="Bold" FontSize="14" />
-                </StackPanel>
-            </GroupBox.Header>
-           
-        </GroupBox>
-        <GroupBox   BorderThickness="2" BorderBrush="#FF999999">
-            <GroupBox.Header>
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="/ATPWork;component/Resources/icons8-защать-от-магнитного-поля-40 (1).png" Height="20" Width="20"/>
                     <TextBlock Text="Нарушение(из текста акта)" FontWeight="Bold" FontSize="14" />
                 </StackPanel>
             </GroupBox.Header>
-            <StackPanel>
+            <StackPanel >
+                <TextBox        TextWrapping="WrapWithOverflow"
+                         >
+                    <Binding Source="{StaticResource BuEditorViewModel}" Path="AktInWork.NumberLS" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" NotifyOnValidationError="True"
+      >
+                        <Binding.ValidationRules>
+                            <viewModel:ValidNumberLS/>
+                            <ExceptionValidationRule/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox>
             </StackPanel>
         </GroupBox>
-        <GroupBox   BorderThickness="2" BorderBrush="#FF999999">
+        <GroupBox  HorizontalAlignment="Left"  BorderThickness="2" BorderBrush="#FF999999" Width="500">
             <GroupBox.Header>
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="/ATPWork;component/Resources/icons8-защать-от-магнитного-поля-40 (1).png" Height="20" Width="20"/>
-                    <TextBlock Text="Файлы" FontWeight="Bold" FontSize="14" />
+                    <TextBlock Text="Фото" FontWeight="Bold" FontSize="14" />
                 </StackPanel>
             </GroupBox.Header>
             <StackPanel>
+                <ListBox  ScrollViewer.HorizontalScrollBarVisibility="Disabled"   VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling"   >
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Image Width="70"  Source="/ATPWork;component/Resources/fenix.png" >
+                            </Image>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <ListBoxItem>
+                        <Image Width="70" Source="/ATPWork;component/Resources/fenix.png" >
+                        </Image>
+                    </ListBoxItem>
+                   
+                </ListBox>
             </StackPanel>
         </GroupBox>
     </StackPanel>

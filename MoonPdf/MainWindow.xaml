@@ -516,14 +516,20 @@
                         <TabItem Header="Занесение" FontSize="14">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="263*"/>
-                                    <ColumnDefinition Width="478*"/>
-                                    <ColumnDefinition Width="364*"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="520"/>
+                                    <ColumnDefinition Width="174"/>
                                 </Grid.ColumnDefinitions>
                                 <mpp:MoonPdfPanel Background="LightGray" PageRowDisplay="ContinuousPageRows" x:Name="PdfPanelBu" x:FieldModifier="private"  AllowDrop="False" />
-                                <local:AktBuEditor  BuInWorkSourse="{Binding SelectedItem, ElementName=AktBuInWork}"  Margin="5,0" Grid.Column="1" ></local:AktBuEditor>
-                                <ListView  ScrollViewer.HorizontalScrollBarVisibility="Disabled"   Name="AktBuInWork" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling"  ItemsSource="{Binding Source={StaticResource AktInWorkSourse}}" SelectedItem="{Binding  Path=SelectedAkt, Source={StaticResource MainAtpVM}}" Grid.Column="2" >
-                                    <ListView.ItemTemplate>
+                                <local:AktBuEditor    Margin="5,0" Grid.Column="1" ></local:AktBuEditor>
+                                <ToggleButton Grid.Column="1" HorizontalAlignment="Right" Width="9"/>
+                                <ListBox  ScrollViewer.HorizontalScrollBarVisibility="Disabled"   Name="AktBuInWork" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling"  ItemsSource="{Binding Source={StaticResource AktInWorkSourse}}" SelectedItem="{Binding  Path=SelectedAkt, Source={StaticResource MainAtpVM}}" Grid.Column="2" >
+                                    <ListBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Width="700" />
+                                        </ItemsPanelTemplate>
+                                    </ListBox.ItemsPanel>
+                                    <ListBox.ItemTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Path=AktName}">
                                                 <TextBlock.ContextMenu>
@@ -535,8 +541,8 @@
                                                 </TextBlock.ContextMenu>
                                             </TextBlock>
                                         </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                    <ListView.GroupStyle>
+                                    </ListBox.ItemTemplate>
+                                    <ListBox.GroupStyle>
                                         <GroupStyle>
                                             <GroupStyle.ContainerStyle>
                                                 <Style TargetType="{x:Type GroupItem}">
@@ -571,10 +577,9 @@
                                             </GroupStyle.ContainerStyle>
                                         </GroupStyle>
                                         <!-- Style for groups under the top level. -->
-                                    </ListView.GroupStyle>
-                                    <ListView.Items>
-                                    </ListView.Items>
-                                </ListView>
+                                    </ListBox.GroupStyle>
+                                    
+                                </ListBox>
                             </Grid>
 
                         </TabItem>

@@ -60,5 +60,7 @@ namespace ATPWork.MyApp.View
             InitializeComponent();
             BuEditVM = (BuEditorViewModel)this.Resources["BuEditorViewModel"];
         }
+
+      
     }
 }
