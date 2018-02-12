@@ -521,6 +521,7 @@
                                     <ColumnDefinition Width="364*"/>
                                 </Grid.ColumnDefinitions>
                                 <mpp:MoonPdfPanel Background="LightGray" PageRowDisplay="ContinuousPageRows" x:Name="PdfPanelBu" x:FieldModifier="private"  AllowDrop="False" />
+                                <local:AktBuEditor  BuInWorkSourse="{Binding SelectedItem, ElementName=AktBuInWork}"  Margin="5,0" Grid.Column="1" ></local:AktBuEditor>
                                 <ListView  ScrollViewer.HorizontalScrollBarVisibility="Disabled"   Name="AktBuInWork" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling"  ItemsSource="{Binding Source={StaticResource AktInWorkSourse}}" SelectedItem="{Binding  Path=SelectedAkt, Source={StaticResource MainAtpVM}}" Grid.Column="2" >
                                     <ListView.ItemTemplate>
                                         <DataTemplate>

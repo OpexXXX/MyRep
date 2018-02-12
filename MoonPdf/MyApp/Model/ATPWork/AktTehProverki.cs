@@ -27,7 +27,6 @@ namespace MyApp.Model
                 this.OnPropertyChanged("MailName");
             }
         }
-
         private long _sizePDF;
         public long SizePDF
         {
@@ -41,8 +40,6 @@ namespace MyApp.Model
                 this.OnPropertyChanged("SizePDF");
             }
         }
-
-
         public string MailName
         {
             get {

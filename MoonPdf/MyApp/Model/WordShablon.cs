@@ -52,5 +52,8 @@ namespace ATPWork.MyApp.Model
         { }
         public static void CreateContentForBuAkt()
         { }
+        public static void CreatePZForBuAkt()
+        { }
+
     }
 }
