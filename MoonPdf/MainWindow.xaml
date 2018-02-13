@@ -453,7 +453,7 @@
                                     <Border CornerRadius="2" BorderThickness="1" BorderBrush="#FF8C9595">
                                         <StackPanel Margin="1,0,1,0">
                                             <TextBox VerticalAlignment="Top" TextWrapping="WrapWithOverflow" Text="{Binding Path=Adress, Mode=OneWay}" BorderBrush="{x:Null}" Background="{x:Null}"/>
-                                            <TextBox VerticalAlignment="Top" TextWrapping="WrapWithOverflow" Text="{Binding Path=Primechanie}" Background="{x:Null}" BorderBrush="{x:Null}" FontSize="10.667"/>
+                                            <TextBox VerticalAlignment="Top" HorizontalAlignment="Left" TextWrapping="WrapWithOverflow" Width="300" Text="{Binding Path=Primechanie}" Background="{x:Null}" BorderBrush="{x:Null}" FontSize="10.667"/>
                                         </StackPanel>
                                     </Border>
                                     <Border CornerRadius="2" BorderThickness="1" BorderBrush="#FF8C9595">
