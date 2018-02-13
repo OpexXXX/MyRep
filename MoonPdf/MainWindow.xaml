@@ -169,6 +169,9 @@
                                 </Grid.ColumnDefinitions>
                                 <mpp:MoonPdfPanel Background="LightGray" PageRowDisplay="ContinuousPageRows" x:Name="moonPdfPanel" x:FieldModifier="private"  AllowDrop="False" />
                                 <DockPanel Grid.Column="1">
+                                        
+                                       
+                 
                                     <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
                                         <Button Content="{Binding Commands.GoPrevousAkt.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.GoPrevousAkt, Source={StaticResource MainAtpVM}}"  Height="25"/>
                                         <Button Content="{Binding Commands.GoFirstPageAkt.Name, Source={StaticResource MainAtpVM}}" Command="{Binding Commands.GoFirstPageAkt, Source={StaticResource MainAtpVM}}"  Height="25"/>
@@ -177,6 +180,7 @@
 
                                         <TextBlock Text="{Binding SelectedIndex, ElementName=DatagridInWork}" />
                                     </StackPanel>
+                                    <ScrollViewer>
                                     <local:AtpEditor   AtpInWorkSourse="{Binding SelectedItem, ElementName=DatagridInWork}"  Margin="5,0" >
                                         <local:AtpEditor.Style>
                                             <Style TargetType="local:AtpEditor">
@@ -188,6 +192,8 @@
                                             </Style>
                                         </local:AtpEditor.Style>
                                     </local:AtpEditor>
+                                        
+                                    </ScrollViewer>
                                 </DockPanel>
                                 <ListView  ScrollViewer.HorizontalScrollBarVisibility="Disabled"   Name="DatagridInWork" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling"  ItemsSource="{Binding Source={StaticResource AktInWorkSourse}}" SelectedItem="{Binding  Path=SelectedAkt, Source={StaticResource MainAtpVM}}" Grid.Column="2" >
                                     <ListView.ItemTemplate>
