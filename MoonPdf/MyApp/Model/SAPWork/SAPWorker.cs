@@ -348,7 +348,7 @@ namespace MoonPdf
                     /**Окно фильтра***************************/
                     GuiCTextField NumberPlombFilter = (GuiCTextField)SapSession.ActiveWindow.FindByName("%%DYN001-LOW", "GuiCTextField");
                     GuiButton Okbtn = ((GuiButton)SapSession.FindById("wnd[1]/tbar[0]/btn[0]")); //Ок
-                    NumberPlombFilter.Text = Plomba.Number;//Код пломбы для фильтра
+                    NumberPlombFilter.Text =Plomba.Number;//Код пломбы для фильтра
                     Okbtn.Press();
                     /*************************/
                     if (GridPlomb.RowCount > 0)
@@ -357,7 +357,8 @@ namespace MoonPdf
                         demontagePlombBtn.Press(); //Установить
                                    /*Окно демонтажа пломбы*/
                         GuiCTextField dateDemontagePlomb = (GuiCTextField)SapSession.ActiveWindow.FindByName("/SAPCE/IURU_SEALS_CHANGED-DREMOV", "GuiCTextField");//Дата демонтажа пломбы /SAPCE/IURU_SEALS_CHANGED-DINST
-                        GuiTextField snyalPlomb = (GuiTextField)SapSession.ActiveWindow.FindByName("/SAPCE/IURU_SEALS_CHANGED-BRPER_LONG", "GuiTextField");////Пломбу снял /SAPCE/IURU_SEALS_CHANGED-PLACE
+                        GuiCTextField snyalPlomb = (GuiCTextField)SapSession.ActiveWindow.FindByName("/SAPCE/IURU_SEALS_CHANGED-BRPER", "GuiCTextField");////Пломбу снял /SAPCE/IURU_SEALS_CHANGED-PLACE
+
                         snyalPlomb.Text = "6";
                         dateDemontagePlomb.Text = akt.DateWork?.ToString("d");
                         GuiButton OkKbtn = ((GuiButton)SapSession.FindById("wnd[1]/tbar[0]/btn[0]")); //Ок
