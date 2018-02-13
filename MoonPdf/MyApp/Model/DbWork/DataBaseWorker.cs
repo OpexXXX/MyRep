@@ -1,4 +1,5 @@
 ﻿using ATPWork.MyApp.Model.VnePlan;
+using ATPWork.Properties;
 using ExcelDataReader;
 using MyApp.Model;
 using System;
@@ -34,7 +35,7 @@ namespace MyApp.Model
         /// <param name="spisokPU">ссылка на список ПУ</param>
         public static void Initial()
         {
-
+            
             connector.Open();
             SQLiteCommand cmd = connector.CreateCommand();
             cmd.CommandText = "PRAGMA synchronous = OFF";
@@ -309,6 +310,7 @@ namespace MyApp.Model
             int i = 0;
             while (r.Read())
             {
+                
                 result.Add(new Dictionary<string, string>());
                 result[i].Add("FIO", r["FIO"].ToString());
                 result[i].Add("PuType", r["PuType"].ToString());
@@ -743,6 +745,7 @@ namespace MyApp.Model
         /// <param name="akt">Акт тех. проверки</param>
         public static void InsertAPTInWork(List<AktTehProverki> akti)
         {
+            
             using (var cmdd = new SQLiteCommand(connector))
             {
                 using (var transaction = connector.BeginTransaction())

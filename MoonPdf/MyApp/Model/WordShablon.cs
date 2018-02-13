@@ -39,5 +39,21 @@ namespace ATPWork.MyApp.Model
             }
             return filePath;
         }
+
+        public static void CreateMailForAktsTehProverki()
+        { }
+        public static void CreateMailForBuAkts()
+        { }
+        public static void CreateRaschetForBuAkt()
+        { }
+        public static void CreatePoliceMailForBuAkt()
+        { }
+        public static void CreateObysnenyaForBuAkt()
+        { }
+        public static void CreateContentForBuAkt()
+        { }
+        public static void CreatePZForBuAkt()
+        { }
+
     }
 }
