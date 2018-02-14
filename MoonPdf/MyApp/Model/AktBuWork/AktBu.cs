@@ -384,6 +384,15 @@ namespace ATPWork.MyApp.Model.AktBuWork
             BuValuePower = CountDay * 24 * Power;
             BuValueNormativ = GetValueBuNormativ((DateTime)StartDate, (DateTime)DateWork, Normativ);
         }
+        public override void setDataByDb(Dictionary<string, string> dict)
+        {
+            base.setDataByDb(dict);
+            getNormativ();//
+            getPrevousAkt();//
+            getPrevousPlan();//
+            calcCountDay();
+            calcBu();
+        }
         #endregion
 
 

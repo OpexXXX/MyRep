@@ -296,7 +296,7 @@
                             <KeyBinding Key="Down" Command="{Binding Commands.DateDown, Source={StaticResource BuEditorViewModel}}" />
                         </DatePicker.InputBindings>
                     </DatePicker>
-                    <TextBox VerticalAlignment="Center"></TextBox>
+                    <TextBox VerticalAlignment="Center" Text="{Binding AktInWork.CountDay, Source={StaticResource BuEditorViewModel}}"></TextBox>
                     <TextBlock VerticalAlignment="Center">дней</TextBlock>
                 </StackPanel>
                     <StackPanel Orientation="Horizontal">
@@ -306,24 +306,30 @@
                         </ComboBox>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock>Мощность:</TextBlock>
-                    <TextBox></TextBox>
+                        <TextBox Text="{Binding AktInWork.Power, Source={StaticResource BuEditorViewModel}}"></TextBox>
                     <TextBlock>кВт</TextBlock>
                 </StackPanel>
                     </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock>Чел.</TextBlock>
-                    <TextBox></TextBox>
+                    <TextBox Text="{Binding AktInWork.PeopleCount, Source={StaticResource BuEditorViewModel}}"></TextBox>
                     <TextBlock>Комнат</TextBlock>
-                    <TextBox></TextBox>
+                    <TextBox Text="{Binding AktInWork.RoomCount, Source={StaticResource BuEditorViewModel}}"></TextBox>
                     <TextBlock>Категория</TextBlock>
                     <ComboBox  HorizontalAlignment="Left" Height="25" ItemsSource="{Binding AgentList, Source={StaticResource BuEditorViewModel}}" SelectedItem="{Binding AktInWork.Agent_2, Source={StaticResource BuEditorViewModel}}" Background="{x:Null}" BorderThickness="1">
                     </ComboBox>
                     <TextBlock>Норматив</TextBlock>
-                    <TextBox></TextBox>
+                    <TextBox Text="{Binding AktInWork.Normativ, Source={StaticResource BuEditorViewModel}}"></TextBox>
+                    
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock>Объем:</TextBlock>
-                    <TextBox></TextBox>
+                    <TextBlock>Объем по нормативу:</TextBlock>
+                    <TextBox Text="{Binding AktInWork.BuValueNormativ, Source={StaticResource BuEditorViewModel}}"></TextBox>
+                    <TextBlock>кВт*ч</TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Объем по мощности:</TextBlock>
+                    <TextBox Text="{Binding AktInWork.BuValuePower, Source={StaticResource BuEditorViewModel}}"></TextBox>
                     <TextBlock>кВт*ч</TextBlock>
                 </StackPanel>
                 <TextBlock>Console</TextBlock>
