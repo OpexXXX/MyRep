@@ -176,6 +176,7 @@
 
                                         <TextBlock Text="{Binding SelectedIndex, ElementName=DatagridInWork}" />
                                     </StackPanel>
+                                    <ScrollViewer>
                                     <local:AtpEditor   AtpInWorkSourse="{Binding SelectedItem, ElementName=DatagridInWork}"  Margin="5,0" >
                                         <local:AtpEditor.Style>
                                             <Style TargetType="local:AtpEditor">
@@ -187,6 +188,7 @@
                                             </Style>
                                         </local:AtpEditor.Style>
                                     </local:AtpEditor>
+                                    </ScrollViewer>
                                 </DockPanel>
                                 <ListView  ScrollViewer.HorizontalScrollBarVisibility="Disabled"   Name="DatagridInWork" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling"  ItemsSource="{Binding Source={StaticResource AktInWorkSourse}}" SelectedItem="{Binding  Path=SelectedAkt, Source={StaticResource MainAtpVM}}" Grid.Column="2" >
                                     <ListView.ItemTemplate>
@@ -258,13 +260,14 @@
                                           SelectedItem=""
                                         AutoGenerateColumns="False">
                                         <DataGrid.Columns>
-                                            <DataGridTextColumn Binding="{Binding Number}" ClipboardContentBinding="{x:Null}" Header="№Акта"/>
+                                            <DataGridTextColumn Binding="{Binding SapNumberAkt}" ClipboardContentBinding="{x:Null}" Header="SAP"/>
                                             <DataGridTextColumn Binding="{Binding DateWork}" ClipboardContentBinding="{x:Null}" Header="Дата"/>
                                             <DataGridTextColumn Binding="{Binding NumberLS}" ClipboardContentBinding="{x:Null}" Header="№ЛС"/>
                                             <DataGridTextColumn Binding="{Binding FIO}" ClipboardContentBinding="{x:Null}" Header="ФИО"/>
                                             <DataGridTextColumn Binding="{Binding Adress}" ClipboardContentBinding="{x:Null}" Header="Адрес"/>
                                             <DataGridTextColumn Binding="{Binding PuOldType}" ClipboardContentBinding="{x:Null}" Header="№ПУ"/>
                                             <DataGridTextColumn Binding="{Binding PuOldPokazanie}" ClipboardContentBinding="{x:Null}" Header="Показание"/>
+                                            <DataGridTextColumn Binding="{Binding Number}" ClipboardContentBinding="{x:Null}" Header="№Акта"/>
                                         </DataGrid.Columns>
                                         <DataGrid.GroupStyle>
                                             <!-- Style for groups at top level. -->
