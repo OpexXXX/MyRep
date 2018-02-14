@@ -569,17 +569,17 @@ namespace MyApp.Model
             return filePath;
 
         }
-        internal static void CreatePdfReestr()
+        internal static void CreatePdfReestr(string pathOutPdf, List<AktTehProverki> akts)
         {
             string currentMailDirectory = MainAtpModel.MailDirektory;
-            DataSet data_set = MakeDataSet(MainAtpModel.AllAkt);
+            DataSet data_set = MakeDataSet(akts);
             //Объект документа пдф
             iTextSharp.text.Document doc = new iTextSharp.text.Document();
             doc.SetPageSize(PageSize.A4.Rotate());
 
 
             //Создаем объект записи пдф-документа в файл
-            PdfWriter.GetInstance(doc, new FileStream("pdfTables.pdf", FileMode.Create));
+            PdfWriter.GetInstance(doc, new FileStream(pathOutPdf, FileMode.Create));
              //Открываем документ
             doc.Open();
             //Определение шрифта необходимо для сохранения кириллического текста
@@ -637,7 +637,7 @@ namespace MyApp.Model
             //Закрываем документ
             doc.Close();
 
-            MessageBox.Show("Pdf-документ сохранен");
+           
 
         }
     }

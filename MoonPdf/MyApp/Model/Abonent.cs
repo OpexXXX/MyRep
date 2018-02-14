@@ -158,7 +158,7 @@ namespace ATPWork.MyApp.Model
                 this.OnPropertyChanged("OldPlombs");
             }
         }
-        public void setDataByDb(Dictionary<string, string> dict)
+        public virtual void setDataByDb(Dictionary<string, string> dict)
         {
             NumberLS = dict["LsNumber"];
             PuOldType = dict["PuType"];

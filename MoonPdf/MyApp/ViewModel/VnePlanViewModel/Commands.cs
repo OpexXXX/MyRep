@@ -4,6 +4,7 @@ using MyApp;
 using MyApp.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -22,24 +23,24 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
 
         private VnePlanVM vnePlanVM;
 
-        public Commands(VnePlanVM planVM)
+        public Commands(VnePlanVM vnePlanVM)
         {
-            this.vnePlanVM = planVM;
+            this.vnePlanVM = vnePlanVM;
             Predicate<object> canSearch = f => CanSearch();
             Predicate<object> canAddZayavka = f => CanAddZayavka();
 
             this.GetDataFromDb = new DelegateCommand("Поиск в базе", f =>
             {
-                string number = planVM.SearchString;
+                string number = vnePlanVM.SearchString;
 
-                planVM.ZayavkaToAdd.RegNumber = planVM.GetLastRegNumber();
+                vnePlanVM.ZayavkaToAdd.RegNumber = vnePlanVM.GetLastRegNumber();
                 List<Dictionary<String, String>> resultSearchAbonent;
                 resultSearchAbonent = DataBaseWorker.GetAbonentFromLS(number);
 
                 if (resultSearchAbonent.Count == 1)
                 {
                     string edob = resultSearchAbonent[0]["EdOborudovania"];
-                    planVM.ZayavkaToAdd.setDataByDb(resultSearchAbonent[0]);
+                    vnePlanVM.ZayavkaToAdd.setDataByDb(resultSearchAbonent[0]);
                 }
                 else if (resultSearchAbonent.Count > 1)
                 {
@@ -48,7 +49,7 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
                     if ((bool)wndResult.DialogResult)
                     {
                         string edob = wndResult.SelectVal["EdOborudovania"];
-                        planVM.ZayavkaToAdd.setDataByDb(wndResult.SelectVal);
+                        vnePlanVM.ZayavkaToAdd.setDataByDb(wndResult.SelectVal);
                     }
                 }
                 else
@@ -57,7 +58,7 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
                     if (resultSearchAbonent.Count == 1)
                     {
                         string edob = resultSearchAbonent[0]["EdOborudovania"];
-                        planVM.ZayavkaToAdd.setDataByDb(resultSearchAbonent[0]);
+                        vnePlanVM.ZayavkaToAdd.setDataByDb(resultSearchAbonent[0]);
                     }
                     else if (resultSearchAbonent.Count > 1)
                     {
@@ -66,7 +67,7 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
                         if ((bool)wndResult.DialogResult)
                         {
                             string edob = wndResult.SelectVal["EdOborudovania"];
-                            planVM.ZayavkaToAdd.setDataByDb(wndResult.SelectVal);
+                            vnePlanVM.ZayavkaToAdd.setDataByDb(wndResult.SelectVal);
                         }
                     }
                     else
@@ -75,7 +76,7 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
                         if (resultSearchAbonent.Count == 1)
                         {
                             string edob = resultSearchAbonent[0]["EdOborudovania"];
-                            planVM.ZayavkaToAdd.setDataByDb(resultSearchAbonent[0]);
+                            vnePlanVM.ZayavkaToAdd.setDataByDb(resultSearchAbonent[0]);
                         }
                         else if (resultSearchAbonent.Count > 1)
                         {
@@ -84,7 +85,7 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
                             if ((bool)wndResult.DialogResult)
                             {
                                 string edob = wndResult.SelectVal["EdOborudovania"];
-                                planVM.ZayavkaToAdd.setDataByDb(wndResult.SelectVal);
+                                vnePlanVM.ZayavkaToAdd.setDataByDb(wndResult.SelectVal);
                             }
                         }
                         else
@@ -93,7 +94,7 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
                             if (resultSearchAbonent.Count == 1)
                             {
                                 string edob = resultSearchAbonent[0]["EdOborudovania"];
-                                planVM.ZayavkaToAdd.setDataByDb(resultSearchAbonent[0]);
+                                vnePlanVM.ZayavkaToAdd.setDataByDb(resultSearchAbonent[0]);
                             }
                             else if (resultSearchAbonent.Count > 1)
                             {
@@ -102,7 +103,7 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
                                 if ((bool)wndResult.DialogResult)
                                 {
                                     string edob = wndResult.SelectVal["EdOborudovania"];
-                                    planVM.ZayavkaToAdd.setDataByDb(wndResult.SelectVal);
+                                    vnePlanVM.ZayavkaToAdd.setDataByDb(wndResult.SelectVal);
                                 }
                             }
                         }
@@ -115,13 +116,11 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
             }, canSearch, null);
             this.AddZayavka = new DelegateCommand("Дабавить заявку", f =>
             {
-                VnePlanModel.AddZayvka(vnePlanVM.ZayavkaToAdd);
-                vnePlanVM.AllZayvki.Add(vnePlanVM.ZayavkaToAdd);
-                //   vnePlanVM.AllZayvki = new ObservableCollection<VnePlanZayavka>(VnePlanModel.Zayavki);
-                // vnePlanVM.AbonentsForVnePlan = CollectionViewSource.GetDefaultView(vnePlanVM.AllZayvki);
-               // (vnePlanVM.AbonentsForVnePlan as CollectionViewSource).View.Refresh();
-                vnePlanVM.ZayavkaToAdd = new VnePlanZayavka();
-              
+                VnePlanModel.AddZayvka(this.vnePlanVM.ZayavkaToAdd);
+                vnePlanVM.refreshAbonentList();
+                vnePlanVM.SelectedZayvka = vnePlanVM.ZayavkaToAdd;
+                createWord(null);
+                this.vnePlanVM.ZayavkaToAdd = new VnePlanZayavka();
             }, canAddZayavka, null);
             this.CheckToComplete = new DelegateCommand("Проверить выполнение заявок", f =>
             {

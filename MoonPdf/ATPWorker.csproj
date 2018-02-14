@@ -232,6 +232,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="MyApp\Model\Abonent.cs" />
+    <Compile Include="MyApp\Model\AktBuWork\AktBu.cs" />
+    <Compile Include="MyApp\Model\AktBuWork\AktsBuModel.cs" />
     <Compile Include="MyApp\Model\ATPWork\Agent.cs" />
     <Compile Include="MyApp\Model\ATPWork\MainAtpModel.cs" />
     <Compile Include="MyApp\Model\ATPWork\Plomba.cs" />
@@ -244,12 +246,16 @@
     <Compile Include="MyApp\Model\VnePlan\VnePlanModel.cs" />
     <Compile Include="MyApp\Model\VnePlan\VnePlanZayavka.cs" />
     <Compile Include="MyApp\Model\WordShablon.cs" />
+    <Compile Include="MyApp\ViewModel\MainAktBu\AktsBuViewModel.cs" />
+    <Compile Include="MyApp\ViewModel\MainAktBu\BuEditor\BuEditorViewModel.cs" />
+    <Compile Include="MyApp\ViewModel\MainAktBu\BuEditor\Commands.cs" />
+    <Compile Include="MyApp\ViewModel\MainAktBu\BuEditor\Validators.cs" />
+    <Compile Include="MyApp\ViewModel\MainAktBu\Commands.cs" />
     <Compile Include="MyApp\ViewModel\MainAtp\AtpEditor\AptEditor.cs" />
     <Compile Include="MyApp\ViewModel\MainAtp\AtpEditor\Commands.cs" />
     <Compile Include="MyApp\ViewModel\MainAtp\AtpEditor\Validators.cs" />
     <Compile Include="MyApp\ViewModel\BaseCommand.cs" />
     <Compile Include="MyApp\ViewModel\DelegateComand.cs" />
-    <Compile Include="MyApp\ViewModel\MainAtp\AtpSettings.cs" />
     <Compile Include="MyApp\ViewModel\MainAtp\Commands.cs" />
     <Compile Include="MyApp\ViewModel\MainAtp\MainAtpVM.cs" />
     <Compile Include="MyApp\ViewModel\MainAtp\PlombEditor\Commands.cs" />
@@ -257,13 +263,18 @@
     <Compile Include="MyApp\ViewModel\MainAtp\PlombEditor\Validators.cs" />
     <Compile Include="MyApp\ViewModel\PlanViewModel\Commands.cs" />
     <Compile Include="MyApp\ViewModel\PlanViewModel\PlanVM.cs" />
-    <Compile Include="MyApp\ViewModel\SettingsVM.cs" />
     <Compile Include="MyApp\ViewModel\ViewModelBase.cs" />
     <Compile Include="MyApp\ViewModel\VnePlanViewModel\Commands.cs" />
     <Compile Include="MyApp\ViewModel\VnePlanViewModel\Validators.cs" />
     <Compile Include="MyApp\ViewModel\VnePlanViewModel\VnePlanVM.cs" />
+    <Compile Include="MyApp\View\AktBuEditor.xaml.cs">
+      <DependentUpon>AktBuEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MyApp\View\AtpEditor.xaml.cs">
       <DependentUpon>AtpEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyApp\View\PhotoView.xaml.cs">
+      <DependentUpon>PhotoView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MyApp\View\PlombEditor.xaml.cs">
       <DependentUpon>PlombEditor.xaml</DependentUpon>
@@ -271,15 +282,15 @@
     <Compile Include="MyApp\View\ResultSearchWindow.xaml.cs">
       <DependentUpon>ResultSearchWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MyApp\View\SearchWindowOplombirovki.xaml.cs">
-      <DependentUpon>SearchWindowOplombirovki.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MyApp\View\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MyApp\View\SettingsWindow.xaml.cs">
-      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Settings.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -293,7 +304,15 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="MyApp\View\AktBuEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MyApp\View\AtpEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyApp\View\PhotoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -305,15 +324,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MyApp\View\SearchWindowOplombirovki.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MyApp\View\Settings.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="MyApp\View\SettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -326,10 +337,47 @@
     <None Include="ATPWorker_TemporaryKey.pfx" />
     <None Include="headertemplate.json" />
     <AppDesigner Include="Properties\" />
+    <Content Include="Shabloni\BU\CalcNoPower.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shabloni\BU\CalcNormativVmishatelstvo.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shabloni\BU\CalcPower.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shabloni\BU\Content.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shabloni\BU\mail_62.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shabloni\BU\mail_62NoPower.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shabloni\BU\mail_81-11.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shabloni\BU\Obesneniya.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shabloni\BU\Police.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shabloni\Dopusk.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shabloni\Proverka.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
+    <None Include="Properties\Settings.settings">
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Resources\moon.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -369,6 +417,15 @@
       <Guid>{00020813-0000-0000-C000-000000000046}</Guid>
       <VersionMajor>1</VersionMajor>
       <VersionMinor>6</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="Microsoft.Office.Interop.Word">
+      <Guid>{00020905-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>8</VersionMajor>
+      <VersionMinor>7</VersionMinor>
       <Lcid>0</Lcid>
       <WrapperTool>primary</WrapperTool>
       <Isolated>False</Isolated>
@@ -416,11 +473,21 @@
     <Resource Include="Resources\icons8-группа-пользователей-40.png" />
     <Resource Include="Resources\icons8-защать-от-магнитного-поля-40 %281%29.png" />
     <Resource Include="Resources\fenix.png" />
-    <Content Include="Resources\Interop.SAPFEWSELib.dll" />
-    <Content Include="Resources\Interop.SAPLogonCtrl.dll" />
-    <Content Include="Resources\libmupdf.dll" />
-    <Content Include="Resources\MoonPdfLib.dll" />
-    <Content Include="Resources\MouseKeyboardActivityMonitor.dll" />
+    <Content Include="Resources\Interop.SAPFEWSELib.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Interop.SAPLogonCtrl.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\libmupdf.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\MoonPdfLib.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\MouseKeyboardActivityMonitor.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\sapfewse.ocx" />
   </ItemGroup>
   <ItemGroup />

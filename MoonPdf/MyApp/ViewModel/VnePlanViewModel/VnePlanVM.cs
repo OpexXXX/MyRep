@@ -43,10 +43,6 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
                 OnPropertyChanged("AbonentsForVnePlan");
             }
         }
-
-
-        
-
         private VnePlanZayavka _zayvkaToAdd = new VnePlanZayavka();
         public VnePlanZayavka ZayavkaToAdd
         {
@@ -57,6 +53,18 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
                 OnPropertyChanged("ZayavkaToAdd");
             }
         }
+        private VnePlanZayavka _selectedZayvka;
+        public VnePlanZayavka SelectedZayvka
+        {
+            get { return _selectedZayvka; }
+            set
+            {
+                _selectedZayvka = value;
+                OnPropertyChanged("SelectedZayvka");
+            }
+        }
+
+
         private bool _expanderOpen = false;
         public bool ExpanderOpen
         {
@@ -79,7 +87,7 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
                     AbonentsForVnePlan.Filter = str => ((str as VnePlanZayavka).NumberAktTehProverki == "");
                     ExpanderOpen = false;
                 }
-                else if(value.Length>2)
+                else if(value.Length>3)
                 {
                     AbonentsForVnePlan.Filter = filterZayvki;
                   ExpanderOpen = true;
@@ -88,8 +96,7 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
                 OnPropertyChanged("SearchStringView");
             }
         }
-        
-                    private bool filterZayvki(object obj)
+        private bool filterZayvki(object obj)
         {
             VnePlanZayavka d = (VnePlanZayavka)obj;
 
@@ -103,8 +110,6 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
             return a || b || c || g || e || f;
                     
         }
-
-       
         private string _searchString;
         public string SearchString
         {
@@ -128,7 +133,6 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
             int result = VnePlanModel.GetLastNumber(); 
             return result;
         }
-
         public void refreshAbonentList()
         {
             AllZayvki = new ObservableCollection<VnePlanZayavka>(VnePlanModel.Zayavki);
@@ -137,7 +141,7 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
             AbonentsForVnePlan.GroupDescriptions.Add(new PropertyGroupDescription("City"));
             AbonentsForVnePlan.Filter = str => ((str as VnePlanZayavka).NumberAktTehProverki=="");
             AbonentsForVnePlan.SortDescriptions.Clear();
-            AbonentsForVnePlan.SortDescriptions.Add(new SortDescription("Group", ListSortDirection.Ascending));
+            
             AbonentsForVnePlan.SortDescriptions.Add(new SortDescription("City", ListSortDirection.Ascending));
             AbonentsForVnePlan.SortDescriptions.Add(new SortDescription("Street", ListSortDirection.Ascending));
             AbonentsForVnePlan.SortDescriptions.Add(new SortDescription("House", ListSortDirection.Ascending));
@@ -147,9 +151,5 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
 
 
         }
-        /*internal void CreatePdf()
-        {
-            PlanWorkModel.CreatePDF(SelectedDate);
-        }*/
     }
 }

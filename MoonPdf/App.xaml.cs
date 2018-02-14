@@ -29,10 +29,11 @@ namespace MyApp
 
 	public partial class App : Application
 	{
+      
+
         protected override void OnStartup(StartupEventArgs e)
         {
             WalkDictionary(this.Resources);
-
             base.OnStartup(e);
         }
 
