@@ -29,6 +29,7 @@ namespace ATPWork.MyApp.Model.Plan
                 getPrevousPlan();//
                 getAvveragePO();
             }
+
         }
         private void getAvveragePO()
         {

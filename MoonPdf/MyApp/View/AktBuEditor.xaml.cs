@@ -61,6 +61,31 @@ namespace ATPWork.MyApp.View
             BuEditVM = (BuEditorViewModel)this.Resources["BuEditorViewModel"];
         }
 
-      
+        private void ListBox_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                // Note that you can have more than one file.
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                foreach (var item in files)
+                {
+                    BuEditVM.AktInWork.PhotoFile.Add(item);
+                }
+
+            }
+
+        }
+
+        private void ListBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete)
+            {
+
+               if(BuEditVM.SelectedPhoto!=null) BuEditVM.AktInWork.PhotoFile.Remove(BuEditVM.SelectedPhoto);
+            }
+        }
+
+        
     }
 }

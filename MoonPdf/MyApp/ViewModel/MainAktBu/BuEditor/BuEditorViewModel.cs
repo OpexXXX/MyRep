@@ -37,8 +37,15 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
             get { return _alentList; }
             set { _alentList = value; }
         }
-        
-        private AktBu _aktInWork;
+
+        private string _selectedPhoto;
+        public string SelectedPhoto
+        {
+            get { return _selectedPhoto; }
+            set { _selectedPhoto = value; this.OnPropertyChanged("SelectedPhoto"); }
+        }
+
+        private AktBu _aktInWork = new AktBu();
         public AktBu AktInWork
         {
             get { return _aktInWork; }
@@ -54,6 +61,14 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
             GetListForComboBox();
             MainAtpModel.ComboRefresh += GetListForComboBox;
         }
+
+        private List<string> _narusheniya = new List<string>() { "Врезка", "Вмешательство", "Врезка без мощности" };
+        public List<string> Narusheniya
+        {
+            get { return _narusheniya; }
+            set { _narusheniya = value; }
+        }
+
 
         private void GetListForComboBox()
         {

@@ -273,6 +273,9 @@
     <Compile Include="MyApp\View\AtpEditor.xaml.cs">
       <DependentUpon>AtpEditor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MyApp\View\PhotoView.xaml.cs">
+      <DependentUpon>PhotoView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MyApp\View\PlombEditor.xaml.cs">
       <DependentUpon>PlombEditor.xaml</DependentUpon>
     </Compile>
@@ -306,6 +309,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MyApp\View\AtpEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyApp\View\PhotoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
