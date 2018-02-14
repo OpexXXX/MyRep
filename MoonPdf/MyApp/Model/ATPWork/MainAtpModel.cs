@@ -407,8 +407,10 @@ namespace MyApp.Model
                     if (File.Exists(currentMailDirectory + "\\" + "Реестр.xlsx")) zip.AddFile(currentMailDirectory + "\\" + "Реестр.xlsx", "\\"); // Кладем в архив одиночный файл
                     if (File.Exists(pathMailPdf)) zip.AddFile(pathMailPdf, "\\"); 
                     var g = zip.Count;
-                    zip.Save(currentMailDirectory + "\\" + mailName + ".zip"); // Создаем архив     
-                    progress.Report(zip.Info);
+                    zip.Save(currentMailDirectory + "\\" + mailName + ".zip"); // Создаем архив   
+                    FileInfo f = new FileInfo(currentMailDirectory + "\\" + mailName + ".zip");
+                    long filesize = f.Length/(1024); // file size in bytes  
+                    progress.Report("Размер архива: "+filesize.ToString()+"кБ");
                 }
                 progress.Report("Обновляем состояние актов");
                 foreach (AktTehProverki item in TempList)
