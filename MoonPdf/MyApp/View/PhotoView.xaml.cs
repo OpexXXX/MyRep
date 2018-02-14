@@ -25,11 +25,13 @@ namespace ATPWork.MyApp.View
         {
            
             InitializeComponent();
-            ImageSourceConverter converter = new ImageSourceConverter();
            
-            ImageSource imageSource = (ImageSource)converter.ConvertFromString(imagePath);
-            ImageW.Source = imageSource;
-
+            if (imagePath != null)
+            {
+                ImageSourceConverter converter = new ImageSourceConverter();
+                ImageSource imageSource = (ImageSource)converter.ConvertFromString(imagePath);
+                ImageW.Source = imageSource;
+            }
            
         }
     }

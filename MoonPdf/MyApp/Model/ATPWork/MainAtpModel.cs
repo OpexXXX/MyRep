@@ -9,6 +9,7 @@ using Ionic.Zip;
 using System.Text;
 using MoonPdf;
 using ATPWork.Properties;
+using ATPWork.MyApp.Model;
 
 namespace MyApp.Model
 
@@ -46,7 +47,7 @@ namespace MyApp.Model
             set { _placePL = value; }
         }
 
-        
+
         #endregion
         #region коллекция актов
         public delegate void AllAtpListRefreshHandler();
@@ -60,7 +61,7 @@ namespace MyApp.Model
             List<string[]> akts = new List<string[]>();
             foreach (var item in AllAkt)
             {
-                if(item.NumberLS == numberLS)
+                if (item.NumberLS == numberLS)
                 {
                     akts.Add(new string[] { item.Number.ToString(), item.DateWork?.ToString("d") });
                 }
@@ -132,7 +133,7 @@ namespace MyApp.Model
             AktDirektory = settings.DirAktTehPDF;
             MailDirektory = settings.DirAktTehMail;
         }
-       
+
         public static void InitMainAtpModel()
         {
             InitListsForCombos();
@@ -243,7 +244,7 @@ namespace MyApp.Model
         {
             string FileName = akt.Number.ToString() + " " + akt.DateWork?.ToString("d") + " " + akt.NumberLS + ".pdf";
 
-            string FilePath = System.IO.Path.Combine(AktDirektory , FileName);
+            string FilePath = System.IO.Path.Combine(AktDirektory, FileName);
 
             try
             {
@@ -296,7 +297,7 @@ namespace MyApp.Model
             {
                 progress.Report("Допуски.pdf");
                 FileName = "Допуски.pdf";
-                FilePath = System.IO.Path.Combine(folderPath , FileName);
+                FilePath = System.IO.Path.Combine(folderPath, FileName);
                 try
                 {
                     using (FileStream FStream = new System.IO.FileStream(FilePath, System.IO.FileMode.Create))
@@ -362,7 +363,7 @@ namespace MyApp.Model
             progress.Report(">=======================================<");
             List<AktTehProverki> TempList = new List<AktTehProverki>();
             string mailName = "исх.№91-" + numberMail + " от " + dateMail.ToString("d") + "г. Акты ПР ФЛ";
-            string currentMailDirectory = System.IO.Path.Combine(MailDirektory , mailName);
+            string currentMailDirectory = System.IO.Path.Combine(MailDirektory, mailName);
             progress.Report("Создаем папку сопроводительного письма: " + currentMailDirectory);
             if (!Directory.Exists(currentMailDirectory)) Directory.CreateDirectory(currentMailDirectory);
             foreach (AktTehProverki item in AllAkt)
@@ -384,7 +385,17 @@ namespace MyApp.Model
                 blindPdf(TempList, currentMailDirectory, progress);
                 progress.Report("Создаем Реестр.xlsx");
                 ExcelWorker.DataTableToExcel(TempList, currentMailDirectory);
-               
+                progress.Report("Создаем Реестр в PDF");
+                ExcelWorker.CreatePdfReestr(currentMailDirectory + "\\" + "Reestr.pdf", TempList);
+                progress.Report("Создаем сопроводительное письмо");
+                string pathDocX = WordShablon.CreateMailForAktsTehProverki(TempList, dateMail, numberMail, 1, currentMailDirectory);
+                progress.Report(pathDocX);
+                progress.Report("Конвертируем в PDF письмо");
+                string pathPdf = WordShablon.ConvertDocxToPdf(pathDocX);
+                progress.Report("Клеим письмо с реестром");
+
+                string pathMailPdf =System.IO.Path.Combine(currentMailDirectory, mailName + " .pdf");
+                margePdfForMail(pathMailPdf, pathPdf, currentMailDirectory+ "\\Reestr.pdf");
                 progress.Report("Архивируем для отправки.");
                 using (ZipFile zip = new ZipFile()) // Создаем объект для работы с архивом
                 {
@@ -394,8 +405,10 @@ namespace MyApp.Model
                     if (File.Exists(currentMailDirectory + "\\" + "Проверки.pdf")) zip.AddFile(currentMailDirectory + "\\" + "Проверки.pdf", "\\"); // Кладем в архив одиночный файл
                     if (File.Exists(currentMailDirectory + "\\" + "Допуски.pdf")) zip.AddFile(currentMailDirectory + "\\" + "Допуски.pdf", "\\"); // Кладем в архив одиночный файл
                     if (File.Exists(currentMailDirectory + "\\" + "Реестр.xlsx")) zip.AddFile(currentMailDirectory + "\\" + "Реестр.xlsx", "\\"); // Кладем в архив одиночный файл
+                    if (File.Exists(pathMailPdf)) zip.AddFile(pathMailPdf, "\\"); 
                     var g = zip.Count;
                     zip.Save(currentMailDirectory + "\\" + mailName + ".zip"); // Создаем архив     
+                    progress.Report(zip.Info);
                 }
                 progress.Report("Обновляем состояние актов");
                 foreach (AktTehProverki item in TempList)
@@ -412,6 +425,41 @@ namespace MyApp.Model
                 progress.Report(">=======================================<");
             }
         }
+
+        private static void margePdfForMail(string pathOutPdf, string firstPDF, string secondPDF)
+        {
+           
+            try
+            {
+                using (FileStream FStream = new System.IO.FileStream(pathOutPdf, System.IO.FileMode.Create))
+                {
+
+                    iTextSharp.text.Document doc = new iTextSharp.text.Document();
+                    iTextSharp.text.pdf.PdfCopy Writer = new iTextSharp.text.pdf.PdfCopy(doc, FStream);
+                    Writer.SetPdfVersion(PdfWriter.PDF_VERSION_1_5);
+                    Writer.SetFullCompression();
+                    Writer.CompressionLevel = PdfStream.BEST_COMPRESSION;
+                    doc.Open();
+
+                    iTextSharp.text.pdf.PdfReader ReaderDoc1 = new iTextSharp.text.pdf.PdfReader(firstPDF);
+                    Writer.AddDocument(ReaderDoc1);
+                    ReaderDoc1 = new iTextSharp.text.pdf.PdfReader(secondPDF);
+                    Writer.AddDocument(ReaderDoc1);
+                    doc.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+        }
+
+
+
+
+
+
         /// <summary>
         /// Создать сопроводительное письмо из листа актов (в том числе не отправленных ранее)
         /// </summary>

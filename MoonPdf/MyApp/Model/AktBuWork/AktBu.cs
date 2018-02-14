@@ -98,8 +98,11 @@ namespace ATPWork.MyApp.Model.AktBuWork
         internal void FindCurrentAktProverki()
         {
           AktTehProverki akt =  MainAtpModel.GetAtpFromComplete(NumberLS, DateWork);
-            AktPedProverki = "№91/Е-" + akt.Number + " от " + akt.DateWork?.ToString("d") + "г.";
-            AktPredProverkiPdf = System.IO.Path.Combine(MainAtpModel.AktDirektory, akt.NamePdfFile); 
+            if (akt != null)
+            {
+                AktPedProverki = "№91/Е-" + akt.Number + " от " + akt.DateWork?.ToString("d") + "г.";
+                AktPredProverkiPdf = System.IO.Path.Combine(MainAtpModel.AktDirektory, akt.NamePdfFile);
+            }
         }
 
         public Agent Agent_1
@@ -266,12 +269,12 @@ namespace ATPWork.MyApp.Model.AktBuWork
                     foreach (var item in PrevProverki)
                     {
                         startDate.Add(DateTime.Parse(item[1]));
-                        result += "№" + item[0] + " от " + item[1] + "г.; ";
+                        result += "№" + item[0] + " от " + item[1] + "г.; \n";
                     }
                 }
                 else
                 {
-                    result += "Нет данных о последней проверке.";
+                    result += "Нет данных о последней проверке.\n";
                 }
                 if (PrevPlan.Count > 0)
                 {
@@ -279,13 +282,12 @@ namespace ATPWork.MyApp.Model.AktBuWork
                     foreach (var item in PrevPlan)
                     {
                         startDate.Add(item);
-                        result += item.ToString("d") + ";";
+                        result += item.ToString("d") + ";\n";
                     }
                 }
 
-                result += " Ср. за 2017г. " + AvveragePO + "кВт*ч/мес; 2016г. " + AvverageP + "кВт*ч/мес; ";
-                result += CountDay + " дней к расчету, ";
-                result += "норматив:" + Normativ + "кВт*ч/мес. БУ: " + BuValueNormativ + "кВт*ч";
+                result += " Ср. за 2017г. " + AvveragePO + "кВт*ч/мес; 2016г. " + AvverageP + "кВт*ч/мес; \n";
+                result += CountDay + " дней к расчету, \n";
                 return result; }
             
         }
