@@ -70,7 +70,10 @@ namespace ATPWork.MyApp.View
 
                 foreach (var item in files)
                 {
-                    BuEditVM.AktInWork.PhotoFile.Add(item);
+
+                    string extension;
+                    extension = System.IO.Path.GetExtension(item);
+                    if (extension == ".JPG" || extension == ".JPEG"|| extension == ".jpg" || extension == ".jpeg") BuEditVM.AktInWork.PhotoFile.Add(item);
                 }
 
             }
@@ -86,6 +89,37 @@ namespace ATPWork.MyApp.View
             }
         }
 
-        
+        private void GroupBoxAktBU_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                string extension;
+                extension = System.IO.Path.GetExtension(files[0]);
+                if (extension == ".PDF" || extension == ".pdf") BuEditVM.AktInWork.AktBuPdf = files[0];
+            }
+        }
+
+        private void GroupBoxAktProverki_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                string extension;
+                extension =System.IO.Path.GetExtension(files[0]);
+                if(extension == ".PDF"|| extension==".pdf") BuEditVM.AktInWork.AktPredProverkiPdf = files[0];
+            }
+        }
+
+        private void GroupBoxIzvechenie_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                string extension;
+                extension = System.IO.Path.GetExtension(files[0]);
+                if (extension == ".PDF" || extension == ".pdf") BuEditVM.AktInWork.IzvesheniePDF = files[0];
+            }
+        }
     }
 }

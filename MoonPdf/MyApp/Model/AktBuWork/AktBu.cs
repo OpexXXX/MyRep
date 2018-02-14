@@ -10,7 +10,7 @@ namespace ATPWork.MyApp.Model.AktBuWork
 {
     public class AktBu : Abonent
     {
-        
+
         private int numberMail;
         public int NumberMail
         {
@@ -94,6 +94,14 @@ namespace ATPWork.MyApp.Model.AktBuWork
             }
         }
         private Agent agent_1;
+
+        internal void FindCurrentAktProverki()
+        {
+          AktTehProverki akt =  MainAtpModel.GetAtpFromComplete(NumberLS, DateWork);
+            AktPedProverki = "№91/Е-" + akt.Number + " от " + akt.DateWork?.ToString("d") + "г.";
+            AktPredProverkiPdf = System.IO.Path.Combine(MainAtpModel.AktDirektory, akt.NamePdfFile); 
+        }
+
         public Agent Agent_1
         {
             get { return this.agent_1; }
@@ -140,6 +148,12 @@ namespace ATPWork.MyApp.Model.AktBuWork
         {
             get { return _narushenie; }
             set { _narushenie = value; this.OnPropertyChanged("Narushenie"); }
+        }
+        private string _vidNarusheniya;
+        public string VidNarusheniya
+        {
+            get { return _vidNarusheniya; }
+            set { _vidNarusheniya = value; this.OnPropertyChanged("VidNarusheniya"); }
         }
         private ObservableCollection<string> _photoFile = new ObservableCollection<string>();
         public ObservableCollection<string> PhotoFile
@@ -207,7 +221,7 @@ namespace ATPWork.MyApp.Model.AktBuWork
                 this.OnPropertyChanged("BuValuePower");
             }
         }
-       private int _power;
+        private int _power;
         public int Power
         {
             get { return this._power; }
@@ -239,11 +253,111 @@ namespace ATPWork.MyApp.Model.AktBuWork
                 this.OnPropertyChanged("RoomCount");
             }
         }
+
+       
+        public string ConsoleRaschet
+        {
+            get {
+                string result = "";
+                List<DateTime> startDate = new List<DateTime>();
+                if (PrevProverki.Count > 0)
+                {
+                    result += "Проверки: ";
+                    foreach (var item in PrevProverki)
+                    {
+                        startDate.Add(DateTime.Parse(item[1]));
+                        result += "№" + item[0] + " от " + item[1] + "г.; ";
+                    }
+                }
+                else
+                {
+                    result += "Нет данных о последней проверке.";
+                }
+                if (PrevPlan.Count > 0)
+                {
+                    result += "Был в плане на ";
+                    foreach (var item in PrevPlan)
+                    {
+                        startDate.Add(item);
+                        result += item.ToString("d") + ";";
+                    }
+                }
+
+                result += " Ср. за 2017г. " + AvveragePO + "кВт*ч/мес; 2016г. " + AvverageP + "кВт*ч/мес; ";
+                result += CountDay + " дней к расчету, ";
+                result += "норматив:" + Normativ + "кВт*ч/мес. БУ: " + BuValueNormativ + "кВт*ч";
+                return result; }
+            
+        }
+        public static int GetAvveragePO(string ear, string numberLS)
+        {
+            int result = 0;
+            var ls = DataBaseWorker.GetAbonentPO(ear, numberLS);
+            if (ls.Count > 0)
+            {
+                int summ = 0;
+                foreach (var item in ls)
+                {
+                    int i = 0;
+                    bool flag = int.TryParse(item, out i);
+                    if (flag)
+                    {
+                        summ += i;
+                    }
+                }
+
+                result = summ / ls.Count;
+
+            }
+            return result;
+        }
+        private void getAvveragePO()
+        {
+            AvveragePO = GetAvveragePO("2017", NumberLS);
+            AvverageP = GetAvveragePO("2016", NumberLS);
+        }
+        private int _avveragePO;
+        public int AvveragePO
+        {
+            get { return _avveragePO; }
+            set { _avveragePO = value; }
+        }
+        private int _avverageP;
+        public int AvverageP
+        {
+            get { return _avverageP; }
+            set { _avverageP = value; }
+        }
+        private string _normativKatStr;
+        public string NormativKatStr
+        {
+            get { return _normativKatStr; }
+            set
+            {
+
+                //{ "Без электроплиты", "С электроплитой","Водонагреватель", "Электробойлер" };
+                if (value == "Без электроплиты") _normativKat = 1;
+                if (value == "С электроплитой") _normativKat = 2;
+                if (value == "Водонагреватель") _normativKat = 3;
+                if (value == "Электробойлер") _normativKat = 4;
+                _normativKatStr = value;
+                this.OnPropertyChanged("NormativKatStr");
+            }
+        }
+
         private int _normativKat;
         public int NormativKat
         {
             get { return _normativKat; }
-            set { _normativKat = value; }
+            set
+            {
+                if (value == 1) NormativKatStr = "Без электроплиты";
+                if (value == 2) NormativKatStr = "С электроплитой";
+                if (value == 3) NormativKatStr = "Водонагреватель";
+                if (value == 4) NormativKatStr = "Электробойлер";
+                this.OnPropertyChanged("NormativKatStr");
+                _normativKat = value;
+            }
         }
         private int _normativ;
         public int Normativ
@@ -275,7 +389,7 @@ namespace ATPWork.MyApp.Model.AktBuWork
         private void getPrevousAkt()
         {
             List<string[]> result = DataBaseWorker.GetPrevusAktFenix(NumberLS);
-            
+
             if (result.Count > 0)
             {
                 PrevProverki.Clear();
@@ -285,12 +399,21 @@ namespace ATPWork.MyApp.Model.AktBuWork
                 }
             }
         }
-        private void getNormativ()
+        /// <summary>
+        /// Выгрузка информации по прописанным и количеству комнат
+        /// </summary>
+        private void getInfoForNormativFromNumberLS()
         {
             Dictionary<string, string> info = DataBaseWorker.GetInfoForNormativ(NumberLS);
             RoomCount = Int32.Parse(info["Rooms"].ToString());
             PeopleCount = Int32.Parse(info["People"].ToString());
             NormativKat = Int32.Parse(info["Kategorya"].ToString());
+        }
+        /// <summary>
+        /// Выгрузка норматива из базы
+        /// </summary>
+        public void getNormativ()
+        {
             Normativ = DataBaseWorker.GetNormativ(PeopleCount, RoomCount, NormativKat);
         }
         private void calcCountDay()
@@ -343,7 +466,8 @@ namespace ATPWork.MyApp.Model.AktBuWork
             if (difMounth == 0) // Если даты в одном месяце
             {
                 float day = norm / (DateTime.DaysInMonth(startDate.Year, startDate.Month));
-                result += day * startDate.Day;
+                difDay = (endDate - startDate);
+                result += day * (difDay.Days + 1);
                 int resultt = (int)Math.Round(result * 10);
                 return resultt;
             }
@@ -381,17 +505,26 @@ namespace ATPWork.MyApp.Model.AktBuWork
         }
         public void calcBu()
         {
+            TimeSpan difDay;
+            difDay =(DateTime) DateWork - (DateTime)StartDate;
+            CountDay = difDay.Days + 1;
             BuValuePower = CountDay * 24 * Power;
             BuValueNormativ = GetValueBuNormativ((DateTime)StartDate, (DateTime)DateWork, Normativ);
+            this.OnPropertyChanged("ConsoleRaschet");
         }
         public override void setDataByDb(Dictionary<string, string> dict)
         {
             base.setDataByDb(dict);
-            getNormativ();//
+            getInfoForNormativFromNumberLS();//
+            getNormativ();
             getPrevousAkt();//
             getPrevousPlan();//
-            calcCountDay();
-            calcBu();
+            getAvveragePO();
+            if (dateWork != null)
+            {
+                calcCountDay();
+                calcBu();
+            }
         }
         #endregion
 

@@ -79,6 +79,17 @@ namespace MyApp.Model
             get { return _allAktInCurrentWork; }
             set { _allAktInCurrentWork = value; }
         }
+
+        internal static AktTehProverki GetAtpFromComplete(string numberLS, DateTime? dateWork)
+        {
+
+            foreach (var item in AllAkt)
+            {
+                if (item.NumberLS == numberLS && item.DateWork == dateWork) return item;
+            }
+            return null;
+        }
+
         public static List<AktTehProverki> UnmailedAkt
         {
             get

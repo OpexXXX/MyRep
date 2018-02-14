@@ -16,12 +16,13 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
         public DelegateCommand GetDataFromDbByNumberLs { get; private set; }
         public DelegateCommand GetDataFromDbByNumberPu { get; private set; }
         public DelegateCommand OpenImage { get; private set; }
-
+        public DelegateCommand CalcRaschet { get; private set; }
+        public DelegateCommand GetNormativ { get; private set; }
         public DelegateCommand NumberUp { get; private set; }
         public DelegateCommand NumberDown { get; private set; }
         public DelegateCommand DateUp { get; private set; }
         public DelegateCommand DateDown { get; private set; }
-
+        public DelegateCommand FindCurrentProverka { get; private set; }
         public DelegateCommand RemoveSecondAgent { get; private set; }
 
         private bool CanNumberCange()
@@ -51,6 +52,20 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
             Predicate<object> canNumberCange = f => CanNumberCange();// 
             Predicate<object> canDateCange = f => CanDateCange();// 
             Predicate<object> canRemoveAgent = f => CanRemAgent();// 
+            this.CalcRaschet = new DelegateCommand("Расчитать", f =>
+            {
+                
+                BuEditVM.AktInWork.calcBu();
+
+            }, canCalcRaschetBUCange, null);
+            this.GetNormativ = new DelegateCommand("Получить норматив", f =>
+            {
+                BuEditVM.AktInWork.getNormativ();
+            }, null, null);
+            this.FindCurrentProverka = new DelegateCommand("Найти в разнесенных актах", f =>
+            {
+                BuEditVM.AktInWork.FindCurrentAktProverki();
+            }, canSearchPderAkt, null); 
 
             this.GetDataFromDbByNumberLs = new DelegateCommand("Поиск по номеру лицевого счета", f =>
             {
@@ -113,6 +128,18 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
                 BuEditorVM.AktInWork.Agent_2 = null;
             }, canRemoveAgent, null);
             this.OpenImage = new DelegateCommand("Открыть изображение", openPhoto, null, null);
+        }
+
+        private bool canSearchPderAkt(object obj)
+        {
+            return BuEditVM.AktInWork.NumberLS != null && BuEditVM.AktInWork.DateWork != null;
+        }
+
+        private bool canCalcRaschetBUCange(object obj)
+        {
+            bool result = false;
+            if (BuEditVM.AktInWork.FIO != null) result = true;
+            return result;
         }
 
         private void openPhoto(object obj)

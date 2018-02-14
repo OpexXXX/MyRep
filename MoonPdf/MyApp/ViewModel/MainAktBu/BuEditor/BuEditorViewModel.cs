@@ -68,7 +68,12 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
             get { return _narusheniya; }
             set { _narusheniya = value; }
         }
-
+        private List<string> _vidNormativa = new List<string>() { "Без электроплиты", "С электроплитой","Водонагреватель", "Электробойлер" };
+        public List<string> VidNormativa
+        {
+            get { return _vidNormativa; }
+            set { _vidNormativa = value; }
+        }
 
         private void GetListForComboBox()
         {
