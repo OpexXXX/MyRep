@@ -1,4 +1,5 @@
-﻿using MyApp;
+﻿using ATPWork.MyApp.View;
+using MyApp;
 using MyApp.Model;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
 
         public DelegateCommand GetDataFromDbByNumberLs { get; private set; }
         public DelegateCommand GetDataFromDbByNumberPu { get; private set; }
+        public DelegateCommand OpenImage { get; private set; }
 
         public DelegateCommand NumberUp { get; private set; }
         public DelegateCommand NumberDown { get; private set; }
@@ -41,18 +43,18 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
 
 
 
-        public Commands(BuEditorViewModel AtpEdit)
+        public Commands(BuEditorViewModel BuEditorVM)
         {
-            this.BuEditVM = AtpEdit;
-            Predicate<object> findByLs = f => AtpEdit.CheckFindByLs() && DataBaseWorker.ConnectorBusy(); // 
-            Predicate<object> findByPu = f => AtpEdit.CheckFindByPu() && DataBaseWorker.ConnectorBusy(); // 
+            this.BuEditVM = BuEditorVM;
+            Predicate<object> findByLs = f => BuEditorVM.CheckFindByLs() && DataBaseWorker.ConnectorBusy(); // 
+            Predicate<object> findByPu = f => BuEditorVM.CheckFindByPu() && DataBaseWorker.ConnectorBusy(); // 
             Predicate<object> canNumberCange = f => CanNumberCange();// 
             Predicate<object> canDateCange = f => CanDateCange();// 
             Predicate<object> canRemoveAgent = f => CanRemAgent();// 
 
             this.GetDataFromDbByNumberLs = new DelegateCommand("Поиск по номеру лицевого счета", f =>
             {
-                string number = AtpEdit.AktInWork.NumberLS;
+                string number = BuEditorVM.AktInWork.NumberLS;
                 List<Dictionary<String, String>> resultSearchAbonent;
                 resultSearchAbonent = DataBaseWorker.GetAbonentFromLS(number);
 
@@ -61,7 +63,7 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
                     string edob = resultSearchAbonent[0]["EdOborudovania"];
 
 
-                    AtpEdit.AktInWork.setDataByDb(resultSearchAbonent[0]);
+                    BuEditorVM.AktInWork.setDataByDb(resultSearchAbonent[0]);
                 }
                 else if (resultSearchAbonent.Count > 1)
                 {
@@ -70,13 +72,13 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
                     if ((bool)wndResult.DialogResult)
                     {
                         string edob = wndResult.SelectVal["EdOborudovania"];
-                        AtpEdit.AktInWork.setDataByDb(wndResult.SelectVal);
+                        BuEditorVM.AktInWork.setDataByDb(wndResult.SelectVal);
                     }
                 }
             }, findByLs, null);
             this.GetDataFromDbByNumberPu = new DelegateCommand("Поиск по номеру прибора учета", f =>
             {
-                string number = AtpEdit.AktInWork.PuOldNumber;
+                string number = BuEditorVM.AktInWork.PuOldNumber;
                 List<Dictionary<String, String>> resultSearchAbonent;
                 resultSearchAbonent = DataBaseWorker.GetAbonentFromDbByPU(number);
                 if (resultSearchAbonent.Count == 1)
@@ -84,7 +86,7 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
                     string edob = resultSearchAbonent[0]["EdOborudovania"];
 
 
-                    AtpEdit.AktInWork.setDataByDb(resultSearchAbonent[0]);
+                    BuEditorVM.AktInWork.setDataByDb(resultSearchAbonent[0]);
                 }
                 else if (resultSearchAbonent.Count > 1)
                 {
@@ -93,24 +95,36 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
                     if ((bool)wndResult.DialogResult)
                     {
                         string edob = wndResult.SelectVal["EdOborudovania"];
-                        AtpEdit.AktInWork.setDataByDb(wndResult.SelectVal);
+                        BuEditorVM.AktInWork.setDataByDb(wndResult.SelectVal);
                     }
                 }
             }, findByPu, null);
             this.NumberUp = new DelegateCommand("+1", f =>
             {
-                AtpEdit.AktInWork.Number++;
+                BuEditorVM.AktInWork.Number++;
             }, canNumberCange, null);
             this.NumberDown = new DelegateCommand("-1", f =>
             {
-                AtpEdit.AktInWork.Number--;
+                BuEditorVM.AktInWork.Number--;
             }, canNumberCange, null);
-           
+
             this.RemoveSecondAgent = new DelegateCommand("Очистить", f =>
             {
-                AtpEdit.AktInWork.Agent_2 = null;
+                BuEditorVM.AktInWork.Agent_2 = null;
             }, canRemoveAgent, null);
+            this.OpenImage = new DelegateCommand("Открыть изображение", openPhoto, null, null);
         }
+
+        private void openPhoto(object obj)
+        {
+            if (obj is string)
+            {
+                var windowPhoto = new PhotoView(BuEditVM.SelectedPhoto);
+
+                windowPhoto.Show();
+            }
+        }
+
 
     }
 }
