@@ -53,6 +53,18 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
                 OnPropertyChanged("ZayavkaToAdd");
             }
         }
+        private VnePlanZayavka _selectedZayvka;
+        public VnePlanZayavka SelectedZayvka
+        {
+            get { return _selectedZayvka; }
+            set
+            {
+                _selectedZayvka = value;
+                OnPropertyChanged("SelectedZayvka");
+            }
+        }
+
+
         private bool _expanderOpen = false;
         public bool ExpanderOpen
         {
@@ -139,9 +151,5 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
 
 
         }
-        /*internal void CreatePdf()
-        {
-            PlanWorkModel.CreatePDF(SelectedDate);
-        }*/
     }
 }

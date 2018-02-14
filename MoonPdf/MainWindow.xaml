@@ -362,7 +362,7 @@
                                 <Image  Height="20" Source="/ATPWork;component/Resources/icons8-поиск-40.png" Width="20" />
                             </Button>
                         </StackPanel>
-                        <GroupBox Header="Добавть заявку" Width="236">
+                        <GroupBox Margin="2,2,2,2" Header="Добавть заявку" Width="236" BorderBrush="#FF6C7B83" BorderThickness="2">
                             <StackPanel>
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock VerticalAlignment="Center">ФИО:</TextBlock>
@@ -424,7 +424,8 @@
                             <Image  Height="20" Source="/ATPWork;component/Resources/icons8-поиск-40.png" Width="20" />
                         </Button>
                     </StackPanel>
-                    <ListView     VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling"  ItemsSource="{Binding AbonentsForVnePlan,  Source={StaticResource VnePlanVM}, UpdateSourceTrigger=PropertyChanged}" >
+                    <ListView     VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling"  ItemsSource="{Binding AbonentsForVnePlan,  Source={StaticResource VnePlanVM}, UpdateSourceTrigger=PropertyChanged}" 
+                                  SelectedItem="{Binding SelectedZayvka,  Source={StaticResource VnePlanVM}, UpdateSourceTrigger=PropertyChanged}">
 
                         <ListView.ItemTemplate>
                             <DataTemplate>

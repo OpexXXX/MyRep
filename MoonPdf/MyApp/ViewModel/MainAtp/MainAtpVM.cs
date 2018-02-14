@@ -78,7 +78,7 @@ namespace ATPWork.MyApp.ViewModel
             get { return _currentPagePdf; }
             set
             {
-                if (_currentPagePdf != value)
+                if (_currentPagePdf != value && PdfViewer?.CurrentSource != null)
                 {
                     _currentPagePdf = value;
                     try
@@ -100,7 +100,7 @@ namespace ATPWork.MyApp.ViewModel
             get { return _currentFilePdf; }
             set
             {
-                if (_currentFilePdf != value)
+                if ((_currentFilePdf != value || PdfViewer?.CurrentSource==null)&& PdfViewer !=null)
                 {
                     _currentFilePdf = value;
                     try
