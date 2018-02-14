@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ATPWork.MyApp.ViewModel
+namespace ATPWork.MyApp.ViewModel.MainAktBu
 {
-    class SettingsVM : ViewModelBase
+    class AktsBuViewModel
     {
-
     }
 }
