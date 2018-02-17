@@ -136,6 +136,8 @@ namespace MyApp.Model
 
         public static void InitMainAtpModel()
         {
+            var prop = new Settings();
+            LoadSettings(prop);
             InitListsForCombos();
             InitCompleteAktCollection();
             InitAktInWorkCollection();
@@ -583,7 +585,18 @@ namespace MyApp.Model
                 MessageBox.Show(ex.Message);
                 return;
             }
-            int i = 0;
+           
+            AllAkt.Sort(delegate (AktTehProverki akt1, AktTehProverki akt2)
+            {
+                if (akt1.DateWork > akt2.DateWork) return 1;
+                else if (akt1.DateWork < akt2.DateWork) return -1;
+                else if (akt1.Number > akt2.Number) return 1;
+                else if (akt1.Number < akt2.Number) return -1;
+
+               
+                return 0;
+            });
+
             foreach (var item in AllAkt)
             {
                 if ((item.SapNumberAkt == "") && (File.Exists(System.IO.Path.Combine(AktDirektory, item.NamePdfFile))))

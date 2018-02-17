@@ -153,6 +153,20 @@ namespace ATPWork.MyApp.ViewModel
                 return result;
             }
         }
+
+        public int UnEnterSAPAkt
+        {
+            get
+            {
+                int result = 0;
+                foreach (AktTehProverki item in AllAkt)
+                {
+                    if (item.SapNumberAkt == null|| item.SapNumberAkt=="") result++;
+                }
+                return result;
+            }
+        }
+
         public long SizeUnmailedPdf
         {
             get

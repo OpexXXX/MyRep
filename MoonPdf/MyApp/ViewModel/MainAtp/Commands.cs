@@ -61,6 +61,7 @@ namespace ATPWork.MyApp.ViewModel.MainAtp
             Predicate<object> isGoPage = f => CanGoToPage();
             Predicate<object> isCreateMail = f => CanCreateMail();
 
+
             this.AddAktToworkFromPDF = new DelegateCommand("Добавить к заданию  из PDF", async f =>
             {
                 mainAtpVm.WorkinAddAktFromPdf = true;
@@ -118,7 +119,7 @@ namespace ATPWork.MyApp.ViewModel.MainAtp
                         mainAtpVm.WorkinAddAktFromPdf = false;
                     }
                 });
-            }, null, null);
+            }, canEnterAktsInSAP, null);
 
 
             this.SaveCurrentWork = new DelegateCommand("Сохранить", async f =>
@@ -127,6 +128,7 @@ namespace ATPWork.MyApp.ViewModel.MainAtp
                 await Task.Run(() =>
                 {
                     MainAtpModel.SaveBeforeCloseApp();
+                    mainAtpVm.WorkinAddAktFromPdf = false;
                 });
             }, isDatabaseConnectorBusy, new KeyGesture(Key.S, ModifierKeys.Control));
             this.CreateMailAllPossibleAkt = new DelegateCommand("Создать сопроводительное (все акты)", f =>
@@ -197,6 +199,12 @@ namespace ATPWork.MyApp.ViewModel.MainAtp
                 mainAtpVm.GoSecongPageAkt();
             }, isGoPage, null);
             this.DeleteGroup = new DelegateCommand("Удалить задание", deleteGroup, null, null);
+        }
+
+        private bool canEnterAktsInSAP(object obj)
+        {
+
+            return mainAtpVm.UnEnterSAPAkt > 0;
         }
 
         private void OpenFolderWhisMail(object obj)

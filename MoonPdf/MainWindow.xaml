@@ -265,7 +265,8 @@
                                           SelectedItem=""
                                         AutoGenerateColumns="False">
                                         <DataGrid.Columns>
-                                            <DataGridTextColumn Binding="{Binding Number}" ClipboardContentBinding="{x:Null}" Header="№Акта"/>
+                                            <DataGridTextColumn Binding="{Binding Number}" ClipboardContentBinding="{x:Null}" Header="№Акта" >
+                                            </DataGridTextColumn>
                                             <DataGridTextColumn Binding="{Binding DateWork}" ClipboardContentBinding="{x:Null}" Header="Дата"/>
                                             <DataGridTextColumn Binding="{Binding NumberLS}" ClipboardContentBinding="{x:Null}" Header="№ЛС"/>
                                             <DataGridTextColumn Binding="{Binding FIO}" ClipboardContentBinding="{x:Null}" Header="ФИО"/>
@@ -288,8 +289,7 @@
                                                                                     <ContextMenu>
                                                                                         <MenuItem Header="{Binding Commands.OpenFolderMail.Name, Source={StaticResource MainAtpVM}}" 
                                                                                                   Command="{Binding Commands.OpenFolderMail, Source={StaticResource MainAtpVM}}" 
-                                                                                                  CommandParameter="{Binding Path=Name}"
-                                                                                                  />
+                                                                                                  CommandParameter="{Binding Path=Name}"/>
                                                                                     </ContextMenu>
                                                                                 </DockPanel.ContextMenu>
                                                                                 <TextBlock FontWeight="Bold" Text="{Binding Path=Name}" Margin="5,0,0,0">
