@@ -530,7 +530,7 @@
                                 <mpp:MoonPdfPanel Background="LightGray" PageRowDisplay="ContinuousPageRows" x:Name="PdfPanelBu" x:FieldModifier="private"  AllowDrop="False" />
                                 <local:AktBuEditor    Margin="5,0" Grid.Column="1" ></local:AktBuEditor>
                                 <ToggleButton Grid.Column="1" HorizontalAlignment="Right" Width="9"/>
-                                <ListBox  ScrollViewer.HorizontalScrollBarVisibility="Disabled"   Name="AktBuInWork" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling"  ItemsSource="{Binding Source={StaticResource AktInWorkSourse}}" SelectedItem="{Binding  Path=SelectedAkt, Source={StaticResource MainAtpVM}}" Grid.Column="2" >
+                                <ListBox  ScrollViewer.HorizontalScrollBarVisibility="Disabled"   Name="AktBuInWork" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling"  ItemsSource="{Binding Source={StaticResource AktInWorkSourse}}" SelectedItem="{Binding  Path=SelectedAkt, Source={StaticResource MainAtpVM}}" Grid.Column="2" SelectionChanged="AktBuInWork_SelectionChanged" >
                                     <ListBox.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <WrapPanel Width="700" />

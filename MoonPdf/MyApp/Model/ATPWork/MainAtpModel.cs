@@ -128,7 +128,7 @@ namespace MyApp.Model
             }
         }
         #region Инициализация 
-        internal static void LoadSettings(Settings settings)
+        internal static void LoadSettings(ATPWork.Properties.Settings settings)
         {
             AktDirektory = settings.DirAktTehPDF;
             MailDirektory = settings.DirAktTehMail;

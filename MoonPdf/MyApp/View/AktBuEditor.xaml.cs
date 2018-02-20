@@ -54,11 +54,13 @@ namespace ATPWork.MyApp.View
             BuEditVM.AktInWork = newValue;
         }
         #endregion
+
         private BuEditorViewModel BuEditVM;
         public AktBuEditor()
         {
             InitializeComponent();
             BuEditVM = (BuEditorViewModel)this.Resources["BuEditorViewModel"];
+
         }
 
         private void ListBox_Drop(object sender, DragEventArgs e)

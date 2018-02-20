@@ -28,6 +28,7 @@ namespace MyApp
             MainAtpViemModel = (MainAtpVM)this.Resources["MainAtpVM"];
             MainAtpViemModel.PdfViewer = moonPdfPanel;
             MainAtpViemModel.ListBoxAktInWork = DatagridInWork;
+
             VnePlanModel.refreshZayavki();
             this.Loaded += MainWindow_Loaded;
             
@@ -73,6 +74,8 @@ namespace MyApp
             g.Owner = this;
             g.ShowDialog();
         }
+
+       
     }
 }
 
