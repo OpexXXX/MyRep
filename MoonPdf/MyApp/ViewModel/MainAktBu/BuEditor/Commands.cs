@@ -1,8 +1,10 @@
-﻿using ATPWork.MyApp.View;
+﻿using ATPWork.MyApp.Model;
+using ATPWork.MyApp.View;
 using MyApp;
 using MyApp.Model;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +26,8 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
         public DelegateCommand DateDown { get; private set; }
         public DelegateCommand FindCurrentProverka { get; private set; }
         public DelegateCommand RemoveSecondAgent { get; private set; }
+        public DelegateCommand  OpenRaschetDocx { get; private set; }
+        public DelegateCommand OpenMailDocx { get; private set; }
 
         private bool CanNumberCange()
         {
@@ -58,6 +62,17 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
                 BuEditVM.AktInWork.calcBu();
 
             }, canCalcRaschetBUCange, null);
+
+            this.OpenRaschetDocx = new DelegateCommand("Открыть расчет в Word", f =>
+            {
+                Process.Start(WordShablon.CreateRaschetForBuAkt(BuEditVM.AktInWork));
+            }, canCalcRaschetBUCange, null);
+
+            this.OpenMailDocx = new DelegateCommand("Открыть письмо в Word", f =>
+            {
+                Process.Start(WordShablon.CreateMailForBuAkts(BuEditVM.AktInWork));
+            }, canCalcRaschetBUCange, null);
+
             this.GetNormativ = new DelegateCommand("Получить норматив", f =>
             {
                 BuEditVM.AktInWork.getNormativ();

@@ -71,6 +71,7 @@
             </GroupBox.Header>
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
+                    
                     <TextBlock TextWrapping="Wrap" Text="№Л/С:" VerticalAlignment="Center"  />
                     <TextBox x:Name="NumberLsWPF" VerticalAlignment="Center"  Style="{StaticResource TextBoxStyle}"
                            Width="120"  
@@ -78,22 +79,58 @@
                         <TextBox.InputBindings>
                             <KeyBinding Key="Enter" Command="{Binding Commands.GetDataFromDbByNumberLs, Source={StaticResource BuEditorViewModel}}" />
                         </TextBox.InputBindings>
-                        <Binding Source="{StaticResource BuEditorViewModel}" Path="AktInWork.NumberLS" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" NotifyOnValidationError="True"
-      >
-                            <Binding.ValidationRules>
+                        <Binding Source="{StaticResource BuEditorViewModel}" Path="AktInWork.NumberLS" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" NotifyOnValidationError="True">                            <Binding.ValidationRules>
                                 <viewModel:ValidNumberLS/>
                                 <ExceptionValidationRule/>
                             </Binding.ValidationRules>
                         </Binding>
                     </TextBox>
-
                     <Button  Focusable="False" Command="{Binding Commands.GetDataFromDbByNumberLs, Source={StaticResource BuEditorViewModel}}">
                         <Image  Height="20" Source="/ATPWork;component/Resources/icons8-поиск-40.png" Width="20" />
                     </Button>
                     <TextBlock  TextWrapping="Wrap" Text="{Binding AktInWork.FIO, Source={StaticResource BuEditorViewModel}}" Style="{StaticResource Hidden}"/>
+                    
                 </StackPanel>
                 <StackPanel>
                     <TextBlock   Text="{Binding AktInWork.Adress, Source={StaticResource BuEditorViewModel}}"  Style="{StaticResource Hidden}"  />
+                </StackPanel>
+                <StackPanel  Orientation="Horizontal">
+                    <TextBlock Text="исх №" VerticalAlignment="Center"/>
+                    <Grid>
+                        <TextBox   VerticalAlignment="Center" Style="{StaticResource TextBoxStyle}"   Width="93" MaxLength="5" >
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Up" Command="{Binding Commands.NumberUp, Source={StaticResource BuEditorViewModel}}" />
+                                <KeyBinding Key="Down" Command="{Binding Commands.NumberDown, Source={StaticResource BuEditorViewModel}}" />
+                            </TextBox.InputBindings>
+
+                            <Binding Source="{StaticResource BuEditorViewModel}" Path="AktInWork.NumberMail" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
+        UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <viewModel:ValidNumber/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox>
+                    </Grid>
+                    <DatePicker  Margin="5,0,0,0"
+                                        SelectedDate ="{Binding AktInWork.DateMail, Source={StaticResource BuEditorViewModel}}"
+                                        HorizontalAlignment="Left" 
+                                       VerticalAlignment="Center" Height="25" Width="111" SelectedDateFormat="Short" 
+                            DisplayDateEnd="2025-12-31" 
+                            DisplayDateStart="2017-01-01" 
+                            TextOptions.TextFormattingMode="Display" 
+                            IsManipulationEnabled="True">
+                        <DatePicker.InputBindings>
+                            <KeyBinding Key="Up" Command="{Binding Commands.NumberDown, Source={StaticResource BuEditorViewModel}}" />
+                            <KeyBinding Key="Down" Command="{Binding Commands.DateDown, Source={StaticResource BuEditorViewModel}}" />
+                        </DatePicker.InputBindings>
+                    </DatePicker>
+                    <Button Command="{Binding Commands.OpenMailDocx, Source={StaticResource BuEditorViewModel}}" ToolTip="{Binding Commands.OpenMailDocx.Name, Source={StaticResource BuEditorViewModel}}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/ATPWork;component/Resources/word-doc.ico" Width="20" Height="20"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
                 </StackPanel>
             </StackPanel>
         </GroupBox>
@@ -108,7 +145,8 @@
                 </GroupBox.Header>
                 <StackPanel>
                     <StackPanel  Orientation="Horizontal">
-                        <TextBlock Text="Номер" VerticalAlignment="Center"/>
+                        <TextBlock Text="№" VerticalAlignment="Center"/>
+                        <Grid>
                         <TextBox   VerticalAlignment="Center" Style="{StaticResource TextBoxStyle}"   Width="93" MaxLength="5" >
                             <TextBox.InputBindings>
                                 <KeyBinding Key="Up" Command="{Binding Commands.NumberUp, Source={StaticResource BuEditorViewModel}}" />
@@ -122,6 +160,7 @@
                                 </Binding.ValidationRules>
                             </Binding>
                         </TextBox>
+                        </Grid>
                         <DatePicker  Margin="5,0,0,0"
                                         SelectedDate ="{Binding AktInWork.DateWork, Source={StaticResource BuEditorViewModel}}"
                                         HorizontalAlignment="Left" 
@@ -137,7 +176,8 @@
                         </DatePicker>
                     </StackPanel>
                     <StackPanel  Orientation="Horizontal">
-                        <TextBlock>PDF:</TextBlock>
+                        <Grid>
+                            <TextBlock Panel.ZIndex="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontWeight="Bold" Foreground="#FFC7C7C7" IsEnabled="False" Cursor="None" FontSize="21.333">Скан акта БУ</TextBlock>
                         <TextBox   VerticalAlignment="Center" Style="{StaticResource TextBoxStyle}"    Width="199"  >
                             <TextBox.InputBindings>
                                 <KeyBinding Key="Up" Command="{Binding Commands.NumberUp, Source={StaticResource BuEditorViewModel}}" />
@@ -150,6 +190,7 @@
                                 </Binding.ValidationRules>
                             </Binding>
                         </TextBox>
+                        </Grid>
                         <Button>...</Button>
                     </StackPanel>
                 </StackPanel>
@@ -184,7 +225,8 @@
                         </TextBox>
                     </StackPanel>
                     <StackPanel  Orientation="Horizontal">
-                        <TextBlock>PDF:</TextBlock>
+                        <Grid>
+                        <TextBlock Panel.ZIndex="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontWeight="Bold" Foreground="#FFC7C7C7" IsEnabled="False" Cursor="None" FontSize="21.333">Скан проверки</TextBlock>
                         <TextBox   VerticalAlignment="Center" Style="{StaticResource TextBoxStyle}"   Width="180" >
                             <TextBox.InputBindings>
                                 <KeyBinding Key="Up" Command="{Binding Commands.NumberUp, Source={StaticResource BuEditorViewModel}}" />
@@ -197,6 +239,7 @@
                                 </Binding.ValidationRules>
                             </Binding>
                         </TextBox>
+                        </Grid>
                         <Button>...</Button>
                     </StackPanel>
                 </StackPanel>
@@ -233,8 +276,9 @@
                 <StackPanel>
 
                     <StackPanel  Orientation="Horizontal">
-                        <TextBlock>PDF:</TextBlock>
-                        <TextBox   VerticalAlignment="Center" Style="{StaticResource TextBoxStyle}"   Width="162" >
+                        <Grid>
+                        <TextBlock Panel.ZIndex="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontWeight="Bold" Foreground="#FFC7C7C7" IsEnabled="False" Cursor="None" FontSize="21.333">Скан извещения</TextBlock>
+                        <TextBox   VerticalAlignment="Center" Style="{StaticResource TextBoxStyle}"   Width="180" >
                             <TextBox.InputBindings>
                                 <KeyBinding Key="Up" Command="{Binding Commands.NumberUp, Source={StaticResource BuEditorViewModel}}" />
                                 <KeyBinding Key="Down" Command="{Binding Commands.NumberDown, Source={StaticResource BuEditorViewModel}}" />
@@ -246,6 +290,7 @@
                                 </Binding.ValidationRules>
                             </Binding>
                         </TextBox>
+                        </Grid>
                         <Button>...</Button>
                     </StackPanel>
                 </StackPanel>
@@ -261,6 +306,13 @@
                         <Button.Content>
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="/ATPWork;component/Resources/ok.png" Width="20" Height="20"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                    <Button Command="{Binding Commands.OpenRaschetDocx, Source={StaticResource BuEditorViewModel}}" ToolTip="{Binding Commands.OpenRaschetDocx.Name, Source={StaticResource BuEditorViewModel}}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/ATPWork;component/Resources/word-doc.ico" Width="20" Height="20"/>
                             </StackPanel>
                         </Button.Content>
                     </Button>
@@ -301,7 +353,7 @@
                 </StackPanel>
                 <StackPanel Margin="1" Orientation="Horizontal">
                     <TextBlock VerticalAlignment="Center">Вид нарушения:</TextBlock>
-                    <ComboBox ItemsSource="{Binding  Path=Narusheniya, Source={StaticResource BuEditorViewModel}}"  SelectedItem="{Binding AktInWork.VidNarusheniya, Source={StaticResource BuEditorViewModel}}"  Name="Narushenie" HorizontalAlignment="Left" Height="25" Background="{x:Null}"  BorderThickness="1" Width="134">
+                    <ComboBox ItemsSource="{Binding  Path=Narusheniya, Source={StaticResource BuEditorViewModel}}"  SelectedIndex="{Binding AktInWork.TypeNarushenie, Source={StaticResource BuEditorViewModel}, Converter={local:VidNarusheniyaConv}}"  Name="Narushenie" HorizontalAlignment="Left" Height="25" Background="{x:Null}"  BorderThickness="1" Width="134">
 
                     </ComboBox>
                 </StackPanel>
@@ -347,20 +399,24 @@
         <GroupBox  HorizontalAlignment="Left"  BorderThickness="2" BorderBrush="#FF999999" Width="500">
             <GroupBox.Header>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Нарушение(из текста акта)" FontWeight="Bold" FontSize="14" />
+                    <TextBlock Text="Нарушение" FontWeight="Bold" FontSize="14" />
                 </StackPanel>
             </GroupBox.Header>
             <StackPanel >
-                <TextBox        TextWrapping="WrapWithOverflow"
+                <Grid>
+                    <TextBlock Panel.ZIndex="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontWeight="Bold" Foreground="#FFC7C7C7" IsEnabled="False" Cursor="None" FontSize="21.333">Место и способ нарушения(из текста акта)</TextBlock>
+
+                    <TextBox        TextWrapping="WrapWithOverflow"
                          >
-                    <Binding Source="{StaticResource BuEditorViewModel}" Path="AktInWork.Narushenie" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" NotifyOnValidationError="True"
+                        <Binding Source="{StaticResource BuEditorViewModel}" Path="AktInWork.Narushenie" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" NotifyOnValidationError="True"
       >
-                        <Binding.ValidationRules>
-                            <viewModel:ValidNumberLS/>
-                            <ExceptionValidationRule/>
-                        </Binding.ValidationRules>
-                    </Binding>
-                </TextBox>
+                            <Binding.ValidationRules>
+                                <viewModel:ValidNumberLS/>
+                                <ExceptionValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox>
+                </Grid>
             </StackPanel>
         </GroupBox>
         <GroupBox  HorizontalAlignment="Left"  BorderThickness="2" BorderBrush="#FF999999" Width="500">
@@ -370,6 +426,8 @@
                 </StackPanel>
             </GroupBox.Header>
             <StackPanel>
+                <Grid>
+                    
                 <ListBox KeyUp="ListBox_KeyUp"  Drop="ListBox_Drop"  ItemsSource="{Binding  Path=AktInWork.PhotoFile, Source={StaticResource BuEditorViewModel}}"  SelectedItem="{Binding SelectedPhoto, Source={StaticResource BuEditorViewModel}}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"   VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling"   >
 
                     <ListBox.ItemsPanel>
@@ -391,6 +449,8 @@
 
 
                 </ListBox>
+                    <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" FontWeight="Bold" Foreground="#FFC7C7C7" IsEnabled="False" Cursor="None"> Пертащите фото сюда</TextBlock>
+                </Grid>
             </StackPanel>
         </GroupBox>
     </StackPanel>

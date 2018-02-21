@@ -62,7 +62,7 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
             MainAtpModel.ComboRefresh += GetListForComboBox;
         }
 
-        private List<string> _narusheniya = new List<string>() { "Врезка", "Вмешательство", "Врезка без мощности" };
+        private List<string> _narusheniya = new List<string>() { "Вмешательство", "Врезка", "Врезка без мощности" };
         public List<string> Narusheniya
         {
             get { return _narusheniya; }

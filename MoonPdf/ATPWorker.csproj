@@ -337,6 +337,7 @@
     <None Include="ATPWorker_TemporaryKey.pfx" />
     <None Include="headertemplate.json" />
     <AppDesigner Include="Properties\" />
+    <Resource Include="Resources\word-doc.ico" />
     <Content Include="Shabloni\BU\CalcNoPower.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

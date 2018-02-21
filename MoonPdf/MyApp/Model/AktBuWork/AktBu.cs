@@ -8,6 +8,12 @@ using System.Threading.Tasks;
 
 namespace ATPWork.MyApp.Model.AktBuWork
 {
+   public enum VidNarusheniya
+    {
+        Vmeshatelstvo,
+        Power,
+        NoPower
+    }
     public class AktBu : Abonent
     {
 
@@ -152,11 +158,11 @@ namespace ATPWork.MyApp.Model.AktBuWork
             get { return _narushenie; }
             set { _narushenie = value; this.OnPropertyChanged("Narushenie"); }
         }
-        private string _vidNarusheniya;
-        public string VidNarusheniya
+        private VidNarusheniya _typeNarushenie;
+        public VidNarusheniya TypeNarushenie
         {
-            get { return _vidNarusheniya; }
-            set { _vidNarusheniya = value; this.OnPropertyChanged("VidNarusheniya"); }
+            get { return _typeNarushenie; }
+            set { _typeNarushenie = value; this.OnPropertyChanged("TypeNarushenie"); }
         }
         private ObservableCollection<string> _photoFile = new ObservableCollection<string>();
         public ObservableCollection<string> PhotoFile
