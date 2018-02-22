@@ -80,16 +80,16 @@
     <StackPanel>
         <StackPanel Orientation="Horizontal">
             <Button Margin="1,1,1,1" Focusable="False" Command="{Binding Source={ StaticResource  PlombEditorViewModel}, Path=Commands.AddPlombCommand}" ToolTip="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.AddPlombCommand.Name}">
-                <Image  Height="25" Source="/ATPWork;component/Resources/icons8-создать-новый.png" Width="25" />
+                <Image RenderOptions.BitmapScalingMode="HighQuality"  Height="25" Source="/ATPWork;component/Resources/icons8-создать-новый.png" Width="25" />
             </Button>
             <Button Margin="1,1,1,1" Command="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.DeletePlombCommand}" Focusable="False" ToolTip="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.DeletePlombCommand.Name}">
-                <Image  Height="25" Source="/ATPWork;component/Resources/icons8-удалить.png" Width="25" />
+                <Image  RenderOptions.BitmapScalingMode="HighQuality" Height="25" Source="/ATPWork;component/Resources/icons8-удалить.png" Width="25" />
             </Button>
             <Button Margin="1,1,1,1" Focusable="False"  Command="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.IncrementAddPlombComand}" ToolTip="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.IncrementAddPlombComand.Name}">
-                <Image x:Name="image" Height="25" Source="/ATPWork;component/Resources/icons8+1.png" Width="25" />
+                <Image RenderOptions.BitmapScalingMode="HighQuality" x:Name="image" Height="25" Source="/ATPWork;component/Resources/icons8+1.png" Width="25" />
             </Button>
             <Button Margin="1,1,1,1" Focusable="False"  Command="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.DecrementAddPlombComand}" ToolTip="{Binding Source={StaticResource PlombEditorViewModel}, Path=Commands.DecrementAddPlombComand.Name}">
-                <Image  Height="25" Source="/ATPWork;component/Resources/icons8-1.png" Width="25" />
+                <Image RenderOptions.BitmapScalingMode="HighQuality" Height="25" Source="/ATPWork;component/Resources/icons8-1.png" Width="25" />
             </Button>
         </StackPanel>
         <StackPanel Orientation="Vertical" >

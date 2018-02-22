@@ -337,6 +337,14 @@
     <None Include="ATPWorker_TemporaryKey.pfx" />
     <None Include="headertemplate.json" />
     <AppDesigner Include="Properties\" />
+    <Resource Include="Resources\refresh.png" />
+    <Resource Include="Resources\Word-Mac-icon.png" />
+    <Content Include="Shabloni\mail.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shabloni\Zayavka.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Resource Include="Resources\word-doc.ico" />
     <Content Include="Shabloni\BU\CalcNoPower.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

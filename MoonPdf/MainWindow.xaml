@@ -524,11 +524,14 @@
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
-                                    <ColumnDefinition Width="520"/>
+                                    <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="174"/>
                                 </Grid.ColumnDefinitions>
                                 <mpp:MoonPdfPanel Background="LightGray" PageRowDisplay="ContinuousPageRows" x:Name="PdfPanelBu" x:FieldModifier="private"  AllowDrop="False" />
+                                <ScrollViewer Grid.Column="1">
+                                    
                                 <local:AktBuEditor    Margin="5,0" Grid.Column="1" ></local:AktBuEditor>
+                                </ScrollViewer>
                                 <ToggleButton Grid.Column="1" HorizontalAlignment="Right" Width="9"/>
                                 <ListBox  ScrollViewer.HorizontalScrollBarVisibility="Disabled"   Name="AktBuInWork" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling"  ItemsSource="{Binding Source={StaticResource AktInWorkSourse}}" SelectedItem="{Binding  Path=SelectedAkt, Source={StaticResource MainAtpVM}}" Grid.Column="2" >
                                     <ListBox.ItemsPanel>

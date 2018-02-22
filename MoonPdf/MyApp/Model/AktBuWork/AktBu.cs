@@ -230,8 +230,8 @@ namespace ATPWork.MyApp.Model.AktBuWork
                 this.OnPropertyChanged("BuValuePower");
             }
         }
-        private int _power;
-        public int Power
+        private float _power;
+        public float Power
         {
             get { return this._power; }
             set
@@ -516,7 +516,11 @@ namespace ATPWork.MyApp.Model.AktBuWork
             TimeSpan difDay;
             difDay =(DateTime) DateWork - (DateTime)StartDate;
             CountDay = difDay.Days + 1;
-            BuValuePower = CountDay * 24 * Power;
+
+          
+
+            BuValuePower = (int)Math.Round(CountDay * 24 * Power);
+
             BuValueNormativ = GetValueBuNormativ((DateTime)StartDate, (DateTime)DateWork, Normativ);
             this.OnPropertyChanged("ConsoleRaschet");
         }

@@ -78,7 +78,7 @@ namespace ATPWork.MyApp.Model
     new FieldContent("NumberAktBu", akt.Number.ToString()),
     new FieldContent("DateAktBu", akt.DateWork?.ToString("d")),
 
-     new FieldContent("ValueBu", (akt.CountDay * 24).ToString()),
+     new FieldContent("ValueBu", akt.TypeNarushenie==VidNarusheniya.Power?akt.BuValuePower.ToString():akt.BuValueNormativ.ToString()),
 
       new FieldContent("Adress", akt.Adress),
     new FieldContent("NumberLs", akt.NumberLS),
