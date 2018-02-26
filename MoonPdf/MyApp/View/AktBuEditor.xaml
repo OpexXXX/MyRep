@@ -140,6 +140,14 @@
                                 </StackPanel>
                             </Button.Content>
                         </Button>
+                        <Button Command="{Binding Commands.OpenMailPDF, Source={StaticResource BuEditorViewModel}}" ToolTip="{Binding Commands.OpenMailPDF.Name, Source={StaticResource BuEditorViewModel}}">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/ATPWork;component/Resources/PDF.png" Width="25" Height="25"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+
                         <Button  Margin="1"  Command="{Binding Commands.OpenPoliceMailDocx, Source={StaticResource BuEditorViewModel}}" ToolTip="{Binding Commands.OpenPoliceMailDocx.Name, Source={StaticResource BuEditorViewModel}}">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
@@ -147,6 +155,14 @@
                                 </StackPanel>
                             </Button.Content>
                         </Button>
+                        <Button Command="{Binding Commands.OpenPoliceMailDocPDF, Source={StaticResource BuEditorViewModel}}" ToolTip="{Binding Commands.OpenPoliceMailDocPDF.Name, Source={StaticResource BuEditorViewModel}}">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/ATPWork;component/Resources/PDF.png" Width="25" Height="25"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+
                     </StackPanel>
                 </StackPanel>
             </GroupBox.Header>
@@ -339,7 +355,7 @@
                 </StackPanel>
             </GroupBox.Header>
             <StackPanel Orientation="Horizontal">
-                <ComboBox   HorizontalAlignment="Left" Height="26" Width="200" ItemsSource="{Binding AgentList, Source={StaticResource BuEditorViewModel}}" SelectedItem="{Binding AktInWork.Agent_1, Source={StaticResource BuEditorViewModel}}" Background="{x:Null}"  BorderThickness="1">
+                <ComboBox   HorizontalAlignment="Left" Height="26" Width="170" ItemsSource="{Binding AgentList, Source={StaticResource BuEditorViewModel}}" SelectedItem="{Binding AktInWork.Agent_1, Source={StaticResource BuEditorViewModel}}" Background="{x:Null}"  BorderThickness="1">
                 </ComboBox>
                 <Button  Margin="1"  Command="{Binding Commands.OpenAgent1Docx, Source={StaticResource BuEditorViewModel}}" ToolTip="{Binding Commands.OpenAgent1Docx.Name, Source={StaticResource BuEditorViewModel}}">
                     <Button.Content>
@@ -348,9 +364,16 @@
                         </StackPanel>
                     </Button.Content>
                 </Button>
+                <Button Command="{Binding Commands.OpenAgent1PDF, Source={StaticResource BuEditorViewModel}}" ToolTip="{Binding Commands.OpenAgent1PDF.Name, Source={StaticResource BuEditorViewModel}}">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/ATPWork;component/Resources/PDF.png" Width="25" Height="25"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
 
                 <StackPanel Orientation="Horizontal">
-                    <ComboBox  HorizontalAlignment="Left" Height="24" Width="200" ItemsSource="{Binding AgentList, Source={StaticResource BuEditorViewModel}}" SelectedItem="{Binding AktInWork.Agent_2, Source={StaticResource BuEditorViewModel}}" Background="{x:Null}" BorderThickness="1">
+                    <ComboBox  HorizontalAlignment="Left" Height="24" Width="170" ItemsSource="{Binding AgentList, Source={StaticResource BuEditorViewModel}}" SelectedItem="{Binding AktInWork.Agent_2, Source={StaticResource BuEditorViewModel}}" Background="{x:Null}" BorderThickness="1">
                     </ComboBox>
                     <Button  Margin="1"  Command="{Binding Commands.OpenAgent2Docx, Source={StaticResource BuEditorViewModel}}" ToolTip="{Binding Commands.OpenAgent2Docx.Name, Source={StaticResource BuEditorViewModel}}">
                         <Button.Content>
@@ -359,6 +382,14 @@
                             </StackPanel>
                         </Button.Content>
                     </Button>
+                    <Button Command="{Binding Commands.OpenAgent2PDF, Source={StaticResource BuEditorViewModel}}" ToolTip="{Binding Commands.OpenAgent2PDF.Name, Source={StaticResource BuEditorViewModel}}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/ATPWork;component/Resources/PDF.png" Width="25" Height="25"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+
                     <Button  Focusable="False" Command="{Binding Commands.RemoveSecondAgent, Source={StaticResource BuEditorViewModel}}">
                         <Image  Height="20" Source="/ATPWork;component/Resources/icons8-удалить.png" Width="20" />
                     </Button>
@@ -383,6 +414,7 @@
                                 <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/ATPWork;component/Resources/refresh.png" Width="20" Height="20"/>
                             </StackPanel>
                         </Button.Content>
+                        
                     </Button>
                     <Button Command="{Binding Commands.OpenRaschetDocx, Source={StaticResource BuEditorViewModel}}" ToolTip="{Binding Commands.OpenRaschetDocx.Name, Source={StaticResource BuEditorViewModel}}">
                         <Button.Content>
@@ -391,6 +423,14 @@
                             </StackPanel>
                         </Button.Content>
                     </Button>
+                    <Button Command="{Binding Commands.OpenRaschetPDF, Source={StaticResource BuEditorViewModel}}" ToolTip="{Binding Commands.OpenRaschetPDF.Name, Source={StaticResource BuEditorViewModel}}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/ATPWork;component/Resources/PDF.png" Width="25" Height="25"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+
                 </StackPanel>
             </GroupBox.Header>
             <StackPanel>
@@ -465,9 +505,9 @@
                     </StackPanel.Style>
                     <StackPanel Margin="1" Orientation="Horizontal">
                         <TextBlock VerticalAlignment="Center">Чел.</TextBlock>
-                        <TextBox MinWidth="20" VerticalAlignment="Center" Text="{Binding AktInWork.PeopleCount, Source={StaticResource BuEditorViewModel}}"></TextBox>
+                        <TextBox MaxLength="2" MinWidth="20" VerticalAlignment="Center" Text="{Binding AktInWork.PeopleCount, Source={StaticResource BuEditorViewModel}}"></TextBox>
                         <TextBlock VerticalAlignment="Center">Комнат</TextBlock>
-                        <TextBox  MinWidth="20" VerticalAlignment="Center" Text="{Binding AktInWork.RoomCount, Source={StaticResource BuEditorViewModel}}"></TextBox>
+                        <TextBox MaxLength="2" MinWidth="20" VerticalAlignment="Center" Text="{Binding AktInWork.RoomCount, Source={StaticResource BuEditorViewModel}}"></TextBox>
                         <TextBlock VerticalAlignment="Center">Категория</TextBlock>
                         <ComboBox VerticalAlignment="Center" Width="140" HorizontalAlignment="Left" Height="25" ItemsSource="{Binding VidNormativa, Source={StaticResource BuEditorViewModel}}" SelectedItem="{Binding AktInWork.NormativKatStr, Source={StaticResource BuEditorViewModel}}" Background="{x:Null}" BorderThickness="1">
                         </ComboBox>
@@ -528,15 +568,11 @@
                             </Style>
                         </TextBlock.Style>
                        (из текста акта)</TextBlock>
-                    <TextBox   MinWidth="400" Name="TextNarushenie"    TextWrapping="WrapWithOverflow"
+                    <TextBox   Width="485" Name="TextNarushenie"    TextWrapping="Wrap"
                          >
-                        <Binding Source="{StaticResource BuEditorViewModel}" Path="AktInWork.Narushenie" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" ValidatesOnExceptions="True" NotifyOnValidationError="True"
-      >
-                            <Binding.ValidationRules>
-                                <viewModel:ValidNumberLS/>
-                                <ExceptionValidationRule/>
-                            </Binding.ValidationRules>
+                        <Binding Source="{StaticResource BuEditorViewModel}" Path="AktInWork.Narushenie" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"  >
                         </Binding>
+                        
                     </TextBox>
                 </Grid>
             </StackPanel>
@@ -544,14 +580,20 @@
         <GroupBox  HorizontalAlignment="Left"  BorderThickness="2" BorderBrush="#FF999999">
             <GroupBox.Header>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Фото" FontWeight="Bold" FontSize="14" />
+                    <TextBlock VerticalAlignment="Center" Text="Фото" FontWeight="Bold" FontSize="14" />
+                    <Button Command="{Binding Commands.OpenPhotoInPDF, Source={StaticResource BuEditorViewModel}}" ToolTip="{Binding Commands.OpenPhotoInPDF.Name, Source={StaticResource BuEditorViewModel}}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/ATPWork;component/Resources/PDF.png" Width="25" Height="25"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+
                 </StackPanel>
             </GroupBox.Header>
             <StackPanel>
                 <Grid>
-
-                    <ListBox Width="500" KeyUp="ListBox_KeyUp" Name="PhotoList" Drop="ListBox_Drop"  ItemsSource="{Binding  Path=AktInWork.PhotoFile, Source={StaticResource BuEditorViewModel}}"  SelectedItem="{Binding SelectedPhoto, Source={StaticResource BuEditorViewModel}}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"   VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling"   >
-
+                    <ListBox Width="485" KeyUp="ListBox_KeyUp" Name="PhotoList" Drop="ListBox_Drop"  ItemsSource="{Binding  Path=AktInWork.PhotoFile, Source={StaticResource BuEditorViewModel}}"  SelectedItem="{Binding SelectedPhoto, Source={StaticResource BuEditorViewModel}}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"   VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling"   >
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel MinHeight="75" AllowDrop="true"/>
@@ -568,8 +610,6 @@
                                 </Border>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
-
-
                     </ListBox>
                     <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontWeight="Bold" Foreground="#FFC7C7C7" IsEnabled="False" Cursor="None">
                         <TextBlock.Style>
@@ -585,7 +625,6 @@
                             </Style>
                         </TextBlock.Style>
                         Пертащите фото сюда</TextBlock>
-
                 </Grid>
             </StackPanel>
         </GroupBox>

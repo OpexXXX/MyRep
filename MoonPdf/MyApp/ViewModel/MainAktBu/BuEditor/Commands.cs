@@ -26,12 +26,22 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
         public DelegateCommand DateDown { get; private set; }
         public DelegateCommand FindCurrentProverka { get; private set; }
         public DelegateCommand RemoveSecondAgent { get; private set; }
+
         public DelegateCommand  OpenRaschetDocx { get; private set; }
         public DelegateCommand OpenMailDocx { get; private set; }
         public DelegateCommand OpenPoliceMailDocx { get; private set; }
         public DelegateCommand OpenAgent1Docx { get; private set; }
         public DelegateCommand OpenAgent2Docx { get; private set; }
-        
+
+        public DelegateCommand OpenRaschetPDF { get; private set; }
+        public DelegateCommand OpenMailPDF { get; private set; }
+        public DelegateCommand OpenPoliceMailPDF { get; private set; }
+        public DelegateCommand OpenAgent1PDF { get; private set; }
+        public DelegateCommand OpenAgent2PDF { get; private set; }
+
+        public DelegateCommand OpenPoliceMailDocPDF { get; private set; }
+        public DelegateCommand OpenPhotoInPDF { get; private set; }
+
         private bool CanNumberCange()
         {
             bool result = (BuEditVM.AktInWork != null);
@@ -59,11 +69,57 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
             Predicate<object> canNumberCange = f => CanNumberCange();// 
             Predicate<object> canDateCange = f => CanDateCange();// 
             Predicate<object> canRemoveAgent = f => CanRemAgent();// 
+            this.OpenPhotoInPDF = new DelegateCommand("Открыть фото в  PDF", f =>
+            {
+                string filePathPDF = WordShablon.CreatePdfWithPhoto(BuEditVM.AktInWork.PhotoFile);
+                Process.Start(filePathPDF);
+
+            }, null, null);
+
             this.CalcRaschet = new DelegateCommand("Расчитать", f =>
             {
                 
                 BuEditVM.AktInWork.calcBu();
 
+            }, canCalcRaschetBUCange, null);
+
+            this.OpenAgent1PDF = new DelegateCommand("Открыть объяснения в PDF", f =>
+            {
+                string filePathDocx = WordShablon.CreateObysnenyaForBuAkt(BuEditVM.AktInWork, BuEditVM.AktInWork.Agent_1);
+                string filePathPDF= WordShablon.ConvertDocxToPdf(filePathDocx);
+                Process.Start(filePathPDF);
+            }, canCalcRaschetBUCange, null);
+
+            this.OpenAgent2PDF = new DelegateCommand("Открыть объяснения в PDF", f =>
+            {
+                string filePathDocx = WordShablon.CreateObysnenyaForBuAkt(BuEditVM.AktInWork, BuEditVM.AktInWork.Agent_2);
+                string filePathPDF = WordShablon.ConvertDocxToPdf(filePathDocx);
+                Process.Start(filePathPDF);
+            }, canCalcRaschetBUCange, null);
+            this.OpenRaschetPDF = new DelegateCommand("Открыть расчет в PDF", f =>
+            {
+                string filePathDocx = WordShablon.CreateRaschetForBuAkt(BuEditVM.AktInWork);
+                string filePathPDF = WordShablon.ConvertDocxToPdf(filePathDocx);
+                Process.Start(filePathPDF);
+            }, canCalcRaschetBUCange, null);
+            this.OpenPoliceMailPDF = new DelegateCommand("Открыть письмо в полицию в PDF", f =>
+            {
+                string filePathDocx = WordShablon.CreatePoliceMailForBuAkt(BuEditVM.AktInWork);
+                string filePathPDF = WordShablon.ConvertDocxToPdf(filePathDocx);
+                Process.Start(filePathPDF);
+            }, canCalcRaschetBUCange, null);
+
+            this.OpenPoliceMailDocPDF = new DelegateCommand("Открыть полное письмо в полицию в PDF", f =>
+            {
+                string filePathPDF = WordShablon.CreatePdfPoliceMail(BuEditVM.AktInWork);
+                Process.Start(filePathPDF);
+            }, canCalcRaschetBUCange, null);
+
+            this.OpenMailPDF = new DelegateCommand("Открыть письмо в PDF", f =>
+            {
+                string filePathDocx = WordShablon.CreateMailForBuAkts(BuEditVM.AktInWork);
+                string filePathPDF = WordShablon.ConvertDocxToPdf(filePathDocx);
+                Process.Start(filePathPDF);
             }, canCalcRaschetBUCange, null);
 
             this.OpenAgent1Docx = new DelegateCommand("Открыть объяснения в Word", f =>

@@ -339,6 +339,7 @@
     <AppDesigner Include="Properties\" />
     <Resource Include="Resources\refresh.png" />
     <Resource Include="Resources\Word-Mac-icon.png" />
+    <Resource Include="Resources\PDF.png" />
     <Content Include="Shabloni\mail.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

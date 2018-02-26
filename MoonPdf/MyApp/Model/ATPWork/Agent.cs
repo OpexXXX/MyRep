@@ -20,6 +20,18 @@ namespace MyApp.Model
             get { return this.surname; }
             set { this.surname = value; }
         }
+        private string _dateB;
+        public string DateB
+        {
+            get { return this._dateB; }
+            set { this._dateB = value; }
+        }
+        private string _placeB;
+        public string PlaceB
+        {
+            get { return this._placeB; }
+            set { this._placeB = value; }
+        }
         private string post;
         public string Post
         {
@@ -32,12 +44,14 @@ namespace MyApp.Model
             get { return this.searchString; }
             set { this.searchString = value;  }
         }
-        public Agent(string SapNumber, string Post, string Surname, string SearchString)
+        public Agent(string SapNumber, string Post, string Surname, string SearchString, string DateB, string PlaceB)
         {
             this.SapNumber = SapNumber;
             this.Surname = Surname;
             this.Post = Post;
             this.SearchString = SearchString;
+            this.DateB = DateB;
+            this.PlaceB = PlaceB;
         }
 
         public override string ToString()

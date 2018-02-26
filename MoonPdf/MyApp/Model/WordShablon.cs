@@ -9,6 +9,10 @@ using TemplateEngine.Docx;
 using MyApp.Model;
 using Microsoft.Office.Interop.Word;
 using ATPWork.MyApp.Model.AktBuWork;
+using System.Windows;
+using iTextSharp.text.pdf;
+using iTextSharp.text;
+using System.Collections.ObjectModel;
 
 namespace ATPWork.MyApp.Model
 {
@@ -91,6 +95,28 @@ new FieldContent("MounthYearPo", GetMounth(akt.DateMail?.Month) + " " + akt.Date
             }
             return filePath;
         }
+
+        internal static string CreatePdfWithPhoto(ObservableCollection<string> photoFile)
+        {
+            if (!Directory.Exists(TempDocxDirectory)) Directory.CreateDirectory(TempDocxDirectory);
+            string fileName = System.IO.Path.GetRandomFileName() + ".pdf";
+            string filePath = System.IO.Path.Combine(TempDocxDirectory, fileName);
+            iTextSharp.text.Document doc = new iTextSharp.text.Document(PageSize.A4);
+            doc.SetPageSize(PageSize.A4.Rotate());
+            var output = new FileStream(filePath, FileMode.Create);
+            var writer = PdfWriter.GetInstance(doc, output);
+            doc.Open();
+            foreach (var item in photoFile)
+            {
+                var logo = iTextSharp.text.Image.GetInstance(item);
+                logo.ScaleAbsoluteWidth(500);
+               
+               doc.Add(logo);
+            }
+            doc.Close();
+            return filePath;
+        }
+
         public static string CreateRaschetForBuAkt(AktBu akt)
         {
             if (!Directory.Exists(TempDocxDirectory)) Directory.CreateDirectory(TempDocxDirectory);
@@ -209,10 +235,9 @@ new FieldContent("NumberBU", akt.Number.ToString()),
 new FieldContent("TextNarushenia", akt.Narushenie),
 new FieldContent("Post", agent.Post),
 
-new FieldContent("DateB", agent.Surname),//////////////////////////
-new FieldContent("PlaceB", agent.Surname)//////////////////////////
+new FieldContent("DateB", agent.DateB),
+new FieldContent("PlaceB", agent.PlaceB)
 );
-
             using (var outputDocument = new TemplateProcessor(filePath)
                  .SetRemoveContentControls(true))
             {
@@ -225,11 +250,8 @@ new FieldContent("PlaceB", agent.Surname)//////////////////////////
         { }
         public static void CreatePZForBuAkt()
         { }
-
-
-
         internal static string CreateMailForAktsTehProverki(List<AktTehProverki> tempList, DateTime dateMail,
-            int numberMail, int pageCountReestr, string directory)
+        int numberMail, int pageCountReestr, string directory)
         {
             int pageCountAkts = 0;
             foreach (var item in tempList)
@@ -260,7 +282,6 @@ new FieldContent("PlaceB", agent.Surname)//////////////////////////
             return filePath;
 
         }
-
         private static string GetMounth(int? month)
         {
             switch (month)
@@ -281,15 +302,66 @@ new FieldContent("PlaceB", agent.Surname)//////////////////////////
 
             }
         }
-
+        internal static Microsoft.Office.Interop.Word.Application appWord;
         internal static string ConvertDocxToPdf(string docxPath)
         {
+            if (appWord == null) appWord = new Microsoft.Office.Interop.Word.Application();
             Microsoft.Office.Interop.Word.Document wordDocument;
-            Microsoft.Office.Interop.Word.Application appWord = new Microsoft.Office.Interop.Word.Application();
             string pdfPath = Path.ChangeExtension(docxPath, ".pdf");
             wordDocument = appWord.Documents.Open(docxPath);
             wordDocument.ExportAsFixedFormat(pdfPath, WdExportFormat.wdExportFormatPDF);
+            wordDocument.Close();
             return pdfPath;
+        }
+
+        internal static string CreatePdfPoliceMail(AktBu akt)
+        {
+            string resultPdfPath ="",pathMail,pathOb1,pathOb2;
+
+            List<string> FileToBlind = new List<string>();
+            pathMail = ConvertDocxToPdf(WordShablon.CreatePoliceMailForBuAkt(akt));
+            FileToBlind.Add(pathMail);
+            FileToBlind.Add(akt.AktBuPdf);
+            pathOb1 = ConvertDocxToPdf(WordShablon.CreateObysnenyaForBuAkt(akt,akt.Agent_1));
+            FileToBlind.Add(pathOb1);
+            if (akt.Agent_2 != null)
+            {
+                pathOb2 = ConvertDocxToPdf(WordShablon.CreateObysnenyaForBuAkt(akt, akt.Agent_2));
+                FileToBlind.Add(pathOb2);
+            }
+            resultPdfPath = margePdf(FileToBlind);
+            return resultPdfPath;
+        }
+
+      
+
+        private static string margePdf(List<string> filePDF)
+        {
+            if (!Directory.Exists(TempDocxDirectory)) Directory.CreateDirectory(TempDocxDirectory);
+            string fileName = System.IO.Path.GetRandomFileName() + ".pdf";
+            string filePath = System.IO.Path.Combine(TempDocxDirectory, fileName);
+
+          
+                using (FileStream FStream = new System.IO.FileStream(filePath, System.IO.FileMode.Create))
+                {
+
+                    iTextSharp.text.Document doc = new iTextSharp.text.Document();
+                    iTextSharp.text.pdf.PdfCopy Writer = new iTextSharp.text.pdf.PdfCopy(doc, FStream);
+                    Writer.SetPdfVersion(PdfWriter.PDF_VERSION_1_5);
+                    Writer.SetFullCompression();
+                    Writer.CompressionLevel = PdfStream.BEST_COMPRESSION;
+                    doc.Open();
+                    iTextSharp.text.pdf.PdfReader ReaderDoc1;
+                    foreach (var filePathPdf in filePDF)
+                    {
+                        ReaderDoc1 = new iTextSharp.text.pdf.PdfReader(filePathPdf);
+                        Writer.AddDocument(ReaderDoc1);
+                    }
+                    doc.Close();
+                    return filePath;
+                }
+           
+
         }
     }
 }
