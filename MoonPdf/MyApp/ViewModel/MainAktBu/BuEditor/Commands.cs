@@ -28,7 +28,10 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
         public DelegateCommand RemoveSecondAgent { get; private set; }
         public DelegateCommand  OpenRaschetDocx { get; private set; }
         public DelegateCommand OpenMailDocx { get; private set; }
-
+        public DelegateCommand OpenPoliceMailDocx { get; private set; }
+        public DelegateCommand OpenAgent1Docx { get; private set; }
+        public DelegateCommand OpenAgent2Docx { get; private set; }
+        
         private bool CanNumberCange()
         {
             bool result = (BuEditVM.AktInWork != null);
@@ -63,9 +66,25 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
 
             }, canCalcRaschetBUCange, null);
 
+            this.OpenAgent1Docx = new DelegateCommand("Открыть объяснения в Word", f =>
+            {
+                Process.Start(WordShablon.CreateObysnenyaForBuAkt(BuEditVM.AktInWork, BuEditVM.AktInWork.Agent_1));
+            }, canCalcRaschetBUCange, null);
+
+            this.OpenAgent2Docx = new DelegateCommand("Открыть объяснения в Word", f =>
+            {
+                Process.Start(WordShablon.CreateObysnenyaForBuAkt(BuEditVM.AktInWork, BuEditVM.AktInWork.Agent_2));
+            }, canCalcRaschetBUCange, null);
+
+
             this.OpenRaschetDocx = new DelegateCommand("Открыть расчет в Word", f =>
             {
                 Process.Start(WordShablon.CreateRaschetForBuAkt(BuEditVM.AktInWork));
+            }, canCalcRaschetBUCange, null);
+
+            this.OpenPoliceMailDocx = new DelegateCommand("Открыть письмо в полицию в Word", f =>
+            {
+                Process.Start(WordShablon.CreatePoliceMailForBuAkt(BuEditVM.AktInWork));
             }, canCalcRaschetBUCange, null);
 
             this.OpenMailDocx = new DelegateCommand("Открыть письмо в Word", f =>

@@ -71,20 +71,18 @@ namespace ATPWork.MyApp.Model
             shablonPath = Path.Combine(ShablonDirectory, "BU", shablonName);
             File.Copy(shablonPath, filePath);
             Content valuesToFill;
-                        valuesToFill = new Content(
-                              new FieldContent("DateMail", akt.DateMail?.ToString("d")),
-                                new FieldContent("NumberMail", akt.NumberMail.ToString()),
-    new FieldContent("FIO", akt.FIO),
-    new FieldContent("NumberAktBu", akt.Number.ToString()),
-    new FieldContent("DateAktBu", akt.DateWork?.ToString("d")),
-
-     new FieldContent("ValueBu", akt.TypeNarushenie==VidNarusheniya.Power?akt.BuValuePower.ToString():akt.BuValueNormativ.ToString()),
-
-      new FieldContent("Adress", akt.Adress),
-    new FieldContent("NumberLs", akt.NumberLS),
-   new FieldContent("MounthYearPo",GetMounth( akt.DateMail?.Month)+" "+ akt.DateMail?.Year.ToString())
+            valuesToFill = new Content(
+                  new FieldContent("DateMail", akt.DateMail?.ToString("d")),
+                    new FieldContent("NumberMail", akt.NumberMail.ToString()),
+new FieldContent("FIO", akt.FIO),
+new FieldContent("NumberAktBu", akt.Number.ToString()),
+new FieldContent("DateAktBu", akt.DateWork?.ToString("d")),
+new FieldContent("ValueBu", akt.TypeNarushenie == VidNarusheniya.Power ? akt.BuValuePower.ToString() : akt.BuValueNormativ.ToString()),
+new FieldContent("Adress", akt.Adress),
+new FieldContent("NumberLs", akt.NumberLS),
+new FieldContent("MounthYearPo", GetMounth(akt.DateMail?.Month) + " " + akt.DateMail?.Year.ToString())
 );
-                       
+
             using (var outputDocument = new TemplateProcessor(filePath)
                  .SetRemoveContentControls(true))
             {
@@ -133,14 +131,14 @@ namespace ATPWork.MyApp.Model
     new FieldContent("CountDay", akt.CountDay.ToString()),
      new FieldContent("CountPeople", akt.PeopleCount.ToString()),
       new FieldContent("CountRooms", akt.RoomCount.ToString()),
-      new FieldContent("ElecttroBoller", akt.NormativKat==4?"Да":"Нет"),
+      new FieldContent("ElecttroBoller", akt.NormativKat == 4 ? "Да" : "Нет"),
       new FieldContent("Normativ", akt.Normativ.ToString()),
     new FieldContent("ValueBu", akt.BuValueNormativ.ToString())
 ); break;
                     }
             }
-           using (var outputDocument = new TemplateProcessor(filePath)
-                .SetRemoveContentControls(true))
+            using (var outputDocument = new TemplateProcessor(filePath)
+                 .SetRemoveContentControls(true))
             {
                 outputDocument.FillContent(valuesToFill);
                 outputDocument.SaveChanges();
@@ -148,10 +146,81 @@ namespace ATPWork.MyApp.Model
             return filePath;
         }
 
-        public static void CreatePoliceMailForBuAkt()
-        { }
-        public static void CreateObysnenyaForBuAkt()
-        { }
+        public static string CreatePoliceMailForBuAkt(AktBu akt)
+        {
+            if (!Directory.Exists(TempDocxDirectory)) Directory.CreateDirectory(TempDocxDirectory);
+            string fileName = System.IO.Path.GetRandomFileName() + ".docx";
+            string filePath = System.IO.Path.Combine(TempDocxDirectory, fileName);
+            string shablonName = "Police.docx", shablonPath;
+            shablonPath = Path.Combine(ShablonDirectory, "BU", shablonName);
+            File.Copy(shablonPath, filePath);
+            Content valuesToFill;
+
+            string sotrudnikami = "";
+            if (akt.Agent_2 != null)
+            {
+                /*сотрудники филиала ПАО «МРСК Сибири»-«Красноярскэнерго» электромонтер УТЭЭ  Глушков Александр Сергеевич, электромонтер УТЭЭ  Назаров Дмитрий Анатольевич ,*/
+                sotrudnikami = "сотрудники филиала ПАО «МРСК Сибири»-«Красноярскэнерго» " + akt.Agent_1.Post + " " + akt.Agent_1.Surname + ", " + akt.Agent_2.Post + " " + akt.Agent_2.Surname + ",";
+            }
+            else
+            {
+                sotrudnikami = "сотрудник филиала ПАО «МРСК Сибири»-«Красноярскэнерго» " + akt.Agent_1.Post + " " + akt.Agent_1.Surname + " ";
+            }
+
+            valuesToFill = new Content(
+new FieldContent("DateWork", akt.DateWork?.ToString("d")),
+new FieldContent("PotrFIO", akt.FIO),
+new FieldContent("Adress", akt.Adress),
+new FieldContent("BuValue", akt.TypeNarushenie == VidNarusheniya.Power ? akt.BuValuePower.ToString() : akt.BuValueNormativ.ToString()),
+new FieldContent("NumberBU", akt.Number.ToString()),
+new FieldContent("StartDate", akt.StartDate?.ToString("d")),
+new FieldContent("PunktPP", akt.TypeNarushenie == VidNarusheniya.Power ? "62" : "81(11)"),
+new FieldContent("CountPageOb", akt.Agent_2 == null ? "1" : "2"),
+new FieldContent("Li", akt.Agent_2 == null ? "л" : "ли"),
+
+new FieldContent("Sotrudniki", sotrudnikami)
+
+);
+
+            using (var outputDocument = new TemplateProcessor(filePath)
+                 .SetRemoveContentControls(true))
+            {
+                outputDocument.FillContent(valuesToFill);
+                outputDocument.SaveChanges();
+            }
+            return filePath;
+        }
+        public static string CreateObysnenyaForBuAkt(AktBu akt, Agent agent)
+        {
+
+            if (!Directory.Exists(TempDocxDirectory)) Directory.CreateDirectory(TempDocxDirectory);
+            string fileName = System.IO.Path.GetRandomFileName() + ".docx";
+            string filePath = System.IO.Path.Combine(TempDocxDirectory, fileName);
+            string shablonName = "Obesneniya.docx", shablonPath;
+            shablonPath = Path.Combine(ShablonDirectory, "BU", shablonName);
+            File.Copy(shablonPath, filePath);
+            Content valuesToFill;
+            valuesToFill = new Content(
+new FieldContent("DateWork", akt.DateWork?.ToString("d")),
+new FieldContent("AbonentFIO", akt.FIO),
+new FieldContent("FIO", agent.Surname),
+new FieldContent("Adress", akt.Adress),
+new FieldContent("NumberBU", akt.Number.ToString()),
+new FieldContent("TextNarushenia", akt.Narushenie),
+new FieldContent("Post", agent.Post),
+
+new FieldContent("DateB", agent.Surname),//////////////////////////
+new FieldContent("PlaceB", agent.Surname)//////////////////////////
+);
+
+            using (var outputDocument = new TemplateProcessor(filePath)
+                 .SetRemoveContentControls(true))
+            {
+                outputDocument.FillContent(valuesToFill);
+                outputDocument.SaveChanges();
+            }
+            return filePath;
+        }
         public static void CreateContentForBuAkt()
         { }
         public static void CreatePZForBuAkt()
