@@ -38,7 +38,7 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
         public DelegateCommand OpenPoliceMailPDF { get; private set; }
         public DelegateCommand OpenAgent1PDF { get; private set; }
         public DelegateCommand OpenAgent2PDF { get; private set; }
-
+        public DelegateCommand OpenFullMailDocPDF { get; private set; }
         public DelegateCommand OpenPoliceMailDocPDF { get; private set; }
         public DelegateCommand OpenPhotoInPDF { get; private set; }
 
@@ -69,10 +69,14 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
             Predicate<object> canNumberCange = f => CanNumberCange();// 
             Predicate<object> canDateCange = f => CanDateCange();// 
             Predicate<object> canRemoveAgent = f => CanRemAgent();// 
-            this.OpenPhotoInPDF = new DelegateCommand("Открыть фото в  PDF", f =>
+            this.OpenPhotoInPDF = new DelegateCommand("Открыть фото в  PDF", async f =>
             {
-                string filePathPDF = WordShablon.CreatePdfWithPhoto(BuEditVM.AktInWork.PhotoFile);
-                Process.Start(filePathPDF);
+                await Task.Run(() =>
+                {
+                    string filePathPDF = WordShablon.CreatePdfWithPhoto(BuEditVM.AktInWork);
+                    Process.Start(filePathPDF);
+                });
+               
 
             }, null, null);
 
@@ -109,11 +113,24 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
                 Process.Start(filePathPDF);
             }, canCalcRaschetBUCange, null);
 
-            this.OpenPoliceMailDocPDF = new DelegateCommand("Открыть полное письмо в полицию в PDF", f =>
+            this.OpenPoliceMailDocPDF = new DelegateCommand("Открыть полное письмо в полицию в PDF", async f =>
             {
-                string filePathPDF = WordShablon.CreatePdfPoliceMail(BuEditVM.AktInWork);
+                await Task.Run(() =>
+                {
+                    string filePathPDF = WordShablon.CreatePdfPoliceMail(BuEditVM.AktInWork);
                 Process.Start(filePathPDF);
+                });
             }, canCalcRaschetBUCange, null);
+
+            this.OpenFullMailDocPDF = new DelegateCommand("Открыть полное письмо в сбыт в PDF", async f =>
+            {
+                await Task.Run(() =>
+                {
+                    string filePathPDF = WordShablon.CreateFullPdfMail(BuEditVM.AktInWork);
+                    Process.Start(filePathPDF);
+                });
+            }, canCalcRaschetBUCange, null);
+
 
             this.OpenMailPDF = new DelegateCommand("Открыть письмо в PDF", f =>
             {

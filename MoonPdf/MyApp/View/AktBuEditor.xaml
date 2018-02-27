@@ -140,7 +140,7 @@
                                 </StackPanel>
                             </Button.Content>
                         </Button>
-                        <Button Command="{Binding Commands.OpenMailPDF, Source={StaticResource BuEditorViewModel}}" ToolTip="{Binding Commands.OpenMailPDF.Name, Source={StaticResource BuEditorViewModel}}">
+                        <Button Command="{Binding Commands.OpenFullMailDocPDF, Source={StaticResource BuEditorViewModel}}" ToolTip="{Binding Commands.OpenFullMailDocPDF.Name, Source={StaticResource BuEditorViewModel}}">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
                                     <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/ATPWork;component/Resources/PDF.png" Width="25" Height="25"/>

@@ -13,6 +13,8 @@ using System.Windows;
 using iTextSharp.text.pdf;
 using iTextSharp.text;
 using System.Collections.ObjectModel;
+using System.Drawing.Imaging;
+using System.Drawing.Drawing2D;
 
 namespace ATPWork.MyApp.Model
 {
@@ -96,22 +98,61 @@ new FieldContent("MounthYearPo", GetMounth(akt.DateMail?.Month) + " " + akt.Date
             return filePath;
         }
 
-        internal static string CreatePdfWithPhoto(ObservableCollection<string> photoFile)
+        internal static string CreatePdfWithPhoto(AktBu akt)
         {
+            ObservableCollection<string> photoFile = akt.PhotoFile;
+
             if (!Directory.Exists(TempDocxDirectory)) Directory.CreateDirectory(TempDocxDirectory);
             string fileName = System.IO.Path.GetRandomFileName() + ".pdf";
             string filePath = System.IO.Path.Combine(TempDocxDirectory, fileName);
             iTextSharp.text.Document doc = new iTextSharp.text.Document(PageSize.A4);
-            doc.SetPageSize(PageSize.A4.Rotate());
+           //
             var output = new FileStream(filePath, FileMode.Create);
             var writer = PdfWriter.GetInstance(doc, output);
             doc.Open();
+
             foreach (var item in photoFile)
             {
-                var logo = iTextSharp.text.Image.GetInstance(item);
-                logo.ScaleAbsoluteWidth(500);
-               
-               doc.Add(logo);
+                string photoPathEn = ResizeImage(item);
+             
+             
+                var logo = iTextSharp.text.Image.GetInstance(photoPathEn);
+
+
+                if (logo.Height > logo.Width)
+                {
+                    //Maximum height is 800 pixels.
+                   
+                    Chunk c2 = new Chunk("");
+                    doc.SetPageSize(PageSize.A4);
+                    doc.NewPage();
+                    float percentage = 0.0f;
+                    percentage = 700 / logo.Height;
+                    logo.ScalePercent(percentage * 100);
+                   
+                 
+                    doc.Add(c2);
+                    doc.Add(logo);
+                }
+                else
+                {
+
+                 
+
+                    Chunk c2 = new Chunk("");
+                    doc.SetPageSize(PageSize.A4.Rotate());
+                    doc.NewPage();
+
+                    //Maximum width is 600 pixels.
+                    float percentage = 0.0f;
+                    percentage = 700 / logo.Width;
+                    logo.ScalePercent(percentage * 100);
+                   
+                    doc.Add(c2);
+                    doc.Add(logo);
+                }
+
+
             }
             doc.Close();
             return filePath;
@@ -302,7 +343,9 @@ new FieldContent("PlaceB", agent.PlaceB)
 
             }
         }
+
         internal static Microsoft.Office.Interop.Word.Application appWord;
+
         internal static string ConvertDocxToPdf(string docxPath)
         {
             if (appWord == null) appWord = new Microsoft.Office.Interop.Word.Application();
@@ -313,10 +356,9 @@ new FieldContent("PlaceB", agent.PlaceB)
             wordDocument.Close();
             return pdfPath;
         }
-
         internal static string CreatePdfPoliceMail(AktBu akt)
         {
-            string resultPdfPath ="",pathMail,pathOb1,pathOb2;
+            string resultPdfPath ="",pathMail,pathOb1,pathOb2,photo;
 
             List<string> FileToBlind = new List<string>();
             pathMail = ConvertDocxToPdf(WordShablon.CreatePoliceMailForBuAkt(akt));
@@ -329,11 +371,86 @@ new FieldContent("PlaceB", agent.PlaceB)
                 pathOb2 = ConvertDocxToPdf(WordShablon.CreateObysnenyaForBuAkt(akt, akt.Agent_2));
                 FileToBlind.Add(pathOb2);
             }
+
+            if (akt.PhotoFile.Count > 0)
+            {
+             photo = CreatePdfWithPhoto(akt);
+                FileToBlind.Add(photo);
+            }
+
+            resultPdfPath = margePdf(FileToBlind);
+            return resultPdfPath;
+        }
+        internal static string CreateFullPdfMail(AktBu akt)
+        {
+            string resultPdfPath = "", pathMail, pathRaschet, photo;
+
+            List<string> FileToBlind = new List<string>();
+            pathMail = ConvertDocxToPdf(WordShablon.CreateMailForBuAkts(akt));
+            FileToBlind.Add(pathMail);
+
+            pathRaschet = ConvertDocxToPdf(WordShablon.CreateRaschetForBuAkt(akt));
+            FileToBlind.Add(pathRaschet);
+            FileToBlind.Add(akt.AktBuPdf);
+            FileToBlind.Add(akt.AktPredProverkiPdf);
+            FileToBlind.Add(akt.IzvesheniePDF);
+
+            if (akt.PhotoFile.Count > 0)
+            {
+                photo = CreatePdfWithPhoto(akt);
+                FileToBlind.Add(photo);
+            }
             resultPdfPath = margePdf(FileToBlind);
             return resultPdfPath;
         }
 
-      
+
+
+        private static int MaxImageSize = 1280;
+
+        private static string ResizeImage(string imagePath)
+        {
+            var image = System.Drawing.Image.FromFile(imagePath);
+            if (image.Height <= MaxImageSize && image.Width <= MaxImageSize)
+                return imagePath;
+
+            var ratio = image.Width >= image.Height
+                ? (float)MaxImageSize / image.Width
+                : (float)MaxImageSize / image.Height;
+            var nWidth = ratio * image.Width;
+            var nHeight = ratio * image.Height;
+
+            var bm = new System.Drawing.Bitmap((int)(nWidth), (int)(nHeight), PixelFormat.Format16bppRgb565);
+            using (var gx = System.Drawing.Graphics.FromImage(bm))
+            {
+                gx.Clear(System.Drawing.Color.White);
+                gx.CompositingQuality = CompositingQuality.HighQuality;
+                gx.SmoothingMode = SmoothingMode.HighQuality;
+                gx.InterpolationMode = InterpolationMode.HighQualityBicubic;
+
+                gx.DrawImage(image,
+                    new System.Drawing.RectangleF(0, 0, nWidth, nHeight),
+                    new System.Drawing.Rectangle(0, 0, image.Width, image.Height), System.Drawing.GraphicsUnit.Pixel);
+
+            }
+            //
+            string savePath = Path.Combine(TempDocxDirectory,Path.GetRandomFileName()+".jpg");
+
+            var jgpEncoder = GetEncoder(ImageFormat.Jpeg);
+            var myEncoder = System.Drawing.Imaging.Encoder.Quality;
+            var myEncoderParameters = new EncoderParameters(1);
+            var myEncoderParameter = new EncoderParameter(myEncoder, 40L);
+            myEncoderParameters.Param[0] = myEncoderParameter;
+          bm.Save(savePath, jgpEncoder, myEncoderParameters);
+         
+            image.Dispose();
+            return savePath;
+        }
+        public static ImageCodecInfo GetEncoder(ImageFormat format)
+        {
+            var codecs = ImageCodecInfo.GetImageDecoders();
+            return codecs.FirstOrDefault(codec => codec.FormatID == format.Guid);
+        }
 
         private static string margePdf(List<string> filePDF)
         {
