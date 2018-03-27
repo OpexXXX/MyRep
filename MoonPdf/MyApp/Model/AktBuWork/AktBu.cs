@@ -134,6 +134,20 @@ namespace ATPWork.MyApp.Model.AktBuWork
             get { return _aktBuPdf; }
             set { _aktBuPdf = value; this.OnPropertyChanged("AktBuPdf"); }
         }
+
+        private string _aktPedidProverkiPdf;
+        public string AktPredidProverkiPdf
+        {
+            get { return _aktPedidProverkiPdf; }
+            set { _aktPedidProverkiPdf = value; this.OnPropertyChanged("AktPredidProverkiPdf"); }
+        }
+        private string _aktPedidProverki;
+        public string AktPedidProverki
+        {
+            get { return _aktPedidProverki; }
+            set { _aktPedidProverki = value; this.OnPropertyChanged("AktPedidProverki"); }
+        }
+
         private string _aktPedProverkiPdf;
         public string AktPredProverkiPdf
         {
@@ -146,6 +160,7 @@ namespace ATPWork.MyApp.Model.AktBuWork
             get { return _aktPedProverki; }
             set { _aktPedProverki = value; this.OnPropertyChanged("AktPedProverki"); }
         }
+
         private string _izveshenie;
         public string IzvesheniePDF
         {

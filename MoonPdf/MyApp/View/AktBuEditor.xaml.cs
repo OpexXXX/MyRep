@@ -139,5 +139,16 @@ namespace ATPWork.MyApp.View
                 if (extension == ".PDF" || extension == ".pdf") BuEditVM.AktInWork.IzvesheniePDF = files[0];
             }
         }
+
+        private void GroupBoxAktPredProverki_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                string extension;
+                extension = System.IO.Path.GetExtension(files[0]);
+                if (extension == ".PDF" || extension == ".pdf") BuEditVM.AktInWork.AktPredidProverkiPdf = files[0];
+            }
+        }
     }
 }

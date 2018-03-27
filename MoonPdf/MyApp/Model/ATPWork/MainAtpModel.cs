@@ -599,7 +599,7 @@ namespace MyApp.Model
 
             foreach (var item in AllAkt)
             {
-                if ((item.SapNumberAkt == "") && (File.Exists(System.IO.Path.Combine(AktDirektory, item.NamePdfFile))))
+                if ((item.SapNumberAkt == ""|| item.SapNumberAkt ==null) && (File.Exists(System.IO.Path.Combine(AktDirektory, item.NamePdfFile))))
                 {
                     try
                     {

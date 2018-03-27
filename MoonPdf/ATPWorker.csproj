@@ -340,6 +340,7 @@
     <Resource Include="Resources\refresh.png" />
     <Resource Include="Resources\Word-Mac-icon.png" />
     <Resource Include="Resources\PDF.png" />
+    <Resource Include="Resources\Save256.png" />
     <Content Include="Shabloni\mail.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

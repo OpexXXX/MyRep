@@ -162,7 +162,13 @@
                                 </StackPanel>
                             </Button.Content>
                         </Button>
-
+                        <Button Command="{Binding Commands.SaveOnPublic, Source={StaticResource BuEditorViewModel}}" ToolTip="{Binding Commands.SaveOnPublic.Name, Source={StaticResource BuEditorViewModel}}">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/ATPWork;component/Resources/Save256.png" Width="25" Height="25"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
                     </StackPanel>
                 </StackPanel>
             </GroupBox.Header>
@@ -252,7 +258,7 @@
                     </Button>
                     <StackPanel  Orientation="Horizontal">
                         <TextBlock Text="Номер/дата" VerticalAlignment="Center"/>
-                        <TextBox   VerticalAlignment="Center" Style="{StaticResource TextBoxStyle}"   Width="151" MaxLength="5" >
+                        <TextBox   VerticalAlignment="Center" Style="{StaticResource TextBoxStyle}"   Width="205"  >
                             <TextBox.InputBindings>
                                 <KeyBinding Key="Up" Command="{Binding Commands.NumberUp, Source={StaticResource BuEditorViewModel}}" />
                                 <KeyBinding Key="Down" Command="{Binding Commands.NumberDown, Source={StaticResource BuEditorViewModel}}" />
@@ -302,9 +308,69 @@
                 </StackPanel>
             </StackPanel>
         </GroupBox>
+        <GroupBox  Drop="GroupBoxAktPredProverki_Drop" BorderBrush="#FF999999" BorderThickness="2"  >
+            <GroupBox.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center" Text="Акт предыдущей проверки" FontWeight="Bold" FontSize="14" />
+                    <Button Margin="1" Command="{Binding Commands.FindCurrentProverka, Source={StaticResource BuEditorViewModel}}" ToolTip="{Binding Commands.FindCurrentProverka.Name, Source={StaticResource BuEditorViewModel}}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/ATPWork;component/Resources/icons8-поиск-40.png"  Height="18"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                    <StackPanel  Orientation="Horizontal">
+                        <TextBlock Text="Номер/дата" VerticalAlignment="Center"/>
+                        <TextBox   VerticalAlignment="Center" Style="{StaticResource TextBoxStyle}"   Width="174"  >
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Up" Command="{Binding Commands.NumberUp, Source={StaticResource BuEditorViewModel}}" />
+                                <KeyBinding Key="Down" Command="{Binding Commands.NumberDown, Source={StaticResource BuEditorViewModel}}" />
+                            </TextBox.InputBindings>
+                            <Binding Source="{StaticResource BuEditorViewModel}" Path="AktInWork.AktPedidProverki" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
+        UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <viewModel:ValidNumber/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox.Header>
+            <StackPanel>
 
-
-
+                <StackPanel  Orientation="Horizontal">
+                    <Grid Width="450">
+                        <TextBlock Panel.ZIndex="1" HorizontalAlignment="Center" VerticalAlignment="Center"  FontWeight="Bold" Foreground="#FFC7C7C7" IsEnabled="False" Cursor="None" FontSize="16">
+                            <TextBlock.Style>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Style.Setters>
+                                        <Setter Property="Visibility" Value="Collapsed"></Setter>
+                                    </Style.Setters>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Text, ElementName=PdfPathPredProverka}" Value="">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                            Скан проверки</TextBlock>
+                        <TextBox Name="PdfPathPredProverka"  VerticalAlignment="Center" Style="{StaticResource TextBoxStyle}"    >
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Up" Command="{Binding Commands.NumberUp, Source={StaticResource BuEditorViewModel}}" />
+                                <KeyBinding Key="Down" Command="{Binding Commands.NumberDown, Source={StaticResource BuEditorViewModel}}" />
+                            </TextBox.InputBindings>
+                            <Binding Source="{StaticResource BuEditorViewModel}" Path="AktInWork.AktPredidProverkiPdf" Mode="OneWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
+        UpdateSourceTrigger="PropertyChanged" >
+                                <Binding.ValidationRules>
+                                    <viewModel:ValidNumber/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox>
+                    </Grid>
+                    <Button>...</Button>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
         <GroupBox Drop="GroupBoxIzvechenie_Drop" BorderBrush="#FF999999" BorderThickness="2" >
             <GroupBox.Header>
                 <StackPanel Orientation="Horizontal">
