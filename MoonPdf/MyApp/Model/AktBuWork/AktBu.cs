@@ -111,6 +111,14 @@ namespace ATPWork.MyApp.Model.AktBuWork
             }
         }
 
+        internal void FindPrevousAktProverki()
+        {
+            if(PrevProverki.Count>0)
+            {
+                AktPedidProverki =  "№91/" + PrevProverki[(PrevProverki.Count - 1)][0]+" от "+ PrevProverki[(PrevProverki.Count - 1)][1]+ "г.";
+            }
+        }
+
         public Agent Agent_1
         {
             get { return this.agent_1; }

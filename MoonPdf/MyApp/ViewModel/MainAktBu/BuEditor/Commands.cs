@@ -28,7 +28,7 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
         public DelegateCommand DateDown { get; private set; }
         public DelegateCommand FindCurrentProverka { get; private set; }
         public DelegateCommand RemoveSecondAgent { get; private set; }
-
+        public DelegateCommand FindPrevousProverka { get; private set; }
         public DelegateCommand OpenRaschetDocx { get; private set; }
         public DelegateCommand OpenMailDocx { get; private set; }
         public DelegateCommand OpenPoliceMailDocx { get; private set; }
@@ -85,7 +85,7 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
                         {
                             SelectedPath = folderBrowser.SelectedPath;
                             //Создаем директории
-                            string nameDirectory = "Акт БУ№" + BuEditVM.AktInWork.Number + " от " + BuEditVM.AktInWork.DateWork?.ToString("d") + BuEditVM.AktInWork.FIO + " Ермаковский РЭС";
+                            string nameDirectory = "Акт БУ№" + BuEditVM.AktInWork.Number + " от " + BuEditVM.AktInWork.DateWork?.ToString("d") +" "+ BuEditVM.AktInWork.FIO + " Ермаковский РЭС";
                             string folderPath = Path.Combine(SelectedPath, nameDirectory);
                             string photoFolderPath = Path.Combine(SelectedPath, nameDirectory, "Фото");
                             if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath); //Рабочая директория
@@ -119,7 +119,7 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
                             //11. Акт последней проверки
                             if (BuEditVM.AktInWork.AktPredidProverkiPdf != null & BuEditVM.AktInWork.AktPredidProverkiPdf != "")
                             {
-                                File.Copy(filePathMailPDF, Path.Combine(folderPath, "11. Акт последней проверки " + BuEditVM.AktInWork.AktPedidProverki + ".pdf"));
+                                File.Copy(BuEditVM.AktInWork.AktPredidProverkiPdf, Path.Combine(folderPath, "11. Акт последней проверки " + BuEditVM.AktInWork.AktPedidProverki + ".pdf"));
                             }
                             //15. ПЗ
                             //16. Содержание
@@ -222,6 +222,13 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
              {
                  BuEditVM.AktInWork.FindCurrentAktProverki();
              }, canSearchPderAkt, null);
+
+            this.FindPrevousProverka = new DelegateCommand("Найти предыдущую проверку", f =>
+            {
+                BuEditVM.AktInWork.FindPrevousAktProverki();
+            }, canSearchPderAkt, null);
+
+
             this.GetDataFromDbByNumberLs = new DelegateCommand("Поиск по номеру лицевого счета", f =>
             {
                 string number = BuEditorVM.AktInWork.NumberLS;

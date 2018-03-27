@@ -337,6 +337,9 @@
     <None Include="ATPWorker_TemporaryKey.pfx" />
     <None Include="headertemplate.json" />
     <AppDesigner Include="Properties\" />
+    <Content Include="Shabloni\BU\PZ.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Resource Include="Resources\refresh.png" />
     <Resource Include="Resources\Word-Mac-icon.png" />
     <Resource Include="Resources\PDF.png" />

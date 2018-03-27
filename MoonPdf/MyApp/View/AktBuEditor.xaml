@@ -312,7 +312,7 @@
             <GroupBox.Header>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock VerticalAlignment="Center" Text="Акт предыдущей проверки" FontWeight="Bold" FontSize="14" />
-                    <Button Margin="1" Command="{Binding Commands.FindCurrentProverka, Source={StaticResource BuEditorViewModel}}" ToolTip="{Binding Commands.FindCurrentProverka.Name, Source={StaticResource BuEditorViewModel}}">
+                    <Button Margin="1" Command="{Binding Commands.FindPrevousProverka, Source={StaticResource BuEditorViewModel}}" ToolTip="{Binding Commands.FindPrevousProverka.Name, Source={StaticResource BuEditorViewModel}}">
                         <Button.Content>
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="/ATPWork;component/Resources/icons8-поиск-40.png"  Height="18"/>
