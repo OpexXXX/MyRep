@@ -586,6 +586,7 @@ namespace MyApp.Model
             //Иначе мы не увидим кириллический текст
             //Если мы работаем только с англоязычными текстами, то шрифт можно не указывать
             BaseFont baseFont = BaseFont.CreateFont("C:\\Windows\\Fonts\\arial.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+            iTextSharp.text.Font headerFont = new iTextSharp.text.Font(baseFont, 12, iTextSharp.text.Font.NORMAL);
             iTextSharp.text.Font font = new iTextSharp.text.Font(baseFont, 10, iTextSharp.text.Font.NORMAL);
 
             //Обход по всем таблицам датасета (хотя в данном случае мы можем опустить
@@ -603,7 +604,7 @@ namespace MyApp.Model
                 table.SetWidths(colWidthPercentages);
                
                 //Добавим в таблицу общий заголовок
-                PdfPCell cell = new PdfPCell(new Phrase("БД " + data_set.Tables[i].TableName+ ", таблица №" + (i + 1), font));
+                PdfPCell cell = new PdfPCell(new Phrase(data_set.Tables[i].TableName, headerFont));
 
                 cell.Colspan = data_set.Tables[i].Columns.Count;
                 cell.HorizontalAlignment = 1;

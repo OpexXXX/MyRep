@@ -133,7 +133,7 @@
                     </TextBox>
 
                     <Button  Focusable="False" Command="{Binding Commands.GetDataFromDbByNumberLs, Source={StaticResource AtpEditorViewModel}}">
-                        <Image  Height="20" Source="/ATPWork;component/Resources/icons8-поиск-40.png" Width="20" />
+                        <Image RenderOptions.BitmapScalingMode="HighQuality" Height="20" Source="/ATPWork;component/Resources/icons8-поиск-40.png" Width="20" />
                     </Button>
 
                 </StackPanel>
@@ -157,7 +157,7 @@
                 <ComboBox  HorizontalAlignment="Left" Height="25" Width="240" ItemsSource="{Binding AgentList, Source={StaticResource AtpEditorViewModel}}" SelectedItem="{Binding AktInWork.Agent_2, Source={StaticResource AtpEditorViewModel}}" Background="{x:Null}" BorderThickness="1">
                 </ComboBox>
                     <Button  Focusable="False" Command="{Binding Commands.RemoveSecondAgent, Source={StaticResource AtpEditorViewModel}}">
-                        <Image  Height="20" Source="/ATPWork;component/Resources/icons8-удалить.png" Width="20" />
+                        <Image RenderOptions.BitmapScalingMode="HighQuality" Height="20" Source="/ATPWork;component/Resources/icons8-удалить.png" Width="20" />
                     </Button>
                 </StackPanel>
             </StackPanel>
@@ -244,7 +244,7 @@
                         </Binding>
                     </TextBox>
                     <Button  Focusable="False" Command="{Binding Commands.GetDataFromDbByNumberPu, Source={StaticResource AtpEditorViewModel}}">
-                        <Image  Height="20" Source="/ATPWork;component/Resources/icons8-поиск-40.png" Width="20" />
+                        <Image RenderOptions.BitmapScalingMode="HighQuality" Height="20" Source="/ATPWork;component/Resources/icons8-поиск-40.png" Width="20" />
                     </Button>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" >

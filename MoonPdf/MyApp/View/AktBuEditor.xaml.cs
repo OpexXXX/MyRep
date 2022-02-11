@@ -3,6 +3,7 @@ using ATPWork.MyApp.ViewModel.MainAktBu.BuEditor;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -18,6 +20,22 @@ using System.Windows.Shapes;
 
 namespace ATPWork.MyApp.View
 {
+    public class VidNarusheniyaConv : MarkupExtension, IValueConverter
+    {
+        public override object ProvideValue(IServiceProvider serviceProvider) => this;
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+
+            return (int)value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+
+            return (VidNarusheniya)value;
+        }
+    }
     /// <summary>
     /// Логика взаимодействия для AktBuEditor.xaml
     /// </summary>
@@ -119,6 +137,17 @@ namespace ATPWork.MyApp.View
                 string extension;
                 extension = System.IO.Path.GetExtension(files[0]);
                 if (extension == ".PDF" || extension == ".pdf") BuEditVM.AktInWork.IzvesheniePDF = files[0];
+            }
+        }
+
+        private void GroupBoxAktPredProverki_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                string extension;
+                extension = System.IO.Path.GetExtension(files[0]);
+                if (extension == ".PDF" || extension == ".pdf") BuEditVM.AktInWork.AktPredidProverkiPdf = files[0];
             }
         }
     }

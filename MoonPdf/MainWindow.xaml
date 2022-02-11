@@ -265,7 +265,8 @@
                                           SelectedItem=""
                                         AutoGenerateColumns="False">
                                         <DataGrid.Columns>
-                                            <DataGridTextColumn Binding="{Binding Number}" ClipboardContentBinding="{x:Null}" Header="№Акта"/>
+                                            <DataGridTextColumn Binding="{Binding Number}" ClipboardContentBinding="{x:Null}" Header="№Акта" >
+                                            </DataGridTextColumn>
                                             <DataGridTextColumn Binding="{Binding DateWork}" ClipboardContentBinding="{x:Null}" Header="Дата"/>
                                             <DataGridTextColumn Binding="{Binding NumberLS}" ClipboardContentBinding="{x:Null}" Header="№ЛС"/>
                                             <DataGridTextColumn Binding="{Binding FIO}" ClipboardContentBinding="{x:Null}" Header="ФИО"/>
@@ -288,8 +289,7 @@
                                                                                     <ContextMenu>
                                                                                         <MenuItem Header="{Binding Commands.OpenFolderMail.Name, Source={StaticResource MainAtpVM}}" 
                                                                                                   Command="{Binding Commands.OpenFolderMail, Source={StaticResource MainAtpVM}}" 
-                                                                                                  CommandParameter="{Binding Path=Name}"
-                                                                                                  />
+                                                                                                  CommandParameter="{Binding Path=Name}"/>
                                                                                     </ContextMenu>
                                                                                 </DockPanel.ContextMenu>
                                                                                 <TextBlock FontWeight="Bold" Text="{Binding Path=Name}" Margin="5,0,0,0">
@@ -519,23 +519,29 @@
             </TabItem>
             <TabItem Header="Акты БУ" FontSize="14">
                 <Grid Margin="0,0,0,0">
-                    <TabControl x:Name="tabControlBU" Margin="0,0,0,0" >
-                        <TabItem Header="Занесение" FontSize="14">
-                            <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
-                                    <ColumnDefinition Width="520"/>
-                                    <ColumnDefinition Width="174"/>
+                                    <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <mpp:MoonPdfPanel Background="LightGray" PageRowDisplay="ContinuousPageRows" x:Name="PdfPanelBu" x:FieldModifier="private"  AllowDrop="False" />
-                                <local:AktBuEditor    Margin="5,0" Grid.Column="1" ></local:AktBuEditor>
-                                <ToggleButton Grid.Column="1" HorizontalAlignment="Right" Width="9"/>
-                                <ListBox  ScrollViewer.HorizontalScrollBarVisibility="Disabled"   Name="AktBuInWork" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling"  ItemsSource="{Binding Source={StaticResource AktInWorkSourse}}" SelectedItem="{Binding  Path=SelectedAkt, Source={StaticResource MainAtpVM}}" Grid.Column="2" >
-                                    <ListBox.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <WrapPanel Width="700" />
-                                        </ItemsPanelTemplate>
-                                    </ListBox.ItemsPanel>
+                                <StackPanel Orientation="Horizontal"  Grid.Column="1" >
+                                <ScrollViewer>
+                                <local:AktBuEditor    Margin="4,0,0,0"></local:AktBuEditor>
+                                </ScrollViewer>
+                                    <StackPanel>
+                                        <StackPanel.Style>
+                                            <Style TargetType="{x:Type StackPanel}">
+                                                <Style.Setters>
+                                                    <Setter Property="Visibility" Value="Visible"></Setter>
+                                                </Style.Setters>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsChecked, ElementName=ToggleHidePanelBU}" Value="True">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </StackPanel.Style>
+                                <ListBox   ScrollViewer.HorizontalScrollBarVisibility="Disabled"   Name="AktBuInWork" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling"  ItemsSource="{Binding Source={StaticResource AktInWorkSourse}}" SelectedItem="{Binding  Path=SelectedAkt, Source={StaticResource MainAtpVM}}" Width="300">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Path=AktName}">
@@ -587,14 +593,13 @@
                                     </ListBox.GroupStyle>
                                     
                                 </ListBox>
+                                    </StackPanel>
+                                <ToggleButton  Name="ToggleHidePanelBU"  HorizontalAlignment="Right" Width="9"/>
+                                </StackPanel>
                             </Grid>
 
-                        </TabItem>
-                        <TabItem Header="Реестр" FontSize="14">
-                            <Grid Margin="0,0,0,0"/>
-                        </TabItem>
-                    </TabControl>
-                </Grid>
+               
+              
             </TabItem>
             <TabItem Header="Планы проверок" FontSize="14">
                 <DockPanel>

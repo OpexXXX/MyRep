@@ -8,6 +8,12 @@ using System.Threading.Tasks;
 
 namespace ATPWork.MyApp.Model.AktBuWork
 {
+   public enum VidNarusheniya
+    {
+        Vmeshatelstvo,
+        Power,
+        NoPower
+    }
     public class AktBu : Abonent
     {
 
@@ -105,6 +111,14 @@ namespace ATPWork.MyApp.Model.AktBuWork
             }
         }
 
+        internal void FindPrevousAktProverki()
+        {
+            if(PrevProverki.Count>0)
+            {
+                AktPedidProverki =  "№91/" + PrevProverki[(PrevProverki.Count - 1)][0]+" от "+ PrevProverki[(PrevProverki.Count - 1)][1]+ "г.";
+            }
+        }
+
         public Agent Agent_1
         {
             get { return this.agent_1; }
@@ -128,6 +142,20 @@ namespace ATPWork.MyApp.Model.AktBuWork
             get { return _aktBuPdf; }
             set { _aktBuPdf = value; this.OnPropertyChanged("AktBuPdf"); }
         }
+
+        private string _aktPedidProverkiPdf;
+        public string AktPredidProverkiPdf
+        {
+            get { return _aktPedidProverkiPdf; }
+            set { _aktPedidProverkiPdf = value; this.OnPropertyChanged("AktPredidProverkiPdf"); }
+        }
+        private string _aktPedidProverki;
+        public string AktPedidProverki
+        {
+            get { return _aktPedidProverki; }
+            set { _aktPedidProverki = value; this.OnPropertyChanged("AktPedidProverki"); }
+        }
+
         private string _aktPedProverkiPdf;
         public string AktPredProverkiPdf
         {
@@ -140,6 +168,7 @@ namespace ATPWork.MyApp.Model.AktBuWork
             get { return _aktPedProverki; }
             set { _aktPedProverki = value; this.OnPropertyChanged("AktPedProverki"); }
         }
+
         private string _izveshenie;
         public string IzvesheniePDF
         {
@@ -152,11 +181,11 @@ namespace ATPWork.MyApp.Model.AktBuWork
             get { return _narushenie; }
             set { _narushenie = value; this.OnPropertyChanged("Narushenie"); }
         }
-        private string _vidNarusheniya;
-        public string VidNarusheniya
+        private VidNarusheniya _typeNarushenie;
+        public VidNarusheniya TypeNarushenie
         {
-            get { return _vidNarusheniya; }
-            set { _vidNarusheniya = value; this.OnPropertyChanged("VidNarusheniya"); }
+            get { return _typeNarushenie; }
+            set { _typeNarushenie = value; this.OnPropertyChanged("TypeNarushenie"); }
         }
         private ObservableCollection<string> _photoFile = new ObservableCollection<string>();
         public ObservableCollection<string> PhotoFile
@@ -224,8 +253,8 @@ namespace ATPWork.MyApp.Model.AktBuWork
                 this.OnPropertyChanged("BuValuePower");
             }
         }
-        private int _power;
-        public int Power
+        private float _power;
+        public float Power
         {
             get { return this._power; }
             set
@@ -510,7 +539,11 @@ namespace ATPWork.MyApp.Model.AktBuWork
             TimeSpan difDay;
             difDay =(DateTime) DateWork - (DateTime)StartDate;
             CountDay = difDay.Days + 1;
-            BuValuePower = CountDay * 24 * Power;
+
+          
+
+            BuValuePower = (int)Math.Round(CountDay * 24 * Power);
+
             BuValueNormativ = GetValueBuNormativ((DateTime)StartDate, (DateTime)DateWork, Normativ);
             this.OnPropertyChanged("ConsoleRaschet");
         }

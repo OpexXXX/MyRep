@@ -14,7 +14,6 @@ namespace ATPWork.MyApp.ViewModel.MainAtp
 {
     public class Commands
     {
-
         public DelegateCommand AddAktToworkFromPDF { get; private set; }
         public DelegateCommand ProcessCompletedActs { get; private set; }
         public DelegateCommand SaveCurrentWork { get; private set; }
@@ -52,7 +51,6 @@ namespace ATPWork.MyApp.ViewModel.MainAtp
         public Commands(MainAtpVM mainAtpVm)
         {
             this.mainAtpVm = mainAtpVm;
-
             Predicate<object> isBysyAddWork = f => checkBysyWork();
             Predicate<object> isCanProcessCompleteAkts = f => CanProcessCompleteAkts();
             Predicate<object> isDatabaseConnectorBusy = f => DataBaseWorker.ConnectorBusy();
@@ -102,7 +100,6 @@ namespace ATPWork.MyApp.ViewModel.MainAtp
                 });
 
             }, isCanProcessCompleteAkts, null);
-
             this.EnterAktInSAP = new DelegateCommand("Занести в SAP", async f =>
             {
                 mainAtpVm.WorkinAddAktFromPdf = true;
@@ -118,22 +115,20 @@ namespace ATPWork.MyApp.ViewModel.MainAtp
                         mainAtpVm.WorkinAddAktFromPdf = false;
                     }
                 });
-            }, null, null);
-
-
+            }, canEnterAktsInSAP, null);
             this.SaveCurrentWork = new DelegateCommand("Сохранить", async f =>
             {
                 mainAtpVm.WorkinAddAktFromPdf = true;
                 await Task.Run(() =>
                 {
                     MainAtpModel.SaveBeforeCloseApp();
+                    mainAtpVm.WorkinAddAktFromPdf = false;
                 });
             }, isDatabaseConnectorBusy, new KeyGesture(Key.S, ModifierKeys.Control));
             this.CreateMailAllPossibleAkt = new DelegateCommand("Создать сопроводительное (все акты)", f =>
            {
                mainAtpVm.CreateMailAllComplete(new Progress<string>(mainAtpVm.SetProgressBarText));
            }, isCreateMail, null);
-
             this.OpenFolderMail = new DelegateCommand("Открыть папку", 
                          OpenFolderWhisMail
                       , null, null);
@@ -179,7 +174,6 @@ namespace ATPWork.MyApp.ViewModel.MainAtp
                     });
                 }
             }, isDatabaseConnectorBusy, null);
-
             this.GoNextAkt = new DelegateCommand("Вперед", f =>
            {
                mainAtpVm.GoNextAkt();
@@ -198,14 +192,16 @@ namespace ATPWork.MyApp.ViewModel.MainAtp
             }, isGoPage, null);
             this.DeleteGroup = new DelegateCommand("Удалить задание", deleteGroup, null, null);
         }
-
+        private bool canEnterAktsInSAP(object obj)
+        {
+            return mainAtpVm.UnEnterSAPAkt > 0;
+        }
         private void OpenFolderWhisMail(object obj)
         {
             var gg = (string)obj;
             string path = MainAtpModel.MailDirektory + "\\" + gg + "г. Акты ПР ФЛ";
             System.Diagnostics.Process.Start("explorer", path);
         }
-
         private void deleteGroup(object obj)
         {
 

@@ -136,7 +136,7 @@ namespace MyApp.Model
             SQLiteDataReader r = CommandSQL.ExecuteReader();
             while (r.Read())
             {
-                agentList.Add(new Agent(r["SapNumber"].ToString(), r["Post"].ToString(), r["Surname"].ToString(), r["SearchString"].ToString()));
+                agentList.Add(new Agent(r["SapNumber"].ToString(), r["Post"].ToString(), r["Surname"].ToString(), r["SearchString"].ToString(), r["DateB"].ToString(), r["PlaceB"].ToString()));
             }
             r.Close();
             return agentList;
@@ -468,7 +468,7 @@ namespace MyApp.Model
                 {
                     foreach (Agent item in MainAtpModel.AgentList)
                     {
-                        if (item.SapNumber == temp_agent) result[i].Agent_1 = new Agent(item.SapNumber, item.Post, item.Surname, item.SearchString);
+                        if (item.SapNumber == temp_agent) result[i].Agent_1 = new Agent(item.SapNumber, item.Post, item.Surname, item.SearchString, item.DateB, item.PlaceB);
                     }
                 }
                 temp_agent = r["Agent_2"].ToString();
@@ -476,7 +476,7 @@ namespace MyApp.Model
                 {
                     foreach (Agent item in MainAtpModel.AgentList)
                     {
-                        if (item.SapNumber == temp_agent) result[i].Agent_2 = new Agent(item.SapNumber, item.Post, item.Surname, item.SearchString);
+                        if (item.SapNumber == temp_agent) result[i].Agent_2 = new Agent(item.SapNumber, item.Post, item.Surname, item.SearchString, item.DateB, item.PlaceB);
                     }
                 }
                 //Создаем новй ПУ
@@ -551,7 +551,7 @@ namespace MyApp.Model
                 {
                     foreach (Agent item in MainAtpModel.AgentList)
                     {
-                        if (item.SapNumber == temp_agent) result[i].Agent_1 = new Agent(item.SapNumber, item.Post, item.Surname, item.SearchString);
+                        if (item.SapNumber == temp_agent) result[i].Agent_1 = new Agent(item.SapNumber, item.Post, item.Surname, item.SearchString, item.DateB, item.PlaceB);
                     }
                 }
                 temp_agent = r["Agent_2"].ToString();
@@ -561,7 +561,7 @@ namespace MyApp.Model
                     {
                         if (item.SapNumber == temp_agent)
                         {
-                            result[i].Agent_2 = new Agent(item.SapNumber, item.Post, item.Surname, item.SearchString);
+                            result[i].Agent_2 = new Agent(item.SapNumber, item.Post, item.Surname, item.SearchString, item.DateB, item.PlaceB);
                             break;
                         }
                     }
