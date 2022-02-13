@@ -72,6 +72,7 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
             Predicate<object> canNumberCange = f => CanNumberCange();// 
             Predicate<object> canDateCange = f => CanDateCange();// 
             Predicate<object> canRemoveAgent = f => CanRemAgent();// 
+
             this.SaveOnPublic = new DelegateCommand("Сохранить пакет документов на паблик", async f =>
             {
                 string SelectedPath = "";
@@ -130,7 +131,8 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
                         }
                     });
                 }
-            }, null, null);
+            }, canSaveOnPublic, null);
+
             this.OpenPhotoInPDF = new DelegateCommand("Открыть фото в  PDF", async f =>
             {
                 await Task.Run(() =>
@@ -140,37 +142,43 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
                 });
 
 
-            }, null, null);
+            }, canOpenPhotoPDF, null);
+
             this.CalcRaschet = new DelegateCommand("Расчитать", f =>
             {
 
                 BuEditVM.AktInWork.calcBu();
 
             }, canCalcRaschetBUCange, null);
+
             this.OpenAgent1PDF = new DelegateCommand("Открыть объяснения в PDF", f =>
             {
                 string filePathDocx = WordShablon.CreateObysnenyaForBuAkt(BuEditVM.AktInWork, BuEditVM.AktInWork.Agent_1);
                 string filePathPDF = WordShablon.ConvertDocxToPdf(filePathDocx);
                 Process.Start(filePathPDF);
             }, canOpenAgent1Docx, null);
+
             this.OpenAgent2PDF = new DelegateCommand("Открыть объяснения в PDF", f =>
             {
                 string filePathDocx = WordShablon.CreateObysnenyaForBuAkt(BuEditVM.AktInWork, BuEditVM.AktInWork.Agent_2);
                 string filePathPDF = WordShablon.ConvertDocxToPdf(filePathDocx);
                 Process.Start(filePathPDF);
             }, canOpenAgent2Docx, null);
+
             this.OpenRaschetPDF = new DelegateCommand("Открыть расчет в PDF", f =>
             {
                 string filePathDocx = WordShablon.CreateRaschetForBuAkt(BuEditVM.AktInWork);
                 string filePathPDF = WordShablon.ConvertDocxToPdf(filePathDocx);
                 Process.Start(filePathPDF);
             }, canCalcRaschetBUCange, null);
+
             this.OpenPoliceMailPDF = new DelegateCommand("Открыть письмо в полицию в PDF", f =>
             {
                 string filePathDocx = WordShablon.CreatePoliceMailForBuAkt(BuEditVM.AktInWork);
                 string filePathPDF = WordShablon.ConvertDocxToPdf(filePathDocx);
                 Process.Start(filePathPDF);
             }, canOpenAgent1Docx, null);
+
             this.OpenPoliceMailDocPDF = new DelegateCommand("Открыть полное письмо в полицию в PDF", async f =>
             {
                 await Task.Run(() =>
@@ -179,6 +187,7 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
                     Process.Start(filePathPDF);
                 });
             }, canOpenAgent1Docx, null);
+
             this.OpenFullMailDocPDF = new DelegateCommand("Открыть полное письмо в сбыт в PDF", async f =>
             {
                 await Task.Run(() =>
@@ -186,38 +195,45 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
                     string filePathPDF = WordShablon.CreateFullPdfMail(BuEditVM.AktInWork);
                     Process.Start(filePathPDF);
                 });
-            }, canCalcRaschetBUCange, null);
+            }, canOpenFullMailDocPDF, null);
+
             this.OpenMailPDF = new DelegateCommand("Открыть письмо в PDF", f =>
             {
                 string filePathDocx = WordShablon.CreateMailForBuAkts(BuEditVM.AktInWork);
                 string filePathPDF = WordShablon.ConvertDocxToPdf(filePathDocx);
                 Process.Start(filePathPDF);
-            }, canCalcRaschetBUCange, null);
+            }, canCreateSbitMail, null);
 
             this.OpenAgent1Docx = new DelegateCommand("Открыть объяснения в Word", f =>
             {
                 Process.Start(WordShablon.CreateObysnenyaForBuAkt(BuEditVM.AktInWork, BuEditVM.AktInWork.Agent_1));
             }, canOpenAgent1Docx, null);
+
             this.OpenAgent2Docx = new DelegateCommand("Открыть объяснения в Word", f =>
             {
                 Process.Start(WordShablon.CreateObysnenyaForBuAkt(BuEditVM.AktInWork, BuEditVM.AktInWork.Agent_2));
             }, canOpenAgent2Docx, null);
+
             this.OpenRaschetDocx = new DelegateCommand("Открыть расчет в Word", f =>
             {
                 Process.Start(WordShablon.CreateRaschetForBuAkt(BuEditVM.AktInWork));
             }, canCalcRaschetBUCange, null);
+
             this.OpenPoliceMailDocx = new DelegateCommand("Открыть письмо в полицию в Word", f =>
             {
                 Process.Start(WordShablon.CreatePoliceMailForBuAkt(BuEditVM.AktInWork));
-            }, canCalcRaschetBUCange, null);
+            }, canOpenAgent1Docx, null);
+
             this.OpenMailDocx = new DelegateCommand("Открыть письмо в Word", f =>
             {
                 Process.Start(WordShablon.CreateMailForBuAkts(BuEditVM.AktInWork));
             }, canCreateSbitMail, null);
+
             this.GetNormativ = new DelegateCommand("Получить норматив", f =>
             {
                 BuEditVM.AktInWork.getNormativ();
             }, null, null);
+
             this.FindCurrentProverka = new DelegateCommand("Найти в разнесенных актах", f =>
              {
                  BuEditVM.AktInWork.FindCurrentAktProverki();
@@ -253,6 +269,7 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
                     }
                 }
             }, findByLs, null);
+
             this.GetDataFromDbByNumberPu = new DelegateCommand("Поиск по номеру прибора учета", f =>
             {
                 string number = BuEditorVM.AktInWork.PuOldNumber;
@@ -296,10 +313,11 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
         {
             return BuEditVM.AktInWork.NumberLS != null && BuEditVM.AktInWork.DateWork != null;
         }
+
         private bool canCalcRaschetBUCange(object obj)
         {
 
-            if (BuEditVM.AktInWork.FIO == null) return false;
+          //  if (BuEditVM.AktInWork.FIO == null) return false;
             if (BuEditVM.AktInWork.DateWork == null) return false;
             if (BuEditVM.AktInWork.StartDate == null) return false;
 
@@ -309,7 +327,8 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
         {
 
             if (!canCalcRaschetBUCange(null) |
-                BuEditVM.AktInWork.DateMail == null |
+                BuEditVM.AktInWork.FIO == null|
+                 BuEditVM.AktInWork.DateMail == null |
                 BuEditVM.AktInWork.NumberMail == 0 |
                 BuEditVM.AktInWork.Number == 0
                ) return false;
@@ -323,6 +342,7 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
                  ) return false;
             return true;
         }
+
         private bool canOpenAgent2Docx(object obj)
         {
             if (!canCreateSbitMail(null) ||
@@ -331,6 +351,28 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
                  ) return false;
             return true;
         }
+        private bool canSaveOnPublic(object obj)
+        {
+            if (!canOpenFullMailDocPDF(null)
+                 ) return false;
+            return true;
+        }
+        private bool canOpenFullMailDocPDF(object obj)
+        {
+            if (!canCreateSbitMail(null) ||
+                !canOpenAgent1Docx(null) 
+                 )
+            {
+                return false;
+            }
+            return true;
+        }
+        private bool canOpenPhotoPDF(object obj)
+        {
+            if (BuEditVM.AktInWork.PhotoFile?.Count==0) return false;
+            return true;
+        }
+
         private void openPhoto(object obj)
         {
             if (obj is string)

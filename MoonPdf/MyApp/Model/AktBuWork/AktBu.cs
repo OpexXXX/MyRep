@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -147,13 +148,23 @@ namespace ATPWork.MyApp.Model.AktBuWork
         public string AktPredidProverkiPdf
         {
             get { return _aktPedidProverkiPdf; }
-            set { _aktPedidProverkiPdf = value; this.OnPropertyChanged("AktPredidProverkiPdf"); }
+            set {
+               
+                _aktPedidProverkiPdf = value;
+                this.OnPropertyChanged("AktPredidProverkiPdf");
+            }
         }
         private string _aktPedidProverki;
         public string AktPedidProverki
         {
             get { return _aktPedidProverki; }
-            set { _aktPedidProverki = value; this.OnPropertyChanged("AktPedidProverki"); }
+            set {
+                foreach (char ch in Path.GetInvalidFileNameChars())
+                {
+                    value =  value.Replace(ch, '-');
+                }
+                _aktPedidProverki = value; 
+                this.OnPropertyChanged("AktPedidProverki"); }
         }
 
         private string _aktProverkiPdf;
@@ -166,7 +177,14 @@ namespace ATPWork.MyApp.Model.AktBuWork
         public string AktPedProverki
         {
             get { return _aktPedProverki; }
-            set { _aktPedProverki = value; this.OnPropertyChanged("AktPedProverki"); }
+            set {
+                foreach (char ch in Path.GetInvalidFileNameChars())
+                {
+                    value = value.Replace(ch, '-');
+                }
+                _aktPedProverki = value; 
+                this.OnPropertyChanged("AktPedProverki"); 
+            }
         }
 
         private string _izveshenie;

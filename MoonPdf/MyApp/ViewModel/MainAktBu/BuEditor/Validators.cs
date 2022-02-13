@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,15 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
             if (value == null || (value.ToString() == "0")) return new ValidationResult(false, "Укажите номер проверки");
 
 
+            return ValidationResult.ValidResult;
+        }
+    }
+    public class ValidFileName : ValidationRule
+    {
+        public override ValidationResult Validate
+     (object value, System.Globalization.CultureInfo cultureInfo)
+        {
+            if (value.ToString().IndexOfAny(Path.GetInvalidFileNameChars()) > 0) return new ValidationResult(false, "Недопустимые символы в имени файла");
             return ValidationResult.ValidResult;
         }
     }

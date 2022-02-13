@@ -267,6 +267,7 @@
         UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
                                     <viewModel:ValidNumber/>
+                                    <viewModel:ValidFileName/>
                                 </Binding.ValidationRules>
                             </Binding>
                         </TextBox>
@@ -330,6 +331,7 @@
         UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
                                     <viewModel:ValidNumber/>
+                                    <viewModel:ValidFileName/>
                                 </Binding.ValidationRules>
                             </Binding>
                         </TextBox>
