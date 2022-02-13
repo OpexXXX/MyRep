@@ -366,8 +366,17 @@ namespace MyApp.Model
             List<AktTehProverki> TempList = new List<AktTehProverki>();
             string mailName = "исх.№91-" + numberMail + " от " + dateMail.ToString("d") + "г. Акты ПР ФЛ";
             string currentMailDirectory = System.IO.Path.Combine(MailDirektory, mailName);
+            int ii = 1;
+            while (Directory.Exists(currentMailDirectory))
+            {
+                progress.Report("Директория сопроводительного письма: " + currentMailDirectory + "  уже существует.");
+                currentMailDirectory += "_копия (" + ii.ToString() + ")";
+                progress.Report("Сохраняем в   " + currentMailDirectory);
+            }
+
             progress.Report("Создаем папку сопроводительного письма: " + currentMailDirectory);
             if (!Directory.Exists(currentMailDirectory)) Directory.CreateDirectory(currentMailDirectory);
+
             foreach (AktTehProverki item in AllAkt)
             {
                 item.checkToComplete();

@@ -125,7 +125,7 @@ namespace ATPWork.MyApp.View
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
                 string extension;
                 extension =System.IO.Path.GetExtension(files[0]);
-                if(extension == ".PDF"|| extension==".pdf") BuEditVM.AktInWork.AktPredProverkiPdf = files[0];
+                if(extension == ".PDF"|| extension==".pdf") BuEditVM.AktInWork.AktProverkiPdf = files[0];
             }
         }
 

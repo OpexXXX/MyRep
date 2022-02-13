@@ -85,7 +85,7 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
                         {
                             SelectedPath = folderBrowser.SelectedPath;
                             //Создаем директории
-                            string nameDirectory = "Акт БУ№" + BuEditVM.AktInWork.Number + " от " + BuEditVM.AktInWork.DateWork?.ToString("d") +" "+ BuEditVM.AktInWork.FIO + " Ермаковский РЭС";
+                            string nameDirectory = "Акт БУ№" + BuEditVM.AktInWork.Number + " от " + BuEditVM.AktInWork.DateWork?.ToString("d") + " " + BuEditVM.AktInWork.FIO + " Ермаковский РЭС";
                             string folderPath = Path.Combine(SelectedPath, nameDirectory);
                             string photoFolderPath = Path.Combine(SelectedPath, nameDirectory, "Фото");
                             if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath); //Рабочая директория
@@ -109,7 +109,7 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
                             //3. Извещение потребителя о предстоящей проверке.pdf
                             File.Copy(BuEditVM.AktInWork.IzvesheniePDF, Path.Combine(folderPath, "3. Извещение потребителя о предстоящей проверке.pdf"));
                             //4. Акт проверки №91-Е-186 от 15.02.2018г.
-                            File.Copy(BuEditVM.AktInWork.AktPredProverkiPdf, Path.Combine(folderPath, "4. Акт проверки " + BuEditVM.AktInWork.AktPedProverki + ".pdf"));
+                            File.Copy(BuEditVM.AktInWork.AktProverkiPdf, Path.Combine(folderPath, "4. Акт проверки " + BuEditVM.AktInWork.AktPedProverki + ".pdf"));
                             // 5.Акт БУ №241603578 от 15.02.2018г.
                             File.Copy(BuEditVM.AktInWork.AktBuPdf, Path.Combine(folderPath, "5.Акт БУ №" + BuEditVM.AktInWork.Number + " от " + BuEditVM.AktInWork.DateWork?.ToString("d") + ".pdf"));
                             //6. Расчет к акту БУ №241603578 от 15.02.2018г
@@ -152,13 +152,13 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
                 string filePathDocx = WordShablon.CreateObysnenyaForBuAkt(BuEditVM.AktInWork, BuEditVM.AktInWork.Agent_1);
                 string filePathPDF = WordShablon.ConvertDocxToPdf(filePathDocx);
                 Process.Start(filePathPDF);
-            }, canCalcRaschetBUCange, null);
+            }, canOpenAgent1Docx, null);
             this.OpenAgent2PDF = new DelegateCommand("Открыть объяснения в PDF", f =>
             {
                 string filePathDocx = WordShablon.CreateObysnenyaForBuAkt(BuEditVM.AktInWork, BuEditVM.AktInWork.Agent_2);
                 string filePathPDF = WordShablon.ConvertDocxToPdf(filePathDocx);
                 Process.Start(filePathPDF);
-            }, canCalcRaschetBUCange, null);
+            }, canOpenAgent2Docx, null);
             this.OpenRaschetPDF = new DelegateCommand("Открыть расчет в PDF", f =>
             {
                 string filePathDocx = WordShablon.CreateRaschetForBuAkt(BuEditVM.AktInWork);
@@ -170,7 +170,7 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
                 string filePathDocx = WordShablon.CreatePoliceMailForBuAkt(BuEditVM.AktInWork);
                 string filePathPDF = WordShablon.ConvertDocxToPdf(filePathDocx);
                 Process.Start(filePathPDF);
-            }, canCalcRaschetBUCange, null);
+            }, canOpenAgent1Docx, null);
             this.OpenPoliceMailDocPDF = new DelegateCommand("Открыть полное письмо в полицию в PDF", async f =>
             {
                 await Task.Run(() =>
@@ -178,7 +178,7 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
                     string filePathPDF = WordShablon.CreatePdfPoliceMail(BuEditVM.AktInWork);
                     Process.Start(filePathPDF);
                 });
-            }, canCalcRaschetBUCange, null);
+            }, canOpenAgent1Docx, null);
             this.OpenFullMailDocPDF = new DelegateCommand("Открыть полное письмо в сбыт в PDF", async f =>
             {
                 await Task.Run(() =>
@@ -197,11 +197,11 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
             this.OpenAgent1Docx = new DelegateCommand("Открыть объяснения в Word", f =>
             {
                 Process.Start(WordShablon.CreateObysnenyaForBuAkt(BuEditVM.AktInWork, BuEditVM.AktInWork.Agent_1));
-            }, canCalcRaschetBUCange, null);
+            }, canOpenAgent1Docx, null);
             this.OpenAgent2Docx = new DelegateCommand("Открыть объяснения в Word", f =>
             {
                 Process.Start(WordShablon.CreateObysnenyaForBuAkt(BuEditVM.AktInWork, BuEditVM.AktInWork.Agent_2));
-            }, canCalcRaschetBUCange, null);
+            }, canOpenAgent2Docx, null);
             this.OpenRaschetDocx = new DelegateCommand("Открыть расчет в Word", f =>
             {
                 Process.Start(WordShablon.CreateRaschetForBuAkt(BuEditVM.AktInWork));
@@ -213,7 +213,7 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
             this.OpenMailDocx = new DelegateCommand("Открыть письмо в Word", f =>
             {
                 Process.Start(WordShablon.CreateMailForBuAkts(BuEditVM.AktInWork));
-            }, canCalcRaschetBUCange, null);
+            }, canCreateSbitMail, null);
             this.GetNormativ = new DelegateCommand("Получить норматив", f =>
             {
                 BuEditVM.AktInWork.getNormativ();
@@ -291,15 +291,45 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
             this.OpenImage = new DelegateCommand("Открыть изображение", openPhoto, null, null);
         }
 
+
         private bool canSearchPderAkt(object obj)
         {
             return BuEditVM.AktInWork.NumberLS != null && BuEditVM.AktInWork.DateWork != null;
         }
         private bool canCalcRaschetBUCange(object obj)
         {
-            bool result = false;
-            if (BuEditVM.AktInWork.FIO != null) result = true;
-            return result;
+
+            if (BuEditVM.AktInWork.FIO == null) return false;
+            if (BuEditVM.AktInWork.DateWork == null) return false;
+            if (BuEditVM.AktInWork.StartDate == null) return false;
+
+            return true;
+        }
+        private bool canCreateSbitMail(object obj)
+        {
+
+            if (!canCalcRaschetBUCange(null) |
+                BuEditVM.AktInWork.DateMail == null |
+                BuEditVM.AktInWork.NumberMail == 0 |
+                BuEditVM.AktInWork.Number == 0
+               ) return false;
+            return true;
+        }
+        private bool canOpenAgent1Docx(object obj)
+        {
+            if ( !canCreateSbitMail(null) ||
+                BuEditVM.AktInWork.Narushenie == null ||
+                BuEditVM.AktInWork.Agent_1 == null
+                 ) return false;
+            return true;
+        }
+        private bool canOpenAgent2Docx(object obj)
+        {
+            if (!canCreateSbitMail(null) ||
+                BuEditVM.AktInWork.Narushenie == null ||
+                BuEditVM.AktInWork.Agent_2 == null
+                 ) return false;
+            return true;
         }
         private void openPhoto(object obj)
         {

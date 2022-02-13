@@ -392,7 +392,7 @@ new FieldContent("PlaceB", agent.PlaceB)
             pathRaschet = ConvertDocxToPdf(WordShablon.CreateRaschetForBuAkt(akt));
             FileToBlind.Add(pathRaschet);
             FileToBlind.Add(akt.AktBuPdf);
-            FileToBlind.Add(akt.AktPredProverkiPdf);
+            FileToBlind.Add(akt.AktProverkiPdf);
             FileToBlind.Add(akt.IzvesheniePDF);
 
             if (akt.PhotoFile.Count > 0)
@@ -471,8 +471,10 @@ new FieldContent("PlaceB", agent.PlaceB)
                     iTextSharp.text.pdf.PdfReader ReaderDoc1;
                     foreach (var filePathPdf in filePDF)
                     {
-                        ReaderDoc1 = new iTextSharp.text.pdf.PdfReader(filePathPdf);
-                        Writer.AddDocument(ReaderDoc1);
+                        if (filePathPdf != null) { 
+                            ReaderDoc1 = new iTextSharp.text.pdf.PdfReader(filePathPdf);
+                            Writer.AddDocument(ReaderDoc1);
+                        }
                     }
                     doc.Close();
                     return filePath;

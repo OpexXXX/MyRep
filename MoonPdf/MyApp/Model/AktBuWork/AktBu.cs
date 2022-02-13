@@ -107,7 +107,7 @@ namespace ATPWork.MyApp.Model.AktBuWork
             if (akt != null)
             {
                 AktPedProverki = "№91/Е-" + akt.Number + " от " + akt.DateWork?.ToString("d") + "г.";
-                AktPredProverkiPdf = System.IO.Path.Combine(MainAtpModel.AktDirektory, akt.NamePdfFile);
+                AktProverkiPdf = System.IO.Path.Combine(MainAtpModel.AktDirektory, akt.NamePdfFile);
             }
         }
 
@@ -156,11 +156,11 @@ namespace ATPWork.MyApp.Model.AktBuWork
             set { _aktPedidProverki = value; this.OnPropertyChanged("AktPedidProverki"); }
         }
 
-        private string _aktPedProverkiPdf;
-        public string AktPredProverkiPdf
+        private string _aktProverkiPdf;
+        public string AktProverkiPdf
         {
-            get { return _aktPedProverkiPdf; }
-            set { _aktPedProverkiPdf = value; this.OnPropertyChanged("AktPredProverkiPdf"); }
+            get { return _aktProverkiPdf; }
+            set { _aktProverkiPdf = value; this.OnPropertyChanged("AktProverkiPdf"); }
         }
         private string _aktPedProverki;
         public string AktPedProverki

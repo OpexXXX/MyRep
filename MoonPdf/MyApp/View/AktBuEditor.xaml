@@ -296,7 +296,7 @@
                                 <KeyBinding Key="Up" Command="{Binding Commands.NumberUp, Source={StaticResource BuEditorViewModel}}" />
                                 <KeyBinding Key="Down" Command="{Binding Commands.NumberDown, Source={StaticResource BuEditorViewModel}}" />
                             </TextBox.InputBindings>
-                            <Binding Source="{StaticResource BuEditorViewModel}" Path="AktInWork.AktPredProverkiPdf" Mode="OneWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
+                            <Binding Source="{StaticResource BuEditorViewModel}" Path="AktInWork.AktProverkiPdf" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
         UpdateSourceTrigger="PropertyChanged" >
                                 <Binding.ValidationRules>
                                     <viewModel:ValidNumber/>
@@ -359,7 +359,7 @@
                                 <KeyBinding Key="Up" Command="{Binding Commands.NumberUp, Source={StaticResource BuEditorViewModel}}" />
                                 <KeyBinding Key="Down" Command="{Binding Commands.NumberDown, Source={StaticResource BuEditorViewModel}}" />
                             </TextBox.InputBindings>
-                            <Binding Source="{StaticResource BuEditorViewModel}" Path="AktInWork.AktPredidProverkiPdf" Mode="OneWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
+                            <Binding Source="{StaticResource BuEditorViewModel}" Path="AktInWork.AktPredidProverkiPdf" Mode="TwoWay"  ValidatesOnExceptions="True" NotifyOnValidationError="True"
         UpdateSourceTrigger="PropertyChanged" >
                                 <Binding.ValidationRules>
                                     <viewModel:ValidNumber/>
