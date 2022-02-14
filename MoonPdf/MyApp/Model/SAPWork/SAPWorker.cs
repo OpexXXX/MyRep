@@ -264,11 +264,26 @@ namespace MoonPdf
             {
 
             }
+
             try
             {
                 GuiTextField ErrorText = ((GuiTextField)SapSession.FindById("/wnd[1]/usr/txtMESSTXT1"));
                 if (ErrorText.Text.Contains("Ошибка при проверке на входе и сохранении")) //Если ошибка сохранения оригиналов
                 {
+                    GuiButton OKBtn = (GuiButton)SapSession.ActiveWindow.FindByName("btn[0]", "GuiButton"); //
+                    OKBtn.Press();
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+            try
+            {
+                GuiModalWindow ErrorWindow = ((GuiModalWindow)SapSession.FindById("/app/con[0]/ses[0]/wnd[1]"));
+                if (ErrorWindow.Text.Contains("норматив")) //Модалка с запросом на изменение норматива
+                {
+                    //TODO: Выяснить какая кнопка "Нет"
                     GuiButton OKBtn = (GuiButton)SapSession.ActiveWindow.FindByName("btn[0]", "GuiButton"); //
                     OKBtn.Press();
                 }
