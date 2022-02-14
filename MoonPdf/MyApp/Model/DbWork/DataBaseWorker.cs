@@ -149,6 +149,7 @@ namespace MyApp.Model
         static public List<Dictionary<String, String>> GetPlombsFromEdOb(string edenicaOborudovania)
         {
             List<Dictionary<String, String>> result = new List<Dictionary<string, string>>();
+            if (edenicaOborudovania == "") return result;
             SQLiteCommand CommandSQL = new SQLiteCommand(connector);
             CommandSQL.CommandText = "SELECT Type, Number, Place, InstallDate, Status  "
     + " FROM SAPPlomb WHERE EdenicaOborud LIKE '%" + edenicaOborudovania + "%' ";
