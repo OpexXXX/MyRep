@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
+﻿namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
 {
-    class Validators
+    internal class Validators
     {
     }
 }

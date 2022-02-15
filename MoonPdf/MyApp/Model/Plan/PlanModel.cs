@@ -2,10 +2,6 @@
 using MyApp.Model;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ATPWork.MyApp.Model.Plan
 {
@@ -73,7 +69,7 @@ namespace ATPWork.MyApp.Model.Plan
         public static int CalculationPremiumActBu(double buValue)
         {
             double tarif = 1.70303;
-            double ecoEffect = 0,premialFond;
+            double ecoEffect = 0, premialFond;
             double ecoValue = tarif * buValue / 1000;
             double RK = 30, SN = 30, SV = 30.4;
             if (ecoValue <= 5) ecoEffect = ecoValue * 0.5;
@@ -91,7 +87,7 @@ namespace ATPWork.MyApp.Model.Plan
             if ((1000 < ecoValue) && (ecoValue <= 2000)) ecoEffect = 69 + (ecoValue - 1000) * 0.03;
             if ((2000 < ecoValue)) ecoEffect = 99 + (ecoValue - 2000) * 0.02;
             premialFond = ecoEffect / ((1 + RK / 100 + SN / 100) * (1 + SV / 100));
-            int result = (int)Math.Round(premialFond * 1000); 
+            int result = (int)Math.Round(premialFond * 1000);
             return result;
         }
         public static int GetAvveragePO(string ear, string numberLS)
@@ -134,7 +130,7 @@ namespace ATPWork.MyApp.Model.Plan
         internal static string CreatePDF(List<PlanAbonent> planList)
         {
             var gg = ExcelWorker.MakeDataTableForPlan(planList);
-           string result =  ExcelWorker.CreatePdfReestrForPlan(gg);
+            string result = ExcelWorker.CreatePdfReestrForPlan(gg);
             return result;
         }
         private static List<PlanAbonent> _abonentList = new List<PlanAbonent>();

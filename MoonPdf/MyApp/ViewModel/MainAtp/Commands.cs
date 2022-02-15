@@ -1,10 +1,7 @@
 ﻿using MyApp.Model;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
@@ -33,7 +30,7 @@ namespace ATPWork.MyApp.ViewModel.MainAtp
 
         public DelegateCommand EnterAktInSAP { get; private set; }
 
-        private MainAtpVM mainAtpVm;
+        private readonly MainAtpVM mainAtpVm;
         private bool checkBysyWork()
         {
             return !mainAtpVm.WorkinAddAktFromPdf;
@@ -105,9 +102,9 @@ namespace ATPWork.MyApp.ViewModel.MainAtp
                 mainAtpVm.WorkinAddAktFromPdf = true;
                 await Task.Run(() =>
                 {
-                try
-                {
-                    MainAtpModel.EnterInSapAllPosibleAkts(new Progress<string>(mainAtpVm.SetProgressBarText),new Progress<double>(mainAtpVm.SetProgressBarValue));
+                    try
+                    {
+                        MainAtpModel.EnterInSapAllPosibleAkts(new Progress<string>(mainAtpVm.SetProgressBarText), new Progress<double>(mainAtpVm.SetProgressBarValue));
                     }
                     catch (Exception ex)
                     {
@@ -129,7 +126,7 @@ namespace ATPWork.MyApp.ViewModel.MainAtp
            {
                mainAtpVm.CreateMailAllComplete(new Progress<string>(mainAtpVm.SetProgressBarText));
            }, isCreateMail, null);
-            this.OpenFolderMail = new DelegateCommand("Открыть папку", 
+            this.OpenFolderMail = new DelegateCommand("Открыть папку",
                          OpenFolderWhisMail
                       , null, null);
             this.RefreshSapPlombTable = new DelegateCommand("Обновить базу пломб", async f =>
@@ -225,10 +222,10 @@ namespace ATPWork.MyApp.ViewModel.MainAtp
             }
             if (obj is AktTehProverki)
             {
- 
-                        MainAtpModel.AllAktInCurrentWork.Remove((AktTehProverki)obj);
-                        mainAtpVm.AllAktInCurrentWork.Remove((AktTehProverki)obj);
-                 
+
+                MainAtpModel.AllAktInCurrentWork.Remove((AktTehProverki)obj);
+                mainAtpVm.AllAktInCurrentWork.Remove((AktTehProverki)obj);
+
             }
 
 

@@ -2,16 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace MyApp.Model
 {
-    public class AktTehProverki:Abonent ,IComparer<AktTehProverki>
+    public class AktTehProverki : Abonent, IComparer<AktTehProverki>
     {
         private int numberMail;
         public int NumberMail
@@ -42,22 +37,23 @@ namespace MyApp.Model
         }
         public string MailName
         {
-            get {
+            get
+            {
                 string result;
                 if ((numberMail > 0) && DateMail != null) result = "исх.№91-" + numberMail + " от " + DateMail?.ToString("d");
                 else result = "Неотправлено";
                 return result;
             }
-            
+
         }
         public string AktName
         {
             get
             {
                 string result;
-                if (number>0 && DateWork!=null) result = "№91-" + number + " от " + DateWork?.ToString("d");
-                else result = NumberOfPagesInSoursePdf[0] + "стр.; "+ NumberOfPagesInSoursePdf[1] + "стр.;  незаполнен";
-               
+                if (number > 0 && DateWork != null) result = "№91-" + number + " от " + DateWork?.ToString("d");
+                else result = NumberOfPagesInSoursePdf[0] + "стр.; " + NumberOfPagesInSoursePdf[1] + "стр.;  незаполнен";
+
                 return result;
             }
         }
@@ -70,7 +66,7 @@ namespace MyApp.Model
             {
                 this._numberOfPagesInSoursePdf = value;
                 this.OnPropertyChanged("NumberOfPagesInSoursePdf");
-                
+
             }
         }
         public bool ProverkaFlag
@@ -95,7 +91,7 @@ namespace MyApp.Model
                 this.OnPropertyChanged("DopuskFlag");
             }
         }
-       
+
         private string sapNumberAkt;
         public string SapNumberAkt
         {
@@ -106,7 +102,7 @@ namespace MyApp.Model
                 this.OnPropertyChanged("SapNumberAkt");
             }
         }
-        
+
         private string puNewNumber;
         public string PuNewNumber
         {
@@ -127,7 +123,7 @@ namespace MyApp.Model
                 this.OnPropertyChanged("PuNewType");
             }
         }
-       
+
         private bool puOldMPI;
         public bool PuOldMPI
         {
@@ -197,14 +193,16 @@ namespace MyApp.Model
             {
                 this.dateMail = value;
                 this.OnPropertyChanged("DateMail");
-                this.OnPropertyChanged("MailName"); 
+                this.OnPropertyChanged("MailName");
             }
         }
         private DateTime? dateWork;
         public DateTime? DateWork
         {
             get { return this.dateWork; }
-            set { this.dateWork = value;
+            set
+            {
+                this.dateWork = value;
                 this.OnPropertyChanged("DateWork");
                 this.OnPropertyChanged("AktName");
             }
@@ -216,13 +214,16 @@ namespace MyApp.Model
             set { this.iD = value; this.OnPropertyChanged("ID"); }
         }
         private ObservableCollection<Plomba> _newPlombs = new ObservableCollection<Plomba>();
-        public ObservableCollection<Plomba> NewPlombs {
+        public ObservableCollection<Plomba> NewPlombs
+        {
             get { return _newPlombs; }
-            set { this._newPlombs =  value;
+            set
+            {
+                this._newPlombs = value;
                 this.OnPropertyChanged("NewPlombs");
             }
         }
-        
+
         private Agent agent_1;
         public Agent Agent_1
         {
@@ -235,13 +236,13 @@ namespace MyApp.Model
         private Agent agent_2;
         public Agent Agent_2
         {
-            get { return this.agent_2;  }
+            get { return this.agent_2; }
             set
             {
                 this.agent_2 = value; this.OnPropertyChanged("Agent_2");
             }
         }
-      
+
         private string namePdfFile;
         public string NamePdfFile
         {
@@ -259,14 +260,14 @@ namespace MyApp.Model
                 NumberOfPagesInSoursePdf.Add(page);
             }
         }
-        
+
         public bool checkToComplete()
         {
             bool result = true;
             if (agent_1 == null) result = false;
             if (dateWork == null) result = false;
             if (FIO == null || FIO == "") result = false;
-            if (number ==0) result = false;
+            if (number == 0) result = false;
             if (NumberLS == null || NumberLS == "") result = false;
             if (PuOldNumber == null || PuOldNumber == "") result = false;
             if (PuOldPokazanie == null || PuOldPokazanie == "") result = false;

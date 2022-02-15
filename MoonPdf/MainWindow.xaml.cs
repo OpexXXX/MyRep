@@ -1,21 +1,20 @@
-using System.IO;
-using System.Windows;
-using MoonPdfLib;
-using System.ComponentModel;
-using MyApp.Model;
-using ATPWork.MyApp.ViewModel;
 using ATPWork.MyApp.Model.Plan;
 using ATPWork.MyApp.Model.VnePlan;
 using ATPWork.MyApp.View;
+using ATPWork.MyApp.ViewModel;
+using MoonPdfLib;
+using MyApp.Model;
+using System.ComponentModel;
+using System.IO;
+using System.Windows;
 
 namespace MyApp
 {
-   
+
 
     public partial class MainWindow : Window
     {
-
-        MainAtpVM MainAtpViemModel;
+        private readonly MainAtpVM MainAtpViemModel;
 
 
         internal MoonPdfPanel MoonPdfPanel { get { return this.moonPdfPanel; } }
@@ -30,10 +29,10 @@ namespace MyApp
             MainAtpViemModel.ListBoxAktInWork = DatagridInWork;
             VnePlanModel.refreshZayavki();
             this.Loaded += MainWindow_Loaded;
-            
+
         }
 
-        void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
         }
 
@@ -46,25 +45,25 @@ namespace MyApp
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             double temp;
-            if(double.TryParse(BuValue.Text, out temp)) TextBU.Text = PlanWorkModel.CalculationPremiumActBu(temp).ToString();
-           
-                //Pass the filepath and filename to the StreamWriter Constructor
-                StreamWriter sw = new StreamWriter("Test.txt");
-                for (int i = 1; i < 50000; i+=500)
-                {
-                sw.WriteLine(i +"\t"+PlanWorkModel.CalculationPremiumActBu(i) );
+            if (double.TryParse(BuValue.Text, out temp)) TextBU.Text = PlanWorkModel.CalculationPremiumActBu(temp).ToString();
+
+            //Pass the filepath and filename to the StreamWriter Constructor
+            StreamWriter sw = new StreamWriter("Test.txt");
+            for (int i = 1; i < 50000; i += 500)
+            {
+                sw.WriteLine(i + "\t" + PlanWorkModel.CalculationPremiumActBu(i));
             }
-                //Write a line of text
-              
-                //Close the file
-                sw.Close();
-           
-           
+            //Write a line of text
+
+            //Close the file
+            sw.Close();
+
+
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-           
+
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)

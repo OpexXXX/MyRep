@@ -4,12 +4,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ATPWork.MyApp.Model.AktBuWork
 {
-   public enum VidNarusheniya
+    public enum VidNarusheniya
     {
         Vmeshatelstvo,
         Power,
@@ -104,7 +102,7 @@ namespace ATPWork.MyApp.Model.AktBuWork
 
         internal void FindCurrentAktProverki()
         {
-          AktTehProverki akt =  MainAtpModel.GetAtpFromComplete(NumberLS, DateWork);
+            AktTehProverki akt = MainAtpModel.GetAtpFromComplete(NumberLS, DateWork);
             if (akt != null)
             {
                 AktPedProverki = "№91/Е-" + akt.Number + " от " + akt.DateWork?.ToString("d") + "г.";
@@ -114,9 +112,9 @@ namespace ATPWork.MyApp.Model.AktBuWork
 
         internal void FindPrevousAktProverki()
         {
-            if(PrevProverki.Count>0)
+            if (PrevProverki.Count > 0)
             {
-                AktPedidProverki =  "№91/" + PrevProverki[(PrevProverki.Count - 1)][0]+" от "+ PrevProverki[(PrevProverki.Count - 1)][1]+ "г.";
+                AktPedidProverki = "№91/" + PrevProverki[(PrevProverki.Count - 1)][0] + " от " + PrevProverki[(PrevProverki.Count - 1)][1] + "г.";
             }
         }
 
@@ -148,8 +146,9 @@ namespace ATPWork.MyApp.Model.AktBuWork
         public string AktPredidProverkiPdf
         {
             get { return _aktPedidProverkiPdf; }
-            set {
-               
+            set
+            {
+
                 _aktPedidProverkiPdf = value;
                 this.OnPropertyChanged("AktPredidProverkiPdf");
             }
@@ -158,13 +157,15 @@ namespace ATPWork.MyApp.Model.AktBuWork
         public string AktPedidProverki
         {
             get { return _aktPedidProverki; }
-            set {
+            set
+            {
                 foreach (char ch in Path.GetInvalidFileNameChars())
                 {
-                    value =  value.Replace(ch, '-');
+                    value = value.Replace(ch, '-');
                 }
-                _aktPedidProverki = value; 
-                this.OnPropertyChanged("AktPedidProverki"); }
+                _aktPedidProverki = value;
+                this.OnPropertyChanged("AktPedidProverki");
+            }
         }
 
         private string _aktProverkiPdf;
@@ -177,13 +178,14 @@ namespace ATPWork.MyApp.Model.AktBuWork
         public string AktPedProverki
         {
             get { return _aktPedProverki; }
-            set {
+            set
+            {
                 foreach (char ch in Path.GetInvalidFileNameChars())
                 {
                     value = value.Replace(ch, '-');
                 }
-                _aktPedProverki = value; 
-                this.OnPropertyChanged("AktPedProverki"); 
+                _aktPedProverki = value;
+                this.OnPropertyChanged("AktPedProverki");
             }
         }
 
@@ -304,10 +306,11 @@ namespace ATPWork.MyApp.Model.AktBuWork
             }
         }
 
-       
+
         public string ConsoleRaschet
         {
-            get {
+            get
+            {
                 string result = "";
                 List<DateTime> startDate = new List<DateTime>();
                 if (PrevProverki.Count > 0)
@@ -335,8 +338,9 @@ namespace ATPWork.MyApp.Model.AktBuWork
 
                 result += " Ср. за 2017г. " + AvveragePO + "кВт*ч/мес; 2016г. " + AvverageP + "кВт*ч/мес; \n";
                 result += CountDay + " дней к расчету, \n";
-                return result; }
-            
+                return result;
+            }
+
         }
         public static int GetAvveragePO(string ear, string numberLS)
         {
@@ -555,10 +559,10 @@ namespace ATPWork.MyApp.Model.AktBuWork
         public void calcBu()
         {
             TimeSpan difDay;
-            difDay =(DateTime) DateWork - (DateTime)StartDate;
+            difDay = (DateTime)DateWork - (DateTime)StartDate;
             CountDay = difDay.Days + 1;
 
-          
+
 
             BuValuePower = (int)Math.Round(CountDay * 24 * Power);
 

@@ -2,23 +2,13 @@
 using MyApp.Model;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Markup;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ATPWork.MyApp.View
 {
@@ -61,7 +51,7 @@ namespace ATPWork.MyApp.View
 
             // Remove handler for oldValue.CollectionChanged
             var oldValueINotifyCollectionChanged = oldValue as INotifyCollectionChanged;
-                        if (null != oldValueINotifyCollectionChanged)
+            if (null != oldValueINotifyCollectionChanged)
             {
                 oldValueINotifyCollectionChanged.CollectionChanged -= new NotifyCollectionChangedEventHandler(newValueINotifyCollectionChanged_CollectionChanged);
             }
@@ -74,7 +64,8 @@ namespace ATPWork.MyApp.View
 
             editVM.NewPlombList = NewPlombItemsSource as ObservableCollection<Plomba>;
         }
-        void newValueINotifyCollectionChanged_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) // при изменениях внутри коллекции
+
+        private void newValueINotifyCollectionChanged_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) // при изменениях внутри коллекции
         {
             //Do your stuff here.
         }
@@ -110,13 +101,14 @@ namespace ATPWork.MyApp.View
 
             editVM.OldPlombList = OldPlombItemsSource as ObservableCollection<Plomba>;
         }
-        void oldValueINotifyCollectionChanged_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) // при изменениях внутри коллекции
+
+        private void oldValueINotifyCollectionChanged_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) // при изменениях внутри коллекции
         {
             //Do your stuff here.
         }
 
 
-        private PlombEditorVM editVM;
+        private readonly PlombEditorVM editVM;
         public PlombEditor()
         {
             InitializeComponent();

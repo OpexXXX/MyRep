@@ -4,16 +4,12 @@ using MyApp;
 using MyApp.Model;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
 {
-     public class Commands
+    public class Commands
     {
         public DelegateCommand GetDataFromDb { get; private set; }
         public DelegateCommand AddZayavka { get; private set; }
@@ -21,7 +17,7 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
         public DelegateCommand CreateReestr { get; private set; }
         public DelegateCommand CreateWordDoc { get; private set; }
 
-        private VnePlanVM vnePlanVM;
+        private readonly VnePlanVM vnePlanVM;
 
         public Commands(VnePlanVM vnePlanVM)
         {
@@ -128,7 +124,7 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
             }, null, null);
             this.CreateReestr = new DelegateCommand("Открыть в PDF", createPdf, null, null);
             this.CreateWordDoc = new DelegateCommand("Открыть в Word", createWord, null, null);
-            
+
         }
 
 
@@ -136,7 +132,7 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
 
         private void createWord(object obj)
         {
-            Process.Start(WordShablon.CreateVnePlanZayvka(vnePlanVM.ZayavkaToAdd)); 
+            Process.Start(WordShablon.CreateVnePlanZayvka(vnePlanVM.ZayavkaToAdd));
         }
 
         private void createPdf(object obj)

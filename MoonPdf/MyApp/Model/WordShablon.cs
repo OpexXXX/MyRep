@@ -1,20 +1,17 @@
-﻿using ATPWork.MyApp.Model.VnePlan;
+﻿using ATPWork.MyApp.Model.AktBuWork;
+using ATPWork.MyApp.Model.VnePlan;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using Microsoft.Office.Interop.Word;
+using MyApp.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TemplateEngine.Docx;
-using MyApp.Model;
-using Microsoft.Office.Interop.Word;
-using ATPWork.MyApp.Model.AktBuWork;
-using System.Windows;
-using iTextSharp.text.pdf;
-using iTextSharp.text;
-using System.Collections.ObjectModel;
-using System.Drawing.Imaging;
-using System.Drawing.Drawing2D;
 
 namespace ATPWork.MyApp.Model
 {
@@ -106,7 +103,7 @@ new FieldContent("MounthYearPo", GetMounth(akt.DateMail?.Month) + " " + akt.Date
             string fileName = System.IO.Path.GetRandomFileName() + ".pdf";
             string filePath = System.IO.Path.Combine(TempDocxDirectory, fileName);
             iTextSharp.text.Document doc = new iTextSharp.text.Document(PageSize.A4);
-           //
+            //
             var output = new FileStream(filePath, FileMode.Create);
             var writer = PdfWriter.GetInstance(doc, output);
             doc.Open();
@@ -114,30 +111,30 @@ new FieldContent("MounthYearPo", GetMounth(akt.DateMail?.Month) + " " + akt.Date
             foreach (var item in photoFile)
             {
                 string photoPathEn = ResizeImage(item);
-             
-             
+
+
                 var logo = iTextSharp.text.Image.GetInstance(photoPathEn);
 
 
                 if (logo.Height > logo.Width)
                 {
                     //Maximum height is 800 pixels.
-                   
+
                     Chunk c2 = new Chunk("");
                     doc.SetPageSize(PageSize.A4);
                     doc.NewPage();
                     float percentage = 0.0f;
                     percentage = 700 / logo.Height;
                     logo.ScalePercent(percentage * 100);
-                   
-                 
+
+
                     doc.Add(c2);
                     doc.Add(logo);
                 }
                 else
                 {
 
-                 
+
 
                     Chunk c2 = new Chunk("");
                     doc.SetPageSize(PageSize.A4.Rotate());
@@ -147,7 +144,7 @@ new FieldContent("MounthYearPo", GetMounth(akt.DateMail?.Month) + " " + akt.Date
                     float percentage = 0.0f;
                     percentage = 700 / logo.Width;
                     logo.ScalePercent(percentage * 100);
-                   
+
                     doc.Add(c2);
                     doc.Add(logo);
                 }
@@ -358,13 +355,13 @@ new FieldContent("PlaceB", agent.PlaceB)
         }
         internal static string CreatePdfPoliceMail(AktBu akt)
         {
-            string resultPdfPath ="",pathMail,pathOb1,pathOb2,photo;
+            string resultPdfPath = "", pathMail, pathOb1, pathOb2, photo;
 
             List<string> FileToBlind = new List<string>();
             pathMail = ConvertDocxToPdf(WordShablon.CreatePoliceMailForBuAkt(akt));
             FileToBlind.Add(pathMail);
             FileToBlind.Add(akt.AktBuPdf);
-            pathOb1 = ConvertDocxToPdf(WordShablon.CreateObysnenyaForBuAkt(akt,akt.Agent_1));
+            pathOb1 = ConvertDocxToPdf(WordShablon.CreateObysnenyaForBuAkt(akt, akt.Agent_1));
             FileToBlind.Add(pathOb1);
             if (akt.Agent_2 != null)
             {
@@ -374,7 +371,7 @@ new FieldContent("PlaceB", agent.PlaceB)
 
             if (akt.PhotoFile.Count > 0)
             {
-             photo = CreatePdfWithPhoto(akt);
+                photo = CreatePdfWithPhoto(akt);
                 FileToBlind.Add(photo);
             }
 
@@ -406,7 +403,7 @@ new FieldContent("PlaceB", agent.PlaceB)
 
 
 
-        private static int MaxImageSize = 1280;
+        private static readonly int MaxImageSize = 1280;
 
         private static string ResizeImage(string imagePath)
         {
@@ -434,15 +431,15 @@ new FieldContent("PlaceB", agent.PlaceB)
 
             }
             //
-            string savePath = Path.Combine(TempDocxDirectory,Path.GetRandomFileName()+".jpg");
+            string savePath = Path.Combine(TempDocxDirectory, Path.GetRandomFileName() + ".jpg");
 
             var jgpEncoder = GetEncoder(ImageFormat.Jpeg);
             var myEncoder = System.Drawing.Imaging.Encoder.Quality;
             var myEncoderParameters = new EncoderParameters(1);
             var myEncoderParameter = new EncoderParameter(myEncoder, 40L);
             myEncoderParameters.Param[0] = myEncoderParameter;
-          bm.Save(savePath, jgpEncoder, myEncoderParameters);
-         
+            bm.Save(savePath, jgpEncoder, myEncoderParameters);
+
             image.Dispose();
             return savePath;
         }
@@ -458,28 +455,29 @@ new FieldContent("PlaceB", agent.PlaceB)
             string fileName = System.IO.Path.GetRandomFileName() + ".pdf";
             string filePath = System.IO.Path.Combine(TempDocxDirectory, fileName);
 
-          
-                using (FileStream FStream = new System.IO.FileStream(filePath, System.IO.FileMode.Create))
-                {
 
-                    iTextSharp.text.Document doc = new iTextSharp.text.Document();
-                    iTextSharp.text.pdf.PdfCopy Writer = new iTextSharp.text.pdf.PdfCopy(doc, FStream);
-                    Writer.SetPdfVersion(PdfWriter.PDF_VERSION_1_5);
-                    Writer.SetFullCompression();
-                    Writer.CompressionLevel = PdfStream.BEST_COMPRESSION;
-                    doc.Open();
-                    iTextSharp.text.pdf.PdfReader ReaderDoc1;
-                    foreach (var filePathPdf in filePDF)
+            using (FileStream FStream = new System.IO.FileStream(filePath, System.IO.FileMode.Create))
+            {
+
+                iTextSharp.text.Document doc = new iTextSharp.text.Document();
+                iTextSharp.text.pdf.PdfCopy Writer = new iTextSharp.text.pdf.PdfCopy(doc, FStream);
+                Writer.SetPdfVersion(PdfWriter.PDF_VERSION_1_5);
+                Writer.SetFullCompression();
+                Writer.CompressionLevel = PdfStream.BEST_COMPRESSION;
+                doc.Open();
+                iTextSharp.text.pdf.PdfReader ReaderDoc1;
+                foreach (var filePathPdf in filePDF)
+                {
+                    if (filePathPdf != null)
                     {
-                        if (filePathPdf != null) { 
-                            ReaderDoc1 = new iTextSharp.text.pdf.PdfReader(filePathPdf);
-                            Writer.AddDocument(ReaderDoc1);
-                        }
+                        ReaderDoc1 = new iTextSharp.text.pdf.PdfReader(filePathPdf);
+                        Writer.AddDocument(ReaderDoc1);
                     }
-                    doc.Close();
-                    return filePath;
                 }
-           
+                doc.Close();
+                return filePath;
+            }
+
 
         }
     }

@@ -1,11 +1,6 @@
 ﻿using ATPWork.MyApp.Model.VnePlan;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
@@ -34,12 +29,14 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
                 OnPropertyChanged("AllZayvki");
             }
         }
-        private ICollectionView _abonentsForVnePlan ;
+        private ICollectionView _abonentsForVnePlan;
 
         public ICollectionView AbonentsForVnePlan
         {
             get { return _abonentsForVnePlan; }
-            set { _abonentsForVnePlan = value;
+            set
+            {
+                _abonentsForVnePlan = value;
                 OnPropertyChanged("AbonentsForVnePlan");
             }
         }
@@ -87,10 +84,10 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
                     AbonentsForVnePlan.Filter = str => ((str as VnePlanZayavka).NumberAktTehProverki == "");
                     ExpanderOpen = false;
                 }
-                else if(value.Length>3)
+                else if (value.Length > 3)
                 {
                     AbonentsForVnePlan.Filter = filterZayvki;
-                  ExpanderOpen = true;
+                    ExpanderOpen = true;
                 }
 
                 OnPropertyChanged("SearchStringView");
@@ -100,15 +97,15 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
         {
             VnePlanZayavka d = (VnePlanZayavka)obj;
 
-            bool a = (d.FIO != null)? (d.FIO.Contains(_searchStringView)) : false;
-               bool b = d.Adress != null ? d.Adress.Contains(_searchStringView) : false;
-               bool c = d.NumberLS != null ? d.NumberLS.Contains(_searchStringView) : false;
-                bool g = d.PuOldNumber != null ? d.PuOldNumber.Contains(_searchStringView) : false;
-               bool e = d.RegNumber != null ? d.RegNumber.ToString().Contains(_searchStringView) : false;
-                bool f = d.DateReg != null ? d.DateReg.ToString("d").Contains(_searchStringView) : false;
+            bool a = (d.FIO != null) ? (d.FIO.Contains(_searchStringView)) : false;
+            bool b = d.Adress != null ? d.Adress.Contains(_searchStringView) : false;
+            bool c = d.NumberLS != null ? d.NumberLS.Contains(_searchStringView) : false;
+            bool g = d.PuOldNumber != null ? d.PuOldNumber.Contains(_searchStringView) : false;
+            bool e = d.RegNumber != null ? d.RegNumber.ToString().Contains(_searchStringView) : false;
+            bool f = d.DateReg != null ? d.DateReg.ToString("d").Contains(_searchStringView) : false;
 
             return a || b || c || g || e || f;
-                    
+
         }
         private string _searchString;
         public string SearchString
@@ -116,8 +113,8 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
             get { return _searchString; }
             set
             {
-               
-                   _searchString = value;
+
+                _searchString = value;
                 OnPropertyChanged("SearchString");
             }
         }
@@ -129,8 +126,8 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
             AbonentsForVnePlan = CollectionViewSource.GetDefaultView(AllZayvki);
         }
         public int GetLastRegNumber()
-        { 
-            int result = VnePlanModel.GetLastNumber(); 
+        {
+            int result = VnePlanModel.GetLastNumber();
             return result;
         }
         public void refreshAbonentList()
@@ -139,13 +136,13 @@ namespace ATPWork.MyApp.ViewModel.VnePlanViewModel
             AbonentsForVnePlan = CollectionViewSource.GetDefaultView(VnePlanModel.Zayavki);
             AbonentsForVnePlan.GroupDescriptions.Clear();
             AbonentsForVnePlan.GroupDescriptions.Add(new PropertyGroupDescription("City"));
-            AbonentsForVnePlan.Filter = str => ((str as VnePlanZayavka).NumberAktTehProverki=="");
+            AbonentsForVnePlan.Filter = str => ((str as VnePlanZayavka).NumberAktTehProverki == "");
             AbonentsForVnePlan.SortDescriptions.Clear();
-            
+
             AbonentsForVnePlan.SortDescriptions.Add(new SortDescription("City", ListSortDirection.Ascending));
             AbonentsForVnePlan.SortDescriptions.Add(new SortDescription("Street", ListSortDirection.Ascending));
             AbonentsForVnePlan.SortDescriptions.Add(new SortDescription("House", ListSortDirection.Ascending));
-            AbonentsForVnePlan.SortDescriptions.Add(new SortDescription("Kvartira", ListSortDirection.Ascending)); 
+            AbonentsForVnePlan.SortDescriptions.Add(new SortDescription("Kvartira", ListSortDirection.Ascending));
             AbonentsForVnePlan.SortDescriptions.Add(new SortDescription("DateReg", ListSortDirection.Ascending));
             AbonentsForVnePlan.SortDescriptions.Add(new SortDescription("RegNumber", ListSortDirection.Ascending));
 

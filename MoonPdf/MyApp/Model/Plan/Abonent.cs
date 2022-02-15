@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ATPWork.MyApp.Model.Plan
 {
@@ -13,7 +11,7 @@ namespace ATPWork.MyApp.Model.Plan
         ElectricStove,
         Electroboiler
     }
-    public class PlanAbonent:Abonent
+    public class PlanAbonent : Abonent
     {
         public PlanAbonent(string numberLS, DateTime dateWork)
         {
@@ -75,7 +73,8 @@ namespace ATPWork.MyApp.Model.Plan
         }
         public string Raschet
         {
-            get {
+            get
+            {
                 string result = "";
                 List<DateTime> startDate = new List<DateTime>();
                 if (PrevProverki.Count > 0)
@@ -117,13 +116,13 @@ namespace ATPWork.MyApp.Model.Plan
                     start = DateWork.AddMonths(-3);
                 }
                 TimeSpan difDay = DateWork - (DateTime)start;
-               
+
                 result += " Ср. за 2017г. " + AvveragePO + "кВт*ч/мес; 2016г. " + AvverageP + "кВт*ч/мес; ";
                 result += (difDay.Days + 1) + " дней к расчету, ";
                 result += "норматив:" + Normativ + "кВт*ч/мес. БУ: " + PlanWorkModel.GetValueBuNormativ((DateTime)start, DateWork, Normativ).ToString() + "кВт*ч";
                 return result;
             }
-           
+
         }
         private List<DateTime> _prevPlan = new List<DateTime>();
         public List<DateTime> PrevPlan
@@ -158,7 +157,7 @@ namespace ATPWork.MyApp.Model.Plan
 
         private void getPrevousPlan()
         {
-          var dat =   DataBaseWorker.FindAbonentPlan(NumberLS);
+            var dat = DataBaseWorker.FindAbonentPlan(NumberLS);
             if (dat.Count > 0)
             {
                 if (dat.Contains(DateWork.ToString("d"))) dat.Remove(DateWork.ToString("d"));
@@ -167,13 +166,13 @@ namespace ATPWork.MyApp.Model.Plan
                 {
                     PrevPlan.Add(DateTime.Parse(item));
                 }
-               
+
             }
         }
         private void getPrevousAkt()
         {
-            List<string[]> result= DataBaseWorker.GetPrevusAktFenix(NumberLS);
-            if(result.Count>0)
+            List<string[]> result = DataBaseWorker.GetPrevusAktFenix(NumberLS);
+            if (result.Count > 0)
             {
                 foreach (var item in result)
                 {
@@ -187,7 +186,7 @@ namespace ATPWork.MyApp.Model.Plan
             Rooms = Int32.Parse(info["Rooms"].ToString());
             PeopleCount = Int32.Parse(info["People"].ToString());
             NormativKat = Int32.Parse(info["Kategorya"].ToString());
-           Normativ = DataBaseWorker.GetNormativ(PeopleCount, Rooms, NormativKat);
+            Normativ = DataBaseWorker.GetNormativ(PeopleCount, Rooms, NormativKat);
         }
         private void addPlombs()
         {

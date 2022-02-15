@@ -1,10 +1,6 @@
 ﻿using ATPWork.MyApp.Model.Plan;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ATPWork.MyApp.ViewModel.PlanViewModel
 {
@@ -76,7 +72,7 @@ namespace ATPWork.MyApp.ViewModel.PlanViewModel
 
         internal void CreatePdf()
         {
-            
+
         }
     }
 }

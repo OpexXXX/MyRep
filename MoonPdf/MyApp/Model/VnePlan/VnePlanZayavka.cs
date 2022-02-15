@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ATPWork.MyApp.Model.VnePlan
 {
-    public class VnePlanZayavka:Abonent
+    public class VnePlanZayavka : Abonent
     {
         public string BriefInformation
         {
             get
             {
                 string result = "";
-                if(FIO=="") result += base.FIO + "\n " +base.Adress + "\n " + base.NumberLS;
+                if (FIO == "") result += base.FIO + "\n " + base.Adress + "\n " + base.NumberLS;
                 return result;
             }
 
@@ -100,7 +96,7 @@ namespace ATPWork.MyApp.Model.VnePlan
                 this.OnPropertyChanged("Prichina");
             }
         }
-      
+
         private string _numberAktTehProverki;
         public string NumberAktTehProverki
         {
@@ -111,7 +107,7 @@ namespace ATPWork.MyApp.Model.VnePlan
                 this.OnPropertyChanged("NumberAktTehProverki");
             }
         }
-        private  string _phoneNumbers;
+        private string _phoneNumbers;
         public string PhoneNumbers
         {
             get { return this._phoneNumbers; }

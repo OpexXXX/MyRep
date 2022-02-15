@@ -6,8 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -15,7 +13,7 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
 {
     public class Commands
     {
-        private BuEditorViewModel BuEditVM;
+        private readonly BuEditorViewModel BuEditVM;
 
         public DelegateCommand GetDataFromDbByNumberLs { get; private set; }
         public DelegateCommand GetDataFromDbByNumberPu { get; private set; }
@@ -317,7 +315,7 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
         private bool canCalcRaschetBUCange(object obj)
         {
 
-          //  if (BuEditVM.AktInWork.FIO == null) return false;
+            //  if (BuEditVM.AktInWork.FIO == null) return false;
             if (BuEditVM.AktInWork.DateWork == null) return false;
             if (BuEditVM.AktInWork.StartDate == null) return false;
 
@@ -327,7 +325,7 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
         {
 
             if (!canCalcRaschetBUCange(null) |
-                BuEditVM.AktInWork.FIO == null|
+                BuEditVM.AktInWork.FIO == null |
                  BuEditVM.AktInWork.DateMail == null |
                 BuEditVM.AktInWork.NumberMail == 0 |
                 BuEditVM.AktInWork.Number == 0
@@ -336,7 +334,7 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
         }
         private bool canOpenAgent1Docx(object obj)
         {
-            if ( !canCreateSbitMail(null) ||
+            if (!canCreateSbitMail(null) ||
                 BuEditVM.AktInWork.Narushenie == null ||
                 BuEditVM.AktInWork.Agent_1 == null
                  ) return false;
@@ -360,7 +358,7 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
         private bool canOpenFullMailDocPDF(object obj)
         {
             if (!canCreateSbitMail(null) ||
-                !canOpenAgent1Docx(null) 
+                !canOpenAgent1Docx(null)
                  )
             {
                 return false;
@@ -369,7 +367,7 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
         }
         private bool canOpenPhotoPDF(object obj)
         {
-            if (BuEditVM.AktInWork.PhotoFile?.Count==0) return false;
+            if (BuEditVM.AktInWork.PhotoFile?.Count == 0) return false;
             return true;
         }
 

@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 
 namespace ATPWork.MyApp.ViewModel.AtpEditor
 {
-   public class ValidNumber:ValidationRule
+    public class ValidNumber : ValidationRule
     {
         public override ValidationResult Validate
      (object value, System.Globalization.CultureInfo cultureInfo)
@@ -32,8 +28,8 @@ namespace ATPWork.MyApp.ViewModel.AtpEditor
             }
 
             var rt = value.ToString().Length;
-            if ( (value.ToString().Length < 10)) return new ValidationResult(false, "Введите не менее 10 символов для поиска");
-           
+            if ((value.ToString().Length < 10)) return new ValidationResult(false, "Введите не менее 10 символов для поиска");
+
             return ValidationResult.ValidResult;
         }
     }
@@ -74,8 +70,8 @@ namespace ATPWork.MyApp.ViewModel.AtpEditor
                 return new ValidationResult(false, "Квартал должен состоять из чисел");
             }
 
- 
-            if (res>4||res<1) return new ValidationResult(false, "Введите число от 1 до 4х");
+
+            if (res > 4 || res < 1) return new ValidationResult(false, "Введите число от 1 до 4х");
 
             return ValidationResult.ValidResult;
         }

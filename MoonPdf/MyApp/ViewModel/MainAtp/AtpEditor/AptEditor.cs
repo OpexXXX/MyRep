@@ -1,13 +1,5 @@
-﻿using ATPWork.MyApp.View;
-using ATPWork.MyApp.ViewModel;
-using ATPWork.MyApp.ViewModel.PlombEditorVm;
-using MyApp.Model;
-using System;
-using System.Collections.Generic;
+﻿using MyApp.Model;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ATPWork.MyApp.ViewModel.AtpEditor
 {
@@ -26,11 +18,11 @@ namespace ATPWork.MyApp.ViewModel.AtpEditor
         }
         public bool CheckFindByLs()
         {
-            return  (AktInWork != null) ? ((AktInWork.NumberLS != null) ? AktInWork.NumberLS.ToString().Length > 9 : false) : false; 
+            return (AktInWork != null) ? ((AktInWork.NumberLS != null) ? AktInWork.NumberLS.ToString().Length > 9 : false) : false;
         }
         public bool CheckFindByPu()
         {
-            return (AktInWork != null) ? ((AktInWork.PuOldNumber!=null)? AktInWork.PuOldNumber.ToString().Length > 4:false) : false;
+            return (AktInWork != null) ? ((AktInWork.PuOldNumber != null) ? AktInWork.PuOldNumber.ToString().Length > 4 : false) : false;
         }
         #endregion
         private static ObservableCollection<Agent> _alentList;
@@ -46,16 +38,18 @@ namespace ATPWork.MyApp.ViewModel.AtpEditor
             set { _puList = value; }
         }
         private AktTehProverki _aktInWork;
-        public AktTehProverki AktInWork {
+        public AktTehProverki AktInWork
+        {
             get { return _aktInWork; }
-            set {
+            set
+            {
                 _aktInWork = value;
                 OnPropertyChanged("AktInWork");
             }
         }
         public AtpEditorVM()
         {
-           Commands = new Commands(this);
+            Commands = new Commands(this);
             GetListForComboBox();
             MainAtpModel.ComboRefresh += GetListForComboBox;
         }
@@ -65,6 +59,6 @@ namespace ATPWork.MyApp.ViewModel.AtpEditor
             PuList = new ObservableCollection<PriborUcheta>(MainAtpModel.NewPuList);
             AgentList = new ObservableCollection<Agent>(MainAtpModel.AgentList);
         }
-       
+
     }
 }

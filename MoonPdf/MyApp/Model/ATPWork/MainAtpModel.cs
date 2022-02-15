@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using ATPWork.MyApp.Model;
+using ATPWork.Properties;
+using Ionic.Zip;
 using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.parser;
-using System.IO;
-using System.Windows;
-using Ionic.Zip;
-using System.Text;
 using MoonPdf;
-using ATPWork.Properties;
-using ATPWork.MyApp.Model;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Windows;
 
 namespace MyApp.Model
 
 {
-    static class MainAtpModel
+    internal static class MainAtpModel
     {
         #region Коллекции для comboBox's
         public delegate void ComboListRefreshHandler();
@@ -405,8 +404,8 @@ namespace MyApp.Model
                 string pathPdf = WordShablon.ConvertDocxToPdf(pathDocX);
                 progress.Report("Клеим письмо с реестром");
 
-                string pathMailPdf =System.IO.Path.Combine(currentMailDirectory, mailName + " .pdf");
-                margePdfForMail(pathMailPdf, pathPdf, currentMailDirectory+ "\\Reestr.pdf");
+                string pathMailPdf = System.IO.Path.Combine(currentMailDirectory, mailName + " .pdf");
+                margePdfForMail(pathMailPdf, pathPdf, currentMailDirectory + "\\Reestr.pdf");
                 progress.Report("Архивируем для отправки.");
                 using (ZipFile zip = new ZipFile()) // Создаем объект для работы с архивом
                 {
@@ -416,12 +415,12 @@ namespace MyApp.Model
                     if (File.Exists(currentMailDirectory + "\\" + "Проверки.pdf")) zip.AddFile(currentMailDirectory + "\\" + "Проверки.pdf", "\\"); // Кладем в архив одиночный файл
                     if (File.Exists(currentMailDirectory + "\\" + "Допуски.pdf")) zip.AddFile(currentMailDirectory + "\\" + "Допуски.pdf", "\\"); // Кладем в архив одиночный файл
                     if (File.Exists(currentMailDirectory + "\\" + "Реестр.xlsx")) zip.AddFile(currentMailDirectory + "\\" + "Реестр.xlsx", "\\"); // Кладем в архив одиночный файл
-                    if (File.Exists(pathMailPdf)) zip.AddFile(pathMailPdf, "\\"); 
+                    if (File.Exists(pathMailPdf)) zip.AddFile(pathMailPdf, "\\");
                     var g = zip.Count;
                     zip.Save(currentMailDirectory + "\\" + mailName + ".zip"); // Создаем архив   
                     FileInfo f = new FileInfo(currentMailDirectory + "\\" + mailName + ".zip");
-                    long filesize = f.Length/(1024); // file size in bytes  
-                    progress.Report("Размер архива: "+filesize.ToString()+"кБ");
+                    long filesize = f.Length / (1024); // file size in bytes  
+                    progress.Report("Размер архива: " + filesize.ToString() + "кБ");
                 }
                 progress.Report("Обновляем состояние актов");
                 foreach (AktTehProverki item in TempList)
@@ -441,7 +440,7 @@ namespace MyApp.Model
 
         private static void margePdfForMail(string pathOutPdf, string firstPDF, string secondPDF)
         {
-           
+
             try
             {
                 using (FileStream FStream = new System.IO.FileStream(pathOutPdf, System.IO.FileMode.Create))
@@ -524,7 +523,6 @@ namespace MyApp.Model
                 MessageBox.Show(ex.Message);
                 return;
             }
-            int i = 0;
             foreach (var item in akts)
             {
                 if ((File.Exists(System.IO.Path.Combine(AktDirektory, item.NamePdfFile))))
@@ -594,7 +592,7 @@ namespace MyApp.Model
                 MessageBox.Show(ex.Message);
                 return;
             }
-           
+
             AllAkt.Sort(delegate (AktTehProverki akt1, AktTehProverki akt2)
             {
                 if (akt1.DateWork > akt2.DateWork) return 1;
@@ -602,13 +600,13 @@ namespace MyApp.Model
                 else if (akt1.Number > akt2.Number) return 1;
                 else if (akt1.Number < akt2.Number) return -1;
 
-               
+
                 return 0;
             });
 
             foreach (var item in AllAkt)
             {
-                if ((item.SapNumberAkt == ""|| item.SapNumberAkt ==null) && (File.Exists(System.IO.Path.Combine(AktDirektory, item.NamePdfFile))))
+                if ((item.SapNumberAkt == "" || item.SapNumberAkt == null) && (File.Exists(System.IO.Path.Combine(AktDirektory, item.NamePdfFile))))
                 {
                     try
                     {

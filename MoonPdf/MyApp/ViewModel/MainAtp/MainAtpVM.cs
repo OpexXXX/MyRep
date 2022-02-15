@@ -2,11 +2,7 @@
 using MoonPdfLib;
 using MyApp.Model;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -100,7 +96,7 @@ namespace ATPWork.MyApp.ViewModel
             get { return _currentFilePdf; }
             set
             {
-                if ((_currentFilePdf != value || PdfViewer?.CurrentSource==null)&& PdfViewer !=null)
+                if ((_currentFilePdf != value || PdfViewer?.CurrentSource == null) && PdfViewer != null)
                 {
                     _currentFilePdf = value;
                     try
@@ -161,7 +157,7 @@ namespace ATPWork.MyApp.ViewModel
                 int result = 0;
                 foreach (AktTehProverki item in AllAkt)
                 {
-                    if (item.SapNumberAkt == null|| item.SapNumberAkt=="") result++;
+                    if (item.SapNumberAkt == null || item.SapNumberAkt == "") result++;
                 }
                 return result;
             }

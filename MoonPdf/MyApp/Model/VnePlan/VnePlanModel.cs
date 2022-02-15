@@ -1,14 +1,11 @@
 ﻿using MyApp.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace ATPWork.MyApp.Model.VnePlan
 {
-   static class VnePlanModel
+    internal static class VnePlanModel
     {
         public delegate void AbonentsRefreshHandler();
         public static event AbonentsRefreshHandler AbonentsRefresh;
@@ -31,23 +28,25 @@ namespace ATPWork.MyApp.Model.VnePlan
         private static List<VnePlanZayavka> _zayvki = new List<VnePlanZayavka>();
         public static List<VnePlanZayavka> Zayavki
         {
-            get { return _zayvki;}
-            set { _zayvki = value;}
+            get { return _zayvki; }
+            set { _zayvki = value; }
         }
         public static List<VnePlanZayavka> UnCompleteZayavki
         {
-            get {
+            get
+            {
 
                 List<VnePlanZayavka> tempList = new List<VnePlanZayavka>();
                 foreach (var item in Zayavki)
                 {
                     if (item.NumberAktTehProverki == "")
                         tempList.Add(item);
-                }    
-                   
+                }
 
-                return tempList; }
-            
+
+                return tempList;
+            }
+
         }
 
 
@@ -63,22 +62,22 @@ namespace ATPWork.MyApp.Model.VnePlan
             int ii = 0;
             foreach (var item in Zayavki)
             {
-                if (item.NumberLS!=""&& item.NumberAktTehProverki=="")
+                if (item.NumberLS != "" && item.NumberAktTehProverki == "")
                 {
-                List<string[]> akts = new List<string[]>();
+                    List<string[]> akts = new List<string[]>();
 
                     List<string[]> result = DataBaseWorker.GetPrevusAktFenix(item.NumberLS);
                     List<string[]> aktsInApp = MainAtpModel.GetAktsForVneplan(item.NumberLS);
-                    if (result.Count>0)
+                    if (result.Count > 0)
                     {
                         akts.AddRange(result);
                     }
-                    if(aktsInApp.Count>0)
+                    if (aktsInApp.Count > 0)
                     {
                         akts.AddRange(aktsInApp);
                     }
 
-                    if (akts.Count>0)
+                    if (akts.Count > 0)
                     {
                         DateTime maxDateAkt = item.DateReg;
                         string numberMaxAkt = "";
@@ -94,7 +93,7 @@ namespace ATPWork.MyApp.Model.VnePlan
                         if (maxDateAkt > item.DateReg)
                         {
                             item.NumberAktTehProverki = "№91-Е-" + numberMaxAkt + " от " + maxDateAkt.ToString("d");
-                        } 
+                        }
                     }
                 }
             }
@@ -109,7 +108,7 @@ namespace ATPWork.MyApp.Model.VnePlan
             List<VnePlanZayavka> list = new List<VnePlanZayavka>();
             foreach (var item in Zayavki)
             {
-                if (city.Contains(item.City)&&item.NumberAktTehProverki=="")list.Add(item);
+                if (city.Contains(item.City) && item.NumberAktTehProverki == "") list.Add(item);
             }
             if (list.Count > 0) return CreatePDF(list);
             else return "";
@@ -131,7 +130,7 @@ namespace ATPWork.MyApp.Model.VnePlan
         {
             foreach (var item in UnCompleteZayavki)
             {
-                if (item.NumberLS.Length ==12)
+                if (item.NumberLS.Length == 12)
                 {
                     List<Dictionary<String, String>> resultSearchAbonent;
                     resultSearchAbonent = DataBaseWorker.GetAbonentFromLS(item.NumberLS);
@@ -144,12 +143,12 @@ namespace ATPWork.MyApp.Model.VnePlan
             }
             var d = ExcelWorker.MakeDataTableForVnePlan(VnePlanModel.UnCompleteZayavki);
 
-         return   ExcelWorker.CreatePdfReestrForVnePlan(d);
+            return ExcelWorker.CreatePdfReestrForVnePlan(d);
         }
 
         public static string CreatePDF(List<VnePlanZayavka> zayavki)
         {
-            
+
             foreach (var item in zayavki)
             {
                 if (item.NumberLS.Length == 12)

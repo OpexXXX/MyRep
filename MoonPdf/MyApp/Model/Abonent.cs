@@ -1,12 +1,8 @@
 ﻿using MyApp.Model;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ATPWork.MyApp.Model
 {
@@ -22,9 +18,9 @@ namespace ATPWork.MyApp.Model
                 this.OnPropertyChanged("Ustanovka");
             }
         }
-       
 
-       
+
+
         private string edOborudovania;
         public string EdOborudovania
         {
@@ -105,7 +101,9 @@ namespace ATPWork.MyApp.Model
         public int Kvartira
         {
             get { return _kvartira; }
-            set { _kvartira = value;
+            set
+            {
+                _kvartira = value;
                 this.OnPropertyChanged("Adress");
             }
         }
@@ -114,7 +112,7 @@ namespace ATPWork.MyApp.Model
             get
             {
                 string result = "";
-                if (City?.Length>0)
+                if (City?.Length > 0)
                 {
                     result += City;
                     result += ", " + Street;
@@ -187,7 +185,7 @@ namespace ATPWork.MyApp.Model
             this.OnPropertyChanged("BriefInformation");
         }
         public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName]string prop = "")
+        public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }

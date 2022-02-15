@@ -1,30 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyApp.Model
+﻿namespace MyApp.Model
 {
-    public class Plomba 
+    public class Plomba
     {
         private string type;
         public string Type
         {
             get { return this.type; }
-            set { this.type = value;}
+            set { this.type = value; }
         }
         private string number;
         public string Number
         {
             get { return this.number; }
-            set { this.number = value;}
+            set { this.number = value; }
         }
         private string place;
         public string Place
         {
             get { return this.place; }
-            set { this.place = value;}
+            set { this.place = value; }
         }
         private bool _oldPlomb;
         public bool OldPlomb
@@ -36,7 +30,7 @@ namespace MyApp.Model
         public bool Demontage
         {
             get { return this._demontage; }
-            set { this._demontage = value;}
+            set { this._demontage = value; }
         }
         private string _installDate;
         public string InstallDate
@@ -51,7 +45,7 @@ namespace MyApp.Model
             set { this._status = value; }
         }
 
-        public Plomba(string type, string number, string place, bool remove = false, bool old =false,  string status = "",string dateInstall = "")
+        public Plomba(string type, string number, string place, bool remove = false, bool old = false, string status = "", string dateInstall = "")
         {
             this.Type = type;
             this.Number = number;
@@ -66,5 +60,5 @@ namespace MyApp.Model
             return Number;
         }
     }
-    
+
 }

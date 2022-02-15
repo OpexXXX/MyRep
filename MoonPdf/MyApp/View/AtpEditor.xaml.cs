@@ -1,21 +1,8 @@
 ﻿using ATPWork.MyApp.ViewModel.AtpEditor;
 using MyApp.Model;
-using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ATPWork.MyApp.View
 {
@@ -24,7 +11,7 @@ namespace ATPWork.MyApp.View
     /// </summary>
     public partial class AtpEditor : UserControl
     {
-       private AtpEditorVM AtpEditVM;
+        private readonly AtpEditorVM AtpEditVM;
 
         #region AtpInWork Depency
         public static readonly DependencyProperty AtpInWorkProperty =
@@ -45,7 +32,7 @@ namespace ATPWork.MyApp.View
        DependencyPropertyChangedEventArgs e // Event arguments.
    )
         {
-           
+
             var control = d as AtpEditor;
             if (control != null)
             {

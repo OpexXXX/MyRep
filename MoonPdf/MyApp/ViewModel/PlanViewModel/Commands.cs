@@ -1,16 +1,8 @@
 ﻿using ATPWork.MyApp.Model.Plan;
-using MyApp.Model;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Data;
-using System.Windows.Input;
 
 namespace ATPWork.MyApp.ViewModel.PlanViewModel
 {
@@ -18,9 +10,9 @@ namespace ATPWork.MyApp.ViewModel.PlanViewModel
     {
         public DelegateCommand CreatePdf { get; private set; }
         public DelegateCommand CreatePdfForVnePlan { get; private set; }
-        
+
         public DelegateCommand CreatePdfFromGroup { get; private set; }
-        private PlanVM planVM;
+        private readonly PlanVM planVM;
         public Commands(PlanVM planVM)
         {
             this.planVM = planVM;
@@ -37,7 +29,7 @@ namespace ATPWork.MyApp.ViewModel.PlanViewModel
         private void createPdfForVneplan(object obj)
         {
             string path = PlanWorkModel.CreatePDFforVneplan();
-            if(path!="") Process.Start(path);
+            if (path != "") Process.Start(path);
         }
 
         private bool CanCreateMail()
@@ -48,7 +40,7 @@ namespace ATPWork.MyApp.ViewModel.PlanViewModel
 
         private void createPdf(object obj)
         {
-            var gg = (CollectionViewGroup) obj;
+            var gg = (CollectionViewGroup)obj;
             List<PlanAbonent> ggg = new List<PlanAbonent>();
             foreach (PlanAbonent item in gg.Items)
             {
@@ -56,7 +48,7 @@ namespace ATPWork.MyApp.ViewModel.PlanViewModel
             }
             if (ggg.Count > 0)
             {
-               string path = PlanWorkModel.CreatePDF(ggg);
+                string path = PlanWorkModel.CreatePDF(ggg);
                 Process.Start(path);
 
             }

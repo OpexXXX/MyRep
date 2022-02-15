@@ -1,15 +1,11 @@
 ﻿using ATPWork.MyApp.Model.AktBuWork;
 using MyApp.Model;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
 {
-    public class BuEditorViewModel:ViewModelBase
+    public class BuEditorViewModel : ViewModelBase
     {
         #region Команды
         private Commands _commands;
@@ -68,7 +64,7 @@ namespace ATPWork.MyApp.ViewModel.MainAktBu.BuEditor
             get { return _narusheniya; }
             set { _narusheniya = value; }
         }
-        private List<string> _vidNormativa = new List<string>() { "Без электроплиты", "С электроплитой","Водонагреватель", "Электробойлер" };
+        private List<string> _vidNormativa = new List<string>() { "Без электроплиты", "С электроплитой", "Водонагреватель", "Электробойлер" };
         public List<string> VidNormativa
         {
             get { return _vidNormativa; }

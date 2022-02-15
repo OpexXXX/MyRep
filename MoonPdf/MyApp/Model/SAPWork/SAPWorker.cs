@@ -366,7 +366,7 @@ namespace MoonPdf
                     {
                         GridPlomb.SelectAll(); //ВЫделяем все
                         demontagePlombBtn.Press(); //Установить
-                                                   /*Окно демонтажа пломбы*/
+                        /*Окно демонтажа пломбы*/
                         try
                         {
                             GuiCTextField dateDemontagePlomb = (GuiCTextField)SapSession.ActiveWindow.FindByName("/SAPCE/IURU_SEALS_CHANGED-DREMOV", "GuiCTextField");//Дата демонтажа пломбы /SAPCE/IURU_SEALS_CHANGED-DINST
@@ -379,7 +379,6 @@ namespace MoonPdf
                         }
                         catch (Exception)
                         {
-                            int i = 0;
                         }
 
                         /*******************************/
@@ -415,7 +414,7 @@ namespace MoonPdf
                         {
                             GridPlomb.SelectAll(); //ВЫделяем все
                             ustanovitPlombBtn.Press(); //Установить
-                                                       /*Окно установки пломбы*/
+                            /*Окно установки пломбы*/
                             GuiButton findMaterial = (GuiButton)SapSession.ActiveWindow.FindByName("ISU_FINDER_DIALOG", "GuiButton"); //ISU_FINDER_DIALOG
                             GuiButton copyToAll = (GuiButton)SapSession.ActiveWindow.FindByName("btn[5]", "GuiButton"); //Скопировать во все
                             findMaterial.Press();

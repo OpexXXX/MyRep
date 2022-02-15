@@ -1,18 +1,10 @@
-﻿using ATPWork.MyApp.View;
-using MyApp.Model;
-using System;
+﻿using MyApp.Model;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace ATPWork.MyApp.ViewModel.PlombEditorVm
 {
-    public class PlombEditorVM :ViewModelBase
+    public class PlombEditorVM : ViewModelBase
     {
         #region Команды
         private Commands _commands;
@@ -48,18 +40,20 @@ namespace ATPWork.MyApp.ViewModel.PlombEditorVm
 
         public bool OldPlomb
         {
-            get { return OldPlombList.Count>0; }
+            get { return OldPlombList.Count > 0; }
         }
 
         public List<string> PlombsNumberList
         {
-            get {
+            get
+            {
                 List<string> result = new List<string>();
                 foreach (Plomba item in NewPlombList)
                 {
                     result.Add(item.Number);
                 }
-                return result; }
+                return result;
+            }
         }
         private static ObservableCollection<string> _typePL = new ObservableCollection<string>();
         public static ObservableCollection<string> typePL
@@ -77,7 +71,9 @@ namespace ATPWork.MyApp.ViewModel.PlombEditorVm
         public ObservableCollection<Plomba> NewPlombList
         {
             get { return this._pl; }
-            set { this._pl = value;
+            set
+            {
+                this._pl = value;
                 OnPropertyChanged("NewPlombList");
             }
         }

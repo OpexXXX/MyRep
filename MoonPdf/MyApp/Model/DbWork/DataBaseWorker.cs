@@ -1,41 +1,35 @@
 ﻿using ATPWork.MyApp.Model.VnePlan;
-using ATPWork.Properties;
-using ExcelDataReader;
-using MyApp.Model;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
-using System.Data.OleDb;
 using System.Data.SQLite;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows;
 
 namespace MyApp.Model
 {
-    static public class DataBaseWorker
+    public static class DataBaseWorker
     {
         public static bool ConnectorBusy()
         {
             return connector.State != ConnectionState.Executing;
         }
+
         /// <summary>
         /// Коннектор к рабочей базе данных
         /// </summary>
-        static SQLiteConnection connector = new SQLiteConnection("Data Source=filename.db; Version=3;PRAGMA synchronous = OFF");
+        private static readonly SQLiteConnection connector = new SQLiteConnection("Data Source=filename.db; Version=3;PRAGMA synchronous = OFF");
+
         /// <summary>
         /// Коннектор к базе данных заявок
         /// </summary>
-        static SQLiteConnection connectorOplombirovki = new SQLiteConnection("Data Source=oplombirovki.db; Version=3;");
+        private static readonly SQLiteConnection connectorOplombirovki = new SQLiteConnection("Data Source=oplombirovki.db; Version=3;");
         /// <summary>
         /// Возвращает список монтируеммых ПУ
         /// </summary>
         /// <param name="spisokPU">ссылка на список ПУ</param>
         public static void Initial()
         {
-            
+
             connector.Open();
             SQLiteCommand cmd = connector.CreateCommand();
             cmd.CommandText = "PRAGMA synchronous = OFF";
@@ -146,7 +140,7 @@ namespace MyApp.Model
         /// </summary>
         /// <param name="edenicaOborudovania"Еденица оборудования></param>
         /// <returns></returns>
-        static public List<Dictionary<String, String>> GetPlombsFromEdOb(string edenicaOborudovania)
+        public static List<Dictionary<String, String>> GetPlombsFromEdOb(string edenicaOborudovania)
         {
             List<Dictionary<String, String>> result = new List<Dictionary<string, string>>();
             if (edenicaOborudovania == "") return result;
@@ -177,11 +171,11 @@ namespace MyApp.Model
                 return null;
             }
         }
-/// <summary>
-/// Получение листа проверок, где [0] = Номер акта, [1] = дата
-/// </summary>
-/// <param name="numberLS"></param>
-/// <returns></returns>
+        /// <summary>
+        /// Получение листа проверок, где [0] = Номер акта, [1] = дата
+        /// </summary>
+        /// <param name="numberLS"></param>
+        /// <returns></returns>
         internal static List<string[]> GetPrevusAktFenix(string numberLS)
         {
             List<string[]> result = new List<string[]>(2);
@@ -192,10 +186,9 @@ namespace MyApp.Model
             {
                 SQLiteDataReader r = CommandSQL.ExecuteReader();
                 string line = String.Empty;
-                int i = 0;
                 while (r.Read())
                 {
-                    result.Add(new string[] { r["NumberAkt"].ToString(), r["Date"].ToString()});
+                    result.Add(new string[] { r["NumberAkt"].ToString(), r["Date"].ToString() });
                 }
                 r.Close();
                 return result;
@@ -211,7 +204,7 @@ namespace MyApp.Model
         /// </summary>
         /// <param name="numberLS">Улица</param>
         /// <returns>Лист словарей с данными если успешно, null если не найден</returns>
-        static public List<Dictionary<String, String>> GetAbonentFromStreet(string numberLS)
+        public static List<Dictionary<String, String>> GetAbonentFromStreet(string numberLS)
         {
             List<Dictionary<String, String>> result = new List<Dictionary<string, string>>();
             SQLiteCommand CommandSQL = new SQLiteCommand(connector);
@@ -256,7 +249,7 @@ namespace MyApp.Model
         /// </summary>
         /// <param name="numberLS">Номер лицевого счета</param>
         /// <returns>Лист словарей с данными если успешно, null если не найден</returns>
-        static public List<Dictionary<String, String>> GetAbonentFromLS(string numberLS)
+        public static List<Dictionary<String, String>> GetAbonentFromLS(string numberLS)
         {
             List<Dictionary<String, String>> result = new List<Dictionary<string, string>>();
             SQLiteCommand CommandSQL = new SQLiteCommand(connector);
@@ -300,7 +293,7 @@ namespace MyApp.Model
         /// </summary>
         /// <param name="name">Номер ПУ</param>
         /// <returns>Лист словарей с данными если успешно, null если не найден</returns>
-        static public List<Dictionary<String, String>> GetAbonentFromDbByName(string name)
+        public static List<Dictionary<String, String>> GetAbonentFromDbByName(string name)
         {
             List<Dictionary<String, String>> result = new List<Dictionary<string, string>>();
             SQLiteCommand CommandSQL = new SQLiteCommand(connector);
@@ -311,7 +304,7 @@ namespace MyApp.Model
             int i = 0;
             while (r.Read())
             {
-                
+
                 result.Add(new Dictionary<string, string>());
                 result[i].Add("FIO", r["FIO"].ToString());
                 result[i].Add("PuType", r["PuType"].ToString());
@@ -335,7 +328,7 @@ namespace MyApp.Model
         /// </summary>
         /// <param name="numberPU">Номер ПУ</param>
         /// <returns>Лист словарей с данными если успешно, null если не найден</returns>
-        static public List<Dictionary<String, String>> GetAbonentFromDbByPU(string numberPU)
+        public static List<Dictionary<String, String>> GetAbonentFromDbByPU(string numberPU)
         {
             List<Dictionary<String, String>> result = new List<Dictionary<string, string>>();
             SQLiteCommand CommandSQL = new SQLiteCommand(connector);
@@ -384,7 +377,7 @@ namespace MyApp.Model
                 result.Add(new VnePlanZayavka());
                 result[i].City = r["City"].ToString();
                 if (r["RegNumber"].ToString() != "") result[i].RegNumber = int.Parse(r["RegNumber"].ToString());
-                if (r["DateRegister"].ToString() != "") result[i].DateReg =  DateTime.Parse(r["DateRegister"].ToString());
+                if (r["DateRegister"].ToString() != "") result[i].DateReg = DateTime.Parse(r["DateRegister"].ToString());
                 result[i].NumberLS = r["LsNumber"].ToString();
                 result[i].FIO = r["FIO"].ToString();
                 result[i].City = r["City"].ToString();
@@ -394,10 +387,10 @@ namespace MyApp.Model
                 if (r["Kv"].ToString() != "") result[i].Kvartira = int.Parse(r["Kv"].ToString());
                 result[i].Prichina = r["Prichina"].ToString();
                 result[i].NumberAktTehProverki = r["NumberAkt"].ToString();
-                result[i].PhoneNumbers=r["PhoneNumber"].ToString();
+                result[i].PhoneNumbers = r["PhoneNumber"].ToString();
                 result[i].Primechanie = r["Primechanie"].ToString();
                 int res = 0;
-                result[i].ProvFlag = Int32.TryParse(r["Proverka"].ToString(),out res) ? res == 1 : false;
+                result[i].ProvFlag = Int32.TryParse(r["Proverka"].ToString(), out res) ? res == 1 : false;
                 result[i].DopuskFlag = Int32.TryParse(r["Dopusk"].ToString(), out res) ? res == 1 : false;
                 result[i].DemontageFlag = Int32.TryParse(r["Demontage"].ToString(), out res) ? res == 1 : false;
                 i++;
@@ -434,14 +427,14 @@ namespace MyApp.Model
                         + akt.Primechanie + "', '"
                         + (akt.DopuskFlag ? "1" : "0") + "', '"
                         + (akt.ProvFlag ? "1" : "0") + "', '"
-                        + (akt.DemontageFlag ? "1" : "0")  + "');";
+                        + (akt.DemontageFlag ? "1" : "0") + "');";
                         cmdd.CommandText = sql_command;
                         cmdd.ExecuteNonQuery();
                     }
                     transaction.Commit();
                 }
-        }
             }
+        }
         /// <summary>
         /// Инициализация ласта не отработанных актов при загрузке приложения
         /// </summary>
@@ -492,7 +485,7 @@ namespace MyApp.Model
                 result[i].PuOldMPI = Int32.Parse(r["PuOldMPI"].ToString()) == 0 ? false : true;
                 result[i].DopuskFlag = Int32.Parse(r["DopuskFlag"].ToString()) == 0 ? false : true;
 
-              
+
                 result[i].City = r["City"].ToString();
                 result[i].Street = r["Street"].ToString();
                 result[i].House = r["House"].ToString() != "" ? int.Parse(r["House"].ToString()) : 0;
@@ -584,9 +577,9 @@ namespace MyApp.Model
                 result[i].DopuskFlag = Int32.Parse(r["DopuskFlag"].ToString()) == 0 ? false : true;
                 result[i].City = r["City"].ToString();
                 result[i].Street = r["Street"].ToString();
-                result[i].House = r["House"].ToString()!=""?int.Parse(r["House"].ToString()):0;
-                if ( r["Korpus"].ToString() != "") result[i].Korpus = r["Korpus"].ToString();
-                if ( r["Kvartira"].ToString() != "") result[i].Kvartira = int.Parse(r["Kvartira"].ToString());
+                result[i].House = r["House"].ToString() != "" ? int.Parse(r["House"].ToString()) : 0;
+                if (r["Korpus"].ToString() != "") result[i].Korpus = r["Korpus"].ToString();
+                if (r["Kvartira"].ToString() != "") result[i].Kvartira = int.Parse(r["Kvartira"].ToString());
                 DateTime date1 = DateTime.Parse(r["DateWork"].ToString());
                 result[i].DateWork = date1;
                 result[i].FIO = r["FIO"].ToString();
@@ -746,7 +739,7 @@ namespace MyApp.Model
         /// <param name="akt">Акт тех. проверки</param>
         public static void InsertAPTInWork(List<AktTehProverki> akti)
         {
-            
+
             using (var cmdd = new SQLiteCommand(connector))
             {
                 using (var transaction = connector.BeginTransaction())
@@ -944,7 +937,6 @@ namespace MyApp.Model
             {
                 SQLiteDataReader r = CommandSQL.ExecuteReader();
                 string line = String.Empty;
-                int i = 0;
                 while (r.Read())
                 {
                     result.Add(r["Value"].ToString());
@@ -973,7 +965,6 @@ namespace MyApp.Model
             {
                 SQLiteDataReader r = CommandSQL.ExecuteReader();
                 string line = String.Empty;
-                int i = 0;
                 while (r.Read())
                 {
                     result.Add(r["NumberLS"].ToString());
@@ -1002,7 +993,6 @@ namespace MyApp.Model
             {
                 SQLiteDataReader r = CommandSQL.ExecuteReader();
                 string line = String.Empty;
-                int i = 0;
                 while (r.Read())
                 {
                     string res = r["DateWork"].ToString();
@@ -1033,7 +1023,6 @@ namespace MyApp.Model
             {
                 SQLiteDataReader r = CommandSQL.ExecuteReader();
                 string line = String.Empty;
-                int i = 0;
                 if (r.Read())
                 {
                     result.Add("People", r["People"].ToString());
@@ -1081,7 +1070,6 @@ namespace MyApp.Model
             {
                 SQLiteDataReader r = CommandSQL.ExecuteReader();
                 string line = String.Empty;
-                int i = 0;
                 while (r.Read())
                 {
                     result = int.Parse(r[peopleReq].ToString());

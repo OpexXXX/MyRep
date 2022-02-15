@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ATPWork.MyApp.Model.AktBuWork
+﻿namespace ATPWork.MyApp.Model.AktBuWork
 {
-    class AktsBuModel
+    internal class AktsBuModel
     {
     }
 }

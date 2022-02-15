@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
-using System.Data;
+﻿using ATPWork.MyApp.Model.Plan;
+using ATPWork.MyApp.Model.VnePlan;
+using ExcelDataReader;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 using OfficeOpenXml;
+using OfficeOpenXml.Style;
+using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.IO;
-using OfficeOpenXml.Style;
-using ExcelCOM = Microsoft.Office.Interop.Excel;
-using ExcelDataReader;
-using iTextSharp.text.pdf;
-using iTextSharp.text;
-using ATPWork.MyApp.Model.Plan;
-using ATPWork.MyApp.Model.VnePlan;
+using System.Windows;
 
 namespace MyApp.Model
 {
@@ -330,7 +328,7 @@ namespace MyApp.Model
                 else if (akt1.City.CompareTo(akt2.City) == -1) return -1;
                 else if (akt1.Street.CompareTo(akt2.Street) == 1) return 1;
                 else if (akt1.Street.CompareTo(akt2.Street) == -1) return -1;
-                else if (akt1.House>akt2.House) return 1;
+                else if (akt1.House > akt2.House) return 1;
                 else if (akt1.House < akt2.House) return -1;
                 return 0;
             });
@@ -366,10 +364,10 @@ namespace MyApp.Model
                 row["PuType"] = item.PuOldType;
                 row["PuNumber"] = item.PuOldNumber;
                 row["Podkluchenie"] = item.Podkl;
-                string plobms="";
+                string plobms = "";
                 foreach (Plomba plomb in item.OldPlombs)
                 {
-                    if (plomb.Status=="I")
+                    if (plomb.Status == "I")
                     {
                         plobms += plomb.Number + " " + plomb.Place + ";\n";
                     }
@@ -404,42 +402,42 @@ namespace MyApp.Model
             //Так как в нашей бд только одна таблица)
             //Создаем объект таблицы и передаем в нее число столбцов таблицы из нашего датасета
             PdfPTable table = new PdfPTable(tableL.Columns.Count);
-                table.TotalWidth = 800f;
-                table.LockedWidth = true;
+            table.TotalWidth = 800f;
+            table.LockedWidth = true;
             table.HeaderRows = 2;
-                var colWidthPercentages = new[] { 2f, 8f, 14f, 12f, 13f, 9f, 6f, 17f , 19f };
-                table.SetWidths(colWidthPercentages);
-                //Добавим в таблицу общий заголовок
-                PdfPCell cell = new PdfPCell(new Phrase("Инструментальные проверки" , headerFont));
-                cell.Colspan = tableL.Columns.Count;
-                cell.HorizontalAlignment = 1;
-                //Убираем границу первой ячейки, чтобы балы как заголовок
-                cell.Border = 0;
+            var colWidthPercentages = new[] { 2f, 8f, 14f, 12f, 13f, 9f, 6f, 17f, 19f };
+            table.SetWidths(colWidthPercentages);
+            //Добавим в таблицу общий заголовок
+            PdfPCell cell = new PdfPCell(new Phrase("Инструментальные проверки", headerFont));
+            cell.Colspan = tableL.Columns.Count;
+            cell.HorizontalAlignment = 1;
+            //Убираем границу первой ячейки, чтобы балы как заголовок
+            cell.Border = 0;
+            table.AddCell(cell);
+            //Сначала добавляем заголовки таблицы
+            for (int j = 0; j < tableL.Columns.Count; j++)
+            {
+                cell = new PdfPCell(new Phrase(new Phrase(tableL.Columns[j].Caption, font)));
+                //Фоновый цвет (необязательно, просто сделаем по красивее)
+                cell.BackgroundColor = iTextSharp.text.BaseColor.LIGHT_GRAY;
                 table.AddCell(cell);
-                //Сначала добавляем заголовки таблицы
-                for (int j = 0; j < tableL.Columns.Count; j++)
+            }
+
+            //Добавляем все остальные ячейки
+            for (int j = 0; j < tableL.Rows.Count; j++)
+            {
+                for (int k = 0; k < tableL.Columns.Count; k++)
                 {
-                    cell = new PdfPCell(new Phrase(new Phrase(tableL.Columns[j].Caption, font)));
-                    //Фоновый цвет (необязательно, просто сделаем по красивее)
-                    cell.BackgroundColor = iTextSharp.text.BaseColor.LIGHT_GRAY;
-                    table.AddCell(cell);
+                    var value = tableL.Rows[j][k].ToString();
+                    if (k == 0) value = (Int32.Parse(value) + 1).ToString();
+
+
+                    table.AddCell(new Phrase(value, (k == 2) || (k == 8) || (k == 7) ? smallFont : font));
                 }
+            }
+            //Добавляем таблицу в документ
+            doc.Add(table);
 
-                //Добавляем все остальные ячейки
-                for (int j = 0; j < tableL.Rows.Count; j++)
-                {
-                    for (int k = 0; k < tableL.Columns.Count; k++)
-                    {
-                        var value = tableL.Rows[j][k].ToString();
-                        if (k == 0) value = (Int32.Parse(value) + 1).ToString();
-
-
-                        table.AddCell(new Phrase(value, (k==2)||(k==8)||(k==7)? smallFont :font));
-                    }
-                }
-                //Добавляем таблицу в документ
-                doc.Add(table);
-            
             //Закрываем документ
             doc.Close();
             return filePath;
@@ -486,7 +484,7 @@ namespace MyApp.Model
             foreach (VnePlanZayavka item in abonents)
             {
                 row = table.NewRow();
-                row["NumberLS"] = item.NumberLS + "\n№" + item.RegNumber+" от " + item.DateReg.ToString("d");
+                row["NumberLS"] = item.NumberLS + "\n№" + item.RegNumber + " от " + item.DateReg.ToString("d");
                 row["FIO"] = item.FIO + "\n тел." + item.PhoneNumbers;
                 row["Adress"] = item.Adress;
                 row["Primechanie"] = item.Primechanie;
@@ -498,7 +496,7 @@ namespace MyApp.Model
                         plobms += plomb.Number + " " + plomb.Place + ";";
                     }
                 }
-                row["PuType"] = item.PuOldType +" №"+ item.PuOldNumber + ";" + plobms;
+                row["PuType"] = item.PuOldType + " №" + item.PuOldNumber + ";" + plobms;
                 table.Rows.Add(row);
             }
             return table;
@@ -531,7 +529,7 @@ namespace MyApp.Model
             table.TotalWidth = 800f;
             table.LockedWidth = true;
             table.HeaderRows = 2;
-            var colWidthPercentages = new[] { 3f, 13f, 20f, 20f, 24f, 20f  };
+            var colWidthPercentages = new[] { 3f, 13f, 20f, 20f, 24f, 20f };
             table.SetWidths(colWidthPercentages);
             //Добавим в таблицу общий заголовок
             PdfPCell cell = new PdfPCell(new Phrase("Внеплановые заявки", headerFont));
@@ -557,8 +555,8 @@ namespace MyApp.Model
                     var value = tableL.Rows[j][k].ToString();
                     if (k == 0) value = (Int32.Parse(value) + 1).ToString();
 
-                    table.AddCell(new Phrase(value,(k == 4) ? smallFont : font));
-                 
+                    table.AddCell(new Phrase(value, (k == 4) ? smallFont : font));
+
                 }
             }
             //Добавляем таблицу в документ
@@ -580,7 +578,7 @@ namespace MyApp.Model
 
             //Создаем объект записи пдф-документа в файл
             PdfWriter.GetInstance(doc, new FileStream(pathOutPdf, FileMode.Create));
-             //Открываем документ
+            //Открываем документ
             doc.Open();
             //Определение шрифта необходимо для сохранения кириллического текста
             //Иначе мы не увидим кириллический текст
@@ -602,7 +600,7 @@ namespace MyApp.Model
 
                 var colWidthPercentages = new[] { 2f, 4f, 8f, 15f, 10f, 28f, 18f, 8f, 7f };
                 table.SetWidths(colWidthPercentages);
-               
+
                 //Добавим в таблицу общий заголовок
                 PdfPCell cell = new PdfPCell(new Phrase(data_set.Tables[i].TableName, headerFont));
 
@@ -627,7 +625,7 @@ namespace MyApp.Model
                     for (int k = 0; k < data_set.Tables[i].Columns.Count; k++)
                     {
                         var value = data_set.Tables[i].Rows[j][k].ToString();
-                        if (k == 0) value = (Int32.Parse(value)+1).ToString();
+                        if (k == 0) value = (Int32.Parse(value) + 1).ToString();
 
                         table.AddCell(new Phrase(value, font));
                     }
@@ -638,7 +636,7 @@ namespace MyApp.Model
             //Закрываем документ
             doc.Close();
 
-           
+
 
         }
     }

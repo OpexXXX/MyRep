@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyApp.Model
 {
-    public class Agent: IEquatable<Agent>
+    public class Agent : IEquatable<Agent>
     {
         private string sapNumber;
         public string SapNumber
@@ -36,13 +32,13 @@ namespace MyApp.Model
         public string Post
         {
             get { return this.post; }
-            set { this.post = value;  }
+            set { this.post = value; }
         }
         private string searchString;
         public string SearchString
         {
             get { return this.searchString; }
-            set { this.searchString = value;  }
+            set { this.searchString = value; }
         }
         public Agent(string SapNumber, string Post, string Surname, string SearchString, string DateB, string PlaceB)
         {

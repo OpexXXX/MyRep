@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace ATPWork.MyApp.ViewModel
 {
     public abstract class BaseCommand : ICommand
     {
-        private static Dictionary<ModifierKeys, string> modifierText = new Dictionary<ModifierKeys, string>()
+        private static readonly Dictionary<ModifierKeys, string> modifierText = new Dictionary<ModifierKeys, string>()
         {
             {ModifierKeys.None,""},
             {ModifierKeys.Control,"Ctrl+"},
@@ -19,7 +16,7 @@ namespace ATPWork.MyApp.ViewModel
             {ModifierKeys.Windows,"Windows+"}
         };
 
-        private static Dictionary<Key, string> keyReplacements = new Dictionary<Key, string>()
+        private static readonly Dictionary<Key, string> keyReplacements = new Dictionary<Key, string>()
         {
             {Key.Add, "+"},
             {Key.Subtract, "-"}

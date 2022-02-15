@@ -1,22 +1,13 @@
 ﻿using ATPWork.MyApp.Model.AktBuWork;
 using ATPWork.MyApp.ViewModel.MainAktBu.BuEditor;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Markup;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ATPWork.MyApp.View
 {
@@ -72,7 +63,7 @@ namespace ATPWork.MyApp.View
             BuEditVM.AktInWork = newValue;
         }
         #endregion
-        private BuEditorViewModel BuEditVM;
+        private readonly BuEditorViewModel BuEditVM;
         public AktBuEditor()
         {
             InitializeComponent();
@@ -91,7 +82,7 @@ namespace ATPWork.MyApp.View
 
                     string extension;
                     extension = System.IO.Path.GetExtension(item);
-                    if (extension == ".JPG" || extension == ".JPEG"|| extension == ".jpg" || extension == ".jpeg") BuEditVM.AktInWork.PhotoFile.Add(item);
+                    if (extension == ".JPG" || extension == ".JPEG" || extension == ".jpg" || extension == ".jpeg") BuEditVM.AktInWork.PhotoFile.Add(item);
                 }
 
             }
@@ -103,7 +94,7 @@ namespace ATPWork.MyApp.View
             if (e.Key == Key.Delete)
             {
 
-               if(BuEditVM.SelectedPhoto!=null) BuEditVM.AktInWork.PhotoFile.Remove(BuEditVM.SelectedPhoto);
+                if (BuEditVM.SelectedPhoto != null) BuEditVM.AktInWork.PhotoFile.Remove(BuEditVM.SelectedPhoto);
             }
         }
 
@@ -124,8 +115,8 @@ namespace ATPWork.MyApp.View
             {
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
                 string extension;
-                extension =System.IO.Path.GetExtension(files[0]);
-                if(extension == ".PDF"|| extension==".pdf") BuEditVM.AktInWork.AktProverkiPdf = files[0];
+                extension = System.IO.Path.GetExtension(files[0]);
+                if (extension == ".PDF" || extension == ".pdf") BuEditVM.AktInWork.AktProverkiPdf = files[0];
             }
         }
 

@@ -1,21 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace MyApp
 {
-    
-    public class ListBoxView :INotifyPropertyChanged
+
+    public class ListBoxView : INotifyPropertyChanged
     {
         private Dictionary<String, String> val;
         public Dictionary<String, String> Val
@@ -73,13 +66,13 @@ namespace MyApp
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void OnPropertyChanged(string info) // На изменение полей
         {
             if (this.PropertyChanged != null)
                 this.PropertyChanged(this, new PropertyChangedEventArgs(info));
         }
-        public ListBoxView(Dictionary<String,String> Val)
+        public ListBoxView(Dictionary<String, String> Val)
         {
             string tmpadress = "";
             tmpadress = Val["City"] + ", " + Val["Street"] + ", д. " + Val["House"];
@@ -92,7 +85,7 @@ namespace MyApp
             this.PuOldNumber = Val["PuNumber"];
             this.PuOldType = Val["PuType"];
             this.Val = Val;
-            
+
 
         }
     }
@@ -107,7 +100,7 @@ namespace MyApp
             get { return this.selectVal; }
             set
             {
-                this.selectVal = value; 
+                this.selectVal = value;
             }
         }
 

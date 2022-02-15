@@ -1,18 +1,4 @@
-﻿using MyApp;
-using MyApp.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
 
 namespace ATPWork.MyApp.View
 {
@@ -21,7 +7,7 @@ namespace ATPWork.MyApp.View
     /// </summary>
     public partial class Settings : Window
     {
-        private ATPWork.Properties.Settings _sett  =  Properties.Settings.Default;
+        private ATPWork.Properties.Settings _sett = Properties.Settings.Default;
         public ATPWork.Properties.Settings Sett
         {
             get { return _sett; }
@@ -50,7 +36,7 @@ namespace ATPWork.MyApp.View
             {
                 System.Windows.Forms.DialogResult result = dialog.ShowDialog();
                 if (result == System.Windows.Forms.DialogResult.OK) Sett.DirAktTehPDF = dialog.SelectedPath;
-              
+
             }
         }
 
@@ -60,14 +46,14 @@ namespace ATPWork.MyApp.View
             {
                 System.Windows.Forms.DialogResult result = dialog.ShowDialog();
                 if (result == System.Windows.Forms.DialogResult.OK) Sett.DirAktTehMail = dialog.SelectedPath;
-              
+
             }
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
             Sett.Save();
-            
+
             this.Close();
         }
     }
