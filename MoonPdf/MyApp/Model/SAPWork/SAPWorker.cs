@@ -281,11 +281,11 @@ namespace MoonPdf
             try
             {
                 GuiModalWindow ErrorWindow = ((GuiModalWindow)SapSession.FindById("/app/con[0]/ses[0]/wnd[1]"));
-                if (ErrorWindow.Text.Contains("норматив")) //Модалка с запросом на изменение норматива
+                string ttt = ErrorWindow.Text;
+                if (ErrorWindow.Text.Contains("Запрос на изменение информации")) //Модалка с запросом на изменение норматива
                 {
-                    //TODO: Выяснить какая кнопка "Нет"
-                    GuiButton OKBtn = (GuiButton)SapSession.ActiveWindow.FindByName("btn[0]", "GuiButton"); //
-                    OKBtn.Press();
+                    GuiButton NOBtn = (GuiButton)SapSession.ActiveWindow.FindById("wnd[1]/usr/btnBUTTON_2", "GuiButton"); //
+                    NOBtn.Press();
                 }
             }
             catch (Exception)
