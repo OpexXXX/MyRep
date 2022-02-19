@@ -31,9 +31,8 @@ namespace ATPWork.MyApp.Model.Plan
         }
         private void getAvveragePO()
         {
-            AvveragePO = PlanWorkModel.GetAvveragePO("2017", NumberLS);
-            AvverageP = PlanWorkModel.GetAvveragePO("2016", NumberLS);
-
+            AvveragePO = PlanWorkModel.GetAvveragePO("2021", NumberLS);
+            AvverageP = PlanWorkModel.GetAvveragePO("2017", NumberLS);
         }
         private int _avveragePO;
         public int AvveragePO
@@ -117,7 +116,7 @@ namespace ATPWork.MyApp.Model.Plan
                 }
                 TimeSpan difDay = DateWork - (DateTime)start;
 
-                result += " Ср. за 2017г. " + AvveragePO + "кВт*ч/мес; 2016г. " + AvverageP + "кВт*ч/мес; ";
+                result += " Ср. за 2021г. " + AvveragePO + "кВт*ч/мес; 2017г. " + AvverageP + "кВт*ч/мес; ";
                 result += (difDay.Days + 1) + " дней к расчету, ";
                 result += "норматив:" + Normativ + "кВт*ч/мес. БУ: " + PlanWorkModel.GetValueBuNormativ((DateTime)start, DateWork, Normativ).ToString() + "кВт*ч";
                 return result;
@@ -183,9 +182,18 @@ namespace ATPWork.MyApp.Model.Plan
         private void getNormativ()
         {
             Dictionary<string, string> info = DataBaseWorker.GetInfoForNormativ(NumberLS);
+            if (info.Count == 0)
+            {
+                Rooms = 1;
+                PeopleCount = 1;
+                NormativKat = 1;
+            }
+            else
+            {
             Rooms = Int32.Parse(info["Rooms"].ToString());
             PeopleCount = Int32.Parse(info["People"].ToString());
             NormativKat = Int32.Parse(info["Kategorya"].ToString());
+            }
             Normativ = DataBaseWorker.GetNormativ(PeopleCount, Rooms, NormativKat);
         }
         private void addPlombs()
