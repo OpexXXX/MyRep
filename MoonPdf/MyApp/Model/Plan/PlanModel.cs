@@ -9,8 +9,6 @@ namespace ATPWork.MyApp.Model.Plan
     {
         public delegate void AbonentsRefreshHandler();
         public static event AbonentsRefreshHandler AbonentsRefresh;
-
-
         /// <summary>
         /// Расчет объема безучетного потребления
         /// </summary>
@@ -149,7 +147,5 @@ namespace ATPWork.MyApp.Model.Plan
             }
             AbonentsRefresh?.Invoke();
         }
-
-
     }
 }

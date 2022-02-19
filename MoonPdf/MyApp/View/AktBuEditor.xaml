@@ -182,7 +182,7 @@
                     <StackPanel  Orientation="Horizontal">
                         <TextBlock Text="№" VerticalAlignment="Center"/>
                         <Grid>
-                            <TextBox VerticalAlignment="Center" Style="{StaticResource TextBoxStyle}"   Width="100" MaxLength="9" >
+                            <TextBox VerticalAlignment="Center" Style="{StaticResource TextBoxStyle}"   Width="100" MaxLength="10" >
                                 <TextBox.InputBindings>
                                     <KeyBinding Key="Up" Command="{Binding Commands.NumberUp, Source={StaticResource BuEditorViewModel}}" />
                                     <KeyBinding Key="Down" Command="{Binding Commands.NumberDown, Source={StaticResource BuEditorViewModel}}" />

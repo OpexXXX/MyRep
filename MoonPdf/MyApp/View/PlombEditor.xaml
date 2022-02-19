@@ -48,7 +48,7 @@
                             <TextBox.Text>
                                 <Binding Path="Number"  ValidatesOnExceptions="True"  NotifyOnValidationError="True"  UpdateSourceTrigger="PropertyChanged">
                                     <Binding.ValidationRules>
-                                        <ExceptionValidationRule />
+                                        <plombEditVm:ValidPlombNumber ValidationStep="CommittedValue"/>
                                     </Binding.ValidationRules>
                                 </Binding>
                             </TextBox.Text>
