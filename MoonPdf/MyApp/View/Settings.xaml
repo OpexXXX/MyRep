@@ -49,6 +49,20 @@
                     <DataGrid Margin="2"/>
                 </Grid>
             </TabItem>
+            <TabItem Header="SAP">
+                <GroupBox Header="Авторизация SAP">
+                    <StackPanel>
+                        <Grid Height="55">
+                            <TextBlock   Height="18" Margin="0,3,0,0" VerticalAlignment="Top"  >Логин</TextBlock>
+                            <TextBox   Height="27" Margin="5,21,38,0" VerticalAlignment="Top" />
+                        </Grid>
+                        <Grid Height="55">
+                            <TextBlock   Height="18" Margin="0,3,0,0" VerticalAlignment="Top"  >Пароль</TextBlock>
+                            <TextBox   Height="27" Margin="5,21,38,0" VerticalAlignment="Top" />
+                        </Grid>
+                    </StackPanel>
+                </GroupBox>
+            </TabItem>
 
         </TabControl>
         <StackPanel  Height="30" Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right">

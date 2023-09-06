@@ -324,6 +324,7 @@ namespace MyApp.Model
             List<PlanAbonent> abonents = new List<PlanAbonent>(Temp_abonents);
             abonents.Sort(delegate (PlanAbonent akt1, PlanAbonent akt2)
             {
+                if (akt1.City == null || akt2.City == null) return 0;
                 if (akt1.City.CompareTo(akt2.City) == 1) return 1;
                 else if (akt1.City.CompareTo(akt2.City) == -1) return -1;
                 else if (akt1.Street.CompareTo(akt2.Street) == 1) return 1;

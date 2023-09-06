@@ -31,8 +31,8 @@ namespace ATPWork.MyApp.Model.Plan
         }
         private void getAvveragePO()
         {
-            AvveragePO = PlanWorkModel.GetAvveragePO("2021", NumberLS);
-            AvverageP = PlanWorkModel.GetAvveragePO("2017", NumberLS);
+            AvveragePO = PlanWorkModel.GetAvveragePO("2022", NumberLS);
+            AvverageP = PlanWorkModel.GetAvveragePO("2021", NumberLS);
         }
         private int _avveragePO;
         public int AvveragePO
@@ -116,7 +116,7 @@ namespace ATPWork.MyApp.Model.Plan
                 }
                 TimeSpan difDay = DateWork - (DateTime)start;
 
-                result += " Ср. за 2021г. " + AvveragePO + "кВт*ч/мес; 2017г. " + AvverageP + "кВт*ч/мес; ";
+                result += " Ср. за 2022г. " + AvveragePO + "кВт*ч/мес; 2021г. " + AvverageP + "кВт*ч/мес; ";
                 result += (difDay.Days + 1) + " дней к расчету, ";
                 result += "норматив:" + Normativ + "кВт*ч/мес. БУ: " + PlanWorkModel.GetValueBuNormativ((DateTime)start, DateWork, Normativ).ToString() + "кВт*ч";
                 return result;
